@@ -797,6 +797,7 @@
                     <option value="NYSE">NYSE</option>
                     <option value="SP500">S&P 500</option>
                     <option value="FOREX">Forex</option>
+                    <option value="CRYPTO">Krypto</option>
                     <option value="OTHER">Andere</option>
                 </select>
                 <select class="filter-select" id="filterTimeframe">
@@ -898,11 +899,198 @@
         wolfewavesignals.com • Trading-Signale für professionelle Händler
     </footer>
 
-    <!-- Image Modal -->
+    <!-- Chart Slider Modal -->
     <div class="modal" id="imageModal">
         <span class="modal-close" onclick="closeModal()">✕</span>
-        <img id="modalImage" src="" alt="Signal Chart">
+        <div class="slider-container">
+            <button class="slider-arrow slider-prev" onclick="prevSlide()">‹</button>
+            
+            <div class="slider-content">
+                <div class="slider-images" id="sliderImages">
+                    <img src="" alt="Chart">
+                </div>
+                
+                <div class="slider-info">
+                    <div class="slider-title" id="sliderTitle">Signal Name</div>
+                    <div class="slider-counter" id="sliderCounter">1 / 3</div>
+                </div>
+                
+                <div class="slider-dots" id="sliderDots"></div>
+                
+                <div class="slider-timeline" id="sliderTimeline"></div>
+            </div>
+            
+            <button class="slider-arrow slider-next" onclick="nextSlide()">›</button>
+        </div>
     </div>
+
+    <style>
+        /* Slider Modal Styles */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            max-width: 95vw;
+            max-height: 95vh;
+        }
+
+        .slider-arrow {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            font-size: 48px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-arrow:hover {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .slider-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slider-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .slider-images {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 900px;
+            max-height: 600px;
+        }
+
+        .slider-images img {
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            display: block;
+            transition: opacity 0.3s;
+        }
+
+        .slider-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            padding: 0 10px;
+        }
+
+        .slider-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .slider-counter {
+            font-size: 14px;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .slider-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider-dot:hover {
+            background: var(--text-secondary);
+        }
+
+        .slider-dot.active {
+            background: var(--accent-green);
+            transform: scale(1.2);
+        }
+
+        .slider-timeline {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .timeline-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .timeline-item:hover {
+            border-color: var(--accent-green);
+        }
+
+        .timeline-item.active {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .timeline-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .timeline-label.success {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .slider-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 32px;
+            }
+
+            .slider-images img {
+                max-height: 400px;
+            }
+
+            .slider-container {
+                flex-direction: column;
+            }
+
+            .slider-arrow {
+                display: none;
+            }
+        }
+    </style>
 
     <!-- Auth Modal -->
     <div class="modal" id="authModal">
@@ -1461,6 +1649,19 @@
             letter-spacing: 1px;
         }
 
+        .image-count-badge {
+            position: absolute;
+            top: 16px;
+            right: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            z-index: 10;
+        }
+
         .filters {
             display: flex;
             gap: 12px;
@@ -1744,7 +1945,7 @@
         let adminSubscriptions = [];
 
         // Markets we want to show as preview (1 each)
-        const PREVIEW_MARKETS = ['DAX', 'NASDAQ', 'FOREX'];
+        const PREVIEW_MARKETS = ['DAX', 'NASDAQ', 'FOREX', 'CRYPTO'];
 
         // ==================== AUTH FUNCTIONS ====================
         
@@ -2818,6 +3019,12 @@
             const tp3Pct = signal.tp3_pct ? Math.abs(signal.tp3_pct).toFixed(1) : Math.abs(calcPct(signal.tp3)).toFixed(1);
             const slPct = signal.sl_pct ? Math.abs(signal.sl_pct).toFixed(1) : Math.abs(calcPct(signal.sl)).toFixed(1);
 
+            // Count images
+            let imageCount = 0;
+            if (signal.image_path) imageCount++;
+            if (signal.image_path_2) imageCount++;
+            if (signal.image_path_3) imageCount++;
+
             // Determine which badge to show
             let badgeHTML = '';
             if (isSuccess) {
@@ -2828,9 +3035,16 @@
                 badgeHTML = '<div class="new-badge">NEU</div>';
             }
 
+            // Show image count badge if multiple images
+            let imageCountBadge = '';
+            if (imageCount > 1) {
+                imageCountBadge = `<div class="image-count-badge">📷 ${imageCount}</div>`;
+            }
+
             return `
-                <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" onclick="${isPreview ? `openModal('${imageUrl}')` : 'showCheckout()'}">
+                <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" onclick="openSignalSlider('${signal.id}', ${isSuccess})">
                     ${badgeHTML}
+                    ${imageCountBadge}
                     <div class="signal-image-container">
                         ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image">📈</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">
@@ -2886,6 +3100,60 @@
             `;
         }
 
+        function openSignalSlider(signalId, isSuccess) {
+            const signal = isSuccess 
+                ? successSignals.find(s => s.id === signalId)
+                : allSignals.find(s => s.id === signalId);
+            
+            if (!signal) return;
+            
+            const images = buildImagesArray(signal);
+            const signalName = signal.symbol_name || signal.symbol;
+            
+            openSlider(images, signalName);
+        }
+
+        function buildImagesArray(signal) {
+            const images = [];
+            
+            // Main image
+            if (signal.image_path) {
+                const url = signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
+                images.push({
+                    url: url,
+                    date: formatDateTime(signal.created_at),
+                    label: 'Signal erkannt'
+                });
+            }
+            
+            // Additional images (image_path_2, image_path_3, etc.)
+            if (signal.image_path_2) {
+                const url = signal.image_path_2.startsWith('http') ? signal.image_path_2 : `${STORAGE_URL}/${signal.image_path_2}`;
+                images.push({
+                    url: url,
+                    date: formatDateTime(signal.image_date_2) || 'Update',
+                    label: signal.image_label_2 || 'Zwischenstand'
+                });
+            }
+            
+            if (signal.image_path_3) {
+                const url = signal.image_path_3.startsWith('http') ? signal.image_path_3 : `${STORAGE_URL}/${signal.image_path_3}`;
+                images.push({
+                    url: url,
+                    date: formatDateTime(signal.image_date_3) || 'Aktuell',
+                    label: signal.image_label_3 || 'Aktueller Stand'
+                });
+            }
+            
+            return images;
+        }
+
+        function formatDateTime(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        }
+
         function isNewSignal(createdAt) {
             const now = new Date();
             const signalTime = new Date(createdAt);
@@ -2919,13 +3187,99 @@
 
         function openModal(imageUrl) {
             if (!imageUrl) return;
-            document.getElementById('modalImage').src = imageUrl;
+            // Single image fallback
+            openSlider([{ url: imageUrl, date: '', label: '' }], '');
+        }
+
+        function openSlider(images, signalName) {
+            if (!images || images.length === 0) return;
+            
+            currentSliderImages = images;
+            currentSlideIndex = 0;
+            
+            document.getElementById('sliderTitle').textContent = signalName || 'Signal';
+            
+            // Build dots
+            const dotsContainer = document.getElementById('sliderDots');
+            dotsContainer.innerHTML = images.map((_, i) => 
+                `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+            ).join('');
+            
+            // Build timeline
+            const timelineContainer = document.getElementById('sliderTimeline');
+            if (images.length > 1 && images[0].date) {
+                timelineContainer.innerHTML = images.map((img, i) => `
+                    <div class="timeline-item ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})">
+                        <div class="timeline-date">${img.date}</div>
+                        <div class="timeline-label ${img.label?.includes('TP') ? 'success' : ''}">${img.label || ''}</div>
+                    </div>
+                `).join('');
+                timelineContainer.style.display = 'flex';
+            } else {
+                timelineContainer.style.display = 'none';
+            }
+            
+            updateSlide();
             document.getElementById('imageModal').classList.add('active');
+        }
+
+        let currentSliderImages = [];
+        let currentSlideIndex = 0;
+
+        function updateSlide() {
+            const img = document.getElementById('sliderImages');
+            img.innerHTML = `<img src="${currentSliderImages[currentSlideIndex].url}" alt="Chart">`;
+            
+            // Update counter
+            document.getElementById('sliderCounter').textContent = 
+                `${currentSlideIndex + 1} / ${currentSliderImages.length}`;
+            
+            // Update dots
+            document.querySelectorAll('.slider-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlideIndex);
+            });
+            
+            // Update timeline
+            document.querySelectorAll('.timeline-item').forEach((item, i) => {
+                item.classList.toggle('active', i === currentSlideIndex);
+            });
+            
+            // Update arrows
+            document.querySelector('.slider-prev').disabled = currentSlideIndex === 0;
+            document.querySelector('.slider-next').disabled = currentSlideIndex === currentSliderImages.length - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < currentSliderImages.length - 1) {
+                currentSlideIndex++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                updateSlide();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            updateSlide();
         }
 
         function closeModal() {
             document.getElementById('imageModal').classList.remove('active');
         }
+
+        // Keyboard navigation for slider
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('imageModal').classList.contains('active')) return;
+            
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'Escape') closeModal();
+        });
 
         function showCheckout() {
             // TODO: Stripe Checkout integration
