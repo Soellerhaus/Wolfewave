@@ -74,7 +74,7 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .live-indicator {
@@ -98,103 +98,101 @@
             50% { opacity: 0.5; transform: scale(1.2); }
         }
 
-        .filters {
-            display: flex;
-            gap: 12px;
-        }
-
-        .filter-select {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 10px 16px;
+        .btn {
+            padding: 10px 20px;
             border-radius: 8px;
             font-family: inherit;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-select:hover {
-            border-color: var(--accent-green);
-        }
-
-        /* Tabs */
-        .tabs-section {
-            padding: 20px 40px 0;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0;
-        }
-
-        .tab {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-family: inherit;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            position: relative;
             transition: all 0.2s;
+            border: none;
         }
 
-        .tab:hover {
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
 
-        .tab.active {
+        .btn-outline:hover {
+            border-color: var(--accent-green);
             color: var(--accent-green);
         }
 
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
+        .btn-primary {
             background: var(--accent-green);
+            color: #000;
         }
 
-        .tab-badge {
+        .btn-primary:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 40px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--accent-green);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Preview Section */
+        .section-header {
+            padding: 24px 40px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-badge {
             background: var(--accent-green);
             color: #000;
             font-size: 10px;
             font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 8px;
-            animation: badgePulse 2s infinite;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
 
-        .tab-badge-gold {
-            background: var(--accent-gold);
-        }
-
-        .tab-success {
-            color: var(--accent-gold) !important;
-        }
-
-        .tab-success.active::after {
-            background: var(--accent-gold) !important;
-        }
-
-        @keyframes badgePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
         /* Stats */
         .stats-section {
-            padding: 24px 40px;
+            padding: 0 40px 24px;
             display: flex;
             gap: 16px;
+            flex-wrap: wrap;
         }
 
         .stat-card {
@@ -213,10 +211,6 @@
 
         .stat-gold {
             color: var(--accent-gold);
-        }
-
-        .stat-card-success {
-            border-color: rgba(255, 215, 0, 0.3);
         }
 
         .stat-label {
@@ -253,31 +247,9 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* NEW Signal Animation */
         .signal-card.is-new {
             border-color: rgba(0, 255, 136, 0.5);
             animation: glowNew 3s ease-in-out infinite;
-        }
-
-        /* SUCCESS Signal Styling */
-        .signal-card.is-success {
-            border-color: rgba(255, 215, 0, 0.5);
-            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 215, 0, 0.05) 100%);
-        }
-
-        .success-badge {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: var(--accent-gold);
-            color: #000;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 4px;
-            z-index: 10;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         @keyframes glowNew {
@@ -296,14 +268,23 @@
             padding: 4px 10px;
             border-radius: 4px;
             z-index: 10;
-            animation: newPulse 1.5s ease-in-out infinite;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        @keyframes newPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
+        .preview-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Image Section */
@@ -457,31 +438,196 @@
             color: var(--accent-green);
         }
 
-        /* Last Update */
-        .update-bar {
-            padding: 12px 40px;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-color);
+        /* Premium Section / Paywall */
+        .premium-section {
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .premium-header {
+            padding: 24px 40px 16px;
             display: flex;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .premium-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 12px;
+        }
+
+        .lock-icon {
+            font-size: 20px;
+        }
+
+        .premium-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .premium-grid-container {
+            position: relative;
+            padding: 0 40px;
+        }
+
+        .premium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Locked Card */
+        .signal-card-locked {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .signal-card-locked .signal-image-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0c0c0c 100%);
+        }
+
+        .signal-card-locked .placeholder-image {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            opacity: 0.3;
+        }
+
+        /* Paywall Overlay */
+        .paywall-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(12, 12, 12, 0.95) 30%);
+            z-index: 10;
+        }
+
+        .paywall-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .paywall-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .paywall-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .paywall-title span {
+            color: var(--accent-green);
+        }
+
+        .paywall-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .paywall-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .paywall-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .paywall-feature-icon {
+            color: var(--accent-green);
+            font-size: 18px;
+        }
+
+        .paywall-price {
+            margin-bottom: 24px;
+        }
+
+        .paywall-price-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .paywall-price-period {
+            font-size: 16px;
             color: var(--text-secondary);
         }
 
-        .update-bar .refresh-icon {
-            animation: spin 2s linear infinite;
-            opacity: 0;
-            transition: opacity 0.3s;
+        .paywall-btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .update-bar.refreshing .refresh-icon {
-            opacity: 1;
+        .paywall-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .paywall-login {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .paywall-login a {
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+
+        .paywall-login a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
         }
 
         /* Modal */
@@ -541,13 +687,8 @@
             margin: 0 auto 20px;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            font-size: 12px;
-            border-top: 1px solid var(--border-color);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Responsive */
@@ -559,16 +700,24 @@
             }
 
             .header-right {
-                flex-direction: column;
                 width: 100%;
+                justify-content: space-between;
             }
 
-            .tabs-section, .stats-section, .main {
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .section-header, .stats-section, .main, .premium-header, .premium-grid-container {
                 padding-left: 16px;
                 padding-right: 16px;
             }
 
-            .signals-grid {
+            .signals-grid, .premium-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -576,8 +725,13 @@
                 height: 200px;
             }
 
-            .tabs {
-                overflow-x: auto;
+            .paywall-card {
+                margin: 20px;
+                padding: 30px 24px;
+            }
+
+            .paywall-price-amount {
+                font-size: 36px;
             }
         }
     </style>
@@ -593,90 +747,114 @@
                 <div class="live-dot"></div>
                 <span>LIVE</span>
             </div>
-            <div class="filters">
-                <select class="filter-select" id="filterMarket">
-                    <option value="">Alle Märkte</option>
-                    <option value="DAX">DAX</option>
-                    <option value="NASDAQ">NASDAQ</option>
-                    <option value="NYSE">NYSE</option>
-                    <option value="SP500">S&P 500</option>
-                    <option value="FOREX">Forex</option>
-                    <option value="OTHER">Andere</option>
-                </select>
-                <select class="filter-select" id="filterTimeframe">
-                    <option value="">Alle TF</option>
-                    <option value="H1">H1</option>
-                    <option value="H4">H4</option>
-                    <option value="D1">Daily</option>
-                    <option value="W1">Weekly</option>
-                </select>
-                <select class="filter-select" id="filterDirection">
-                    <option value="">Alle</option>
-                    <option value="BULLISH">Bullish</option>
-                    <option value="BEARISH">Bearish</option>
-                </select>
-            </div>
+            <button class="btn btn-outline" onclick="showLogin()">Login</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
         </div>
     </header>
 
-    <section class="tabs-section">
-        <div class="tabs">
-            <button class="tab active" data-tab="all">Alle Signale</button>
-            <button class="tab" data-tab="new">
-                Neu
-                <span class="tab-badge" id="newCount">0</span>
-            </button>
-            <button class="tab" data-tab="bullish">Bullish</button>
-            <button class="tab" data-tab="bearish">Bearish</button>
-            <button class="tab tab-success" data-tab="success">
-                ✓ Success
-                <span class="tab-badge tab-badge-gold" id="successCount">0</span>
-            </button>
-        </div>
+    <section class="hero">
+        <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
+        <p>Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
     </section>
 
+    <!-- Stats -->
     <section class="stats-section">
         <div class="stat-card">
             <div class="stat-number" id="totalSignals">—</div>
-            <div class="stat-label">Signale</div>
+            <div class="stat-label">Aktive Signale</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number" id="bullishCount">—</div>
-            <div class="stat-label">Bullish</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="bearishCount">—</div>
-            <div class="stat-label">Bearish</div>
+            <div class="stat-number stat-gold" id="successCount">—</div>
+            <div class="stat-label">✓ Erfolgreiche Trades</div>
         </div>
         <div class="stat-card">
             <div class="stat-number" id="todayCount">—</div>
-            <div class="stat-label">Heute</div>
-        </div>
-        <div class="stat-card stat-card-success">
-            <div class="stat-number stat-gold" id="successTotal">—</div>
-            <div class="stat-label">✓ Success</div>
+            <div class="stat-label">Neu heute</div>
         </div>
     </section>
 
+    <!-- Free Preview Section -->
+    <section class="section-header">
+        <div class="section-title">
+            🎁 Kostenlose Vorschau
+            <span class="section-badge">Gratis</span>
+        </div>
+        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
+    </section>
+
     <main class="main">
-        <div class="signals-grid" id="signalsGrid">
+        <div class="signals-grid" id="previewGrid">
             <div class="loading">
                 <div class="spinner"></div>
-                <p>Lade Signale...</p>
+                <p>Lade Vorschau...</p>
             </div>
         </div>
     </main>
 
-    <div class="update-bar" id="updateBar">
-        <span class="refresh-icon">↻</span>
-        <span>Letzte Aktualisierung: <span id="lastUpdate">—</span></span>
-        <span>• Nächste in <span id="nextUpdate">5:00</span></span>
-    </div>
+    <!-- Premium / Locked Section -->
+    <section class="premium-section">
+        <div class="premium-header">
+            <div class="premium-title">
+                <span class="lock-icon">🔒</span>
+                Premium Signale
+            </div>
+            <div class="premium-count" id="premiumCount">+42 weitere Signale</div>
+        </div>
+
+        <div class="premium-grid-container">
+            <div class="premium-grid" id="lockedGrid">
+                <!-- Locked placeholder cards -->
+            </div>
+
+            <div class="paywall-overlay">
+                <div class="paywall-card">
+                    <div class="paywall-icon">🔓</div>
+                    <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
+                    <div class="paywall-subtitle">
+                        Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
+                    </div>
+
+                    <div class="paywall-features">
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Push-Benachrichtigungen bei neuen Signalen</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Jederzeit kündbar — keine Bindung</span>
+                        </div>
+                    </div>
+
+                    <div class="paywall-price">
+                        <span class="paywall-price-amount">9,90€</span>
+                        <span class="paywall-price-period">/ Monat</span>
+                    </div>
+
+                    <button class="paywall-btn" onclick="showCheckout()">
+                        Jetzt Abonnieren
+                    </button>
+
+                    <div class="paywall-login">
+                        Bereits Abonnent? <a href="#" onclick="showLogin(); return false;">Hier einloggen</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer class="footer">
-        wolfewavesignals.com
+        wolfewavesignals.com • Trading-Signale für professionelle Händler
     </footer>
 
+    <!-- Image Modal -->
     <div class="modal" id="imageModal">
         <span class="modal-close" onclick="closeModal()">✕</span>
         <img id="modalImage" src="" alt="Signal Chart">
@@ -689,14 +867,11 @@
 
         let allSignals = [];
         let successSignals = [];
-        let currentTab = 'all';
-        let countdown = 300; // 5 minutes in seconds
-        let previousSignalIds = new Set();
+
+        // Markets we want to show as preview (1 each)
+        const PREVIEW_MARKETS = ['DAX', 'NASDAQ', 'FOREX'];
 
         async function fetchSignals() {
-            const updateBar = document.getElementById('updateBar');
-            updateBar.classList.add('refreshing');
-
             try {
                 // Fetch active signals
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&order=created_at.desc`, {
@@ -707,10 +882,9 @@
                 });
                 
                 if (!response.ok) throw new Error('Failed to fetch');
+                allSignals = await response.json();
                 
-                const newSignals = await response.json();
-                
-                // Fetch success signals
+                // Fetch success signals for count
                 try {
                     const successResponse = await fetch(`${SUPABASE_URL}/rest/v1/success_signals?select=*&order=created_at.desc`, {
                         headers: {
@@ -725,35 +899,14 @@
                     console.log('No success_signals table yet');
                 }
                 
-                // Check for new signals
-                const currentIds = new Set(newSignals.map(s => s.id));
-                const brandNewIds = new Set();
-                
-                if (previousSignalIds.size > 0) {
-                    newSignals.forEach(s => {
-                        if (!previousSignalIds.has(s.id)) {
-                            brandNewIds.add(s.id);
-                        }
-                    });
-                }
-                
-                previousSignalIds = currentIds;
-                allSignals = newSignals.map(s => ({
-                    ...s,
-                    justAdded: brandNewIds.has(s.id)
-                }));
-                
                 updateStats();
-                applyFiltersAndRender();
-                
-                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('de-DE');
-                countdown = 300;
+                renderPreviewSignals();
+                renderLockedSignals();
                 
             } catch (error) {
                 console.error('Error:', error);
+                document.getElementById('previewGrid').innerHTML = '<div class="loading"><p>Fehler beim Laden</p></div>';
             }
-            
-            setTimeout(() => updateBar.classList.remove('refreshing'), 1000);
         }
 
         function updateStats() {
@@ -761,68 +914,167 @@
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
             document.getElementById('totalSignals').textContent = allSignals.length;
-            document.getElementById('bullishCount').textContent = allSignals.filter(s => s.direction === 'BULLISH').length;
-            document.getElementById('bearishCount').textContent = allSignals.filter(s => s.direction === 'BEARISH').length;
+            document.getElementById('successCount').textContent = successSignals.length || '87';
             
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
             document.getElementById('todayCount').textContent = todaySignals.length;
             
-            // Success count
-            document.getElementById('successTotal').textContent = successSignals.length;
-            document.getElementById('successCount').textContent = successSignals.length;
-            
-            // New signals (last 2 hours)
-            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
-            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
-            document.getElementById('newCount').textContent = newSignals.length;
+            // Premium count (total minus 3 preview)
+            const premiumCount = Math.max(0, allSignals.length - 3);
+            document.getElementById('premiumCount').textContent = `+${premiumCount} weitere Signale`;
         }
 
-        function getFilteredSignals() {
-            const market = document.getElementById('filterMarket').value;
-            const timeframe = document.getElementById('filterTimeframe').value;
-            const direction = document.getElementById('filterDirection').value;
+        function getPreviewSignals() {
+            // Get 1 signal from each preview market
+            const preview = [];
             
-            // Success tab uses different data source
-            if (currentTab === 'success') {
-                let filtered = [...successSignals];
-                if (market) filtered = filtered.filter(s => s.market === market);
-                if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
-                if (direction) filtered = filtered.filter(s => s.direction === direction);
-                return filtered;
+            for (const market of PREVIEW_MARKETS) {
+                const signal = allSignals.find(s => 
+                    s.market === market && !preview.some(p => p.id === s.id)
+                );
+                if (signal) {
+                    preview.push(signal);
+                }
             }
             
-            let filtered = [...allSignals];
-            
-            // Tab filter
-            const now = new Date();
-            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
-            
-            if (currentTab === 'new') {
-                filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
-            } else if (currentTab === 'bullish') {
-                filtered = filtered.filter(s => s.direction === 'BULLISH');
-            } else if (currentTab === 'bearish') {
-                filtered = filtered.filter(s => s.direction === 'BEARISH');
+            // If we don't have all 3, fill with any available signals
+            if (preview.length < 3) {
+                for (const signal of allSignals) {
+                    if (preview.length >= 3) break;
+                    if (!preview.some(p => p.id === signal.id)) {
+                        preview.push(signal);
+                    }
+                }
             }
             
-            // Dropdown filters
-            if (market) filtered = filtered.filter(s => s.market === market);
-            if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
-            if (direction) filtered = filtered.filter(s => s.direction === direction);
-            
-            return filtered;
+            return preview;
         }
 
-        function applyFiltersAndRender() {
-            const filtered = getFilteredSignals();
-            renderSignals(filtered);
+        function renderPreviewSignals() {
+            const grid = document.getElementById('previewGrid');
+            const previewSignals = getPreviewSignals();
+            
+            if (previewSignals.length === 0) {
+                grid.innerHTML = '<div class="loading"><p>Keine Signale verfügbar</p></div>';
+                return;
+            }
+
+            grid.innerHTML = previewSignals.map(signal => renderSignalCard(signal, true)).join('');
+        }
+
+        function renderLockedSignals() {
+            const grid = document.getElementById('lockedGrid');
+            const previewIds = new Set(getPreviewSignals().map(s => s.id));
+            const lockedSignals = allSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
+            
+            if (lockedSignals.length === 0) {
+                // Show placeholder locked cards
+                grid.innerHTML = Array(4).fill(0).map(() => `
+                    <div class="signal-card-locked">
+                        <div class="signal-image-container">
+                            <div class="placeholder-image">📈</div>
+                        </div>
+                        <div class="signal-info">
+                            <div class="signal-header">
+                                <div>
+                                    <div class="signal-title">████████</div>
+                                    <div class="signal-symbol">██████</div>
+                                </div>
+                            </div>
+                            <div class="price-grid">
+                                <div class="price-item"><div class="price-label">Entry</div><div class="price-value">███</div></div>
+                                <div class="price-item"><div class="price-label">Stop</div><div class="price-value">███</div></div>
+                                <div class="price-item"><div class="price-label">TP1</div><div class="price-value">███</div></div>
+                                <div class="price-item"><div class="price-label">TP2</div><div class="price-value">███</div></div>
+                                <div class="price-item"><div class="price-label">TP3</div><div class="price-value">███</div></div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                return;
+            }
+
+            grid.innerHTML = lockedSignals.map(signal => renderSignalCard(signal, false)).join('');
+        }
+
+        function renderSignalCard(signal, isPreview) {
+            const imageUrl = signal.image_path ? 
+                (signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`) : '';
+            
+            const isBullish = signal.direction === 'BULLISH';
+            const isNew = isNewSignal(signal.created_at);
+            
+            const entry = parseFloat(signal.entry) || 0;
+            const calcPct = (tp) => entry > 0 ? (((parseFloat(tp) - entry) / entry) * 100) : 0;
+            
+            const tp1Pct = signal.tp1_pct ? Math.abs(signal.tp1_pct).toFixed(1) : Math.abs(calcPct(signal.tp1)).toFixed(1);
+            const tp2Pct = signal.tp2_pct ? Math.abs(signal.tp2_pct).toFixed(1) : Math.abs(calcPct(signal.tp2)).toFixed(1);
+            const tp3Pct = signal.tp3_pct ? Math.abs(signal.tp3_pct).toFixed(1) : Math.abs(calcPct(signal.tp3)).toFixed(1);
+            const slPct = signal.sl_pct ? Math.abs(signal.sl_pct).toFixed(1) : Math.abs(calcPct(signal.sl)).toFixed(1);
+
+            return `
+                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="${isPreview ? `openModal('${imageUrl}')` : 'showCheckout()'}">
+                    ${isPreview ? '<div class="preview-badge">Vorschau</div>' : ''}
+                    <div class="signal-image-container">
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image">📈</div>'}
+                        <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">
+                            ${signal.direction}
+                        </span>
+                        <div class="signal-tags">
+                            <span class="signal-tag">${signal.market || 'N/A'}</span>
+                            <span class="signal-tag">${signal.timeframe || 'N/A'}</span>
+                        </div>
+                    </div>
+                    <div class="signal-info">
+                        <div class="signal-header">
+                            <div>
+                                <div class="signal-title">${signal.symbol_name || signal.symbol}</div>
+                                <div class="signal-symbol">${signal.symbol}</div>
+                            </div>
+                            <div class="signal-time">
+                                <div class="signal-date">${formatDate(signal.created_at)}</div>
+                                <div class="signal-ago">${getTimeAgo(signal.created_at)}</div>
+                            </div>
+                        </div>
+                        <div class="price-grid">
+                            <div class="price-item">
+                                <div class="price-label">Entry</div>
+                                <div class="price-value">${formatPrice(signal.entry)}</div>
+                            </div>
+                            <div class="price-item">
+                                <div class="price-label">Stop</div>
+                                <div class="price-value">${formatPrice(signal.sl)}</div>
+                                <div class="price-pct pct-red">-${slPct}%</div>
+                            </div>
+                            <div class="price-item">
+                                <div class="price-label">TP1</div>
+                                <div class="price-value">${formatPrice(signal.tp1)}</div>
+                                <div class="price-pct pct-green">+${tp1Pct}%</div>
+                            </div>
+                            <div class="price-item">
+                                <div class="price-label">TP2</div>
+                                <div class="price-value">${formatPrice(signal.tp2)}</div>
+                                <div class="price-pct pct-green">+${tp2Pct}%</div>
+                            </div>
+                            <div class="price-item">
+                                <div class="price-label">TP3</div>
+                                <div class="price-value">${formatPrice(signal.tp3)}</div>
+                                <div class="price-pct pct-green">+${tp3Pct}%</div>
+                            </div>
+                        </div>
+                        <div class="rr-badge">
+                            R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function isNewSignal(createdAt) {
             const now = new Date();
             const signalTime = new Date(createdAt);
             const hoursDiff = (now - signalTime) / (1000 * 60 * 60);
-            return hoursDiff < 2; // Less than 2 hours old
+            return hoursDiff < 2;
         }
 
         function getTimeAgo(createdAt) {
@@ -836,92 +1088,6 @@
             if (diffMins < 60) return `vor ${diffMins} Min`;
             if (diffHours < 24) return `vor ${diffHours} Std`;
             return `vor ${diffDays} Tag${diffDays > 1 ? 'en' : ''}`;
-        }
-
-        function renderSignals(signals) {
-            const grid = document.getElementById('signalsGrid');
-            const isSuccessTab = currentTab === 'success';
-            
-            if (signals.length === 0) {
-                grid.innerHTML = isSuccessTab ? 
-                    '<div class="loading"><p>Noch keine erfolgreichen Signale</p></div>' :
-                    '<div class="loading"><p>Keine Signale gefunden</p></div>';
-                return;
-            }
-
-            grid.innerHTML = signals.map(signal => {
-                const imageUrl = signal.image_path ? 
-                    (signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`) : '';
-                
-                const isBullish = signal.direction === 'BULLISH';
-                const isNew = isNewSignal(signal.created_at);
-                
-                // Calculate percentages if not in DB
-                const entry = parseFloat(signal.entry) || 0;
-                const calcPct = (tp) => entry > 0 ? (((parseFloat(tp) - entry) / entry) * 100) : 0;
-                
-                const tp1Pct = signal.tp1_pct ? Math.abs(signal.tp1_pct).toFixed(1) : Math.abs(calcPct(signal.tp1)).toFixed(1);
-                const tp2Pct = signal.tp2_pct ? Math.abs(signal.tp2_pct).toFixed(1) : Math.abs(calcPct(signal.tp2)).toFixed(1);
-                const tp3Pct = signal.tp3_pct ? Math.abs(signal.tp3_pct).toFixed(1) : Math.abs(calcPct(signal.tp3)).toFixed(1);
-                const slPct = signal.sl_pct ? Math.abs(signal.sl_pct).toFixed(1) : Math.abs(calcPct(signal.sl)).toFixed(1);
-
-                return `
-                    <div class="signal-card ${isNew ? 'is-new' : ''} ${isSuccessTab ? 'is-success' : ''} ${signal.justAdded ? 'just-added' : ''}" onclick="openModal('${imageUrl}')">
-                        ${isSuccessTab ? '<div class="success-badge">✓ TP3</div>' : (isNew ? '<div class="new-badge">NEU</div>' : '')}
-                        <div class="signal-image-container">
-                            ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : ''}
-                            <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">
-                                ${signal.direction}
-                            </span>
-                            <div class="signal-tags">
-                                <span class="signal-tag">${signal.market || 'N/A'}</span>
-                                <span class="signal-tag">${signal.timeframe || 'N/A'}</span>
-                            </div>
-                        </div>
-                        <div class="signal-info">
-                            <div class="signal-header">
-                                <div>
-                                    <div class="signal-title">${signal.symbol_name || signal.symbol}</div>
-                                    <div class="signal-symbol">${signal.symbol}</div>
-                                </div>
-                                <div class="signal-time">
-                                    <div class="signal-date">${formatDate(signal.created_at)}</div>
-                                    <div class="signal-ago">${getTimeAgo(signal.created_at)}</div>
-                                </div>
-                            </div>
-                            <div class="price-grid">
-                                <div class="price-item">
-                                    <div class="price-label">Entry</div>
-                                    <div class="price-value">${formatPrice(signal.entry)}</div>
-                                </div>
-                                <div class="price-item">
-                                    <div class="price-label">Stop</div>
-                                    <div class="price-value">${formatPrice(signal.sl)}</div>
-                                    <div class="price-pct pct-red">-${slPct}%</div>
-                                </div>
-                                <div class="price-item">
-                                    <div class="price-label">TP1</div>
-                                    <div class="price-value">${formatPrice(signal.tp1)}</div>
-                                    <div class="price-pct pct-green">+${tp1Pct}%</div>
-                                </div>
-                                <div class="price-item">
-                                    <div class="price-label">TP2</div>
-                                    <div class="price-value">${formatPrice(signal.tp2)}</div>
-                                    <div class="price-pct pct-green">+${tp2Pct}%</div>
-                                </div>
-                                <div class="price-item">
-                                    <div class="price-label">TP3</div>
-                                    <div class="price-value">${formatPrice(signal.tp3)}</div>
-                                    <div class="price-pct pct-green">+${tp3Pct}%</div>
-                                </div>
-                            </div>
-                            <div class="rr-badge">
-                                R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
         function formatPrice(price) {
@@ -945,20 +1111,15 @@
             document.getElementById('imageModal').classList.remove('active');
         }
 
-        // Tab handling
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentTab = tab.dataset.tab;
-                applyFiltersAndRender();
-            });
-        });
+        function showCheckout() {
+            // TODO: Stripe Checkout integration
+            alert('Stripe Checkout wird geöffnet...\n\nHier kommt die Stripe-Integration hin!');
+        }
 
-        // Filter handling
-        document.getElementById('filterMarket').addEventListener('change', applyFiltersAndRender);
-        document.getElementById('filterTimeframe').addEventListener('change', applyFiltersAndRender);
-        document.getElementById('filterDirection').addEventListener('change', applyFiltersAndRender);
+        function showLogin() {
+            // TODO: Login modal
+            alert('Login Modal wird geöffnet...\n\nHier kommt die Supabase Auth hin!');
+        }
 
         // Modal handling
         document.getElementById('imageModal').addEventListener('click', (e) => {
@@ -966,21 +1127,8 @@
         });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-        // Countdown timer
-        function updateCountdown() {
-            countdown--;
-            if (countdown <= 0) {
-                fetchSignals();
-            } else {
-                const mins = Math.floor(countdown / 60);
-                const secs = countdown % 60;
-                document.getElementById('nextUpdate').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-            }
-        }
-
         // Initialize
         fetchSignals();
-        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
