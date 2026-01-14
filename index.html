@@ -773,6 +773,46 @@
         </div>
     </section>
 
+    <!-- Tabs & Filters (nur für eingeloggte User) -->
+    <section class="tabs-section" id="tabsSection" style="display: none;">
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="all">Alle Signale</button>
+                <button class="tab" data-tab="new">
+                    Neu
+                    <span class="tab-badge" id="newCount">0</span>
+                </button>
+                <button class="tab" data-tab="bullish">Bullish</button>
+                <button class="tab" data-tab="bearish">Bearish</button>
+            </div>
+            <div class="filters">
+                <select class="filter-select" id="filterMarket">
+                    <option value="">Alle Märkte</option>
+                    <option value="DAX">DAX</option>
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="NYSE">NYSE</option>
+                    <option value="SP500">S&P 500</option>
+                    <option value="FOREX">Forex</option>
+                    <option value="OTHER">Andere</option>
+                </select>
+                <select class="filter-select" id="filterTimeframe">
+                    <option value="">Alle TF</option>
+                    <option value="M5">M5</option>
+                    <option value="M15">M15</option>
+                    <option value="H1">H1</option>
+                    <option value="H4">H4</option>
+                    <option value="D1">Daily</option>
+                    <option value="W1">Weekly</option>
+                </select>
+                <select class="filter-select" id="filterDirection">
+                    <option value="">Alle</option>
+                    <option value="BULLISH">Bullish</option>
+                    <option value="BEARISH">Bearish</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
     <!-- Free Preview Section -->
     <section class="section-header" id="previewHeader">
         <div class="section-title">
@@ -1304,6 +1344,88 @@
             font-size: 12px;
             color: var(--text-secondary);
             margin-top: 4px;
+        }
+
+        /* Tabs Section */
+        .tabs-section {
+            padding: 20px 40px;
+        }
+
+        .tabs-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .tab-badge {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .tab.active .tab-badge {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-select {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-select:hover {
+            border-color: var(--accent-green);
         }
         
         /* Quick Actions */
@@ -1921,6 +2043,11 @@
                 if (premiumSection) {
                     premiumSection.style.display = 'none';
                 }
+                // Show tabs for logged in users with access
+                const tabsSection = document.getElementById('tabsSection');
+                if (tabsSection) {
+                    tabsSection.style.display = 'block';
+                }
             }
         }
 
@@ -1948,10 +2075,83 @@
                 `;
             }
             
+            // Hide tabs for guests
+            const tabsSection = document.getElementById('tabsSection');
+            if (tabsSection) {
+                tabsSection.style.display = 'none';
+            }
+            
             // Show paywall again
             const premiumSection = document.querySelector('.premium-section');
             if (premiumSection) {
                 premiumSection.style.display = 'block';
+            }
+        }
+
+        // ==================== TAB & FILTER FUNCTIONS ====================
+
+        function getFilteredSignals() {
+            const market = document.getElementById('filterMarket')?.value || '';
+            const timeframe = document.getElementById('filterTimeframe')?.value || '';
+            const direction = document.getElementById('filterDirection')?.value || '';
+            
+            let filtered = [...allSignals];
+            
+            // Tab filter
+            const now = new Date();
+            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
+            
+            if (currentTab === 'new') {
+                filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            } else if (currentTab === 'bullish') {
+                filtered = filtered.filter(s => s.direction === 'BULLISH');
+            } else if (currentTab === 'bearish') {
+                filtered = filtered.filter(s => s.direction === 'BEARISH');
+            }
+            
+            // Dropdown filters
+            if (market) filtered = filtered.filter(s => s.market === market);
+            if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
+            if (direction) filtered = filtered.filter(s => s.direction === direction);
+            
+            return filtered;
+        }
+
+        function applyFiltersAndRender() {
+            if (currentUser && (isSubscribed || isAdmin)) {
+                const filtered = getFilteredSignals();
+                const grid = document.getElementById('previewGrid');
+                
+                if (filtered.length === 0) {
+                    grid.innerHTML = '<div class="loading"><p>Keine Signale gefunden</p></div>';
+                    return;
+                }
+                
+                grid.innerHTML = filtered.map(signal => renderSignalCard(signal, true)).join('');
+                
+                // Update header count
+                const previewHeader = document.getElementById('previewHeader');
+                if (previewHeader) {
+                    previewHeader.innerHTML = `
+                        <div class="section-title">
+                            🐺 Alle Signale
+                            <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
+                        </div>
+                        <div class="section-subtitle">— ${filtered.length} von ${allSignals.length} Signale</div>
+                    `;
+                }
+            } else {
+                renderPreviewSignals();
+            }
+        }
+
+        function updateNewCount() {
+            const now = new Date();
+            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
+            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            const newCountEl = document.getElementById('newCount');
+            if (newCountEl) {
+                newCountEl.textContent = newSignals.length;
             }
         }
 
@@ -2366,6 +2566,8 @@
 
         // ==================== SIGNAL FUNCTIONS ====================
 
+        let currentTab = 'all';
+
         async function fetchSignals() {
             try {
                 // Fetch active signals
@@ -2417,6 +2619,9 @@
             // Premium count (total minus 3 preview)
             const premiumCount = Math.max(0, allSignals.length - 3);
             document.getElementById('premiumCount').textContent = `+${premiumCount} weitere Signale`;
+            
+            // Update new count for tabs
+            updateNewCount();
         }
 
         function getPreviewSignals() {
@@ -2448,13 +2653,14 @@
         function renderPreviewSignals() {
             const grid = document.getElementById('previewGrid');
             
-            // If user is subscribed OR admin, show ALL signals here
+            // If user is subscribed OR admin, use filtered signals
             if (currentUser && (isSubscribed || isAdmin)) {
-                if (allSignals.length === 0) {
-                    grid.innerHTML = '<div class="loading"><p>Keine Signale verfügbar</p></div>';
+                const filtered = getFilteredSignals();
+                if (filtered.length === 0) {
+                    grid.innerHTML = '<div class="loading"><p>Keine Signale gefunden</p></div>';
                     return;
                 }
-                grid.innerHTML = allSignals.map(signal => renderSignalCard(signal, true)).join('');
+                grid.innerHTML = filtered.map(signal => renderSignalCard(signal, true)).join('');
                 return;
             }
             
@@ -2666,6 +2872,21 @@
         document.getElementById('forgotEmail').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleForgotPassword();
         });
+
+        // Tab handling
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.tab;
+                applyFiltersAndRender();
+            });
+        });
+
+        // Filter handling
+        document.getElementById('filterMarket')?.addEventListener('change', applyFiltersAndRender);
+        document.getElementById('filterTimeframe')?.addEventListener('change', applyFiltersAndRender);
+        document.getElementById('filterDirection')?.addEventListener('change', applyFiltersAndRender);
 
         // Initialize
         async function init() {
