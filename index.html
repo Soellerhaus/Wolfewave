@@ -1943,9 +1943,132 @@
         let isAdmin = false;
         let adminUsers = [];
         let adminSubscriptions = [];
+        let sessionToken = null;
+        let sessionCheckInterval = null;
 
         // Markets we want to show as preview (1 each)
         const PREVIEW_MARKETS = ['DAX', 'NASDAQ', 'FOREX', 'CRYPTO'];
+
+        // ==================== SESSION FUNCTIONS ====================
+
+        function generateSessionToken() {
+            return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15);
+        }
+
+        function getSessionToken() {
+            return localStorage.getItem('session_token');
+        }
+
+        function saveSessionToken(token) {
+            localStorage.setItem('session_token', token);
+            sessionToken = token;
+        }
+
+        function clearSessionToken() {
+            localStorage.removeItem('session_token');
+            sessionToken = null;
+        }
+
+        async function createSession(userId) {
+            const token = generateSessionToken();
+            const deviceInfo = navigator.userAgent.substring(0, 200);
+            
+            try {
+                // Erstelle neue Session (löscht automatisch alte)
+                await fetch(`${SUPABASE_URL}/rest/v1/rpc/create_user_session`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        p_user_id: userId,
+                        p_session_token: token,
+                        p_device_info: deviceInfo
+                    })
+                });
+                
+                saveSessionToken(token);
+                startSessionCheck();
+                return true;
+            } catch (e) {
+                console.error('Session creation failed:', e);
+                return false;
+            }
+        }
+
+        async function validateSession() {
+            if (!currentUser || !getSessionToken()) return false;
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/validate_session`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        p_user_id: currentUser.id,
+                        p_session_token: getSessionToken()
+                    })
+                });
+                
+                const isValid = await response.json();
+                return isValid === true;
+            } catch (e) {
+                console.error('Session validation failed:', e);
+                return false;
+            }
+        }
+
+        function startSessionCheck() {
+            // Prüfe alle 30 Sekunden ob Session noch gültig
+            if (sessionCheckInterval) clearInterval(sessionCheckInterval);
+            
+            sessionCheckInterval = setInterval(async () => {
+                if (!currentUser) return;
+                
+                const isValid = await validateSession();
+                if (!isValid) {
+                    showSessionExpiredMessage();
+                    handleLogout(true); // silent logout
+                }
+            }, 30000); // 30 Sekunden
+        }
+
+        function stopSessionCheck() {
+            if (sessionCheckInterval) {
+                clearInterval(sessionCheckInterval);
+                sessionCheckInterval = null;
+            }
+        }
+
+        function showSessionExpiredMessage() {
+            // Modal anzeigen
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.id = 'sessionExpiredModal';
+            modal.innerHTML = `
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="auth-icon">🔐</div>
+                        <h2>Session abgelaufen</h2>
+                        <p>Du wurdest auf einem anderen Gerät eingeloggt.</p>
+                    </div>
+                    <button class="auth-btn" onclick="closeSessionExpiredModal()">
+                        OK, verstanden
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeSessionExpiredModal() {
+            const modal = document.getElementById('sessionExpiredModal');
+            if (modal) modal.remove();
+        }
 
         // ==================== AUTH FUNCTIONS ====================
         
@@ -1962,6 +2085,19 @@
                     const user = await response.json();
                     if (user && user.id) {
                         currentUser = user;
+                        
+                        // Validiere Session (falls vorhanden)
+                        if (getSessionToken()) {
+                            const isValid = await validateSession();
+                            if (!isValid) {
+                                // Session ungültig - wurde woanders eingeloggt
+                                showSessionExpiredMessage();
+                                handleLogout(true);
+                                return false;
+                            }
+                            startSessionCheck();
+                        }
+                        
                         await checkSubscription();
                         await checkAdminStatus();
                         updateUIForUser();
@@ -2059,6 +2195,9 @@
                 saveTokens(data.access_token, data.refresh_token);
                 currentUser = data.user;
                 
+                // Erstelle Session (loggt andere Geräte aus)
+                await createSession(currentUser.id);
+                
                 await checkSubscription();
                 await checkAdminStatus();
                 updateUIForUser();
@@ -2130,6 +2269,9 @@
                 if (data.access_token) {
                     saveTokens(data.access_token, data.refresh_token);
                     currentUser = data.user;
+                    await createSession(currentUser.id);
+                    await checkSubscription();
+                    await checkAdminStatus();
                     updateUIForUser();
                     closeAuthModal();
                     fetchSignals();
@@ -2191,7 +2333,28 @@
             }
         }
 
-        async function handleLogout() {
+        async function handleLogout(silent = false) {
+            // Session Check stoppen
+            stopSessionCheck();
+            
+            // Session aus DB löschen
+            if (currentUser && getSessionToken()) {
+                try {
+                    await fetch(
+                        `${SUPABASE_URL}/rest/v1/user_sessions?user_id=eq.${currentUser.id}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                } catch (e) {
+                    console.log('Session delete failed');
+                }
+            }
+            
             try {
                 await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
                     method: 'POST',
@@ -2205,6 +2368,7 @@
             }
             
             clearTokens();
+            clearSessionToken();
             currentUser = null;
             isSubscribed = false;
             isAdmin = false;
