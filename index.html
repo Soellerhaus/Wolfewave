@@ -784,6 +784,10 @@
                 </button>
                 <button class="tab" data-tab="bullish">Bullish</button>
                 <button class="tab" data-tab="bearish">Bearish</button>
+                <button class="tab tab-success" data-tab="success">
+                    ✓ Success
+                    <span class="tab-badge tab-badge-gold" id="successTabCount">0</span>
+                </button>
             </div>
             <div class="filters">
                 <select class="filter-select" id="filterMarket">
@@ -1405,6 +1409,56 @@
         .tab.active .tab-badge {
             background: rgba(0, 0, 0, 0.2);
             color: #000;
+        }
+
+        .tab-success {
+            color: var(--accent-gold) !important;
+        }
+
+        .tab-success:hover {
+            border-color: var(--accent-gold) !important;
+        }
+
+        .tab-success.active {
+            background: var(--accent-gold) !important;
+            border-color: var(--accent-gold) !important;
+            color: #000 !important;
+        }
+
+        .tab-badge-gold {
+            background: rgba(255, 215, 0, 0.2) !important;
+            color: var(--accent-gold) !important;
+        }
+
+        .tab-success.active .tab-badge-gold {
+            background: rgba(0, 0, 0, 0.2) !important;
+            color: #000 !important;
+        }
+
+        /* Success Signal Card */
+        .signal-card.is-success {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .signal-card.is-success:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .success-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .filters {
@@ -2095,6 +2149,15 @@
             const timeframe = document.getElementById('filterTimeframe')?.value || '';
             const direction = document.getElementById('filterDirection')?.value || '';
             
+            // Success tab uses different data source
+            if (currentTab === 'success') {
+                let filtered = [...successSignals];
+                if (market) filtered = filtered.filter(s => s.market === market);
+                if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
+                if (direction) filtered = filtered.filter(s => s.direction === direction);
+                return filtered;
+            }
+            
             let filtered = [...allSignals];
             
             // Tab filter
@@ -2121,24 +2184,37 @@
             if (currentUser && (isSubscribed || isAdmin)) {
                 const filtered = getFilteredSignals();
                 const grid = document.getElementById('previewGrid');
+                const isSuccessTab = currentTab === 'success';
                 
                 if (filtered.length === 0) {
-                    grid.innerHTML = '<div class="loading"><p>Keine Signale gefunden</p></div>';
+                    grid.innerHTML = isSuccessTab ? 
+                        '<div class="loading"><p>Noch keine erfolgreichen Signale</p></div>' :
+                        '<div class="loading"><p>Keine Signale gefunden</p></div>';
                     return;
                 }
                 
-                grid.innerHTML = filtered.map(signal => renderSignalCard(signal, true)).join('');
+                grid.innerHTML = filtered.map(signal => renderSignalCard(signal, true, isSuccessTab)).join('');
                 
                 // Update header count
                 const previewHeader = document.getElementById('previewHeader');
                 if (previewHeader) {
-                    previewHeader.innerHTML = `
-                        <div class="section-title">
-                            🐺 Alle Signale
-                            <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
-                        </div>
-                        <div class="section-subtitle">— ${filtered.length} von ${allSignals.length} Signale</div>
-                    `;
+                    if (isSuccessTab) {
+                        previewHeader.innerHTML = `
+                            <div class="section-title">
+                                🏆 Erfolgreiche Trades
+                                <span class="section-badge" style="background: var(--accent-gold);">✓ TP erreicht</span>
+                            </div>
+                            <div class="section-subtitle">— ${filtered.length} Signale haben ihr Ziel erreicht</div>
+                        `;
+                    } else {
+                        previewHeader.innerHTML = `
+                            <div class="section-title">
+                                🐺 Alle Signale
+                                <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
+                            </div>
+                            <div class="section-subtitle">— ${filtered.length} von ${allSignals.length} Signale</div>
+                        `;
+                    }
                 }
             } else {
                 renderPreviewSignals();
@@ -2152,6 +2228,12 @@
             const newCountEl = document.getElementById('newCount');
             if (newCountEl) {
                 newCountEl.textContent = newSignals.length;
+            }
+            
+            // Update success count
+            const successTabCountEl = document.getElementById('successTabCount');
+            if (successTabCountEl) {
+                successTabCountEl.textContent = successSignals.length;
             }
         }
 
@@ -2721,7 +2803,7 @@
             grid.innerHTML = lockedSignals.map(signal => renderSignalCard(signal, false)).join('');
         }
 
-        function renderSignalCard(signal, isPreview) {
+        function renderSignalCard(signal, isPreview, isSuccess = false) {
             const imageUrl = signal.image_path ? 
                 (signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`) : '';
             
@@ -2736,9 +2818,19 @@
             const tp3Pct = signal.tp3_pct ? Math.abs(signal.tp3_pct).toFixed(1) : Math.abs(calcPct(signal.tp3)).toFixed(1);
             const slPct = signal.sl_pct ? Math.abs(signal.sl_pct).toFixed(1) : Math.abs(calcPct(signal.sl)).toFixed(1);
 
+            // Determine which badge to show
+            let badgeHTML = '';
+            if (isSuccess) {
+                badgeHTML = '<div class="success-badge">✓ TP erreicht</div>';
+            } else if (isPreview && !currentUser) {
+                badgeHTML = '<div class="preview-badge">Vorschau</div>';
+            } else if (isNew) {
+                badgeHTML = '<div class="new-badge">NEU</div>';
+            }
+
             return `
-                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="${isPreview ? `openModal('${imageUrl}')` : 'showCheckout()'}">
-                    ${isPreview ? '<div class="preview-badge">Vorschau</div>' : ''}
+                <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" onclick="${isPreview ? `openModal('${imageUrl}')` : 'showCheckout()'}">
+                    ${badgeHTML}
                     <div class="signal-image-container">
                         ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image">📈</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">
