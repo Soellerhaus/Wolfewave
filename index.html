@@ -3041,8 +3041,11 @@
                 imageCountBadge = `<div class="image-count-badge">📷 ${imageCount}</div>`;
             }
 
+            // Store signal index for click handler
+            const signalIndex = isSuccess ? successSignals.indexOf(signal) : allSignals.indexOf(signal);
+
             return `
-                <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" onclick="openSignalSlider('${signal.id}', ${isSuccess})">
+                <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" data-signal-index="${signalIndex}" data-is-success="${isSuccess}">
                     ${badgeHTML}
                     ${imageCountBadge}
                     <div class="signal-image-container">
@@ -3100,18 +3103,22 @@
             `;
         }
 
-        function openSignalSlider(signalId, isSuccess) {
-            const signal = isSuccess 
-                ? successSignals.find(s => s.id === signalId)
-                : allSignals.find(s => s.id === signalId);
+        // Event delegation for signal cards
+        document.addEventListener('click', function(e) {
+            const card = e.target.closest('.signal-card');
+            if (!card) return;
             
+            const index = parseInt(card.dataset.signalIndex);
+            const isSuccess = card.dataset.isSuccess === 'true';
+            
+            const signal = isSuccess ? successSignals[index] : allSignals[index];
             if (!signal) return;
             
             const images = buildImagesArray(signal);
             const signalName = signal.symbol_name || signal.symbol;
             
             openSlider(images, signalName);
-        }
+        });
 
         function buildImagesArray(signal) {
             const images = [];
