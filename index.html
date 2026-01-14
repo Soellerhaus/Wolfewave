@@ -1,1458 +1,986 @@
-//+------------------------------------------------------------------+
-//|                                     WolfeWaveScanner_D1Only.mq5 |
-//|          Multi-Timeframe Scanner mit Mindestabstand             |
-//+------------------------------------------------------------------+
-#property copyright "Wolfe Wave Scanner"
-#property version   "26.00"
-#property description "M5 Support + Success Tracking"
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WolfeWaveSignals - Professional Trading Signals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-//--- Input Parameter
-input group "======= Scanner ======="
-input int      InpScanIntervalMin = 15;          // Scan Intervall (Minuten)
-input int      InpMaxSymbols      = 0;           // Max. Symbole (0=alle)
-input int      InpScanBars        = 200;         // Bars to scan
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --bg-hover: #1a1a1a;
+            --accent-green: #00ff88;
+            --accent-red: #ff4757;
+            --accent-gold: #ffd700;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --border-color: #1f1f1f;
+        }
 
-input group "======= Timeframes ======="
-input bool     InpScanM5          = true;        // M5 scannen
-input bool     InpScanM15         = true;        // M15 scannen
-input bool     InpScanH1          = true;        // H1 scannen
-input bool     InpScanH4          = true;        // H4 scannen
-input bool     InpScanD1          = true;        // D1 scannen
-input bool     InpScanW1          = true;        // W1 scannen
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
 
-input group "======= ZigZag ======="
-input int      InpZZDepth         = 12;          // ZigZag Depth
-input int      InpZZDeviation     = 5;           // ZigZag Deviation
+        /* Header */
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
 
-input group "======= Wolfe Rules ======="
-input int      InpMinBarsBetween  = 3;           // Min. Kerzen zwischen Punkten
-input int      InpMaxBarsPattern  = 200;         // Max Bars for Pattern
-input int      InpMaxBarsP5       = 10;          // Punkt 5 max. Bars alt
-input double   InpP5Tolerance     = 0.15;        // P5 Toleranz zur Linie 1-3 (0.15 = 15%)
-input double   InpMaxWedgeAngle   = 65.0;        // Max. Keil-Winkel in Grad
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
 
-input group "======= Output ======="
-input bool     InpDebugMode       = true;        // Debug Modus
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
 
-//--- Strukturen
-struct ZZPoint
-{
-   int      bar;
-   double   price;
-   datetime time;
-   bool     isHigh;
-};
+        .logo span {
+            color: var(--accent-green);
+        }
 
-struct WolfeWave
-{
-   string   symbol;
-   ENUM_TIMEFRAMES timeframe;  // NEU: Timeframe
-   ZZPoint  p1, p2, p3, p4, p5;
-   bool     isBullish;
-   double   entryPrice;
-   double   slPrice;
-   double   tpPrice;
-   double   tp1Price;     // TP1: 33% zur grünen Linie
-   double   tp2Price;     // TP2: 66% zur grünen Linie
-   double   tp3Price;     // TP3: Ende der grünen 1-4 Linie
-   datetime epaTime;      // Kreuzungspunkt Zeit
-   double   epaPrice;     // Kreuzungspunkt Preis
-};
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-//--- Globale Variablen
-datetime g_lastScanTime = 0;
-int g_patternsFound = 0;
-long g_openCharts[];
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
 
-//--- Duplikat-Erkennung: speichert bereits gefundene Patterns
-string g_foundPatterns[];  // Format: "SYMBOL_TF_P5TIME"
-int g_maxStoredPatterns = 500;  // Max. gespeicherte Patterns
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
 
-//+------------------------------------------------------------------+
-//| Expert initialization                                             |
-//+------------------------------------------------------------------+
-int OnInit()
-{
-   Print("============================================");
-   Print("WOLFE WAVE SCANNER V26.00");
-   Print("M5 SUPPORT + SUCCESS TRACKING");
-   Print("Hotkeys: S=Scan, C=Close, T=Track Success");
-   Print("============================================");
-   Print("Min. Kerzen zwischen Punkten: ", InpMinBarsBetween);
-   Print("P5 Toleranz zur Linie: ", InpP5Tolerance * 100, "%");
-   Print("Punkt 5 max. ", InpMaxBarsP5, " Bars alt");
-   Print("Max. Keil-Winkel: ", InpMaxWedgeAngle, "°");
-   
-   //--- Aktive Timeframes anzeigen
-   string tfStr = "Timeframes: ";
-   if(InpScanM5)  tfStr += "M5 ";
-   if(InpScanM15) tfStr += "M15 ";
-   if(InpScanH1)  tfStr += "H1 ";
-   if(InpScanH4)  tfStr += "H4 ";
-   if(InpScanD1)  tfStr += "D1 ";
-   if(InpScanW1)  tfStr += "W1 ";
-   Print(tfStr);
-   
-   //--- Hauptordner erstellen
-   FolderCreate("WolfeWaves");
-   
-   //--- Pfad anzeigen
-   string dataPath = TerminalInfoString(TERMINAL_DATA_PATH);
-   Print("");
-   Print("★★★ WEBSITE EXPORT ORDNER: ★★★");
-   Print(dataPath + "\\MQL5\\Files\\WolfeWaves\\");
-   Print("");
-   Print("Struktur: /MARKT/TIMEFRAME/KEIL_ID/VERSIONEN");
-   Print("");
-   Print("  /WolfeWaves/");
-   Print("    /DAX/");
-   Print("      /H1/");
-   Print("        /BULL_BMWGDE_20250113_1400/   <- Keil-Ordner");
-   Print("          v_20250113_1500.png         <- Version 15:00");
-   Print("          v_20250113_1515.png         <- Version 15:15");
-   Print("          v_20250113_1530.png         <- Version 15:30");
-   Print("          latest.png                  <- Aktuellste");
-   Print("          latest.json                 <- Aktuellste Daten");
-   Print("");
-   Print("► Website zeigt: latest.png");
-   Print("► Timeline: alle v_*.png zum Zurückspulen");
-   Print("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
-   Print("");
-   
-   EventSetTimer(60);
-   
-   Print("Starte ersten Scan in 3 Sekunden...");
-   Sleep(3000);
-   PerformScan();
-   
-   return(INIT_SUCCEEDED);
-}
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
 
-//+------------------------------------------------------------------+
-void OnDeinit(const int reason)
-{
-   EventKillTimer();
-   Print("Scanner beendet. Patterns: ", g_patternsFound);
-}
+        .filters {
+            display: flex;
+            gap: 12px;
+        }
 
-//+------------------------------------------------------------------+
-void OnTimer()
-{
-   if(TimeCurrent() - g_lastScanTime >= InpScanIntervalMin * 60)
-      PerformScan();
-   
-   int mins = (int)((InpScanIntervalMin * 60 - (TimeCurrent() - g_lastScanTime)) / 60);
-   Comment("Wolfe Multi-TF Scanner | Patterns: ", g_patternsFound, " | Nächster: ", mins, " Min | [S]=Scan");
-}
+        .filter-select {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-//+------------------------------------------------------------------+
-string TFToString(ENUM_TIMEFRAMES tf)
-{
-   switch(tf)
-   {
-      case PERIOD_M5:  return "M5";
-      case PERIOD_M15: return "M15";
-      case PERIOD_H1:  return "H1";
-      case PERIOD_H4:  return "H4";
-      case PERIOD_D1:  return "D1";
-      case PERIOD_W1:  return "W1";
-      default: return EnumToString(tf);
-   }
-}
+        .filter-select:hover {
+            border-color: var(--accent-green);
+        }
 
-//+------------------------------------------------------------------+
-string GetMarket(string symbol)
-{
-   //--- Deutsche Aktien (DAX)
-   if(StringFind(symbol, ".DE") >= 0) return "DAX";
-   if(StringFind(symbol, "DE40") >= 0) return "DAX";
-   if(StringFind(symbol, "GER40") >= 0) return "DAX";
-   if(StringFind(symbol, "DAX") >= 0) return "DAX";
-   
-   //--- Französische Aktien
-   if(StringFind(symbol, ".PA") >= 0) return "CAC40";
-   if(StringFind(symbol, "FRA40") >= 0) return "CAC40";
-   
-   //--- UK Aktien
-   if(StringFind(symbol, ".UK") >= 0) return "FTSE";
-   if(StringFind(symbol, ".L") >= 0) return "FTSE";
-   if(StringFind(symbol, "UK100") >= 0) return "FTSE";
-   
-   //--- Niederlande
-   if(StringFind(symbol, ".AS") >= 0) return "AEX";
-   
-   //--- Spanien
-   if(StringFind(symbol, ".MC") >= 0) return "IBEX";
-   
-   //--- Schweiz
-   if(StringFind(symbol, ".SW") >= 0) return "SMI";
-   
-   //--- NASDAQ Aktien (Einzelwerte)
-   if(StringFind(symbol, ".OQ") >= 0) return "NASDAQ";  // z.B. VRSN.OQ, AAPL.OQ
-   if(StringFind(symbol, ".O") >= 0) return "NASDAQ";   // Alternative Endung
-   
-   //--- NYSE Aktien
-   if(StringFind(symbol, ".N") >= 0) return "NYSE";     // z.B. MA.N (Mastercard)
-   if(StringFind(symbol, ".K") >= 0) return "NYSE";     // Alternative
-   
-   //--- Indices
-   if(StringFind(symbol, "US500") >= 0) return "SP500";
-   if(StringFind(symbol, "US100") >= 0) return "NASDAQ";
-   if(StringFind(symbol, "US30") >= 0) return "DOWJONES";
-   if(StringFind(symbol, "USTEC") >= 0) return "NASDAQ";
-   if(StringFind(symbol, "SPX") >= 0) return "SP500";
-   if(StringFind(symbol, "NDX") >= 0) return "NASDAQ";
-   
-   //--- Forex
-   if(StringFind(symbol, "USD") >= 0 || StringFind(symbol, "EUR") >= 0 ||
-      StringFind(symbol, "GBP") >= 0 || StringFind(symbol, "JPY") >= 0 ||
-      StringFind(symbol, "CHF") >= 0 || StringFind(symbol, "AUD") >= 0 ||
-      StringFind(symbol, "CAD") >= 0 || StringFind(symbol, "NZD") >= 0)
-   {
-      if(StringLen(symbol) == 6 || StringFind(symbol, ".") < 0)
-         return "FOREX";
-   }
-   
-   //--- US Aktien (Default für amerikanische Symbole)
-   if(StringFind(symbol, ".US") >= 0) return "USA";
-   if(StringFind(symbol, ".") < 0) return "USA";  // Kein Suffix = USA
-   
-   //--- Unbekannt
-   return "OTHER";
-}
+        /* Tabs */
+        .tabs-section {
+            padding: 20px 40px 0;
+        }
 
-//+------------------------------------------------------------------+
-string GetPatternKey(WolfeWave &wave)
-{
-   //--- Eindeutiger Schlüssel für ein Pattern
-   //--- NUR P1-P4 verwenden (die ändern sich nicht mehr!)
-   //--- P5 ändert sich ständig während Kerze läuft
-   //--- Format: SYMBOL_TF_P1TIME_P4TIME
-   return wave.symbol + "_" + TFToString(wave.timeframe) + "_" + 
-          IntegerToString((long)wave.p1.time) + "_" +
-          IntegerToString((long)wave.p4.time);
-}
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0;
+        }
 
-//+------------------------------------------------------------------+
-bool IsPatternDuplicate(WolfeWave &wave)
-{
-   string key = GetPatternKey(wave);
-   
-   //--- Prüfen ob Pattern bereits gefunden wurde
-   for(int i = 0; i < ArraySize(g_foundPatterns); i++)
-   {
-      if(g_foundPatterns[i] == key)
-         return true;  // Duplikat - aber wir ÜBERSCHREIBEN!
-   }
-   
-   return false;  // Neu!
-}
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
 
-//+------------------------------------------------------------------+
-void AddPatternToHistory(WolfeWave &wave)
-{
-   string key = GetPatternKey(wave);
-   
-   int size = ArraySize(g_foundPatterns);
-   
-   //--- Wenn zu viele gespeichert, älteste entfernen
-   if(size >= g_maxStoredPatterns)
-   {
-      //--- Erste 100 entfernen (FIFO)
-      for(int i = 0; i < size - 100; i++)
-         g_foundPatterns[i] = g_foundPatterns[i + 100];
-      ArrayResize(g_foundPatterns, size - 100);
-      size = ArraySize(g_foundPatterns);
-   }
-   
-   //--- Neues Pattern hinzufügen
-   ArrayResize(g_foundPatterns, size + 1);
-   g_foundPatterns[size] = key;
-}
+        .tab:hover {
+            color: var(--text-primary);
+        }
 
-//+------------------------------------------------------------------+
-void PerformScan()
-{
-   Print("");
-   Print("========== MULTI-TF SCAN ==========");
-   g_lastScanTime = TimeCurrent();
-   
-   //--- Timeframes sammeln
-   ENUM_TIMEFRAMES timeframes[];
-   int tfCount = 0;
-   
-   if(InpScanM5)  { ArrayResize(timeframes, tfCount+1); timeframes[tfCount++] = PERIOD_M5; }
-   if(InpScanM15) { ArrayResize(timeframes, tfCount+1); timeframes[tfCount++] = PERIOD_M15; }
-   if(InpScanH1)  { ArrayResize(timeframes, tfCount+1); timeframes[tfCount++] = PERIOD_H1; }
-   if(InpScanH4)  { ArrayResize(timeframes, tfCount+1); timeframes[tfCount++] = PERIOD_H4; }
-   if(InpScanD1)  { ArrayResize(timeframes, tfCount+1); timeframes[tfCount++] = PERIOD_D1; }
-   if(InpScanW1)  { ArrayResize(timeframes, tfCount+1); timeframes[tfCount++] = PERIOD_W1; }
-   
-   if(tfCount == 0)
-   {
-      Print("Kein Timeframe ausgewählt!");
-      return;
-   }
-   
-   int totalSymbols = SymbolsTotal(true);
-   int toScan = (InpMaxSymbols > 0) ? MathMin(InpMaxSymbols, totalSymbols) : totalSymbols;
-   
-   Print("Scanne ", toScan, " Symbole x ", tfCount, " Timeframes...");
-   
-   int foundThisScan = 0;
-   
-   for(int s = 0; s < toScan; s++)
-   {
-      string symbol = SymbolName(s, true);
-      
-      if(!SymbolInfoInteger(symbol, SYMBOL_VISIBLE))
-         continue;
-      
-      //--- Alle Timeframes für dieses Symbol scannen
-      for(int t = 0; t < tfCount; t++)
-      {
-         WolfeWave wave;
-         if(ScanSymbol(symbol, timeframes[t], wave))
-         {
-            //--- DUPLIKAT-CHECK: Gleiches Pattern schon gefunden?
-            bool isUpdate = IsPatternDuplicate(wave);
-            
-            if(isUpdate)
-            {
-               if(InpDebugMode)
-                  Print("  🔄 Update: ", symbol, " ", TFToString(timeframes[t]), " (Bild wird überschrieben)");
+        .tab.active {
+            color: var(--accent-green);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-green);
+        }
+
+        .tab-badge {
+            background: var(--accent-green);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+            animation: badgePulse 2s infinite;
+        }
+
+        .tab-badge-gold {
+            background: var(--accent-gold);
+        }
+
+        .tab-success {
+            color: var(--accent-gold) !important;
+        }
+
+        .tab-success.active::after {
+            background: var(--accent-gold) !important;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Stats */
+        .stats-section {
+            padding: 24px 40px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 24px;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .stat-gold {
+            color: var(--accent-gold);
+        }
+
+        .stat-card-success {
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Main Grid */
+        .main {
+            padding: 0 40px 40px;
+        }
+
+        .signals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        /* Signal Card */
+        .signal-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .signal-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* NEW Signal Animation */
+        .signal-card.is-new {
+            border-color: rgba(0, 255, 136, 0.5);
+            animation: glowNew 3s ease-in-out infinite;
+        }
+
+        /* SUCCESS Signal Styling */
+        .signal-card.is-success {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .success-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes glowNew {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--accent-green);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            z-index: 10;
+            animation: newPulse 1.5s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes newPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        /* Image Section */
+        .signal-image-container {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+        }
+
+        .signal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .signal-card:hover .signal-image {
+            transform: scale(1.02);
+        }
+
+        .signal-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge-bullish {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .badge-bearish {
+            background: var(--accent-red);
+            color: #fff;
+        }
+
+        .signal-tags {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .signal-tag {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        /* Info Section */
+        .signal-info {
+            padding: 16px 20px 20px;
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .signal-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .signal-symbol {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .signal-time {
+            text-align: right;
+        }
+
+        .signal-date {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .signal-ago {
+            font-size: 10px;
+            color: var(--accent-green);
+            margin-top: 2px;
+        }
+
+        /* Price Grid */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .price-item {
+            text-align: center;
+        }
+
+        .price-label {
+            font-size: 8px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .price-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .price-pct {
+            font-size: 9px;
+            margin-top: 1px;
+        }
+
+        .pct-green { color: var(--accent-green); }
+        .pct-red { color: var(--accent-red); }
+
+        /* RR Badge */
+        .rr-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            padding: 6px 12px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .rr-badge span {
+            color: var(--accent-green);
+        }
+
+        /* Last Update */
+        .update-bar {
+            padding: 12px 40px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .update-bar .refresh-icon {
+            animation: spin 2s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .update-bar.refreshing .refresh-icon {
+            opacity: 1;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 32px;
+            color: #fff;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        /* Loading */
+        .loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
             }
-            else
-            {
-               //--- Neues Pattern! Zur History hinzufügen
-               AddPatternToHistory(wave);
-               g_patternsFound++;
+
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .tabs-section, .stats-section, .main {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .signals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signal-image-container {
+                height: 200px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🐺</div>
+            <div>Wolfe<span>Wave</span>Signals</div>
+        </div>
+        <div class="header-right">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>LIVE</span>
+            </div>
+            <div class="filters">
+                <select class="filter-select" id="filterMarket">
+                    <option value="">Alle Märkte</option>
+                    <option value="DAX">DAX</option>
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="NYSE">NYSE</option>
+                    <option value="SP500">S&P 500</option>
+                    <option value="FOREX">Forex</option>
+                    <option value="OTHER">Andere</option>
+                </select>
+                <select class="filter-select" id="filterTimeframe">
+                    <option value="">Alle TF</option>
+                    <option value="H1">H1</option>
+                    <option value="H4">H4</option>
+                    <option value="D1">Daily</option>
+                    <option value="W1">Weekly</option>
+                </select>
+                <select class="filter-select" id="filterDirection">
+                    <option value="">Alle</option>
+                    <option value="BULLISH">Bullish</option>
+                    <option value="BEARISH">Bearish</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <section class="tabs-section">
+        <div class="tabs">
+            <button class="tab active" data-tab="all">Alle Signale</button>
+            <button class="tab" data-tab="new">
+                Neu
+                <span class="tab-badge" id="newCount">0</span>
+            </button>
+            <button class="tab" data-tab="bullish">Bullish</button>
+            <button class="tab" data-tab="bearish">Bearish</button>
+            <button class="tab tab-success" data-tab="success">
+                ✓ Success
+                <span class="tab-badge tab-badge-gold" id="successCount">0</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stat-card">
+            <div class="stat-number" id="totalSignals">—</div>
+            <div class="stat-label">Signale</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="bullishCount">—</div>
+            <div class="stat-label">Bullish</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="bearishCount">—</div>
+            <div class="stat-label">Bearish</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="todayCount">—</div>
+            <div class="stat-label">Heute</div>
+        </div>
+        <div class="stat-card stat-card-success">
+            <div class="stat-number stat-gold" id="successTotal">—</div>
+            <div class="stat-label">✓ Success</div>
+        </div>
+    </section>
+
+    <main class="main">
+        <div class="signals-grid" id="signalsGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Lade Signale...</p>
+            </div>
+        </div>
+    </main>
+
+    <div class="update-bar" id="updateBar">
+        <span class="refresh-icon">↻</span>
+        <span>Letzte Aktualisierung: <span id="lastUpdate">—</span></span>
+        <span>• Nächste in <span id="nextUpdate">5:00</span></span>
+    </div>
+
+    <footer class="footer">
+        wolfewavesignals.com
+    </footer>
+
+    <div class="modal" id="imageModal">
+        <span class="modal-close" onclick="closeModal()">✕</span>
+        <img id="modalImage" src="" alt="Signal Chart">
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
+        const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
+
+        let allSignals = [];
+        let successSignals = [];
+        let currentTab = 'all';
+        let countdown = 300; // 5 minutes in seconds
+        let previousSignalIds = new Set();
+
+        async function fetchSignals() {
+            const updateBar = document.getElementById('updateBar');
+            updateBar.classList.add('refreshing');
+
+            try {
+                // Fetch active signals
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&order=created_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                
+                if (!response.ok) throw new Error('Failed to fetch');
+                
+                const newSignals = await response.json();
+                
+                // Fetch success signals
+                try {
+                    const successResponse = await fetch(`${SUPABASE_URL}/rest/v1/success_signals?select=*&order=created_at.desc`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    });
+                    if (successResponse.ok) {
+                        successSignals = await successResponse.json();
+                    }
+                } catch (e) {
+                    console.log('No success_signals table yet');
+                }
+                
+                // Check for new signals
+                const currentIds = new Set(newSignals.map(s => s.id));
+                const brandNewIds = new Set();
+                
+                if (previousSignalIds.size > 0) {
+                    newSignals.forEach(s => {
+                        if (!previousSignalIds.has(s.id)) {
+                            brandNewIds.add(s.id);
+                        }
+                    });
+                }
+                
+                previousSignalIds = currentIds;
+                allSignals = newSignals.map(s => ({
+                    ...s,
+                    justAdded: brandNewIds.has(s.id)
+                }));
+                
+                updateStats();
+                applyFiltersAndRender();
+                
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('de-DE');
+                countdown = 300;
+                
+            } catch (error) {
+                console.error('Error:', error);
             }
             
-            foundThisScan++;
+            setTimeout(() => updateBar.classList.remove('refreshing'), 1000);
+        }
+
+        function updateStats() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
-            Print("");
-            Print(isUpdate ? "🔄 WOLFE WAVE UPDATE 🔄" : "★★★ NEUES WOLFE WAVE ★★★");
-            Print("Symbol: ", symbol, " ", TFToString(timeframes[t]));
-            Print("Typ: ", wave.isBullish ? "BULLISH" : "BEARISH");
-            Print("P1: ", DoubleToString(wave.p1.price, 2), " @ ", TimeToString(wave.p1.time));
-            Print("P2: ", DoubleToString(wave.p2.price, 2), " @ ", TimeToString(wave.p2.time));
-            Print("P3: ", DoubleToString(wave.p3.price, 2), " @ ", TimeToString(wave.p3.time));
-            Print("P4: ", DoubleToString(wave.p4.price, 2), " @ ", TimeToString(wave.p4.time));
-            Print("P5: ", DoubleToString(wave.p5.price, 2), " @ ", TimeToString(wave.p5.time));
-            Print("Entry: ", DoubleToString(wave.entryPrice, 2));
-            Print("SL: ", DoubleToString(wave.slPrice, 2));
-            Print("TP1: ", DoubleToString(wave.tp1Price, 2));
-            Print("TP2: ", DoubleToString(wave.tp2Price, 2));
-            Print("TP3: ", DoubleToString(wave.tp3Price, 2));
-            Print(isUpdate ? "🔄🔄🔄🔄🔄🔄🔄🔄🔄🔄🔄🔄" : "★★★★★★★★★★★★★★★★★★★★★★★★");
+            document.getElementById('totalSignals').textContent = allSignals.length;
+            document.getElementById('bullishCount').textContent = allSignals.filter(s => s.direction === 'BULLISH').length;
+            document.getElementById('bearishCount').textContent = allSignals.filter(s => s.direction === 'BEARISH').length;
             
-            OpenAndDrawChart(wave);
-         }
-      }
-      
-      Sleep(50);
-      
-      if(s > 0 && s % 25 == 0)
-         Print("... ", s, "/", toScan);
-   }
-   
-   Print("");
-   Print("========== SCAN ENDE ==========");
-   Print("Gefunden: ", foundThisScan);
-   Print("Gesamt: ", g_patternsFound);
-}
+            const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
+            document.getElementById('todayCount').textContent = todaySignals.length;
+            
+            // Success count
+            document.getElementById('successTotal').textContent = successSignals.length;
+            document.getElementById('successCount').textContent = successSignals.length;
+            
+            // New signals (last 2 hours)
+            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
+            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            document.getElementById('newCount').textContent = newSignals.length;
+        }
 
-//+------------------------------------------------------------------+
-bool ScanSymbol(string symbol, ENUM_TIMEFRAMES tf, WolfeWave &wave)
-{
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
-   
-   int copied = CopyRates(symbol, tf, 0, InpScanBars, rates);
-   if(copied < 50)
-      return false;
-   
-   ZZPoint zzPoints[];
-   CalculateZigZag(rates, copied, zzPoints);
-   
-   if(ArraySize(zzPoints) < 5)
-      return false;
-   
-   wave.symbol = symbol;
-   wave.timeframe = tf;
-   
-   if(FindWolfeWave(zzPoints, rates, wave))
-   {
-      return true;
-   }
-   
-   return false;
-}
-
-//+------------------------------------------------------------------+
-void CalculateZigZag(MqlRates &rates[], int count, ZZPoint &zzPoints[])
-{
-   ArrayResize(zzPoints, 0);
-   
-   double zigzag[];
-   int direction[];
-   ArrayResize(zigzag, count);
-   ArrayResize(direction, count);
-   ArrayInitialize(zigzag, 0);
-   ArrayInitialize(direction, 0);
-   
-   double lastHigh = 0, lastLow = 0;
-   int lastHighBar = -1, lastLowBar = -1;
-   int trend = 0;
-   
-   for(int i = count - InpZZDepth - 1; i >= 0; i--)
-   {
-      int highestBar = i;
-      double highestVal = rates[i].high;
-      for(int j = 1; j < InpZZDepth && i + j < count; j++)
-      {
-         if(rates[i + j].high > highestVal)
-         {
-            highestVal = rates[i + j].high;
-            highestBar = i + j;
-         }
-      }
-      
-      int lowestBar = i;
-      double lowestVal = rates[i].low;
-      for(int j = 1; j < InpZZDepth && i + j < count; j++)
-      {
-         if(rates[i + j].low < lowestVal)
-         {
-            lowestVal = rates[i + j].low;
-            lowestBar = i + j;
-         }
-      }
-      
-      if(highestBar == i)
-      {
-         if(trend != 1)
-         {
-            trend = 1;
-            lastHigh = rates[i].high;
-            lastHighBar = i;
-            zigzag[i] = rates[i].high;
-            direction[i] = 1;
-         }
-         else if(rates[i].high > lastHigh)
-         {
-            if(lastHighBar >= 0) zigzag[lastHighBar] = 0;
-            lastHigh = rates[i].high;
-            lastHighBar = i;
-            zigzag[i] = rates[i].high;
-            direction[i] = 1;
-         }
-      }
-      
-      if(lowestBar == i)
-      {
-         if(trend != -1)
-         {
-            trend = -1;
-            lastLow = rates[i].low;
-            lastLowBar = i;
-            zigzag[i] = rates[i].low;
-            direction[i] = -1;
-         }
-         else if(rates[i].low < lastLow)
-         {
-            if(lastLowBar >= 0) zigzag[lastLowBar] = 0;
-            lastLow = rates[i].low;
-            lastLowBar = i;
-            zigzag[i] = rates[i].low;
-            direction[i] = -1;
-         }
-      }
-   }
-   
-   for(int i = 0; i < count; i++)
-   {
-      if(zigzag[i] != 0)
-      {
-         ZZPoint point;
-         point.bar = i;
-         point.price = zigzag[i];
-         point.time = rates[i].time;
-         point.isHigh = (direction[i] > 0);
-         
-         int size = ArraySize(zzPoints);
-         ArrayResize(zzPoints, size + 1);
-         zzPoints[size] = point;
-         
-         if(size >= 12) break;
-      }
-   }
-}
-
-//+------------------------------------------------------------------+
-bool FindWolfeWave(ZZPoint &zzPoints[], MqlRates &rates[], WolfeWave &wave)
-{
-   int count = ArraySize(zzPoints);
-   
-   for(int start = 0; start <= count - 5; start++)
-   {
-      ZZPoint pts[5];
-      for(int i = 0; i < 5; i++)
-         pts[i] = zzPoints[start + i];
-      
-      if(pts[4].bar - pts[0].bar > InpMaxBarsPattern)
-         continue;
-      
-      //--- Mindestens X Kerzen zwischen jedem Punkt (P5→P4→P3→P2→P1)
-      //--- pts[0]=P5, pts[1]=P4, pts[2]=P3, pts[3]=P2, pts[4]=P1
-      int bars54 = pts[1].bar - pts[0].bar;  // P5 zu P4
-      int bars43 = pts[2].bar - pts[1].bar;  // P4 zu P3
-      int bars32 = pts[3].bar - pts[2].bar;  // P3 zu P2
-      int bars21 = pts[4].bar - pts[3].bar;  // P2 zu P1
-      
-      if(bars54 < InpMinBarsBetween || bars43 < InpMinBarsBetween ||
-         bars32 < InpMinBarsBetween || bars21 < InpMinBarsBetween)
-         continue;
-      
-      // Bullish: L-H-L-H-L
-      if(!pts[0].isHigh && pts[1].isHigh && !pts[2].isHigh && 
-          pts[3].isHigh && !pts[4].isHigh)
-      {
-         if(ValidateBullish(pts, rates, wave))
-            return true;
-      }
-      
-      // Bearish: H-L-H-L-H
-      if(pts[0].isHigh && !pts[1].isHigh && pts[2].isHigh && 
-         !pts[3].isHigh && pts[4].isHigh)
-      {
-         if(ValidateBearish(pts, rates, wave))
-            return true;
-      }
-   }
-   
-   return false;
-}
-
-//+------------------------------------------------------------------+
-//| BULLISH Validierung mit Konvergenz-Check                         |
-//+------------------------------------------------------------------+
-bool ValidateBullish(ZZPoint &pts[], MqlRates &rates[], WolfeWave &wave)
-{
-   //--- Punkt 5 muss aktuell sein!
-   if(pts[0].bar > InpMaxBarsP5)
-      return false;
-   
-   //=== P5 MUSS AUF GESCHLOSSENER KERZE SEIN ===
-   // Bar 0 = aktuelle (laufende) Kerze - nicht erlaubt!
-   if(pts[0].bar < 1)
-      return false;
-   
-   double p1 = pts[4].price;
-   double p2 = pts[3].price;
-   double p3 = pts[2].price;
-   double p4 = pts[1].price;
-   double p5 = pts[0].price;
-   
-   datetime t1 = pts[4].time;
-   datetime t2 = pts[3].time;
-   datetime t3 = pts[2].time;
-   datetime t4 = pts[1].time;
-   datetime t5 = pts[0].time;
-   
-   //=== P5 BESTÄTIGUNG: Nächste Kerze muss ÜBER P5 schließen ===
-   // pts[0].bar ist die P5-Kerze, pts[0].bar - 1 ist die Kerze danach
-   int confirmBar = pts[0].bar - 1;
-   if(confirmBar >= 0)
-   {
-      double confirmClose = rates[confirmBar].close;
-      if(confirmClose <= p5)
-         return false;  // Kerze hat nicht über P5 geschlossen - keine Bestätigung!
-   }
-   
-   //=== GRUNDREGELN ===
-   if(p3 >= p1) return false;  // P3 muss tiefer als P1
-   if(p4 >= p2) return false;  // P4 muss tiefer als P2
-   if(p4 <= p1 || p4 <= p3) return false;  // P4 muss über P1 und P3
-   
-   //=== PREIS-ALTERNIERUNG PRÜFEN (Bullish: L-H-L-H-L) ===
-   // P2 (High) > P1 (Low)
-   if(p2 <= p1) return false;
-   // P2 (High) > P3 (Low)
-   if(p2 <= p3) return false;
-   // P4 (High) > P3 (Low)
-   if(p4 <= p3) return false;
-   // P4 (High) > P5 (Low)
-   if(p4 <= p5) return false;
-   
-   //=== KEIL-WINKEL PRÜFEN ===
-   // Normalisierter Winkel basierend auf Pattern-Höhe
-   double patternHeight = MathAbs(p2 - p3);
-   if(patternHeight < 0.0001) return false;  // Zu flaches Pattern
-   
-   int bars13 = pts[2].bar - pts[4].bar;  // Bars zwischen P1 und P3
-   if(bars13 < 1) bars13 = 1;
-   
-   // Steigung normalisiert: Preisänderung pro Bar, relativ zur Pattern-Höhe
-   double priceChange13 = MathAbs(p3 - p1);
-   double normalizedSlope = (priceChange13 / patternHeight) / (bars13 / 10.0);
-   double angle13 = MathArctan(normalizedSlope) * 180.0 / M_PI;
-   
-   if(angle13 > InpMaxWedgeAngle)
-      return false;  // Keil zu steil!
-   
-   //=== P5 MUSS AUF LINIE 1-3 LIEGEN ===
-   // Berechne wo Linie 1-3 bei Zeit t5 wäre
-   double slope13 = (p3 - p1) / (double)(t3 - t1);
-   double expectedP5 = p1 + slope13 * (double)(t5 - t1);
-   
-   // P5 darf max X% der Pattern-Höhe von der Linie abweichen
-   double tolerance = patternHeight * InpP5Tolerance;
-   
-   if(MathAbs(p5 - expectedP5) > tolerance)
-      return false;  // P5 ist nicht auf der Trendlinie 1-3!
-   
-   //=== SWEET ZONE CHECK - DEAKTIVIERT ===
-   // Strecke 2→3 auf P4 dupliziert = erwartete Zone für P5
-   // double strecke23 = MathAbs(p2 - p3);
-   // double sweetZoneTop = p4;
-   // double sweetZoneBottom = p4 - strecke23;
-   // if(p5 > sweetZoneTop || p5 < sweetZoneBottom)
-   //    return false;
-   
-   //=== SLOPES BERECHNEN ===
-   double slope24 = (p4 - p2) / (double)(t4 - t2);
-   
-   //=== KONVERGENZ-CHECK ===
-   double b13 = p1 - slope13 * (double)t1;
-   double b24 = p2 - slope24 * (double)t2;
-   
-   double slopeDiff = slope13 - slope24;
-   if(MathAbs(slopeDiff) < 0.0000000001) 
-      return false;  // Parallel
-   
-   double tCross = (b24 - b13) / slopeDiff;
-   
-   if(tCross <= (double)t5)
-      return false;  // Kreuzung in Vergangenheit
-   
-   double pCross = slope13 * tCross + b13;
-   
-   if(pCross <= p5)
-      return false;  // EPA muss über P5
-   
-   //=== KURSZIELE BERECHNEN ===
-   double slope14 = (p4 - p1) / (double)(t4 - t1);
-   
-   // Keil-Dauer für grüne Linie (2x Keil-Länge)
-   int keilDauer = (int)(t5 - t1);
-   datetime greenEnd = t4 + keilDauer;
-   
-   // TP3 = Preis auf 1-4 Linie am Ende der grünen Linie
-   double tp3OnLine = p1 + slope14 * (double)(greenEnd - t1);
-   
-   //=== SL BERECHNEN: 15% unter P5 ===
-   double slPrice = p5 - patternHeight * 0.15;
-   
-   //=== TP BERECHNEN: Klassische Staffelung zum Ende der 1-4 Linie ===
-   double tpRange = tp3OnLine - p5;
-   double tp1Calc = p5 + tpRange * 0.33;  // 33%
-   double tp2Calc = p5 + tpRange * 0.66;  // 66%
-   double tp3Calc = tp3OnLine;             // 100% = Ende der grünen Linie
-   
-   //=== PATTERN IST GÜLTIG! ===
-   wave.p1 = pts[4];
-   wave.p2 = pts[3];
-   wave.p3 = pts[2];
-   wave.p4 = pts[1];
-   wave.p5 = pts[0];
-   wave.isBullish = true;
-   wave.entryPrice = p5;
-   wave.slPrice = slPrice;
-   wave.tpPrice = pCross;
-   wave.tp1Price = tp1Calc;
-   wave.tp2Price = tp2Calc;
-   wave.tp3Price = tp3Calc;
-   wave.epaTime = (datetime)tCross;
-   wave.epaPrice = pCross;
-   
-   return true;
-}
-
-//+------------------------------------------------------------------+
-//| BEARISH Validierung mit Konvergenz-Check                         |
-//+------------------------------------------------------------------+
-bool ValidateBearish(ZZPoint &pts[], MqlRates &rates[], WolfeWave &wave)
-{
-   //--- Punkt 5 muss aktuell sein!
-   if(pts[0].bar > InpMaxBarsP5)
-      return false;
-   
-   //=== P5 MUSS AUF GESCHLOSSENER KERZE SEIN ===
-   // Bar 0 = aktuelle (laufende) Kerze - nicht erlaubt!
-   if(pts[0].bar < 1)
-      return false;
-   
-   double p1 = pts[4].price;
-   double p2 = pts[3].price;
-   double p3 = pts[2].price;
-   double p4 = pts[1].price;
-   double p5 = pts[0].price;
-   
-   datetime t1 = pts[4].time;
-   datetime t2 = pts[3].time;
-   datetime t3 = pts[2].time;
-   datetime t4 = pts[1].time;
-   datetime t5 = pts[0].time;
-   
-   //=== P5 BESTÄTIGUNG: Nächste Kerze muss UNTER P5 schließen ===
-   // pts[0].bar ist die P5-Kerze, pts[0].bar - 1 ist die Kerze danach
-   int confirmBar = pts[0].bar - 1;
-   if(confirmBar >= 0)
-   {
-      double confirmClose = rates[confirmBar].close;
-      if(confirmClose >= p5)
-         return false;  // Kerze hat nicht unter P5 geschlossen - keine Bestätigung!
-   }
-   
-   //=== GRUNDREGELN ===
-   if(p3 <= p1) return false;  // P3 muss höher als P1
-   if(p4 <= p2) return false;  // P4 muss höher als P2
-   if(p4 >= p1 || p4 >= p3) return false;  // P4 muss unter P1 und P3
-   
-   //=== PREIS-ALTERNIERUNG PRÜFEN (Bearish: H-L-H-L-H) ===
-   // P1 (High) > P2 (Low)
-   if(p1 <= p2) return false;
-   // P3 (High) > P2 (Low)
-   if(p3 <= p2) return false;
-   // P3 (High) > P4 (Low)
-   if(p3 <= p4) return false;
-   // P5 (High) > P4 (Low)
-   if(p5 <= p4) return false;
-   
-   //=== KEIL-WINKEL PRÜFEN ===
-   // Normalisierter Winkel basierend auf Pattern-Höhe
-   double patternHeight = MathAbs(p3 - p2);
-   if(patternHeight < 0.0001) return false;  // Zu flaches Pattern
-   
-   int bars13 = pts[2].bar - pts[4].bar;  // Bars zwischen P1 und P3
-   if(bars13 < 1) bars13 = 1;
-   
-   // Steigung normalisiert: Preisänderung pro Bar, relativ zur Pattern-Höhe
-   double priceChange13 = MathAbs(p3 - p1);
-   double normalizedSlope = (priceChange13 / patternHeight) / (bars13 / 10.0);
-   double angle13 = MathArctan(normalizedSlope) * 180.0 / M_PI;
-   
-   if(angle13 > InpMaxWedgeAngle)
-      return false;  // Keil zu steil!
-   
-   //=== P5 MUSS AUF LINIE 1-3 LIEGEN ===
-   // Berechne wo Linie 1-3 bei Zeit t5 wäre
-   double slope13 = (p3 - p1) / (double)(t3 - t1);
-   double expectedP5 = p1 + slope13 * (double)(t5 - t1);
-   
-   // P5 darf max X% der Pattern-Höhe von der Linie abweichen
-   double tolerance = patternHeight * InpP5Tolerance;
-   
-   if(MathAbs(p5 - expectedP5) > tolerance)
-      return false;  // P5 ist nicht auf der Trendlinie 1-3!
-   
-   //=== SWEET ZONE CHECK - DEAKTIVIERT ===
-   // Strecke 2→3 auf P4 dupliziert = erwartete Zone für P5
-   // double strecke23 = MathAbs(p3 - p2);
-   // double sweetZoneBottom = p4;
-   // double sweetZoneTop = p4 + strecke23;
-   // if(p5 < sweetZoneBottom || p5 > sweetZoneTop)
-   //    return false;
-   
-   //=== SLOPES BERECHNEN ===
-   double slope24 = (p4 - p2) / (double)(t4 - t2);
-   
-   //=== KONVERGENZ-CHECK ===
-   double b13 = p1 - slope13 * (double)t1;
-   double b24 = p2 - slope24 * (double)t2;
-   
-   double slopeDiff = slope13 - slope24;
-   if(MathAbs(slopeDiff) < 0.0000000001) 
-      return false;  // Parallel
-   
-   double tCross = (b24 - b13) / slopeDiff;
-   
-   if(tCross <= (double)t5)
-      return false;  // Kreuzung in Vergangenheit
-   
-   double pCross = slope13 * tCross + b13;
-   
-   if(pCross >= p5)
-      return false;  // EPA muss unter P5
-   
-   //=== KURSZIELE BERECHNEN ===
-   double slope14 = (p4 - p1) / (double)(t4 - t1);
-   
-   // Keil-Dauer für grüne Linie (2x Keil-Länge)
-   int keilDauer = (int)(t5 - t1);
-   datetime greenEnd = t4 + keilDauer;
-   
-   // TP3 = Preis auf 1-4 Linie am Ende der grünen Linie
-   double tp3OnLine = p1 + slope14 * (double)(greenEnd - t1);
-   
-   //=== SL BERECHNEN: 15% über P5 ===
-   double slPrice = p5 + patternHeight * 0.15;
-   
-   //=== TP BERECHNEN: Klassische Staffelung zum Ende der 1-4 Linie ===
-   double tpRange = p5 - tp3OnLine;  // Bearish: Entry - Target
-   double tp1Calc = p5 - tpRange * 0.33;  // 33%
-   double tp2Calc = p5 - tpRange * 0.66;  // 66%
-   double tp3Calc = tp3OnLine;             // 100% = Ende der grünen Linie
-   
-   //=== PATTERN IST GÜLTIG! ===
-   wave.p1 = pts[4];
-   wave.p2 = pts[3];
-   wave.p3 = pts[2];
-   wave.p4 = pts[1];
-   wave.p5 = pts[0];
-   wave.isBullish = false;
-   wave.entryPrice = p5;
-   wave.slPrice = slPrice;
-   wave.tpPrice = pCross;
-   wave.tp1Price = tp1Calc;
-   wave.tp2Price = tp2Calc;
-   wave.tp3Price = tp3Calc;
-   wave.epaTime = (datetime)tCross;
-   wave.epaPrice = pCross;
-   
-   return true;
-}
-
-//+------------------------------------------------------------------+
-void OpenAndDrawChart(WolfeWave &wave)
-{
-   Print("Öffne Chart für ", wave.symbol, " ", TFToString(wave.timeframe), "...");
-   
-   long chartId = ChartOpen(wave.symbol, wave.timeframe);
-   
-   if(chartId == 0)
-   {
-      Print("FEHLER: Chart konnte nicht geöffnet werden!");
-      return;
-   }
-   
-   //--- Max 10 Charts offen - ältesten schließen wenn voll
-   int size = ArraySize(g_openCharts);
-   if(size >= 10)
-   {
-      ChartClose(g_openCharts[0]);  // Ältesten schließen
-      // Array nach links shiften
-      for(int i = 0; i < size - 1; i++)
-         g_openCharts[i] = g_openCharts[i + 1];
-      ArrayResize(g_openCharts, size - 1);
-      size = size - 1;
-   }
-   ArrayResize(g_openCharts, size + 1);
-   g_openCharts[size] = chartId;
-   
-   //--- Chart konfigurieren
-   ChartSetInteger(chartId, CHART_MODE, CHART_CANDLES);
-   ChartSetInteger(chartId, CHART_SHOW_GRID, false);
-   ChartSetInteger(chartId, CHART_AUTOSCROLL, false);
-   ChartSetInteger(chartId, CHART_SHIFT, true);
-   ChartSetDouble(chartId, CHART_SHIFT_SIZE, 30.0);  // 30% Platz rechts (weniger = mehr Keil sichtbar)
-   ChartSetInteger(chartId, CHART_SHOW_VOLUMES, CHART_VOLUME_HIDE);  // Volumen ausblenden
-   
-   //--- ZOOM: Weiter rausgezoomt (Scale 0-5, niedriger = mehr Kerzen sichtbar)
-   ChartSetInteger(chartId, CHART_SCALE, 3);  // 3 = mehr reingezoomt
-   
-   //--- Weißer Hintergrund
-   ChartSetInteger(chartId, CHART_COLOR_BACKGROUND, clrWhite);
-   ChartSetInteger(chartId, CHART_COLOR_FOREGROUND, clrBlack);
-   ChartSetInteger(chartId, CHART_COLOR_GRID, clrWhite);  // Grid ausblenden
-   
-   //--- KERZEN: Schwarz/Weiß Stil - KEINE grünen Kerzen!
-   ChartSetInteger(chartId, CHART_COLOR_CANDLE_BULL, clrWhite);     // Bullish Körper: Weiß
-   ChartSetInteger(chartId, CHART_COLOR_CHART_UP, clrBlack);        // Bullish Rand/Docht: Schwarz
-   ChartSetInteger(chartId, CHART_COLOR_CANDLE_BEAR, clrBlack);     // Bearish Körper: Schwarz
-   ChartSetInteger(chartId, CHART_COLOR_CHART_DOWN, clrBlack);      // Bearish Rand/Docht: Schwarz
-   ChartSetInteger(chartId, CHART_COLOR_CHART_LINE, clrBlack);      // Linie: Schwarz
-   
-   //--- Farben sofort anwenden
-   ChartRedraw(chartId);
-   Sleep(200);
-   
-   //--- Pattern 3/4 RECHTS positionieren
-   int patternStart = wave.p1.bar;  // Ältester Punkt
-   int shift = patternStart - 10;   // Pattern fast am rechten Rand, 10 Bars Puffer
-   if(shift < 0) shift = 0;
-   ChartNavigate(chartId, CHART_END, -shift);
-   
-   Sleep(1000);
-   ChartRedraw(chartId);
-   Sleep(500);
-   
-   DrawPatternOnChart(chartId, wave);
-   
-   ChartRedraw(chartId);
-   Sleep(500);
-   
-   //--- Screenshot - MIT ORDNERSTRUKTUR FÜR WEBSITE
-   string symbolClean = wave.symbol;
-   StringReplace(symbolClean, ".", "");
-   StringReplace(symbolClean, "/", "");
-   
-   MqlDateTime dtP4;
-   TimeToStruct(wave.p4.time, dtP4);  // P4 Zeit für Keil-ID
-   
-   MqlDateTime dtNow;
-   TimeCurrent(dtNow);  // Aktuelle Zeit für Version
-   
-   //--- MARKT ERKENNEN
-   string market = GetMarket(wave.symbol);
-   string tfStr = TFToString(wave.timeframe);
-   
-   //--- Keil-ID basiert auf P4-Zeit
-   string p4DateStr = StringFormat("%04d%02d%02d_%02d%02d", 
-                       dtP4.year, dtP4.mon, dtP4.day, dtP4.hour, dtP4.min);
-   string typeStr = wave.isBullish ? "BULL" : "BEAR";
-   string wedgeId = typeStr + "_" + symbolClean + "_" + p4DateStr;
-   
-   //--- Ordnerstruktur: WolfeWaves/MARKT/TIMEFRAME/KEIL_ID/
-   //--- z.B. WolfeWaves/DAX/H1/BULL_BMWGDE_20250113_1400/
-   string baseFolder = "WolfeWaves\\" + market + "\\" + tfStr + "\\" + wedgeId + "\\";
-   
-   //--- Dateiname = aktuelle Zeit (Version)
-   string versionStr = StringFormat("%04d%02d%02d_%02d%02d", 
-                        dtNow.year, dtNow.mon, dtNow.day, dtNow.hour, dtNow.min);
-   
-   //--- Format: v_20250113_1530.png (Version/Snapshot)
-   string baseName = "v_" + versionStr;
-   string pngFile = baseFolder + baseName + ".png";
-   string jsonFile = baseFolder + baseName + ".json";
-   
-   //--- "latest" Symlink-ähnlich: auch aktuelles Bild als latest.png speichern
-   string latestPng = baseFolder + "latest.png";
-   string latestJson = baseFolder + "latest.json";
-   
-   //--- Ordner erstellen (falls nicht existiert)
-   FolderCreate("WolfeWaves");
-   FolderCreate("WolfeWaves\\" + market);
-   FolderCreate("WolfeWaves\\" + market + "\\" + tfStr);
-   FolderCreate("WolfeWaves\\" + market + "\\" + tfStr + "\\" + wedgeId);
-   
-   //--- JSON Metadaten für Website speichern
-   string symbolName = SymbolInfoString(wave.symbol, SYMBOL_DESCRIPTION);
-   if(symbolName == "") symbolName = wave.symbol;
-   
-   string dateFolder = StringFormat("%04d-%02d-%02d", dtNow.year, dtNow.mon, dtNow.day);
-   
-   //--- Prozent und RR berechnen
-   double slPct = ((wave.slPrice - wave.entryPrice) / wave.entryPrice) * 100;
-   double tp1Pct = ((wave.tp1Price - wave.entryPrice) / wave.entryPrice) * 100;
-   double tp2Pct = ((wave.tp2Price - wave.entryPrice) / wave.entryPrice) * 100;
-   double tp3Pct = ((wave.tp3Price - wave.entryPrice) / wave.entryPrice) * 100;
-   double risk = MathAbs(wave.entryPrice - wave.slPrice);
-   double reward = MathAbs(wave.tp1Price - wave.entryPrice);
-   double rr = (risk > 0) ? reward / risk : 0;
-   
-   string json = "{\n";
-   json += "  \"symbol\": \"" + wave.symbol + "\",\n";
-   json += "  \"symbolName\": \"" + symbolName + "\",\n";
-   json += "  \"market\": \"" + market + "\",\n";
-   json += "  \"timeframe\": \"" + tfStr + "\",\n";
-   json += "  \"type\": \"" + typeStr + "\",\n";
-   json += "  \"direction\": \"" + (wave.isBullish ? "BULLISH" : "BEARISH") + "\",\n";
-   json += "  \"date\": \"" + dateFolder + "\",\n";
-   json += "  \"timestamp\": \"" + TimeToString(TimeCurrent(), TIME_DATE|TIME_SECONDS) + "\",\n";
-   json += "  \"version\": \"" + versionStr + "\",\n";
-   json += "  \"entry\": " + DoubleToString(wave.entryPrice, 4) + ",\n";
-   json += "  \"sl\": " + DoubleToString(wave.slPrice, 4) + ",\n";
-   json += "  \"slPct\": " + DoubleToString(slPct, 2) + ",\n";
-   json += "  \"tp1\": " + DoubleToString(wave.tp1Price, 4) + ",\n";
-   json += "  \"tp1Pct\": " + DoubleToString(tp1Pct, 2) + ",\n";
-   json += "  \"tp2\": " + DoubleToString(wave.tp2Price, 4) + ",\n";
-   json += "  \"tp2Pct\": " + DoubleToString(tp2Pct, 2) + ",\n";
-   json += "  \"tp3\": " + DoubleToString(wave.tp3Price, 4) + ",\n";
-   json += "  \"tp3Pct\": " + DoubleToString(tp3Pct, 2) + ",\n";
-   json += "  \"rr\": " + DoubleToString(rr, 2) + ",\n";
-   json += "  \"p1\": { \"price\": " + DoubleToString(wave.p1.price, 4) + ", \"time\": \"" + TimeToString(wave.p1.time) + "\" },\n";
-   json += "  \"p2\": { \"price\": " + DoubleToString(wave.p2.price, 4) + ", \"time\": \"" + TimeToString(wave.p2.time) + "\" },\n";
-   json += "  \"p3\": { \"price\": " + DoubleToString(wave.p3.price, 4) + ", \"time\": \"" + TimeToString(wave.p3.time) + "\" },\n";
-   json += "  \"p4\": { \"price\": " + DoubleToString(wave.p4.price, 4) + ", \"time\": \"" + TimeToString(wave.p4.time) + "\" },\n";
-   json += "  \"p5\": { \"price\": " + DoubleToString(wave.p5.price, 4) + ", \"time\": \"" + TimeToString(wave.p5.time) + "\" },\n";
-   json += "  \"wedgeId\": \"" + wedgeId + "\",\n";
-   json += "  \"image\": \"" + baseName + ".png\",\n";
-   json += "  \"path\": \"" + market + "/" + tfStr + "/" + wedgeId + "/" + baseName + ".png\"\n";
-   json += "}";
-   
-   //--- JSON speichern (Version)
-   int jsonHandle = FileOpen(jsonFile, FILE_WRITE|FILE_TXT|FILE_ANSI);
-   if(jsonHandle != INVALID_HANDLE)
-   {
-      FileWriteString(jsonHandle, json);
-      FileClose(jsonHandle);
-   }
-   
-   //--- JSON auch als latest.json speichern (überschreibt)
-   int latestHandle = FileOpen(latestJson, FILE_WRITE|FILE_TXT|FILE_ANSI);
-   if(latestHandle != INVALID_HANDLE)
-   {
-      FileWriteString(latestHandle, json);
-      FileClose(latestHandle);
-   }
-   
-   //--- Voller Pfad anzeigen
-   string dataPath = TerminalInfoString(TERMINAL_DATA_PATH);
-   Print("");
-   Print("Speichere Screenshot...");
-   Print("Keil: ", wedgeId);
-   Print("Version: ", versionStr);
-   Print("Ordner: ", baseFolder);
-   
-   //--- Längere Wartezeit damit Chart fertig ist
-   Sleep(1000);
-   ChartRedraw(chartId);
-   Sleep(500);
-   
-   //--- Screenshot als Version speichern
-   if(ChartScreenShot(chartId, pngFile, 1920, 1080, ALIGN_RIGHT))
-   {
-      Print("✓ Version gespeichert: ", baseName, ".png");
-      
-      //--- Auch als latest.png speichern (für schnellen Zugriff)
-      if(ChartScreenShot(chartId, latestPng, 1920, 1080, ALIGN_RIGHT))
-         Print("✓ Latest aktualisiert: latest.png");
-   }
-   else
-   {
-      int err = GetLastError();
-      Print("✗ Screenshot Fehler Code: ", err);
-   }
-   
-   Print("✓✓✓ FERTIG ✓✓✓");
-   PlaySound("alert.wav");
-}
-
-//+------------------------------------------------------------------+
-void DrawPatternOnChart(long chartId, WolfeWave &wave)
-{
-   string prefix = "WW_" + wave.symbol + "_";
-   color waveColor = clrRed;
-   
-   //--- BERECHNE ENDPUNKTE FÜR LINIEN
-   // Keil-Länge in Zeit
-   int keilDauer = (int)(wave.p5.time - wave.p1.time);
-   datetime greenEnd = wave.p4.time + keilDauer;  // Grüne Linie: doppelt so lang wie Keil
-   
-   // EPA Zeit für rote Linien (Kreuzungspunkt)
-   datetime epaTime = wave.epaTime;
-   
-   //--- KEIL-LINIE 1-3 (rot, nur bis EPA)
-   double slope13 = (wave.p3.price - wave.p1.price) / (double)(wave.p3.time - wave.p1.time);
-   double epaPrice13 = wave.p1.price + slope13 * (double)(epaTime - wave.p1.time);
-   ObjectCreate(chartId, prefix+"L13", OBJ_TREND, 0, 
-                wave.p1.time, wave.p1.price, 
-                epaTime, epaPrice13);
-   ObjectSetInteger(chartId, prefix+"L13", OBJPROP_COLOR, clrRed);
-   ObjectSetInteger(chartId, prefix+"L13", OBJPROP_WIDTH, 2);
-   ObjectSetInteger(chartId, prefix+"L13", OBJPROP_STYLE, STYLE_SOLID);
-   ObjectSetInteger(chartId, prefix+"L13", OBJPROP_RAY_RIGHT, false);
-   
-   //--- KEIL-LINIE 2-4 (rot, nur bis EPA)
-   double slope24 = (wave.p4.price - wave.p2.price) / (double)(wave.p4.time - wave.p2.time);
-   double epaPrice24 = wave.p2.price + slope24 * (double)(epaTime - wave.p2.time);
-   ObjectCreate(chartId, prefix+"L24", OBJ_TREND, 0, 
-                wave.p2.time, wave.p2.price, 
-                epaTime, epaPrice24);
-   ObjectSetInteger(chartId, prefix+"L24", OBJPROP_COLOR, clrRed);
-   ObjectSetInteger(chartId, prefix+"L24", OBJPROP_WIDTH, 2);
-   ObjectSetInteger(chartId, prefix+"L24", OBJPROP_STYLE, STYLE_SOLID);
-   ObjectSetInteger(chartId, prefix+"L24", OBJPROP_RAY_RIGHT, false);
-   
-   //--- TARGET Linie 1-4 (grün, doppelt so lang wie Keil)
-   double slope14 = (wave.p4.price - wave.p1.price) / (double)(wave.p4.time - wave.p1.time);
-   double greenEndPrice = wave.p1.price + slope14 * (double)(greenEnd - wave.p1.time);
-   ObjectCreate(chartId, prefix+"L14", OBJ_TREND, 0, 
-                wave.p1.time, wave.p1.price, 
-                greenEnd, greenEndPrice);
-   ObjectSetInteger(chartId, prefix+"L14", OBJPROP_COLOR, clrGreen);
-   ObjectSetInteger(chartId, prefix+"L14", OBJPROP_WIDTH, 2);
-   ObjectSetInteger(chartId, prefix+"L14", OBJPROP_STYLE, STYLE_SOLID);
-   ObjectSetInteger(chartId, prefix+"L14", OBJPROP_RAY_RIGHT, false);
-   
-   //--- Punkt Labels
-   CreateText(chartId, prefix+"P1", wave.p1.time, wave.p1.price, "1", waveColor);
-   CreateText(chartId, prefix+"P2", wave.p2.time, wave.p2.price, "2", waveColor);
-   CreateText(chartId, prefix+"P3", wave.p3.time, wave.p3.price, "3", waveColor);
-   CreateText(chartId, prefix+"P4", wave.p4.time, wave.p4.price, "4", waveColor);
-   CreateText(chartId, prefix+"P5", wave.p5.time, wave.p5.price, "5", waveColor);
-   
-   //--- BULLISH/BEARISH + Timeframe OBEN (groß)
-   string titel = (wave.isBullish ? "BULLISH" : "BEARISH") + " " + TFToString(wave.timeframe);
-   ObjectCreate(chartId, prefix+"Titel", OBJ_LABEL, 0, 0, 0);
-   ObjectSetInteger(chartId, prefix+"Titel", OBJPROP_CORNER, CORNER_LEFT_UPPER);
-   ObjectSetInteger(chartId, prefix+"Titel", OBJPROP_XDISTANCE, 20);
-   ObjectSetInteger(chartId, prefix+"Titel", OBJPROP_YDISTANCE, 25);
-   ObjectSetString(chartId, prefix+"Titel", OBJPROP_TEXT, titel);
-   ObjectSetInteger(chartId, prefix+"Titel", OBJPROP_COLOR, wave.isBullish ? clrGreen : clrRed);
-   ObjectSetInteger(chartId, prefix+"Titel", OBJPROP_FONTSIZE, 16);
-   ObjectSetString(chartId, prefix+"Titel", OBJPROP_FONT, "Arial Bold");
-   
-   //--- SYMBOL NAME darunter (gleiche Größe)
-   string symbolName = SymbolInfoString(wave.symbol, SYMBOL_DESCRIPTION);
-   if(symbolName == "") symbolName = wave.symbol;  // Fallback
-   ObjectCreate(chartId, prefix+"SymbolName", OBJ_LABEL, 0, 0, 0);
-   ObjectSetInteger(chartId, prefix+"SymbolName", OBJPROP_CORNER, CORNER_LEFT_UPPER);
-   ObjectSetInteger(chartId, prefix+"SymbolName", OBJPROP_XDISTANCE, 20);
-   ObjectSetInteger(chartId, prefix+"SymbolName", OBJPROP_YDISTANCE, 48);
-   ObjectSetString(chartId, prefix+"SymbolName", OBJPROP_TEXT, symbolName);
-   ObjectSetInteger(chartId, prefix+"SymbolName", OBJPROP_COLOR, clrBlack);
-   ObjectSetInteger(chartId, prefix+"SymbolName", OBJPROP_FONTSIZE, 16);
-   ObjectSetString(chartId, prefix+"SymbolName", OBJPROP_FONT, "Arial Bold");
-   
-   //=== NUR DATUM + BRANDING UNTEN LINKS ===
-   //--- Datum im Format DD.MM.YYYY HH:MM (Lokalzeit)
-   datetime localTime = TimeLocal();
-   MqlDateTime dtLocal;
-   TimeToStruct(localTime, dtLocal);
-   string datumStr = StringFormat("%02d.%02d.%04d %02d:%02d", 
-                     dtLocal.day, dtLocal.mon, dtLocal.year, dtLocal.hour, dtLocal.min);
-   
-   ObjectCreate(chartId, prefix+"Datum", OBJ_LABEL, 0, 0, 0);
-   ObjectSetInteger(chartId, prefix+"Datum", OBJPROP_CORNER, CORNER_LEFT_LOWER);
-   ObjectSetInteger(chartId, prefix+"Datum", OBJPROP_XDISTANCE, 20);
-   ObjectSetInteger(chartId, prefix+"Datum", OBJPROP_YDISTANCE, 30);
-   ObjectSetString(chartId, prefix+"Datum", OBJPROP_TEXT, datumStr);
-   ObjectSetInteger(chartId, prefix+"Datum", OBJPROP_COLOR, clrGray);
-   ObjectSetInteger(chartId, prefix+"Datum", OBJPROP_FONTSIZE, 9);
-   
-   //--- Branding
-   ObjectCreate(chartId, prefix+"Copyright", OBJ_LABEL, 0, 0, 0);
-   ObjectSetInteger(chartId, prefix+"Copyright", OBJPROP_CORNER, CORNER_LEFT_LOWER);
-   ObjectSetInteger(chartId, prefix+"Copyright", OBJPROP_XDISTANCE, 20);
-   ObjectSetInteger(chartId, prefix+"Copyright", OBJPROP_YDISTANCE, 12);
-   ObjectSetString(chartId, prefix+"Copyright", OBJPROP_TEXT, "wolfewavesignals.com");
-   ObjectSetInteger(chartId, prefix+"Copyright", OBJPROP_COLOR, clrGray);
-   ObjectSetInteger(chartId, prefix+"Copyright", OBJPROP_FONTSIZE, 8);
-   
-   //=== PREIS-MARKER ===
-   int periodSec = PeriodSeconds(wave.timeframe);
-   datetime shortEnd = wave.p5.time + periodSec * 3;  // Kurz: 3 Kerzen für Entry/SL
-   
-   // TP-Linien bis zum Ende der grünen Linie (2x Keil-Länge)
-   int keilDauerTP = (int)(wave.p5.time - wave.p1.time);
-   datetime greenLineEnd = wave.p4.time + keilDauerTP;
-   
-   //--- Entry (blau) - KURZ
-   ObjectCreate(chartId, prefix+"EntryLine", OBJ_TREND, 0, wave.p5.time, wave.entryPrice, shortEnd, wave.entryPrice);
-   ObjectSetInteger(chartId, prefix+"EntryLine", OBJPROP_COLOR, clrDodgerBlue);
-   ObjectSetInteger(chartId, prefix+"EntryLine", OBJPROP_WIDTH, 2);
-   ObjectSetInteger(chartId, prefix+"EntryLine", OBJPROP_RAY_RIGHT, false);
-   ObjectCreate(chartId, prefix+"EntryLbl", OBJ_TEXT, 0, shortEnd, wave.entryPrice);
-   ObjectSetString(chartId, prefix+"EntryLbl", OBJPROP_TEXT, " E");
-   ObjectSetInteger(chartId, prefix+"EntryLbl", OBJPROP_COLOR, clrDodgerBlue);
-   ObjectSetInteger(chartId, prefix+"EntryLbl", OBJPROP_FONTSIZE, 8);
-   
-   //--- SL (rot) - KURZ
-   ObjectCreate(chartId, prefix+"SLLine", OBJ_TREND, 0, wave.p5.time, wave.slPrice, shortEnd, wave.slPrice);
-   ObjectSetInteger(chartId, prefix+"SLLine", OBJPROP_COLOR, clrRed);
-   ObjectSetInteger(chartId, prefix+"SLLine", OBJPROP_WIDTH, 2);
-   ObjectSetInteger(chartId, prefix+"SLLine", OBJPROP_RAY_RIGHT, false);
-   ObjectCreate(chartId, prefix+"SLLbl", OBJ_TEXT, 0, shortEnd, wave.slPrice);
-   ObjectSetString(chartId, prefix+"SLLbl", OBJPROP_TEXT, " SL");
-   ObjectSetInteger(chartId, prefix+"SLLbl", OBJPROP_COLOR, clrRed);
-   ObjectSetInteger(chartId, prefix+"SLLbl", OBJPROP_FONTSIZE, 8);
-   
-   //--- TP1 (hellgrün) - bis Ende grüne Linie
-   ObjectCreate(chartId, prefix+"TP1Line", OBJ_TREND, 0, wave.p5.time, wave.tp1Price, greenLineEnd, wave.tp1Price);
-   ObjectSetInteger(chartId, prefix+"TP1Line", OBJPROP_COLOR, clrLimeGreen);
-   ObjectSetInteger(chartId, prefix+"TP1Line", OBJPROP_WIDTH, 1);
-   ObjectSetInteger(chartId, prefix+"TP1Line", OBJPROP_STYLE, STYLE_DOT);
-   ObjectSetInteger(chartId, prefix+"TP1Line", OBJPROP_RAY_RIGHT, false);
-   ObjectCreate(chartId, prefix+"TP1Lbl", OBJ_TEXT, 0, greenLineEnd, wave.tp1Price);
-   ObjectSetString(chartId, prefix+"TP1Lbl", OBJPROP_TEXT, "  TP1 " + DoubleToString(wave.tp1Price, 2));
-   ObjectSetInteger(chartId, prefix+"TP1Lbl", OBJPROP_COLOR, clrLimeGreen);
-   ObjectSetInteger(chartId, prefix+"TP1Lbl", OBJPROP_FONTSIZE, 9);
-   
-   //--- TP2 (grün) - bis Ende grüne Linie
-   ObjectCreate(chartId, prefix+"TP2Line", OBJ_TREND, 0, wave.p5.time, wave.tp2Price, greenLineEnd, wave.tp2Price);
-   ObjectSetInteger(chartId, prefix+"TP2Line", OBJPROP_COLOR, clrGreen);
-   ObjectSetInteger(chartId, prefix+"TP2Line", OBJPROP_WIDTH, 1);
-   ObjectSetInteger(chartId, prefix+"TP2Line", OBJPROP_STYLE, STYLE_DOT);
-   ObjectSetInteger(chartId, prefix+"TP2Line", OBJPROP_RAY_RIGHT, false);
-   ObjectCreate(chartId, prefix+"TP2Lbl", OBJ_TEXT, 0, greenLineEnd, wave.tp2Price);
-   ObjectSetString(chartId, prefix+"TP2Lbl", OBJPROP_TEXT, "  TP2 " + DoubleToString(wave.tp2Price, 2));
-   ObjectSetInteger(chartId, prefix+"TP2Lbl", OBJPROP_COLOR, clrGreen);
-   ObjectSetInteger(chartId, prefix+"TP2Lbl", OBJPROP_FONTSIZE, 9);
-   
-   //--- TP3 (dunkelgrün) - GENAU AUF DER GRÜNEN LINIE
-   // TP3 endet dort wo die grüne Linie endet
-   ObjectCreate(chartId, prefix+"TP3Line", OBJ_TREND, 0, wave.p5.time, wave.tp3Price, greenLineEnd, wave.tp3Price);
-   ObjectSetInteger(chartId, prefix+"TP3Line", OBJPROP_COLOR, clrDarkGreen);
-   ObjectSetInteger(chartId, prefix+"TP3Line", OBJPROP_WIDTH, 2);
-   ObjectSetInteger(chartId, prefix+"TP3Line", OBJPROP_STYLE, STYLE_DASH);
-   ObjectSetInteger(chartId, prefix+"TP3Line", OBJPROP_RAY_RIGHT, false);
-   ObjectCreate(chartId, prefix+"TP3Lbl", OBJ_TEXT, 0, greenLineEnd, wave.tp3Price);
-   ObjectSetString(chartId, prefix+"TP3Lbl", OBJPROP_TEXT, "  TP3 " + DoubleToString(wave.tp3Price, 2));
-   ObjectSetInteger(chartId, prefix+"TP3Lbl", OBJPROP_COLOR, clrDarkGreen);
-   ObjectSetInteger(chartId, prefix+"TP3Lbl", OBJPROP_FONTSIZE, 9);
-   ObjectSetString(chartId, prefix+"TP3Lbl", OBJPROP_FONT, "Arial Bold");
-}
-
-//+------------------------------------------------------------------+
-void CreateLine(long chartId, string name, datetime t1, double p1, 
-                datetime t2, double p2, color clr, int width, 
-                ENUM_LINE_STYLE style = STYLE_SOLID)
-{
-   ObjectCreate(chartId, name, OBJ_TREND, 0, t1, p1, t2, p2);
-   ObjectSetInteger(chartId, name, OBJPROP_COLOR, clr);
-   ObjectSetInteger(chartId, name, OBJPROP_WIDTH, width);
-   ObjectSetInteger(chartId, name, OBJPROP_STYLE, style);
-   ObjectSetInteger(chartId, name, OBJPROP_RAY_RIGHT, false);
-}
-
-//+------------------------------------------------------------------+
-void CreateText(long chartId, string name, datetime time, double price, 
-                string text, color clr)
-{
-   ObjectCreate(chartId, name, OBJ_TEXT, 0, time, price);
-   ObjectSetString(chartId, name, OBJPROP_TEXT, " " + text);
-   ObjectSetInteger(chartId, name, OBJPROP_COLOR, clr);
-   ObjectSetInteger(chartId, name, OBJPROP_FONTSIZE, 12);
-   ObjectSetString(chartId, name, OBJPROP_FONT, "Arial Bold");
-}
-
-//+------------------------------------------------------------------+
-void CreateTextSmall(long chartId, string name, datetime time, double price, 
-                     string text, color clr)
-{
-   ObjectCreate(chartId, name, OBJ_TEXT, 0, time, price);
-   ObjectSetString(chartId, name, OBJPROP_TEXT, text);
-   ObjectSetInteger(chartId, name, OBJPROP_COLOR, clr);
-   ObjectSetInteger(chartId, name, OBJPROP_FONTSIZE, 8);
-   ObjectSetString(chartId, name, OBJPROP_FONT, "Arial");
-}
-
-//+------------------------------------------------------------------+
-void OnChartEvent(const int id, const long &lparam, const double &dparam, const string &sparam)
-{
-   if(id == CHARTEVENT_KEYDOWN)
-   {
-      if(lparam == 'S')
-      {
-         Print(">>> MANUELLER SCAN <<<");
-         PerformScan();
-      }
-      if(lparam == 'C')
-      {
-         Print("Schließe alle Charts...");
-         for(int i = 0; i < ArraySize(g_openCharts); i++)
-            ChartClose(g_openCharts[i]);
-         ArrayResize(g_openCharts, 0);
-      }
-      if(lparam == 'T')
-      {
-         Print(">>> SUCCESS TRACKING <<<");
-         CheckSuccessSignals();
-      }
-   }
-}
-
-//+------------------------------------------------------------------+
-void OnTick() { }
-
-//+------------------------------------------------------------------+
-//| ERFOLGS-TRACKING: Prüft ob alte Signale TP3 erreicht haben       |
-//+------------------------------------------------------------------+
-void CheckSuccessSignals()
-{
-   Print("");
-   Print("========== SUCCESS CHECK ==========");
-   
-   // SUCCESS Ordner erstellen
-   FolderCreate("WolfeWaves\\SUCCESS");
-   
-   string basePath = "WolfeWaves\\";
-   string markets[] = {"DAX", "NASDAQ", "NYSE", "SP500", "FOREX", "CAC40", "FTSE", "OTHER"};
-   string timeframes[] = {"M5", "M15", "H1", "H4", "D1", "W1"};
-   
-   int successCount = 0;
-   int checkedCount = 0;
-   
-   // Ordner durchsuchen
-   for(int m = 0; m < ArraySize(markets); m++)
-   {
-      for(int t = 0; t < ArraySize(timeframes); t++)
-      {
-         string searchPath = basePath + markets[m] + "\\" + timeframes[t] + "\\";
-         
-         string folderName;
-         long searchHandle = FileFindFirst(searchPath + "*", folderName);
-         
-         if(searchHandle != INVALID_HANDLE)
-         {
-            do
-            {
-               if(folderName == "." || folderName == "..") continue;
-               
-               string fullFolderPath = searchPath + folderName + "\\";
-               string jsonPath = fullFolderPath + "latest.json";
-               string pngPath = fullFolderPath + "latest.png";
-               
-               // Prüfe ob JSON existiert
-               if(FileIsExist(jsonPath))
-               {
-                  checkedCount++;
-                  
-                  // JSON lesen und TP3-Check durchführen
-                  bool tp3Reached = CheckSignalTP3(jsonPath);
-                  
-                  if(tp3Reached)
-                  {
-                     successCount++;
-                     
-                     // In SUCCESS Ordner kopieren
-                     string successFolder = "WolfeWaves\\SUCCESS\\" + folderName + "\\";
-                     
-                     // Nur kopieren wenn noch nicht vorhanden
-                     if(!FileIsExist(successFolder + "latest.json"))
-                     {
-                        FolderCreate("WolfeWaves\\SUCCESS\\" + folderName);
-                        CopyFileInternal(jsonPath, successFolder + "latest.json");
-                        CopyFileInternal(pngPath, successFolder + "latest.png");
-                        Print("✅ SUCCESS: ", folderName, " - TP3 erreicht!");
-                     }
-                  }
-               }
+        function getFilteredSignals() {
+            const market = document.getElementById('filterMarket').value;
+            const timeframe = document.getElementById('filterTimeframe').value;
+            const direction = document.getElementById('filterDirection').value;
+            
+            // Success tab uses different data source
+            if (currentTab === 'success') {
+                let filtered = [...successSignals];
+                if (market) filtered = filtered.filter(s => s.market === market);
+                if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
+                if (direction) filtered = filtered.filter(s => s.direction === direction);
+                return filtered;
             }
-            while(FileFindNext(searchHandle, folderName));
             
-            FileFindClose(searchHandle);
-         }
-      }
-   }
-   
-   Print("");
-   Print("📊 ERGEBNIS:");
-   Print("   Geprüft: ", checkedCount, " Signale");
-   Print("   TP3 erreicht: ", successCount);
-   Print("====================================");
-}
+            let filtered = [...allSignals];
+            
+            // Tab filter
+            const now = new Date();
+            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
+            
+            if (currentTab === 'new') {
+                filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            } else if (currentTab === 'bullish') {
+                filtered = filtered.filter(s => s.direction === 'BULLISH');
+            } else if (currentTab === 'bearish') {
+                filtered = filtered.filter(s => s.direction === 'BEARISH');
+            }
+            
+            // Dropdown filters
+            if (market) filtered = filtered.filter(s => s.market === market);
+            if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
+            if (direction) filtered = filtered.filter(s => s.direction === direction);
+            
+            return filtered;
+        }
 
-//+------------------------------------------------------------------+
-void CopyFileInternal(string source, string dest)
-{
-   if(!FileIsExist(source)) return;
-   
-   int srcHandle = FileOpen(source, FILE_READ|FILE_BIN);
-   if(srcHandle == INVALID_HANDLE) return;
-   
-   int fileSize = (int)FileSize(srcHandle);
-   uchar data[];
-   ArrayResize(data, fileSize);
-   FileReadArray(srcHandle, data);
-   FileClose(srcHandle);
-   
-   int dstHandle = FileOpen(dest, FILE_WRITE|FILE_BIN);
-   if(dstHandle != INVALID_HANDLE)
-   {
-      FileWriteArray(dstHandle, data);
-      FileClose(dstHandle);
-   }
-}
+        function applyFiltersAndRender() {
+            const filtered = getFilteredSignals();
+            renderSignals(filtered);
+        }
 
-//+------------------------------------------------------------------+
-bool CheckSignalTP3(string jsonPath)
-{
-   // JSON einlesen
-   int fileHandle = FileOpen(jsonPath, FILE_READ|FILE_TXT|FILE_ANSI);
-   if(fileHandle == INVALID_HANDLE) return false;
-   
-   string jsonContent = "";
-   while(!FileIsEnding(fileHandle))
-      jsonContent += FileReadString(fileHandle);
-   FileClose(fileHandle);
-   
-   // Werte parsen
-   string symbol = ExtractJsonValue(jsonContent, "symbol");
-   string timeframe = ExtractJsonValue(jsonContent, "timeframe");
-   double tp3 = StringToDouble(ExtractJsonValue(jsonContent, "tp3"));
-   string direction = ExtractJsonValue(jsonContent, "direction");
-   
-   if(symbol == "" || tp3 == 0) return false;
-   
-   // Timeframe konvertieren
-   ENUM_TIMEFRAMES tf = StringToTF(timeframe);
-   
-   // Historische Daten laden
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
-   int copied = CopyRates(symbol, tf, 0, 200, rates);
-   
-   if(copied < 10) return false;
-   
-   bool isBullish = (direction == "BULLISH");
-   
-   // Prüfe ob TP3 erreicht wurde
-   for(int i = copied - 1; i >= 0; i--)
-   {
-      if(isBullish)
-      {
-         if(rates[i].high >= tp3) return true;  // TP3 erreicht!
-      }
-      else
-      {
-         if(rates[i].low <= tp3) return true;   // TP3 erreicht!
-      }
-   }
-   
-   return false;
-}
+        function isNewSignal(createdAt) {
+            const now = new Date();
+            const signalTime = new Date(createdAt);
+            const hoursDiff = (now - signalTime) / (1000 * 60 * 60);
+            return hoursDiff < 2; // Less than 2 hours old
+        }
 
-//+------------------------------------------------------------------+
-string ExtractJsonValue(string json, string key)
-{
-   string searchKey = "\"" + key + "\":";
-   int pos = StringFind(json, searchKey);
-   if(pos < 0) return "";
-   
-   pos += StringLen(searchKey);
-   
-   // Whitespace überspringen
-   while(pos < StringLen(json) && (StringGetCharacter(json, pos) == ' ' || StringGetCharacter(json, pos) == '\t'))
-      pos++;
-   
-   // Wert extrahieren
-   string value = "";
-   bool inQuotes = false;
-   
-   if(StringGetCharacter(json, pos) == '"')
-   {
-      inQuotes = true;
-      pos++;
-   }
-   
-   while(pos < StringLen(json))
-   {
-      ushort ch = StringGetCharacter(json, pos);
-      
-      if(inQuotes && ch == '"') break;
-      if(!inQuotes && (ch == ',' || ch == '}' || ch == '\n')) break;
-      
-      value += CharToString((uchar)ch);
-      pos++;
-   }
-   
-   return value;
-}
+        function getTimeAgo(createdAt) {
+            const now = new Date();
+            const signalTime = new Date(createdAt);
+            const diffMs = now - signalTime;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `vor ${diffMins} Min`;
+            if (diffHours < 24) return `vor ${diffHours} Std`;
+            return `vor ${diffDays} Tag${diffDays > 1 ? 'en' : ''}`;
+        }
 
-//+------------------------------------------------------------------+
-ENUM_TIMEFRAMES StringToTF(string tf)
-{
-   if(tf == "M5") return PERIOD_M5;
-   if(tf == "M15") return PERIOD_M15;
-   if(tf == "H1") return PERIOD_H1;
-   if(tf == "H4") return PERIOD_H4;
-   if(tf == "D1") return PERIOD_D1;
-   if(tf == "W1") return PERIOD_W1;
-   return PERIOD_H1;
-}
-//+------------------------------------------------------------------+
+        function renderSignals(signals) {
+            const grid = document.getElementById('signalsGrid');
+            const isSuccessTab = currentTab === 'success';
+            
+            if (signals.length === 0) {
+                grid.innerHTML = isSuccessTab ? 
+                    '<div class="loading"><p>Noch keine erfolgreichen Signale</p></div>' :
+                    '<div class="loading"><p>Keine Signale gefunden</p></div>';
+                return;
+            }
+
+            grid.innerHTML = signals.map(signal => {
+                const imageUrl = signal.image_path ? 
+                    (signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`) : '';
+                
+                const isBullish = signal.direction === 'BULLISH';
+                const isNew = isNewSignal(signal.created_at);
+                
+                // Calculate percentages if not in DB
+                const entry = parseFloat(signal.entry) || 0;
+                const calcPct = (tp) => entry > 0 ? (((parseFloat(tp) - entry) / entry) * 100) : 0;
+                
+                const tp1Pct = signal.tp1_pct ? Math.abs(signal.tp1_pct).toFixed(1) : Math.abs(calcPct(signal.tp1)).toFixed(1);
+                const tp2Pct = signal.tp2_pct ? Math.abs(signal.tp2_pct).toFixed(1) : Math.abs(calcPct(signal.tp2)).toFixed(1);
+                const tp3Pct = signal.tp3_pct ? Math.abs(signal.tp3_pct).toFixed(1) : Math.abs(calcPct(signal.tp3)).toFixed(1);
+                const slPct = signal.sl_pct ? Math.abs(signal.sl_pct).toFixed(1) : Math.abs(calcPct(signal.sl)).toFixed(1);
+
+                return `
+                    <div class="signal-card ${isNew ? 'is-new' : ''} ${isSuccessTab ? 'is-success' : ''} ${signal.justAdded ? 'just-added' : ''}" onclick="openModal('${imageUrl}')">
+                        ${isSuccessTab ? '<div class="success-badge">✓ TP3</div>' : (isNew ? '<div class="new-badge">NEU</div>' : '')}
+                        <div class="signal-image-container">
+                            ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : ''}
+                            <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">
+                                ${signal.direction}
+                            </span>
+                            <div class="signal-tags">
+                                <span class="signal-tag">${signal.market || 'N/A'}</span>
+                                <span class="signal-tag">${signal.timeframe || 'N/A'}</span>
+                            </div>
+                        </div>
+                        <div class="signal-info">
+                            <div class="signal-header">
+                                <div>
+                                    <div class="signal-title">${signal.symbol_name || signal.symbol}</div>
+                                    <div class="signal-symbol">${signal.symbol}</div>
+                                </div>
+                                <div class="signal-time">
+                                    <div class="signal-date">${formatDate(signal.created_at)}</div>
+                                    <div class="signal-ago">${getTimeAgo(signal.created_at)}</div>
+                                </div>
+                            </div>
+                            <div class="price-grid">
+                                <div class="price-item">
+                                    <div class="price-label">Entry</div>
+                                    <div class="price-value">${formatPrice(signal.entry)}</div>
+                                </div>
+                                <div class="price-item">
+                                    <div class="price-label">Stop</div>
+                                    <div class="price-value">${formatPrice(signal.sl)}</div>
+                                    <div class="price-pct pct-red">-${slPct}%</div>
+                                </div>
+                                <div class="price-item">
+                                    <div class="price-label">TP1</div>
+                                    <div class="price-value">${formatPrice(signal.tp1)}</div>
+                                    <div class="price-pct pct-green">+${tp1Pct}%</div>
+                                </div>
+                                <div class="price-item">
+                                    <div class="price-label">TP2</div>
+                                    <div class="price-value">${formatPrice(signal.tp2)}</div>
+                                    <div class="price-pct pct-green">+${tp2Pct}%</div>
+                                </div>
+                                <div class="price-item">
+                                    <div class="price-label">TP3</div>
+                                    <div class="price-value">${formatPrice(signal.tp3)}</div>
+                                    <div class="price-pct pct-green">+${tp3Pct}%</div>
+                                </div>
+                            </div>
+                            <div class="rr-badge">
+                                R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatPrice(price) {
+            if (!price) return '—';
+            return parseFloat(price).toFixed(2);
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('de-DE');
+        }
+
+        function openModal(imageUrl) {
+            if (!imageUrl) return;
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // Tab handling
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.tab;
+                applyFiltersAndRender();
+            });
+        });
+
+        // Filter handling
+        document.getElementById('filterMarket').addEventListener('change', applyFiltersAndRender);
+        document.getElementById('filterTimeframe').addEventListener('change', applyFiltersAndRender);
+        document.getElementById('filterDirection').addEventListener('change', applyFiltersAndRender);
+
+        // Modal handling
+        document.getElementById('imageModal').addEventListener('click', (e) => {
+            if (e.target.id === 'imageModal') closeModal();
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        // Countdown timer
+        function updateCountdown() {
+            countdown--;
+            if (countdown <= 0) {
+                fetchSignals();
+            } else {
+                const mins = Math.floor(countdown / 60);
+                const secs = countdown % 60;
+                document.getElementById('nextUpdate').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+
+        // Initialize
+        fetchSignals();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
