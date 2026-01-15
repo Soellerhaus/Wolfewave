@@ -333,6 +333,7 @@
             left: 16px;
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .signal-tag {
@@ -1938,6 +1939,7 @@
 
         let allSignals = [];
         let successSignals = [];
+        let symbolMarkets = {}; // Symbol -> [markets] mapping
         let currentUser = null;
         let isSubscribed = false;
         let isAdmin = false;
@@ -1948,6 +1950,55 @@
 
         // Markets we want to show as preview (1 each)
         const PREVIEW_MARKETS = ['DAX', 'NASDAQ', 'FOREX', 'CRYPTO'];
+
+        // ==================== SYMBOL MARKETS FUNCTIONS ====================
+
+        async function fetchSymbolMarkets() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/symbol_markets?select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    console.log('symbol_markets table not found, using signal.market as fallback');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                // Build symbol -> markets lookup
+                symbolMarkets = {};
+                data.forEach(item => {
+                    if (!symbolMarkets[item.symbol]) {
+                        symbolMarkets[item.symbol] = [];
+                    }
+                    symbolMarkets[item.symbol].push(item.market);
+                });
+                
+                console.log('Symbol markets loaded:', Object.keys(symbolMarkets).length, 'symbols');
+            } catch (e) {
+                console.log('Error fetching symbol_markets:', e);
+            }
+        }
+
+        function getMarketsForSymbol(signal) {
+            // If symbol is in symbol_markets, use those
+            if (symbolMarkets[signal.symbol] && symbolMarkets[signal.symbol].length > 0) {
+                return symbolMarkets[signal.symbol];
+            }
+            // Fallback to signal.market field
+            return signal.market ? [signal.market] : [];
+        }
+
+        function signalMatchesMarket(signal, marketFilter) {
+            if (!marketFilter) return true; // No filter = show all
+            
+            const markets = getMarketsForSymbol(signal);
+            return markets.includes(marketFilter);
+        }
 
         // ==================== SESSION FUNCTIONS ====================
 
@@ -2517,7 +2568,8 @@
             // Success tab uses different data source
             if (currentTab === 'success') {
                 let filtered = [...successSignals];
-                if (market) filtered = filtered.filter(s => s.market === market);
+                // Use symbol_markets for market filtering
+                if (market) filtered = filtered.filter(s => signalMatchesMarket(s, market));
                 if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
                 if (direction) filtered = filtered.filter(s => s.direction === direction);
                 return filtered;
@@ -2537,8 +2589,8 @@
                 filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
-            // Dropdown filters
-            if (market) filtered = filtered.filter(s => s.market === market);
+            // Dropdown filters - use symbol_markets for market filtering
+            if (market) filtered = filtered.filter(s => signalMatchesMarket(s, market));
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             if (direction) filtered = filtered.filter(s => s.direction === direction);
             
@@ -3072,22 +3124,22 @@
         }
 
         function getPreviewSignals() {
-            // Get 1 signal from each preview market
+            // Get 1 signal from each preview market using symbol_markets
             const preview = [];
             
             for (const market of PREVIEW_MARKETS) {
                 const signal = allSignals.find(s => 
-                    s.market === market && !preview.some(p => p.id === s.id)
+                    signalMatchesMarket(s, market) && !preview.some(p => p.id === s.id)
                 );
                 if (signal) {
                     preview.push(signal);
                 }
             }
             
-            // If we don't have all 3, fill with any available signals
-            if (preview.length < 3) {
+            // If we don't have all 4, fill with any available signals
+            if (preview.length < 4) {
                 for (const signal of allSignals) {
-                    if (preview.length >= 3) break;
+                    if (preview.length >= 4) break;
                     if (!preview.some(p => p.id === signal.id)) {
                         preview.push(signal);
                     }
@@ -3208,6 +3260,10 @@
             // Store signal index for click handler
             const signalIndex = isSuccess ? successSignals.indexOf(signal) : allSignals.indexOf(signal);
 
+            // Get all markets for this signal to display as tags
+            const markets = getMarketsForSymbol(signal);
+            const marketTags = markets.map(m => `<span class="signal-tag">${m}</span>`).join('');
+
             return `
                 <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" data-signal-index="${signalIndex}" data-is-success="${isSuccess}">
                     ${badgeHTML}
@@ -3218,7 +3274,7 @@
                             ${signal.direction}
                         </span>
                         <div class="signal-tags">
-                            <span class="signal-tag">${signal.market || 'N/A'}</span>
+                            ${marketTags}
                             <span class="signal-tag">${signal.timeframe || 'N/A'}</span>
                         </div>
                     </div>
@@ -3507,6 +3563,9 @@
 
         // Initialize
         async function init() {
+            // Load symbol_markets mapping first
+            await fetchSymbolMarkets();
+            
             await checkSession();
             await fetchSignals();
         }
