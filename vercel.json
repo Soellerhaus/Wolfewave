@@ -24,9 +24,3 @@
 ```
 
 5. Klick **"Commit changes"**
-
----
-
-Dann warte 1 Minute und teste nochmal:
-```
-https://wolfewave.vercel.app/api/upload-signal
