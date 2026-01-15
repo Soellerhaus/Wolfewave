@@ -1,19 +1,11 @@
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb'
-    }
-  }
-};
-
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -35,16 +27,10 @@ export default async function handler(req, res) {
       const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0];
       const imagePath = `${data.market || 'OTHER'}/${data.timeframe || 'H1'}/${data.wedgeId}/v_${timestamp}.png`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('signals')
-        .upload(imagePath, imageBuffer, {
-          contentType: 'image/png',
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-      }
+      await supabase.storage.from('signals').upload(imagePath, imageBuffer, {
+        contentType: 'image/png',
+        upsert: true
+      });
 
       const { data: urlData } = supabase.storage.from('signals').getPublicUrl(imagePath);
       imageUrl = urlData?.publicUrl || '';
@@ -80,7 +66,14 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, wedgeId: data.wedgeId });
   } catch (error) {
-    console.error('Error:', error);
     return res.status(500).json({ error: error.message });
   }
-}
+};
+
+module.exports.config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb'
+    }
+  }
+};
