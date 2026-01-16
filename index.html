@@ -2272,8 +2272,10 @@
             const errorEl = document.getElementById('registerError');
             const btnText = document.getElementById('registerBtnText');
             const spinner = document.getElementById('registerSpinner');
+            const registerBtn = btnText.closest('button');
             
             errorEl.textContent = '';
+            errorEl.style.color = 'var(--accent-red)';
             
             if (!email || !password) {
                 errorEl.textContent = 'Bitte alle Felder ausfüllen';
@@ -2292,15 +2294,25 @@
             
             btnText.style.display = 'none';
             spinner.style.display = 'inline-block';
+            registerBtn.disabled = true;
             
             try {
+                // Include redirect URL for email confirmation
+                const redirectUrl = window.location.origin + '?confirmed=true';
+                
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
                     method: 'POST',
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ 
+                        email, 
+                        password,
+                        options: {
+                            emailRedirectTo: redirectUrl
+                        }
+                    })
                 });
                 
                 const data = await response.json();
@@ -2311,8 +2323,8 @@
                 
                 // Check if email confirmation is required
                 if (data.user && !data.session) {
-                    errorEl.style.color = 'var(--accent-green)';
-                    errorEl.textContent = '✓ Bestätigungs-E-Mail gesendet! Bitte checke deinen Posteingang.';
+                    // Show success message with nice styling
+                    showRegistrationSuccess(email);
                     return;
                 }
                 
@@ -2338,7 +2350,34 @@
             } finally {
                 btnText.style.display = 'inline';
                 spinner.style.display = 'none';
+                registerBtn.disabled = false;
             }
+        }
+        
+        function showRegistrationSuccess(email) {
+            const registerForm = document.getElementById('registerForm');
+            registerForm.innerHTML = `
+                <div class="auth-header">
+                    <div class="auth-icon">📧</div>
+                    <h2>Fast geschafft!</h2>
+                    <p>Wir haben eine Bestätigungs-E-Mail gesendet an:</p>
+                </div>
+                <div style="background: rgba(0,255,136,0.1); border: 1px solid var(--accent-green); border-radius: 10px; padding: 16px; margin: 20px 0; text-align: center;">
+                    <strong style="color: var(--accent-green);">${email}</strong>
+                </div>
+                <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; text-align: center;">
+                    <p>📬 Bitte öffne dein E-Mail-Postfach</p>
+                    <p>✅ Klicke auf den Bestätigungs-Link</p>
+                    <p>🚀 Danach kannst du dich einloggen</p>
+                </div>
+                <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-secondary);">
+                    Keine E-Mail erhalten? Prüfe deinen Spam-Ordner oder 
+                    <a href="#" onclick="toggleAuthForm('register'); return false;" style="color: var(--accent-green);">versuche es erneut</a>
+                </div>
+                <button class="auth-btn" style="margin-top: 20px;" onclick="toggleAuthForm('login')">
+                    Zum Login
+                </button>
+            `;
         }
 
         async function handleForgotPassword() {
@@ -3615,6 +3654,9 @@
 
         // Initialize
         async function init() {
+            // Check for email confirmation tokens in URL hash
+            await handleEmailConfirmation();
+            
             // Load symbol_markets mapping first
             await fetchSymbolMarkets();
             
@@ -3638,6 +3680,92 @@
             if (urlParams.get('canceled') === 'true') {
                 alert('Zahlung abgebrochen. Du kannst es jederzeit erneut versuchen.');
                 window.history.replaceState({}, '', window.location.pathname);
+            }
+            
+            // Check for email confirmation success
+            if (urlParams.get('confirmed') === 'true') {
+                showEmailConfirmedMessage();
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+        
+        async function handleEmailConfirmation() {
+            // Check if there's an access token in the URL hash (from email confirmation)
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                try {
+                    const params = new URLSearchParams(hash.substring(1));
+                    const accessToken = params.get('access_token');
+                    const refreshToken = params.get('refresh_token');
+                    
+                    if (accessToken && refreshToken) {
+                        saveTokens(accessToken, refreshToken);
+                        
+                        // Get user info
+                        const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${accessToken}`
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            currentUser = await response.json();
+                            await createSession(currentUser.id);
+                            await checkSubscription();
+                            await checkAdminStatus();
+                            updateUIForUser();
+                            
+                            // Show success and clean URL
+                            showEmailConfirmedMessage();
+                            window.history.replaceState({}, '', window.location.pathname);
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error handling email confirmation:', e);
+                }
+                
+                // Clean URL even on error
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+        
+        function showEmailConfirmedMessage() {
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.id = 'emailConfirmedModal';
+            modal.innerHTML = `
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="auth-icon">🎉</div>
+                        <h2>E-Mail bestätigt!</h2>
+                        <p style="color: var(--accent-green);">Dein Account ist jetzt aktiv.</p>
+                    </div>
+                    <div style="text-align: center; margin: 20px 0; color: var(--text-secondary);">
+                        ${currentUser ? 'Du bist jetzt eingeloggt und kannst alle Funktionen nutzen!' : 'Du kannst dich jetzt einloggen.'}
+                    </div>
+                    <button class="auth-btn" onclick="closeEmailConfirmedModal()">
+                        ${currentUser ? 'Weiter zur Website' : 'Zum Login'}
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Close on backdrop click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeEmailConfirmedModal();
+            });
+        }
+        
+        function closeEmailConfirmedModal() {
+            const modal = document.getElementById('emailConfirmedModal');
+            if (modal) {
+                modal.remove();
+                if (!currentUser) {
+                    showLogin();
+                }
             }
         }
         
