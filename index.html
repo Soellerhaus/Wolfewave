@@ -340,6 +340,71 @@
             border-color: var(--accent-green);
         }
 
+        /* Search Box */
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-input {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 16px 10px 38px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            width: 280px;
+            transition: all 0.2s;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-input:hover {
+            border-color: var(--accent-green);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+        }
+
+        /* Search Results Highlight */
+        .signal-card.search-match {
+            border-color: rgba(0, 255, 136, 0.6);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .no-results h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
         /* Success Stats Bar (compact) */
         .success-stats-bar {
             display: none;
@@ -1210,6 +1275,14 @@
                 flex: 1;
             }
 
+            .search-input {
+                width: 100%;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
             .success-stats-grid {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -1272,6 +1345,10 @@
                 </button>
             </div>
             <div class="filters">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchSymbol" placeholder="Symbol suchen... (z.B. Henkel, Apple, EURUSD)">
+                </div>
                 <select class="filter-select" id="filterMarket">
                     <option value="">Alle Märkte</option>
                     <option value="DAX">DAX</option>
@@ -1280,7 +1357,6 @@
                     <option value="SP500">S&P 500</option>
                     <option value="FOREX">Forex</option>
                     <option value="CRYPTO">Krypto</option>
-                    <option value="INDICES">INDICES</option>
                     <option value="OTHER">Andere</option>
                 </select>
                 <select class="filter-select" id="filterTimeframe">
@@ -1474,7 +1550,7 @@
         let isAdmin = false;
         let currentTab = 'all';
 
-        const PREVIEW_MARKETS = ['NASDAQ', 'NYSE', 'SP500', 'DAX', 'INDICES', 'FOREX', 'CRYPTO'];
+        const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
 
         // ==================== INIT ====================
         async function init() {
@@ -1855,25 +1931,37 @@
             
             if (currentTab === 'success') {
                 signals = getFilteredCompletedSignals();
+                const searchTerm = document.getElementById('searchSymbol').value.trim();
                 grid.innerHTML = signals.length > 0 
                     ? signals.map(s => renderCompletedSignalCard(s)).join('')
-                    : '<div class="loading"><p>Keine abgeschlossenen Trades gefunden</p></div>';
+                    : `<div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>${searchTerm ? `Keine Ergebnisse für "${searchTerm}"` : 'Keine abgeschlossenen Trades'}</h3>
+                        <p>${searchTerm ? 'Versuche einen anderen Suchbegriff' : 'Noch keine Trades abgeschlossen'}</p>
+                      </div>`;
             } else {
                 signals = getFilteredSignals();
+                const searchTerm = document.getElementById('searchSymbol').value.trim();
                 grid.innerHTML = signals.length > 0
                     ? signals.map(s => renderSignalCard(s, true, false)).join('')
-                    : '<div class="loading"><p>Keine Signale gefunden</p></div>';
+                    : `<div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>${searchTerm ? `Keine Signale für "${searchTerm}"` : 'Keine Signale gefunden'}</h3>
+                        <p>${searchTerm ? 'Versuche einen anderen Suchbegriff oder ändere die Filter' : 'Ändere die Filter um mehr Signale zu sehen'}</p>
+                      </div>`;
             }
             
             // Update header count
             const header = document.getElementById('previewHeader');
+            const searchTerm = document.getElementById('searchSymbol').value.trim();
+            
             if (currentTab === 'success') {
                 header.innerHTML = `
                     <div class="section-title">
                         🏆 Abgeschlossene Trades
                         <span class="section-badge" style="background: var(--accent-gold);">Success</span>
                     </div>
-                    <div class="section-subtitle">— ${signals.length} Trades mit Ergebnis</div>
+                    <div class="section-subtitle">— ${signals.length} Trades${searchTerm ? ` für "${searchTerm}"` : ''}</div>
                 `;
             } else {
                 header.innerHTML = `
@@ -1881,7 +1969,7 @@
                         🐺 ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
                         <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
                     </div>
-                    <div class="section-subtitle">— ${signals.length} Signale</div>
+                    <div class="section-subtitle">— ${signals.length} Signale${searchTerm ? ` für "${searchTerm}"` : ''}</div>
                 `;
             }
         }
@@ -1903,6 +1991,7 @@
         function getFilteredSignals() {
             const market = document.getElementById('filterMarket').value;
             const timeframe = document.getElementById('filterTimeframe').value;
+            const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             const now = new Date();
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
@@ -1921,17 +2010,33 @@
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
+            // Search filter
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    (s.symbol && s.symbol.toLowerCase().includes(searchTerm)) ||
+                    (s.symbol_name && s.symbol_name.toLowerCase().includes(searchTerm))
+                );
+            }
+            
             return filtered;
         }
 
         function getFilteredCompletedSignals() {
             const market = document.getElementById('filterMarket').value;
             const timeframe = document.getElementById('filterTimeframe').value;
+            const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             
             let filtered = [...completedSignals];
             
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
+            
+            // Search filter
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    (s.symbol && s.symbol.toLowerCase().includes(searchTerm))
+                );
+            }
             
             return filtered;
         }
@@ -2113,6 +2218,21 @@
             // Filters
             document.getElementById('filterMarket').addEventListener('change', renderSignals);
             document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
+            
+            // Search with debounce
+            let searchTimeout;
+            document.getElementById('searchSymbol').addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(renderSignals, 300);
+            });
+            
+            // Clear search on Escape
+            document.getElementById('searchSymbol').addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    e.target.value = '';
+                    renderSignals();
+                }
+            });
             
             // Close user menu on outside click
             document.addEventListener('click', (e) => {
