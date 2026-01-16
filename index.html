@@ -99,6 +99,7 @@
             --text-primary: #ffffff;
             --text-secondary: #6b7280;
             --border-color: #1f1f1f;
+            --grid-columns: 4;
         }
 
         body {
@@ -151,6 +152,47 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-left: 40px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-green);
+        }
+
+        .header-success-rate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 20px;
+            padding: 6px 14px;
+        }
+
+        .success-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .success-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-green);
         }
 
         .live-indicator {
@@ -761,8 +803,54 @@
 
         .signals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-template-columns: repeat(var(--grid-columns, 4), 1fr);
             gap: 20px;
+        }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px 8px;
+            margin-left: 12px;
+        }
+
+        .zoom-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(0, 230, 118, 0.2);
+            color: var(--accent-green);
+        }
+
+        .zoom-btn-full {
+            font-size: 12px;
+            margin-left: 4px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 8px;
+        }
+
+        .zoom-indicator {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 20px;
+            text-align: center;
         }
 
         /* Signal Card */
@@ -1070,7 +1158,7 @@
 
         .premium-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-template-columns: repeat(var(--grid-columns, 4), 1fr);
             gap: 20px;
             filter: blur(8px);
             pointer-events: none;
@@ -1616,6 +1704,21 @@
                 gap: 16px;
             }
 
+            .header-nav {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                gap: 16px;
+            }
+
+            .header-success-rate {
+                padding: 4px 10px;
+            }
+
+            .success-label {
+                display: none;
+            }
+
             .header-right {
                 width: 100%;
                 justify-content: space-between;
@@ -1635,7 +1738,11 @@
             }
 
             .signals-grid, .premium-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
+            }
+
+            .zoom-controls {
+                display: none;
             }
 
             .signal-image-container {
@@ -1687,6 +1794,13 @@
             <div class="logo-icon">🐺</div>
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
+        <nav class="header-nav">
+            <a href="wolfe-waves-lernen.html" class="nav-link">📖 Tutorial</a>
+            <div class="header-success-rate" id="headerSuccessRate">
+                <span class="success-label">Success Rate:</span>
+                <span class="success-value" id="headerSuccessValue">—%</span>
+            </div>
+        </nav>
         <div class="header-right">
             <div class="live-indicator">
                 <div class="live-dot"></div>
@@ -1758,6 +1872,12 @@
                     <option value="D1">Daily</option>
                     <option value="W1">Weekly</option>
                 </select>
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
+                    <span class="zoom-indicator" id="zoomIndicator">4</span>
+                    <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
+                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
+                </div>
             </div>
         </div>
     </section>
@@ -1870,7 +1990,7 @@
     <footer class="footer">
         <div style="margin-bottom: 16px;">
             <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
-            <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
+            <a href="wolfe-waves-lernen.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
             <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
         </div>
@@ -2025,10 +2145,48 @@
         let isAdmin = false;
         let currentTab = 'all';
 
+        // Zoom-Steuerung
+        let gridColumns = 4;
+        const MIN_COLUMNS = 1;
+        const MAX_COLUMNS = 6;
+
+        function updateGridZoom() {
+            document.documentElement.style.setProperty('--grid-columns', gridColumns);
+            document.getElementById('zoomIndicator').textContent = gridColumns;
+            localStorage.setItem('gridZoom', gridColumns);
+        }
+
+        function zoomIn() {
+            if (gridColumns > MIN_COLUMNS) {
+                gridColumns--;
+                updateGridZoom();
+            }
+        }
+
+        function zoomOut() {
+            if (gridColumns < MAX_COLUMNS) {
+                gridColumns++;
+                updateGridZoom();
+            }
+        }
+
+        function zoomFull() {
+            gridColumns = 1;
+            updateGridZoom();
+        }
+
+        // Zoom aus localStorage laden
+        const savedZoom = localStorage.getItem('gridZoom');
+        if (savedZoom) {
+            gridColumns = parseInt(savedZoom);
+            document.documentElement.style.setProperty('--grid-columns', gridColumns);
+        }
+
         const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
 
         // ==================== INIT ====================
         async function init() {
+            updateGridZoom(); // Zoom-Indikator setzen
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
@@ -2386,6 +2544,10 @@
             document.getElementById('tp2Count').textContent = tp2;
             document.getElementById('tp1Count').textContent = tp1;
             document.getElementById('slCount').textContent = sl;
+            
+            // NEU: Header Success Rate aktualisieren
+            const headerValue = document.getElementById('headerSuccessValue');
+            if(headerValue) headerValue.textContent = rate + '%';
         }
 
         // ==================== RENDERING ====================
