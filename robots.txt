@@ -1,0 +1,10 @@
+# robots.txt for wolfewavesignals.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://wolfewavesignals.com/sitemap.xml
+
+# Crawl-delay (optional, be nice to servers)
+Crawl-delay: 1

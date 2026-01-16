@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Was sind Wolfe Waves? - Trading-Strategie erklärt | WolfeWaveSignals</title>
+    <meta name="description" content="Lerne was Wolfe Waves sind und wie du sie tradest. Komplette Anleitung mit Entry, Stop-Loss und Take-Profit Regeln für erfolgreiches Trading.">
+    <meta name="keywords" content="Wolfe Waves, Trading Strategie, Wolfe Wave Pattern, technische Analyse, Trading lernen, Chartmuster">
+    <meta name="author" content="WolfeWaveSignals">
+    <meta name="robots" content="index, follow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://wolfewavesignals.com/wolfewaves.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Was sind Wolfe Waves? - Trading-Strategie erklärt">
+    <meta property="og:description" content="Lerne was Wolfe Waves sind und wie du sie tradest. Komplette Anleitung für erfolgreiches Trading.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://wolfewavesignals.com/wolfewaves.html">
+    <meta property="og:image" content="https://wolfewavesignals.com/og-image.png">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Was sind Wolfe Waves? - Die komplette Trading-Anleitung",
+        "description": "Lerne was Wolfe Waves sind und wie du sie erfolgreich tradest.",
+        "author": {
+            "@type": "Organization",
+            "name": "WolfeWaveSignals"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "WolfeWaveSignals",
+            "url": "https://wolfewavesignals.com"
+        }
+    }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --accent-green: #00ff88;
+            --accent-red: #ff4757;
+            --accent-blue: #4dabf7;
+            --accent-gold: #ffd700;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --border-color: #1f1f1f;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .logo span { color: var(--accent-green); }
+        .back-btn {
+            padding: 10px 20px;
+            background: var(--accent-green);
+            border: none;
+            color: #000;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 80px 40px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.05) 0%, transparent 100%);
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .hero h1 span { color: var(--accent-green); }
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Content */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 60px;
+            margin-bottom: 24px;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h2 .num {
+            background: var(--accent-green);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        
+        ul, ol {
+            color: var(--text-secondary);
+            margin-left: 24px;
+            margin-bottom: 20px;
+        }
+        li { margin-bottom: 12px; }
+        
+        strong { color: var(--text-primary); }
+        
+        a { color: var(--accent-green); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        
+        /* Info Boxes */
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 28px 0;
+        }
+        .info-box.green { border-color: rgba(0, 255, 136, 0.3); }
+        .info-box.blue { border-color: rgba(77, 171, 247, 0.3); }
+        .info-box.gold { border-color: rgba(255, 215, 0, 0.3); }
+        .info-box.red { border-color: rgba(255, 71, 87, 0.3); }
+        
+        .info-box h4 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-box.green h4 { color: var(--accent-green); }
+        .info-box.blue h4 { color: var(--accent-blue); }
+        .info-box.gold h4 { color: var(--accent-gold); }
+        .info-box.red h4 { color: var(--accent-red); }
+        
+        /* Pattern Diagram */
+        .pattern-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .pattern-diagram pre {
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            text-align: left;
+            display: inline-block;
+        }
+        .pattern-diagram .green { color: var(--accent-green); }
+        .pattern-diagram .red { color: var(--accent-red); }
+        .pattern-diagram .blue { color: var(--accent-blue); }
+        .pattern-diagram .gold { color: var(--accent-gold); }
+        
+        /* Step Cards */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .step-card .step-num {
+            background: var(--accent-green);
+            color: #000;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .step-card h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .step-card p {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        
+        /* Price Levels */
+        .price-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .level-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .level-card.entry { border: 2px solid var(--accent-blue); }
+        .level-card.sl { border: 2px solid var(--accent-red); }
+        .level-card.tp { border: 2px solid var(--accent-green); }
+        .level-card .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .level-card .value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .level-card.entry .value { color: var(--accent-blue); }
+        .level-card.sl .value { color: var(--accent-red); }
+        .level-card.tp .value { color: var(--accent-green); }
+        
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 106, 0.05));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 48px;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .cta-section h2 {
+            justify-content: center;
+            margin-top: 0;
+        }
+        .cta-section p {
+            font-size: 18px;
+            margin-bottom: 28px;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--accent-green);
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+            text-decoration: none;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer a {
+            color: var(--text-secondary);
+            margin: 0 12px;
+        }
+        .footer a:hover { color: var(--accent-green); }
+        
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; }
+            .hero { padding: 50px 20px; }
+            .hero h1 { font-size: 32px; }
+            .content { padding: 40px 20px; }
+            h2 { font-size: 24px; }
+            .pattern-diagram { padding: 20px; overflow-x: auto; }
+            .pattern-diagram pre { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🐺</div>
+            <div>Wolfe<span>Wave</span>Signals</div>
+        </a>
+        <a href="index.html" class="back-btn">Zu den Signalen →</a>
+    </header>
+
+    <section class="hero">
+        <h1>Was sind <span>Wolfe Waves</span>?</h1>
+        <p>Lerne die mächtige Trading-Strategie, die von Bill Wolfe entwickelt wurde, und wie du sie für konsistente Gewinne nutzen kannst.</p>
+    </section>
+
+    <main class="content">
+        
+        <h2><span class="num">1</span> Die Grundlagen</h2>
+        
+        <p>Die <strong>Wolfe Wave</strong> ist ein natürlich vorkommendes Chartmuster, das in allen Märkten und Zeitrahmen auftritt. Sie wurde von Bill Wolfe und seinem Sohn Brian entdeckt und basiert auf dem physikalischen Prinzip von Newtons drittem Gesetz: <em>"Für jede Aktion gibt es eine gleiche und entgegengesetzte Reaktion."</em></p>
+        
+        <div class="info-box green">
+            <h4>💡 Kernidee</h4>
+            <p>Wolfe Waves identifizieren Punkte, an denen der Markt sein natürliches Gleichgewicht wiederherstellen wird. Sie bieten präzise Entry-Punkte mit klar definierten Zielen und minimalem Risiko.</p>
+        </div>
+        
+        <p>Im Gegensatz zu vielen anderen Chartmustern hat die Wolfe Wave ein <strong>mathematisch berechenbares Kursziel</strong> – die sogenannte EPA-Linie (Estimated Price at Arrival). Das macht sie zu einem der präzisesten Muster in der technischen Analyse.</p>
+        
+        <h2><span class="num">2</span> Die 5 Punkte der Wolfe Wave</h2>
+        
+        <p>Eine gültige Wolfe Wave besteht aus genau <strong>5 Punkten</strong>, die ein keilförmiges Muster bilden:</p>
+        
+        <div class="pattern-diagram">
+            <pre>
+     <span class="gold">Bullish Wolfe Wave</span>                    <span class="gold">Bearish Wolfe Wave</span>
+     
+           2                                        4
+          /\                                       /
+         /  \                                     /
+        /    \  4                            2   /
+       /      \/\                            /\ /
+      /        \  \                         /  X
+     /          \  \ → EPA               3 /  / \
+    1            3  \                     |  /   \
+                     \                    | /     \ → EPA
+                      5 ← ENTRY           |/       \
+                                          1         5 ← ENTRY
+            </pre>
+        </div>
+        
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h4>Punkt 1</h4>
+                <p>Der Startpunkt des Musters – ein signifikantes Tief (bullish) oder Hoch (bearish).</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h4>Punkt 2</h4>
+                <p>Das erste Gegenschwung-Hoch (bullish) oder -Tief (bearish).</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h4>Punkt 3</h4>
+                <p>Ein tieferes Tief als Punkt 1 (bullish) oder höheres Hoch (bearish).</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">4</div>
+                <h4>Punkt 4</h4>
+                <p>Zwischen Punkt 1 und 2 – bestätigt die obere Trendlinie.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">5</div>
+                <h4>Punkt 5</h4>
+                <p><strong>Der Entry!</strong> Berührt die 1-3 Linie und signalisiert die Umkehr.</p>
+            </div>
+        </div>
+        
+        <h2><span class="num">3</span> Wie man Wolfe Waves handelt</h2>
+        
+        <h3>Entry (Einstieg)</h3>
+        <p>Der Einstieg erfolgt bei <strong>Punkt 5</strong>, wenn der Preis die Linie zwischen Punkt 1 und 3 berührt. Dies ist der optimale Einstiegspunkt mit dem besten Risiko-Rendite-Verhältnis.</p>
+        
+        <div class="info-box blue">
+            <h4>📍 Entry-Bestätigung</h4>
+            <p>Warte auf eine Bestätigungskerze (z.B. Hammer, Engulfing) bei Punkt 5, bevor du einsteigst. Das reduziert Fehlsignale erheblich.</p>
+        </div>
+        
+        <h3>Stop-Loss</h3>
+        <p>Der Stop-Loss wird <strong>unter Punkt 5</strong> (bei bullish) oder <strong>über Punkt 5</strong> (bei bearish) platziert. Typischerweise 1-2 ATR Abstand für etwas Spielraum.</p>
+        
+        <h3>Take-Profit (EPA-Linie)</h3>
+        <p>Das Kursziel ist die <strong>EPA-Linie</strong> (Estimated Price at Arrival). Diese wird durch eine Linie von Punkt 1 durch Punkt 4 gezogen und in die Zukunft verlängert.</p>
+        
+        <div class="price-levels">
+            <div class="level-card entry">
+                <div class="label">Entry</div>
+                <div class="value">Punkt 5</div>
+            </div>
+            <div class="level-card sl">
+                <div class="label">Stop-Loss</div>
+                <div class="value">Unter/Über P5</div>
+            </div>
+            <div class="level-card tp">
+                <div class="label">Take-Profit</div>
+                <div class="value">EPA-Linie</div>
+            </div>
+        </div>
+        
+        <h3>Unsere 3 Take-Profit Levels</h3>
+        <p>Bei WolfeWaveSignals verwenden wir <strong>3 gestaffelte Take-Profit Levels</strong> für optimales Risikomanagement:</p>
+        
+        <ul>
+            <li><strong>TP1 (33%):</strong> Erstes Ziel – sichere einen Teil deiner Gewinne</li>
+            <li><strong>TP2 (66%):</strong> Zweites Ziel – weiterer Teilgewinn</li>
+            <li><strong>TP3 (100%):</strong> EPA-Linie – das volle Kursziel</li>
+        </ul>
+        
+        <div class="info-box gold">
+            <h4>🏆 Profi-Tipp</h4>
+            <p>Nach Erreichen von TP1 kannst du deinen Stop-Loss auf Break-Even setzen. So tradest du risikofrei weiter und lässt die Gewinne laufen!</p>
+        </div>
+        
+        <h2><span class="num">4</span> Regeln für gültige Wolfe Waves</h2>
+        
+        <p>Nicht jedes keilförmige Muster ist eine gültige Wolfe Wave. Achte auf diese Kriterien:</p>
+        
+        <ol>
+            <li><strong>Punkt 3</strong> muss unter Punkt 1 liegen (bullish) oder über Punkt 1 (bearish)</li>
+            <li><strong>Punkt 4</strong> muss zwischen Punkt 1 und 2 liegen</li>
+            <li><strong>Punkt 5</strong> muss die 1-3 Linie berühren oder leicht durchbrechen</li>
+            <li>Die Linien 1-3 und 2-4 sollten <strong>konvergieren</strong> (aufeinander zulaufen)</li>
+            <li>Das Muster sollte <strong>symmetrisch</strong> sein (ähnliche Zeitabstände)</li>
+        </ol>
+        
+        <div class="info-box red">
+            <h4>⚠️ Häufige Fehler vermeiden</h4>
+            <ul style="margin-bottom: 0;">
+                <li>Nicht bei Punkt 4 einsteigen – warte auf Punkt 5!</li>
+                <li>Kein Muster "erzwingen" – wenn es nicht passt, überspringe es</li>
+                <li>Immer Stop-Loss setzen – auch das beste Muster kann scheitern</li>
+                <li>Nicht gegen den übergeordneten Trend handeln</li>
+            </ul>
+        </div>
+        
+        <h2><span class="num">5</span> Beste Märkte & Zeitrahmen</h2>
+        
+        <p>Wolfe Waves funktionieren in <strong>allen Märkten</strong>:</p>
+        
+        <ul>
+            <li><strong>Aktien:</strong> DAX, NASDAQ, NYSE, S&P 500</li>
+            <li><strong>Forex:</strong> EUR/USD, GBP/USD, USD/JPY</li>
+            <li><strong>Krypto:</strong> Bitcoin, Ethereum</li>
+            <li><strong>Rohstoffe:</strong> Gold, Öl</li>
+        </ul>
+        
+        <p>Die besten Ergebnisse erzielst du auf <strong>höheren Zeitrahmen</strong>:</p>
+        
+        <ul>
+            <li><strong>H1 (1-Stunde):</strong> Gut für Intraday-Trading</li>
+            <li><strong>H4 (4-Stunden):</strong> Optimaler Kompromiss</li>
+            <li><strong>D1 (Daily):</strong> Sehr zuverlässige Signale</li>
+            <li><strong>W1 (Weekly):</strong> Langfristige Positionen</li>
+        </ul>
+        
+        <div class="cta-section">
+            <h2>🐺 Bereit zum Handeln?</h2>
+            <p>Erhalte täglich professionell identifizierte Wolfe Wave Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels.</p>
+            <a href="index.html" class="cta-btn">Jetzt Signale ansehen →</a>
+        </div>
+        
+        <h2><span class="num">6</span> FAQ - Häufige Fragen</h2>
+        
+        <h3>Wie zuverlässig sind Wolfe Waves?</h3>
+        <p>Bei korrekter Identifikation haben Wolfe Waves eine Erfolgsquote von etwa 60-75%. Der Schlüssel liegt in der strikten Einhaltung der Regeln und gutem Risikomanagement.</p>
+        
+        <h3>Brauche ich spezielle Software?</h3>
+        <p>Wolfe Waves können manuell im Chart identifiziert werden. Bei WolfeWaveSignals nutzen wir jedoch einen automatisierten Scanner, der alle Märkte in Echtzeit überwacht und nur die besten Setups liefert.</p>
+        
+        <h3>Funktioniert das auch für Anfänger?</h3>
+        <p>Ja! Wolfe Waves sind relativ einfach zu verstehen. Mit unseren fertigen Signalen musst du nur noch die vorgegebenen Levels umsetzen.</p>
+        
+        <h3>Wie viel Kapital brauche ich?</h3>
+        <p>Das hängt von deinem Broker und den gehandelten Instrumenten ab. Generell empfehlen wir, nie mehr als 1-2% deines Kapitals pro Trade zu riskieren.</p>
+        
+    </main>
+
+    <footer class="footer">
+        <a href="index.html">Home</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="wolfewaves.html">Was sind Wolfe Waves?</a>
+        <br><br>
+        © 2025 WolfeWaveSignals. Alle Rechte vorbehalten.
+    </footer>
+</body>
+</html>
