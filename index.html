@@ -1876,11 +1876,33 @@
             opacity: 0.5;
         }
 
-        /* User Menu (when logged in) */
-        .user-menu {
+        /* User Menu Dropdown (when logged in) */
+        .user-menu-container {
+            position: relative;
+        }
+
+        .user-menu-trigger {
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .user-menu-trigger:hover {
+            background: var(--bg-hover);
+        }
+
+        .user-menu-arrow {
+            font-size: 10px;
+            color: var(--text-secondary);
+            transition: transform 0.2s;
+        }
+
+        .user-menu-container.open .user-menu-arrow {
+            transform: rotate(180deg);
         }
 
         .user-avatar {
@@ -1913,6 +1935,100 @@
 
         .user-status.free {
             color: var(--text-secondary);
+        }
+
+        /* Dropdown Menu */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-width: 260px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .user-menu-container.open .user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .dropdown-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .dropdown-email {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .dropdown-status {
+            font-size: 12px;
+            color: var(--accent-green);
+            margin-top: 2px;
+        }
+
+        .dropdown-status.free {
+            color: var(--text-secondary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .dropdown-icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .dropdown-logout {
+            color: var(--accent-red);
+        }
+
+        .dropdown-logout:hover {
+            background: rgba(255, 71, 87, 0.1);
         }
 
         .btn-logout {
@@ -2492,6 +2608,34 @@
 
         // ==================== UI UPDATE FUNCTIONS ====================
 
+        function toggleUserMenu() {
+            const container = document.querySelector('.user-menu-container');
+            if (container) {
+                container.classList.toggle('open');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const container = document.querySelector('.user-menu-container');
+            if (container && !container.contains(e.target)) {
+                container.classList.remove('open');
+            }
+        });
+
+        function openCustomerPortal() {
+            // LemonSqueezy Customer Portal URL
+            const email = encodeURIComponent(currentUser.email);
+            const portalUrl = `https://wolfewavesignals.lemonsqueezy.com/billing?email=${email}`;
+            window.open(portalUrl, '_blank');
+            
+            // Close dropdown
+            const container = document.querySelector('.user-menu-container');
+            if (container) {
+                container.classList.remove('open');
+            }
+        }
+
         function updateUIForUser() {
             const headerRight = document.querySelector('.header-right');
             const initial = currentUser.email ? currentUser.email.charAt(0).toUpperCase() : '?';
@@ -2513,14 +2657,45 @@
                     <span>LIVE</span>
                 </div>
                 ${isAdmin ? '<button class="btn-admin" onclick="openAdminPanel()">Admin Panel</button>' : ''}
-                <div class="user-menu">
-                    <div class="user-avatar">${initial}</div>
-                    <div class="user-info">
-                        <span class="user-email">${currentUser.email}</span>
-                        <span class="user-status ${statusClass}">${statusText}</span>
+                <div class="user-menu-container">
+                    <div class="user-menu-trigger" onclick="toggleUserMenu()">
+                        <div class="user-avatar">${initial}</div>
+                        <div class="user-info">
+                            <span class="user-email">${currentUser.email}</span>
+                            <span class="user-status ${statusClass}">${statusText}</span>
+                        </div>
+                        <span class="user-menu-arrow">▼</span>
                     </div>
-                    ${!isSubscribed && !isAdmin ? '<button class="btn btn-primary" onclick="showCheckout()">Upgrade</button>' : ''}
-                    <button class="btn-logout" onclick="handleLogout()">Logout</button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-avatar">${initial}</div>
+                            <div>
+                                <div class="dropdown-email">${currentUser.email}</div>
+                                <div class="dropdown-status ${statusClass}">${statusText}</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        ${isSubscribed ? `
+                            <a class="dropdown-item" onclick="openCustomerPortal()">
+                                <span class="dropdown-icon">💳</span>
+                                Abo verwalten
+                            </a>
+                            <a class="dropdown-item" onclick="openCustomerPortal()">
+                                <span class="dropdown-icon">📄</span>
+                                Rechnungen
+                            </a>
+                        ` : `
+                            <a class="dropdown-item" onclick="showCheckout()">
+                                <span class="dropdown-icon">⭐</span>
+                                Auf Premium upgraden
+                            </a>
+                        `}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item dropdown-logout" onclick="handleLogout()">
+                            <span class="dropdown-icon">🚪</span>
+                            Ausloggen
+                        </a>
+                    </div>
                 </div>
             `;
             
