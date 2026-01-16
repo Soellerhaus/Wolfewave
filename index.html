@@ -1265,6 +1265,127 @@
             opacity: 1;
         }
 
+        /* Image Slider */
+        .image-slider-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 95%;
+            max-height: 95vh;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+            font-size: 48px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: sans-serif;
+            line-height: 1;
+        }
+
+        .slider-nav:hover {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .slider-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slider-nav.hidden {
+            display: none;
+        }
+
+        .slider-prev { left: -80px; }
+        .slider-next { right: -80px; }
+
+        .slider-info {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .slider-info #sliderCounter {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .slider-thumbnails {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            max-width: 100%;
+            overflow-x: auto;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        .slider-thumbnails:empty {
+            display: none;
+        }
+
+        .slider-thumb {
+            width: 80px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .slider-thumb:hover {
+            opacity: 0.8;
+        }
+
+        .slider-thumb.active {
+            opacity: 1;
+            border-color: var(--accent-green);
+        }
+
+        @media (max-width: 1200px) {
+            .slider-prev { left: 10px; }
+            .slider-next { right: 10px; }
+            .slider-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 36px;
+                background: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 28px;
+            }
+            .slider-thumbnails {
+                display: none;
+            }
+        }
+
         /* Loading */
         .loading {
             grid-column: 1 / -1;
@@ -1812,7 +1933,23 @@
     <!-- Image Modal -->
     <div class="modal" id="imageModal">
         <span class="modal-close" onclick="closeModal()">✕</span>
-        <img src="" alt="Chart" id="modalImage">
+        <div class="image-slider-container">
+            <!-- Navigation Buttons -->
+            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">‹</button>
+            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
+            
+            <!-- Main Image -->
+            <img src="" alt="Chart" id="modalImage">
+            
+            <!-- Image Info & Counter -->
+            <div class="slider-info" id="sliderInfo">
+                <span id="sliderCounter">1 / 1</span>
+                <span id="sliderDate"></span>
+            </div>
+            
+            <!-- Thumbnail Strip (wenn mehrere Bilder) -->
+            <div class="slider-thumbnails" id="sliderThumbnails"></div>
+        </div>
     </div>
 
     <!-- Admin Delete Modal -->
@@ -2413,7 +2550,7 @@
             ` : '';
             
             return `
-                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}')">
+                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     ${badge}
                     ${adminControls}
                     <div class="signal-image-container">
@@ -2479,7 +2616,7 @@
             ` : '';
             
             return `
-                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}')">
+                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${adminControls}
                     <div class="signal-image-container">
@@ -2640,15 +2777,150 @@
             document.getElementById('authModal').classList.remove('active');
         }
 
-        function openModal(imageUrl) {
+        // ==================== IMAGE SLIDER ====================
+        let sliderImages = [];
+        let sliderCurrentIndex = 0;
+        let currentWedgeId = null;
+
+        async function openModal(imageUrl, wedgeId = null) {
             if (!imageUrl) return;
-            document.getElementById('modalImage').src = imageUrl;
+            
+            currentWedgeId = wedgeId;
+            sliderImages = [{ url: imageUrl, scanned_at: null }];
+            sliderCurrentIndex = 0;
+            
+            // Zeige erstmal das aktuelle Bild
+            updateSliderDisplay();
             document.getElementById('imageModal').classList.add('active');
+            
+            // Wenn wedge_id vorhanden, lade Bild-Historie
+            if (wedgeId) {
+                await loadImageHistory(wedgeId, imageUrl);
+            }
+        }
+
+        async function loadImageHistory(wedgeId, currentImageUrl) {
+            try {
+                const { data, error } = await supabase
+                    .from('signal_images')
+                    .select('image_url, scanned_at, version')
+                    .eq('wedge_id', wedgeId)
+                    .order('scanned_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                if (data && data.length > 0) {
+                    // Konvertiere zu unserem Format
+                    sliderImages = data.map(img => ({
+                        url: img.image_url,
+                        scanned_at: img.scanned_at
+                    }));
+                    
+                    // Aktuelles Bild an den Anfang (neuestes)
+                    // Stelle sicher dass es nicht doppelt ist
+                    if (sliderImages[0].url !== currentImageUrl) {
+                        sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
+                    }
+                    
+                    sliderCurrentIndex = 0;
+                    updateSliderDisplay();
+                    renderThumbnails();
+                }
+            } catch (err) {
+                console.log('Keine Bild-Historie gefunden:', err.message);
+            }
+        }
+
+        function updateSliderDisplay() {
+            const img = sliderImages[sliderCurrentIndex];
+            document.getElementById('modalImage').src = img.url;
+            
+            // Counter aktualisieren
+            const counter = document.getElementById('sliderCounter');
+            counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
+            
+            // Datum anzeigen
+            const dateEl = document.getElementById('sliderDate');
+            if (img.scanned_at) {
+                const date = new Date(img.scanned_at);
+                dateEl.textContent = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            } else {
+                dateEl.textContent = 'Aktuell';
+            }
+            
+            // Navigation Buttons
+            const prevBtn = document.getElementById('sliderPrev');
+            const nextBtn = document.getElementById('sliderNext');
+            
+            // Verstecke Buttons wenn nur 1 Bild
+            if (sliderImages.length <= 1) {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+                prevBtn.disabled = sliderCurrentIndex === 0;
+                nextBtn.disabled = sliderCurrentIndex === sliderImages.length - 1;
+            }
+            
+            // Thumbnails aktualisieren
+            document.querySelectorAll('.slider-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === sliderCurrentIndex);
+            });
+        }
+
+        function renderThumbnails() {
+            const container = document.getElementById('sliderThumbnails');
+            
+            // Nur bei mehr als 1 Bild anzeigen
+            if (sliderImages.length <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = sliderImages.map((img, i) => `
+                <img src="${img.url}" 
+                     class="slider-thumb ${i === sliderCurrentIndex ? 'active' : ''}" 
+                     onclick="goToImage(${i})"
+                     alt="Scan ${i + 1}">
+            `).join('');
+        }
+
+        function prevImage() {
+            if (sliderCurrentIndex > 0) {
+                sliderCurrentIndex--;
+                updateSliderDisplay();
+            }
+        }
+
+        function nextImage() {
+            if (sliderCurrentIndex < sliderImages.length - 1) {
+                sliderCurrentIndex++;
+                updateSliderDisplay();
+            }
+        }
+
+        function goToImage(index) {
+            sliderCurrentIndex = index;
+            updateSliderDisplay();
         }
 
         function closeModal() {
             document.getElementById('imageModal').classList.remove('active');
+            sliderImages = [];
+            sliderCurrentIndex = 0;
+            currentWedgeId = null;
+            document.getElementById('sliderThumbnails').innerHTML = '';
         }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('imageModal').classList.contains('active')) return;
+            
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'Escape') closeModal();
+        });
 
         function showCheckout() {
             if (!currentUser) {
