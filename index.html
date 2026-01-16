@@ -20,6 +20,7 @@
             --accent-green: #00ff88;
             --accent-red: #ff4757;
             --accent-gold: #ffd700;
+            --accent-blue: #4dabf7;
             --text-primary: #ffffff;
             --text-secondary: #6b7280;
             --border-color: #1f1f1f;
@@ -217,6 +218,408 @@
             font-size: 12px;
             color: var(--text-secondary);
             margin-top: 2px;
+        }
+
+        /* ==================== SUCCESS STATISTICS SECTION ==================== */
+        .success-stats-section {
+            padding: 40px;
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.03) 0%, transparent 100%);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+
+        .success-stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .success-stats-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .success-stats-title .trophy {
+            font-size: 32px;
+        }
+
+        .success-stats-title span {
+            color: var(--accent-gold);
+        }
+
+        .success-stats-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Main Stats Grid */
+        .success-main-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .success-stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .success-stat-card.gold {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .success-stat-card.gold:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .success-stat-card.green {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .success-stat-card.green:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .success-stat-card.red {
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .success-stat-card.red:hover {
+            border-color: var(--accent-red);
+        }
+
+        .success-stat-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .success-stat-value {
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .success-stat-value.gold { color: var(--accent-gold); }
+        .success-stat-value.green { color: var(--accent-green); }
+        .success-stat-value.blue { color: var(--accent-blue); }
+        .success-stat-value.red { color: var(--accent-red); }
+
+        .success-stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .success-stat-pct {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Success Rate Ring */
+        .success-rate-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .success-ring {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .success-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .success-ring-bg {
+            fill: none;
+            stroke: var(--border-color);
+            stroke-width: 12;
+        }
+
+        .success-ring-progress {
+            fill: none;
+            stroke: var(--accent-gold);
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .success-ring-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .success-ring-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .success-ring-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Breakdown by Market/Timeframe */
+        .success-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .breakdown-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .breakdown-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .breakdown-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .breakdown-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .breakdown-bar {
+            width: 100px;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .breakdown-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-gold));
+            border-radius: 4px;
+            transition: width 0.5s ease-out;
+        }
+
+        .breakdown-pct {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-green);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* Recent Success Trades */
+        .recent-success {
+            margin-top: 30px;
+        }
+
+        .recent-success-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recent-success-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .recent-success-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .recent-success-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateX(4px);
+        }
+
+        .recent-success-card.tp3 {
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        .recent-success-card.tp2 {
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .recent-success-card.tp1 {
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .recent-success-card.sl {
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .recent-success-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .recent-success-symbol {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .recent-success-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .recent-success-result {
+            text-align: right;
+        }
+
+        .recent-success-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-tp3 {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--accent-gold);
+        }
+
+        .badge-tp2 {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--accent-green);
+        }
+
+        .badge-tp1 {
+            background: rgba(77, 171, 247, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .badge-sl {
+            background: rgba(255, 71, 87, 0.15);
+            color: var(--accent-red);
+        }
+
+        .recent-success-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Locked overlay for non-premium */
+        .success-stats-locked {
+            position: relative;
+        }
+
+        .success-stats-locked::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(12, 12, 12, 0.95) 30%);
+            pointer-events: none;
+        }
+
+        .success-stats-locked .success-main-stats,
+        .success-stats-locked .success-rate-container,
+        .success-stats-locked .success-breakdown {
+            filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .success-unlock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .success-unlock-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .success-unlock-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .success-unlock-text {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
         }
 
         /* Main Grid */
@@ -734,809 +1137,31 @@
             .paywall-price-amount {
                 font-size: 36px;
             }
-        }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon">🐺</div>
-            <div>Wolfe<span>Wave</span>Signals</div>
-        </div>
-        <div class="header-right">
-            <div class="live-indicator">
-                <div class="live-dot"></div>
-                <span>LIVE</span>
-            </div>
-            <button class="btn btn-outline" onclick="showLogin()">Login</button>
-            <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
-        </div>
-    </header>
 
-    <section class="hero">
-        <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
-        <p>Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
-    </section>
+            .success-stats-section {
+                padding: 24px 16px;
+            }
 
-    <!-- Stats -->
-    <section class="stats-section">
-        <div class="stat-card">
-            <div class="stat-number" id="totalSignals">—</div>
-            <div class="stat-label">Aktive Signale</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number stat-gold" id="successCount">—</div>
-            <div class="stat-label">✓ Erfolgreiche Trades</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="todayCount">—</div>
-            <div class="stat-label">Neu heute</div>
-        </div>
-    </section>
+            .success-main-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
-    <!-- Tabs & Filters (nur für eingeloggte User) -->
-    <section class="tabs-section" id="tabsSection" style="display: none;">
-        <div class="tabs-container">
-            <div class="tabs">
-                <button class="tab active" data-tab="all">Alle Signale</button>
-                <button class="tab" data-tab="new">
-                    Neu
-                    <span class="tab-badge" id="newCount">0</span>
-                </button>
-                <button class="tab" data-tab="bullish">Bullish</button>
-                <button class="tab" data-tab="bearish">Bearish</button>
-                <button class="tab tab-success" data-tab="success">
-                    ✓ Success
-                    <span class="tab-badge tab-badge-gold" id="successTabCount">0</span>
-                </button>
-            </div>
-            <div class="filters">
-                <select class="filter-select" id="filterMarket">
-              <option value="">Alle Märkte</option>
-<option value="DAX">DAX</option>
-<option value="NASDAQ">NASDAQ</option>
-<option value="NYSE">NYSE</option>
-<option value="SP500">S&P 500</option>
-<option value="INDIZES">Indizes</option>
-<option value="FOREX">Forex</option>
-<option value="CRYPTO">Krypto</option>
-                </select>
-                <select class="filter-select" id="filterTimeframe">
-                    <option value="">Alle TF</option>
-                    <option value="M5">M5</option>
-                    <option value="M15">M15</option>
-                    <option value="H1">H1</option>
-                    <option value="H4">H4</option>
-                    <option value="D1">Daily</option>
-                    <option value="W1">Weekly</option>
-                </select>
-                <select class="filter-select" id="filterDirection">
-                    <option value="">Alle</option>
-                    <option value="BULLISH">Bullish</option>
-                    <option value="BEARISH">Bearish</option>
-                </select>
-            </div>
-        </div>
-    </section>
-
-    <!-- Free Preview Section -->
-    <section class="section-header" id="previewHeader">
-        <div class="section-title">
-            🎁 Kostenlose Vorschau
-            <span class="section-badge">Gratis</span>
-        </div>
-        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
-    </section>
-
-    <main class="main">
-        <div class="signals-grid" id="previewGrid">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Lade Vorschau...</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- Premium / Locked Section -->
-    <section class="premium-section">
-        <div class="premium-header">
-            <div class="premium-title">
-                <span class="lock-icon">🔒</span>
-                Premium Signale
-            </div>
-            <div class="premium-count" id="premiumCount">+42 weitere Signale</div>
-        </div>
-
-        <div class="premium-grid-container">
-            <div class="premium-grid" id="lockedGrid">
-                <!-- Locked placeholder cards -->
-            </div>
-
-            <div class="paywall-overlay">
-                <div class="paywall-card">
-                    <div class="paywall-icon">🔓</div>
-                    <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
-                    <div class="paywall-subtitle">
-                        Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
-                    </div>
-
-                    <div class="paywall-features">
-                        <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
-                            <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
-                        </div>
-                        <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
-                            <span>Push-Benachrichtigungen bei neuen Signalen</span>
-                        </div>
-                        <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
-                            <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
-                        </div>
-                        <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
-                            <span>Jederzeit kündbar — keine Bindung</span>
-                        </div>
-                    </div>
-
-                    <div class="paywall-price">
-                        <span class="paywall-price-amount">9,90€</span>
-                        <span class="paywall-price-period">/ Monat</span>
-                    </div>
-
-                    <button class="paywall-btn" onclick="showCheckout()">
-                        Jetzt Abonnieren
-                    </button>
-
-                    <div class="paywall-login">
-                        Bereits Abonnent? <a href="#" onclick="showLogin(); return false;">Hier einloggen</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        wolfewavesignals.com • Trading-Signale für professionelle Händler
-    </footer>
-
-    <!-- Chart Slider Modal -->
-    <div class="modal" id="imageModal">
-        <span class="modal-close" onclick="closeModal()">✕</span>
-        <div class="slider-container">
-            <button class="slider-arrow slider-prev" onclick="prevSlide()">‹</button>
-            
-            <div class="slider-content">
-                <div class="slider-images" id="sliderImages">
-                    <img src="" alt="Chart">
-                </div>
-                
-                <div class="slider-info">
-                    <div class="slider-title" id="sliderTitle">Signal Name</div>
-                    <div class="slider-counter" id="sliderCounter">1 / 3</div>
-                </div>
-                
-                <div class="slider-dots" id="sliderDots"></div>
-                
-                <div class="slider-timeline" id="sliderTimeline"></div>
-            </div>
-            
-            <button class="slider-arrow slider-next" onclick="nextSlide()">›</button>
-        </div>
-    </div>
-
-    <style>
-        /* Slider Modal Styles */
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            max-width: 95vw;
-            max-height: 95vh;
-        }
-
-        .slider-arrow {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #fff;
-            font-size: 48px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .slider-arrow:hover {
-            background: var(--accent-green);
-            color: #000;
-        }
-
-        .slider-arrow:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .slider-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .slider-images {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            max-width: 900px;
-            max-height: 600px;
-        }
-
-        .slider-images img {
-            max-width: 100%;
-            max-height: 600px;
-            object-fit: contain;
-            display: block;
-            transition: opacity 0.3s;
-        }
-
-        .slider-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 900px;
-            padding: 0 10px;
-        }
-
-        .slider-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .slider-counter {
-            font-size: 14px;
-            color: var(--text-secondary);
-            background: var(--bg-card);
-            padding: 6px 14px;
-            border-radius: 20px;
-        }
-
-        .slider-dots {
-            display: flex;
-            gap: 10px;
-        }
-
-        .slider-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .slider-dot:hover {
-            background: var(--text-secondary);
-        }
-
-        .slider-dot.active {
-            background: var(--accent-green);
-            transform: scale(1.2);
-        }
-
-        .slider-timeline {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 900px;
-        }
-
-        .timeline-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            min-width: 120px;
-        }
-
-        .timeline-item:hover {
-            border-color: var(--accent-green);
-        }
-
-        .timeline-item.active {
-            border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .timeline-date {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .timeline-label {
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .timeline-label.success {
-            color: var(--accent-green);
-        }
-
-        @media (max-width: 768px) {
-            .slider-arrow {
-                width: 40px;
-                height: 40px;
+            .success-stat-value {
                 font-size: 32px;
             }
 
-            .slider-images img {
-                max-height: 400px;
+            .success-ring {
+                width: 140px;
+                height: 140px;
             }
 
-            .slider-container {
-                flex-direction: column;
+            .success-ring-value {
+                font-size: 28px;
             }
 
-            .slider-arrow {
-                display: none;
+            .breakdown-bar {
+                width: 60px;
             }
-        }
-    </style>
-
-    <!-- Auth Modal -->
-    <div class="modal" id="authModal">
-        <div class="auth-card">
-            <span class="modal-close" onclick="closeAuthModal()">✕</span>
-            
-            <!-- Login Form -->
-            <div id="loginForm" class="auth-form">
-                <div class="auth-header">
-                    <div class="auth-icon">🐺</div>
-                    <h2>Willkommen zurück</h2>
-                    <p>Melde dich an, um alle Signale zu sehen</p>
-                </div>
-                
-                <div class="auth-fields">
-                    <div class="input-group">
-                        <label>E-Mail</label>
-                        <input type="email" id="loginEmail" placeholder="deine@email.de">
-                    </div>
-                    <div class="input-group">
-                        <label>Passwort</label>
-                        <input type="password" id="loginPassword" placeholder="••••••••">
-                    </div>
-                </div>
-                
-                <div class="auth-error" id="loginError"></div>
-                
-                <button class="auth-btn" onclick="handleLogin()">
-                    <span id="loginBtnText">Einloggen</span>
-                    <span id="loginSpinner" class="btn-spinner" style="display:none;">↻</span>
-                </button>
-                
-                <div class="auth-footer">
-                    <a href="#" onclick="showForgotPassword(); return false;">Passwort vergessen?</a>
-                    <span class="auth-divider">•</span>
-                    <a href="#" onclick="toggleAuthForm('register'); return false;">Neu hier? Registrieren</a>
-                </div>
-            </div>
-            
-            <!-- Register Form -->
-            <div id="registerForm" class="auth-form" style="display:none;">
-                <div class="auth-header">
-                    <div class="auth-icon">🏆€</div>
-                    <h2>Account erstellen</h2>
-                    <p>Starte mit deinem kostenlosen Account</p>
-                </div>
-                
-                <div class="auth-fields">
-                    <div class="input-group">
-                        <label>E-Mail</label>
-                        <input type="email" id="registerEmail" placeholder="deine@email.de">
-                    </div>
-                    <div class="input-group">
-                        <label>Passwort</label>
-                        <input type="password" id="registerPassword" placeholder="Mind. 6 Zeichen">
-                    </div>
-                    <div class="input-group">
-                        <label>Passwort bestätigen</label>
-                        <input type="password" id="registerPasswordConfirm" placeholder="Passwort wiederholen">
-                    </div>
-                </div>
-                
-                <div class="auth-error" id="registerError"></div>
-                
-                <button class="auth-btn" onclick="handleRegister()">
-                    <span id="registerBtnText">Kostenlos registrieren</span>
-                    <span id="registerSpinner" class="btn-spinner" style="display:none;">↻</span>
-                </button>
-                
-                <div class="auth-footer">
-                    <a href="#" onclick="toggleAuthForm('login'); return false;">Bereits registriert? Einloggen</a>
-                </div>
-            </div>
-            
-            <!-- Forgot Password Form -->
-            <div id="forgotForm" class="auth-form" style="display:none;">
-                <div class="auth-header">
-                    <div class="auth-icon">🔑</div>
-                    <h2>Passwort zurücksetzen</h2>
-                    <p>Wir senden dir einen Reset-Link</p>
-                </div>
-                
-                <div class="auth-fields">
-                    <div class="input-group">
-                        <label>E-Mail</label>
-                        <input type="email" id="forgotEmail" placeholder="deine@email.de">
-                    </div>
-                </div>
-                
-                <div class="auth-error" id="forgotError"></div>
-                <div class="auth-success" id="forgotSuccess"></div>
-                
-                <button class="auth-btn" onclick="handleForgotPassword()">
-                    <span id="forgotBtnText">Reset-Link senden</span>
-                    <span id="forgotSpinner" class="btn-spinner" style="display:none;">↻</span>
-                </button>
-                
-                <div class="auth-footer">
-                    <a href="#" onclick="toggleAuthForm('login'); return false;">← Zurück zum Login</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Panel Modal -->
-    <div class="modal" id="adminModal">
-        <div class="admin-panel">
-            <div class="admin-header">
-                <h2>🛡️ Admin Panel</h2>
-                <span class="modal-close" onclick="closeAdminPanel()">✕</span>
-            </div>
-            
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="users" onclick="switchAdminTab('users')">👥 Users</button>
-                <button class="admin-tab" data-tab="subscriptions" onclick="switchAdminTab('subscriptions')">💳 Subscriptions</button>
-                <button class="admin-tab" data-tab="stats" onclick="switchAdminTab('stats')">📊 Stats</button>
-            </div>
-            
-            <!-- Users Tab -->
-            <div class="admin-content" id="adminUsersTab">
-                <div class="admin-toolbar">
-                    <input type="text" id="userSearch" placeholder="User suchen..." class="admin-search" oninput="filterUsers()">
-                    <button class="btn btn-outline" onclick="loadAdminUsers()">↻ Refresh</button>
-                </div>
-                <div class="admin-table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>E-Mail</th>
-                                <th>Registriert</th>
-                                <th>Status</th>
-                                <th>Plan</th>
-                                <th>Aktionen</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <tr><td colspan="5" class="loading-cell">Lade Users...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Subscriptions Tab -->
-            <div class="admin-content" id="adminSubscriptionsTab" style="display:none;">
-                <div class="admin-toolbar">
-                    <select id="subStatusFilter" class="filter-select" onchange="loadAdminSubscriptions()">
-                        <option value="">Alle Status</option>
-                        <option value="active">Active</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="expired">Expired</option>
-                    </select>
-                    <button class="btn btn-outline" onclick="loadAdminSubscriptions()">↻ Refresh</button>
-                </div>
-                <div class="admin-table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Plan</th>
-                                <th>Status</th>
-                                <th>Gültig bis</th>
-                                <th>Stripe ID</th>
-                                <th>Aktionen</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subscriptionsTableBody">
-                            <tr><td colspan="6" class="loading-cell">Lade Subscriptions...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Stats Tab -->
-            <div class="admin-content" id="adminStatsTab" style="display:none;">
-                <div class="stats-grid-admin">
-                    <div class="stat-card-admin">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-value" id="statTotalUsers">—</div>
-                        <div class="stat-label">Registrierte User</div>
-                    </div>
-                    <div class="stat-card-admin">
-                        <div class="stat-icon">💎</div>
-                        <div class="stat-value" id="statActiveSubscriptions">—</div>
-                        <div class="stat-label">Aktive Abos</div>
-                    </div>
-                    <div class="stat-card-admin">
-                        <div class="stat-icon">💰</div>
-                        <div class="stat-value" id="statMRR">—</div>
-                        <div class="stat-label">MRR (€)</div>
-                    </div>
-                    <div class="stat-card-admin">
-                        <div class="stat-icon">📈</div>
-                        <div class="stat-value" id="statConversionRate">—</div>
-                        <div class="stat-label">Conversion Rate</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Quick Actions -->
-            <div class="admin-quick-actions">
-                <h4>Quick Actions</h4>
-                <div class="quick-action-btns">
-                    <button class="btn btn-outline" onclick="showGrantSubscription()">➕ Abo vergeben</button>
-                    <button class="btn btn-outline" onclick="showAddAdmin()">🛡️ Admin hinzufügen</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Grant Subscription Modal -->
-    <div class="modal" id="grantSubModal">
-        <div class="auth-card">
-            <span class="modal-close" onclick="closeGrantSubModal()">✕</span>
-            <div class="auth-header">
-                <div class="auth-icon">➕</div>
-                <h2>Subscription vergeben</h2>
-                <p>Manuell ein Abo aktivieren</p>
-            </div>
-            <div class="auth-fields">
-                <div class="input-group">
-                    <label>User E-Mail</label>
-                    <input type="email" id="grantSubEmail" placeholder="user@email.de">
-                </div>
-                <div class="input-group">
-                    <label>Plan</label>
-                    <select id="grantSubPlan" class="filter-select" style="width:100%; padding:14px;">
-                        <option value="monthly">Monthly (9,90€)</option>
-                        <option value="yearly">Yearly (99€)</option>
-                        <option value="lifetime">Lifetime</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Laufzeit (Tage)</label>
-                    <input type="number" id="grantSubDays" value="30" min="1">
-                </div>
-            </div>
-            <div class="auth-error" id="grantSubError"></div>
-            <div class="auth-success" id="grantSubSuccess"></div>
-            <button class="auth-btn" onclick="handleGrantSubscription()">Abo aktivieren</button>
-        </div>
-    </div>
-
-    <style>
-        /* Admin Panel Styles */
-        .admin-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            width: 95%;
-            max-width: 1000px;
-            max-height: 90vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .admin-header {
-            padding: 24px 30px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .admin-header h2 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        
-        .admin-tabs {
-            display: flex;
-            gap: 8px;
-            padding: 16px 30px;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(0,0,0,0.2);
-        }
-        
-        .admin-tab {
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-family: inherit;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .admin-tab:hover {
-            border-color: var(--accent-green);
-            color: var(--text-primary);
-        }
-        
-        .admin-tab.active {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
-            color: #000;
-            font-weight: 600;
-        }
-        
-        .admin-content {
-            flex: 1;
-            padding: 20px 30px;
-            overflow-y: auto;
-        }
-        
-        .admin-toolbar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .admin-search {
-            flex: 1;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px 16px;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 14px;
-        }
-        
-        .admin-search:focus {
-            outline: none;
-            border-color: var(--accent-green);
-        }
-        
-        .admin-table-wrapper {
-            overflow-x: auto;
-        }
-        
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .admin-table th,
-        .admin-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 13px;
-        }
-        
-        .admin-table th {
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .admin-table tr:hover {
-            background: rgba(255,255,255,0.02);
-        }
-        
-        .loading-cell {
-            text-align: center;
-            color: var(--text-secondary);
-            padding: 40px !important;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .status-active {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
-        }
-        
-        .status-free {
-            background: rgba(107, 114, 128, 0.15);
-            color: var(--text-secondary);
-        }
-        
-        .status-cancelled {
-            background: rgba(255, 71, 87, 0.15);
-            color: var(--accent-red);
-        }
-        
-        .status-admin {
-            background: rgba(255, 215, 0, 0.15);
-            color: var(--accent-gold);
-        }
-        
-        .action-btn {
-            padding: 6px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: transparent;
-            color: var(--text-primary);
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-right: 6px;
-        }
-        
-        .action-btn:hover {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-        
-        .action-btn.danger:hover {
-            border-color: var(--accent-red);
-            color: var(--accent-red);
-        }
-        
-        /* Stats Grid */
-        .stats-grid-admin {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .stat-card-admin {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-        }
-        
-        .stat-card-admin .stat-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-        
-        .stat-card-admin .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-        
-        .stat-card-admin .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
         }
 
         /* Tabs Section */
@@ -1600,69 +1225,6 @@
             color: #000;
         }
 
-        .tab-success {
-            color: var(--accent-gold) !important;
-        }
-
-        .tab-success:hover {
-            border-color: var(--accent-gold) !important;
-        }
-
-        .tab-success.active {
-            background: var(--accent-gold) !important;
-            border-color: var(--accent-gold) !important;
-            color: #000 !important;
-        }
-
-        .tab-badge-gold {
-            background: rgba(255, 215, 0, 0.2) !important;
-            color: var(--accent-gold) !important;
-        }
-
-        .tab-success.active .tab-badge-gold {
-            background: rgba(0, 0, 0, 0.2) !important;
-            color: #000 !important;
-        }
-
-        /* Success Signal Card */
-        .signal-card.is-success {
-            border-color: rgba(255, 215, 0, 0.5);
-            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 215, 0, 0.05) 100%);
-        }
-
-        .signal-card.is-success:hover {
-            border-color: var(--accent-gold);
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
-        }
-
-        .success-badge {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: var(--accent-gold);
-            color: #000;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 4px;
-            z-index: 10;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .image-count-badge {
-            position: absolute;
-            top: 16px;
-            right: 60px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 4px;
-            z-index: 10;
-        }
-
         .filters {
             display: flex;
             gap: 12px;
@@ -1683,49 +1245,8 @@
         .filter-select:hover {
             border-color: var(--accent-green);
         }
-        
-        /* Quick Actions */
-        .admin-quick-actions {
-            padding: 20px 30px;
-            border-top: 1px solid var(--border-color);
-            background: rgba(0,0,0,0.2);
-        }
-        
-        .admin-quick-actions h4 {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .quick-action-btns {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        /* Admin Button in Header */
-        .btn-admin {
-            background: linear-gradient(135deg, var(--accent-gold), #ffaa00);
-            color: #000;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn-admin:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-    </style>
 
-    <style>
-        /* Auth Modal Styles */
+        /* Auth styles */
         .auth-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -1801,27 +1322,6 @@
             box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
 
-        .input-group input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.5;
-        }
-
-        .auth-error {
-            color: var(--accent-red);
-            font-size: 13px;
-            text-align: center;
-            margin-bottom: 16px;
-            min-height: 20px;
-        }
-
-        .auth-success {
-            color: var(--accent-green);
-            font-size: 13px;
-            text-align: center;
-            margin-bottom: 16px;
-            min-height: 20px;
-        }
-
         .auth-btn {
             width: 100%;
             padding: 16px;
@@ -1834,10 +1334,6 @@
             font-family: inherit;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
 
         .auth-btn:hover {
@@ -1845,14 +1341,11 @@
             box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
         }
 
-        .auth-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-spinner {
-            animation: spin 1s linear infinite;
+        .auth-error {
+            color: var(--accent-red);
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 16px;
         }
 
         .auth-footer {
@@ -1867,16 +1360,7 @@
             text-decoration: none;
         }
 
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .auth-divider {
-            margin: 0 12px;
-            opacity: 0.5;
-        }
-
-        /* User Menu Dropdown (when logged in) */
+        /* User menu */
         .user-menu-container {
             position: relative;
         }
@@ -1893,16 +1377,6 @@
 
         .user-menu-trigger:hover {
             background: var(--bg-hover);
-        }
-
-        .user-menu-arrow {
-            font-size: 10px;
-            color: var(--text-secondary);
-            transition: transform 0.2s;
-        }
-
-        .user-menu-container.open .user-menu-arrow {
-            transform: rotate(180deg);
         }
 
         .user-avatar {
@@ -1933,11 +1407,6 @@
             color: var(--accent-green);
         }
 
-        .user-status.free {
-            color: var(--text-secondary);
-        }
-
-        /* Dropdown Menu */
         .user-dropdown {
             position: absolute;
             top: calc(100% + 8px);
@@ -1960,55 +1429,12 @@
             transform: translateY(0);
         }
 
-        .dropdown-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-        }
-
-        .dropdown-avatar {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-            color: #000;
-        }
-
-        .dropdown-email {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .dropdown-status {
-            font-size: 12px;
-            color: var(--accent-green);
-            margin-top: 2px;
-        }
-
-        .dropdown-status.free {
-            color: var(--text-secondary);
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: var(--border-color);
-            margin: 4px 0;
-        }
-
         .dropdown-item {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
             color: var(--text-primary);
-            text-decoration: none;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -2017,36 +1443,219 @@
             background: var(--bg-hover);
         }
 
-        .dropdown-icon {
-            font-size: 16px;
-            width: 24px;
-            text-align: center;
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
         }
 
-        .dropdown-logout {
-            color: var(--accent-red);
-        }
-
-        .dropdown-logout:hover {
-            background: rgba(255, 71, 87, 0.1);
-        }
-
-        .btn-logout {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
+        .btn-admin {
+            background: linear-gradient(135deg, var(--accent-gold), #ffaa00);
+            color: #000;
             padding: 8px 16px;
             border-radius: 8px;
             font-size: 12px;
+            font-weight: 600;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-logout:hover {
-            border-color: var(--accent-red);
-            color: var(--accent-red);
         }
     </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🐺</div>
+            <div>Wolfe<span>Wave</span>Signals</div>
+        </div>
+        <div class="header-right">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>LIVE</span>
+            </div>
+            <button class="btn btn-outline" onclick="showLogin()">Login</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
+        <p>Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="stat-card">
+            <div class="stat-number" id="totalSignals">—</div>
+            <div class="stat-label">Aktive Signale</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number stat-gold" id="successCount">—</div>
+            <div class="stat-label">✓ Erfolgreiche Trades</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="todayCount">—</div>
+            <div class="stat-label">Neu heute</div>
+        </div>
+    </section>
+
+    <!-- ==================== SUCCESS STATISTICS SECTION ==================== -->
+    <section class="success-stats-section" id="successStatsSection">
+        <div class="success-stats-header">
+            <div>
+                <div class="success-stats-title">
+                    <span class="trophy">🏆</span>
+                    Trading <span>Performance</span>
+                </div>
+                <div class="success-stats-subtitle">Echtzeit-Statistiken aller abgeschlossenen Trades</div>
+            </div>
+        </div>
+
+        <div id="successStatsContent">
+            <!-- Wird dynamisch gefüllt -->
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Lade Statistiken...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Preview Section -->
+    <section class="section-header" id="previewHeader">
+        <div class="section-title">
+            🎁 Kostenlose Vorschau
+            <span class="section-badge">Gratis</span>
+        </div>
+        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
+    </section>
+
+    <main class="main">
+        <div class="signals-grid" id="previewGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Lade Vorschau...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Premium / Locked Section -->
+    <section class="premium-section">
+        <div class="premium-header">
+            <div class="premium-title">
+                <span class="lock-icon">🔒</span>
+                Premium Signale
+            </div>
+            <div class="premium-count" id="premiumCount">+42 weitere Signale</div>
+        </div>
+
+        <div class="premium-grid-container">
+            <div class="premium-grid" id="lockedGrid">
+                <!-- Locked placeholder cards -->
+            </div>
+
+            <div class="paywall-overlay">
+                <div class="paywall-card">
+                    <div class="paywall-icon">🔓</div>
+                    <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
+                    <div class="paywall-subtitle">
+                        Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
+                    </div>
+
+                    <div class="paywall-features">
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Detaillierte Performance-Statistiken</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">✓</span>
+                            <span>Jederzeit kündbar — keine Bindung</span>
+                        </div>
+                    </div>
+
+                    <div class="paywall-price">
+                        <span class="paywall-price-amount">9,90€</span>
+                        <span class="paywall-price-period">/ Monat</span>
+                    </div>
+
+                    <button class="paywall-btn" onclick="showCheckout()">
+                        Jetzt Abonnieren
+                    </button>
+
+                    <div class="paywall-login">
+                        Bereits Abonnent? <a href="#" onclick="showLogin(); return false;">Hier einloggen</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        wolfewavesignals.com • Trading-Signale für professionelle Händler
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="auth-card">
+            <span class="modal-close" onclick="closeAuthModal()">✕</span>
+            <div id="loginForm" class="auth-form">
+                <div class="auth-header">
+                    <div class="auth-icon">🐺</div>
+                    <h2>Willkommen zurück</h2>
+                    <p>Melde dich an, um alle Signale zu sehen</p>
+                </div>
+                <div class="auth-fields">
+                    <div class="input-group">
+                        <label>E-Mail</label>
+                        <input type="email" id="loginEmail" placeholder="deine@email.de">
+                    </div>
+                    <div class="input-group">
+                        <label>Passwort</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••">
+                    </div>
+                </div>
+                <div class="auth-error" id="loginError"></div>
+                <button class="auth-btn" onclick="handleLogin()">Einloggen</button>
+                <div class="auth-footer">
+                    <a href="#" onclick="toggleAuthForm('register'); return false;">Neu hier? Registrieren</a>
+                </div>
+            </div>
+            <div id="registerForm" class="auth-form" style="display:none;">
+                <div class="auth-header">
+                    <div class="auth-icon">🏆</div>
+                    <h2>Account erstellen</h2>
+                    <p>Starte mit deinem kostenlosen Account</p>
+                </div>
+                <div class="auth-fields">
+                    <div class="input-group">
+                        <label>E-Mail</label>
+                        <input type="email" id="registerEmail" placeholder="deine@email.de">
+                    </div>
+                    <div class="input-group">
+                        <label>Passwort</label>
+                        <input type="password" id="registerPassword" placeholder="Mind. 6 Zeichen">
+                    </div>
+                </div>
+                <div class="auth-error" id="registerError"></div>
+                <button class="auth-btn" onclick="handleRegister()">Kostenlos registrieren</button>
+                <div class="auth-footer">
+                    <a href="#" onclick="toggleAuthForm('login'); return false;">Bereits registriert? Einloggen</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <span class="modal-close" onclick="closeModal()">✕</span>
+        <img src="" alt="Chart" id="modalImage">
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
@@ -2054,191 +1663,22 @@
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
 
         let allSignals = [];
-        let successSignals = [];
-        let symbolMarkets = {}; // Symbol -> [markets] mapping
+        let completedSignals = [];
         let currentUser = null;
         let isSubscribed = false;
         let isAdmin = false;
-        let adminUsers = [];
-        let adminSubscriptions = [];
-        let sessionToken = null;
-        let sessionCheckInterval = null;
 
-        // Markets we want to show as preview (1 each)
         const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
 
-        // ==================== SYMBOL MARKETS FUNCTIONS ====================
-
-        async function fetchSymbolMarkets() {
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/symbol_markets?select=*`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    }
-                });
-                
-                if (!response.ok) {
-                    console.log('symbol_markets table not found, using signal.market as fallback');
-                    return;
-                }
-                
-                const data = await response.json();
-                
-                // Build symbol -> markets lookup
-                symbolMarkets = {};
-                data.forEach(item => {
-                    if (!symbolMarkets[item.symbol]) {
-                        symbolMarkets[item.symbol] = [];
-                    }
-                    symbolMarkets[item.symbol].push(item.market);
-                });
-                
-                console.log('Symbol markets loaded:', Object.keys(symbolMarkets).length, 'symbols');
-            } catch (e) {
-                console.log('Error fetching symbol_markets:', e);
-            }
+        // ==================== INIT ====================
+        async function init() {
+            await checkSession();
+            await fetchSignals();
+            await fetchCompletedSignals();
+            renderSuccessStats();
         }
 
-        function getMarketsForSymbol(signal) {
-            // If symbol is in symbol_markets, use those
-            if (symbolMarkets[signal.symbol] && symbolMarkets[signal.symbol].length > 0) {
-                return symbolMarkets[signal.symbol];
-            }
-            // Fallback to signal.market field
-            return signal.market ? [signal.market] : [];
-        }
-
-        function signalMatchesMarket(signal, marketFilter) {
-            if (!marketFilter) return true; // No filter = show all
-            
-            const markets = getMarketsForSymbol(signal);
-            return markets.includes(marketFilter);
-        }
-
-        // ==================== SESSION FUNCTIONS ====================
-
-        function generateSessionToken() {
-            return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15);
-        }
-
-        function getSessionToken() {
-            return localStorage.getItem('session_token');
-        }
-
-        function saveSessionToken(token) {
-            localStorage.setItem('session_token', token);
-            sessionToken = token;
-        }
-
-        function clearSessionToken() {
-            localStorage.removeItem('session_token');
-            sessionToken = null;
-        }
-
-        async function createSession(userId) {
-            const token = generateSessionToken();
-            const deviceInfo = navigator.userAgent.substring(0, 200);
-            
-            try {
-                // Erstelle neue Session (löscht automatisch alte)
-                await fetch(`${SUPABASE_URL}/rest/v1/rpc/create_user_session`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        p_user_id: userId,
-                        p_session_token: token,
-                        p_device_info: deviceInfo
-                    })
-                });
-                
-                saveSessionToken(token);
-                startSessionCheck();
-                return true;
-            } catch (e) {
-                console.error('Session creation failed:', e);
-                return false;
-            }
-        }
-
-        async function validateSession() {
-            if (!currentUser || !getSessionToken()) return false;
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/validate_session`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        p_user_id: currentUser.id,
-                        p_session_token: getSessionToken()
-                    })
-                });
-                
-                const isValid = await response.json();
-                return isValid === true;
-            } catch (e) {
-                console.error('Session validation failed:', e);
-                return false;
-            }
-        }
-
-        function startSessionCheck() {
-            // Prüfe alle 30 Sekunden ob Session noch gültig
-            if (sessionCheckInterval) clearInterval(sessionCheckInterval);
-            
-            sessionCheckInterval = setInterval(async () => {
-                if (!currentUser) return;
-                
-                const isValid = await validateSession();
-                if (!isValid) {
-                    showSessionExpiredMessage();
-                    handleLogout(true); // silent logout
-                }
-            }, 30000); // 30 Sekunden
-        }
-
-        function stopSessionCheck() {
-            if (sessionCheckInterval) {
-                clearInterval(sessionCheckInterval);
-                sessionCheckInterval = null;
-            }
-        }
-
-        function showSessionExpiredMessage() {
-            // Modal anzeigen
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.id = 'sessionExpiredModal';
-            modal.innerHTML = `
-                <div class="auth-card">
-                    <div class="auth-header">
-                        <div class="auth-icon">🔒</div>
-                        <h2>Session abgelaufen</h2>
-                        <p>Du wurdest auf einem anderen Gerät eingeloggt.</p>
-                    </div>
-                    <button class="auth-btn" onclick="closeSessionExpiredModal()">
-                        OK, verstanden
-                    </button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
-        function closeSessionExpiredModal() {
-            const modal = document.getElementById('sessionExpiredModal');
-            if (modal) modal.remove();
-        }
-
-        // ==================== AUTH FUNCTIONS ====================
-        
+        // ==================== AUTH ====================
         async function checkSession() {
             try {
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -2252,19 +1692,6 @@
                     const user = await response.json();
                     if (user && user.id) {
                         currentUser = user;
-                        
-                        // Validiere Session (falls vorhanden)
-                        if (getSessionToken()) {
-                            const isValid = await validateSession();
-                            if (!isValid) {
-                                // Session ungültig - wurde woanders eingeloggt
-                                showSessionExpiredMessage();
-                                handleLogout(true);
-                                return false;
-                            }
-                            startSessionCheck();
-                        }
-                        
                         await checkSubscription();
                         await checkAdminStatus();
                         updateUIForUser();
@@ -2276,315 +1703,11 @@
             }
             
             currentUser = null;
-            isAdmin = false;
             updateUIForGuest();
             return false;
         }
 
-        async function checkAdminStatus() {
-            if (!currentUser) {
-                isAdmin = false;
-                return;
-            }
-            
-            try {
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=*`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`
-                        }
-                    }
-                );
-                
-                if (response.ok) {
-                    const admins = await response.json();
-                    isAdmin = admins.length > 0;
-                }
-            } catch (e) {
-                console.log('Admin check failed');
-                isAdmin = false;
-            }
-        }
-
-        function getAccessToken() {
-            return localStorage.getItem('sb_access_token') || '';
-        }
-
-        function getRefreshToken() {
-            return localStorage.getItem('sb_refresh_token') || '';
-        }
-
-        function saveTokens(access, refresh) {
-            localStorage.setItem('sb_access_token', access);
-            localStorage.setItem('sb_refresh_token', refresh);
-        }
-
-        function clearTokens() {
-            localStorage.removeItem('sb_access_token');
-            localStorage.removeItem('sb_refresh_token');
-        }
-
-        async function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const errorEl = document.getElementById('loginError');
-            const btnText = document.getElementById('loginBtnText');
-            const spinner = document.getElementById('loginSpinner');
-            
-            errorEl.textContent = '';
-            
-            if (!email || !password) {
-                errorEl.textContent = 'Bitte E-Mail und Passwort eingeben';
-                return;
-            }
-            
-            btnText.style.display = 'none';
-            spinner.style.display = 'inline-block';
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error_description || data.msg || 'Login fehlgeschlagen');
-                }
-                
-                saveTokens(data.access_token, data.refresh_token);
-                currentUser = data.user;
-                
-                // Erstelle Session (loggt andere Geräte aus)
-                await createSession(currentUser.id);
-                
-                await checkSubscription();
-                await checkAdminStatus();
-                updateUIForUser();
-                closeAuthModal();
-                fetchSignals(); // Refresh to show all signals
-                
-            } catch (error) {
-                errorEl.textContent = error.message === 'Invalid login credentials' 
-                    ? 'Falsche E-Mail oder Passwort' 
-                    : error.message;
-            } finally {
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-            }
-        }
-
-        async function handleRegister() {
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
-            const errorEl = document.getElementById('registerError');
-            const btnText = document.getElementById('registerBtnText');
-            const spinner = document.getElementById('registerSpinner');
-            const registerBtn = btnText.closest('button');
-            
-            errorEl.textContent = '';
-            errorEl.style.color = 'var(--accent-red)';
-            
-            if (!email || !password) {
-                errorEl.textContent = 'Bitte alle Felder ausfüllen';
-                return;
-            }
-            
-            if (password.length < 6) {
-                errorEl.textContent = 'Passwort muss mindestens 6 Zeichen haben';
-                return;
-            }
-            
-            if (password !== passwordConfirm) {
-                errorEl.textContent = 'Passwörter stimmen nicht überein';
-                return;
-            }
-            
-            btnText.style.display = 'none';
-            spinner.style.display = 'inline-block';
-            registerBtn.disabled = true;
-            
-            try {
-                // Include redirect URL for email confirmation
-                const redirectUrl = window.location.origin + '?confirmed=true';
-                
-                const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        email, 
-                        password,
-                        options: {
-                            emailRedirectTo: redirectUrl
-                        }
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error_description || data.msg || 'Registrierung fehlgeschlagen');
-                }
-                
-                // Check if email confirmation is required
-                if (data.user && !data.session) {
-                    // Show success message with nice styling
-                    showRegistrationSuccess(email);
-                    return;
-                }
-                
-                // Auto-login if no confirmation needed
-                if (data.access_token) {
-                    saveTokens(data.access_token, data.refresh_token);
-                    currentUser = data.user;
-                    await createSession(currentUser.id);
-                    await checkSubscription();
-                    await checkAdminStatus();
-                    updateUIForUser();
-                    closeAuthModal();
-                    fetchSignals();
-                }
-                
-            } catch (error) {
-                errorEl.style.color = 'var(--accent-red)';
-                if (error.message.includes('already registered')) {
-                    errorEl.textContent = 'Diese E-Mail ist bereits registriert';
-                } else {
-                    errorEl.textContent = error.message;
-                }
-            } finally {
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-                registerBtn.disabled = false;
-            }
-        }
-        
-        function showRegistrationSuccess(email) {
-            const registerForm = document.getElementById('registerForm');
-            registerForm.innerHTML = `
-                <div class="auth-header">
-                    <div class="auth-icon">📧</div>
-                    <h2>Fast geschafft!</h2>
-                    <p>Wir haben eine Bestätigungs-E-Mail gesendet an:</p>
-                </div>
-                <div style="background: rgba(0,255,136,0.1); border: 1px solid var(--accent-green); border-radius: 10px; padding: 16px; margin: 20px 0; text-align: center;">
-                    <strong style="color: var(--accent-green);">${email}</strong>
-                </div>
-                <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; text-align: center;">
-                    <p>📬 Bitte öffne dein E-Mail-Postfach</p>
-                    <p>✅ Klicke auf den Bestätigungs-Link</p>
-                    <p>🚀 Danach kannst du dich einloggen</p>
-                </div>
-                <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-secondary);">
-                    Keine E-Mail erhalten? Prüfe deinen Spam-Ordner oder 
-                    <a href="#" onclick="toggleAuthForm('register'); return false;" style="color: var(--accent-green);">versuche es erneut</a>
-                </div>
-                <button class="auth-btn" style="margin-top: 20px;" onclick="toggleAuthForm('login')">
-                    Zum Login
-                </button>
-            `;
-        }
-
-        async function handleForgotPassword() {
-            const email = document.getElementById('forgotEmail').value.trim();
-            const errorEl = document.getElementById('forgotError');
-            const successEl = document.getElementById('forgotSuccess');
-            const btnText = document.getElementById('forgotBtnText');
-            const spinner = document.getElementById('forgotSpinner');
-            
-            errorEl.textContent = '';
-            successEl.textContent = '';
-            
-            if (!email) {
-                errorEl.textContent = 'Bitte E-Mail eingeben';
-                return;
-            }
-            
-            btnText.style.display = 'none';
-            spinner.style.display = 'inline-block';
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email })
-                });
-                
-                if (!response.ok) {
-                    const data = await response.json();
-                    throw new Error(data.error_description || 'Fehler beim Senden');
-                }
-                
-                successEl.textContent = '✓ Reset-Link gesendet! Checke deinen Posteingang.';
-                
-            } catch (error) {
-                errorEl.textContent = error.message;
-            } finally {
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-            }
-        }
-
-        async function handleLogout(silent = false) {
-            // Session Check stoppen
-            stopSessionCheck();
-            
-            // Session aus DB löschen
-            if (currentUser && getSessionToken()) {
-                try {
-                    await fetch(
-                        `${SUPABASE_URL}/rest/v1/user_sessions?user_id=eq.${currentUser.id}`,
-                        {
-                            method: 'DELETE',
-                            headers: {
-                                'apikey': SUPABASE_KEY,
-                                'Authorization': `Bearer ${getAccessToken()}`
-                            }
-                        }
-                    );
-                } catch (e) {
-                    console.log('Session delete failed');
-                }
-            }
-            
-            try {
-                await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`
-                    }
-                });
-            } catch (e) {
-                console.log('Logout request failed, clearing locally');
-            }
-            
-            clearTokens();
-            clearSessionToken();
-            currentUser = null;
-            isSubscribed = false;
-            isAdmin = false;
-            updateUIForGuest();
-            fetchSignals();
-        }
-
         async function checkSubscription() {
-            // TODO: Check Stripe subscription status
-            // For now, check if user has 'subscribed' in user_metadata or in a subscriptions table
             try {
                 const response = await fetch(
                     `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.id}&status=eq.active&select=*`,
@@ -2601,143 +1724,185 @@
                     isSubscribed = subs.length > 0;
                 }
             } catch (e) {
-                console.log('Subscription check failed, assuming free user');
                 isSubscribed = false;
             }
         }
 
-        // ==================== UI UPDATE FUNCTIONS ====================
-
-        function toggleUserMenu() {
-            const container = document.querySelector('.user-menu-container');
-            if (container) {
-                container.classList.toggle('open');
+        async function checkAdminStatus() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=*`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    const admins = await response.json();
+                    isAdmin = admins.length > 0;
+                }
+            } catch (e) {
+                isAdmin = false;
             }
         }
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            const container = document.querySelector('.user-menu-container');
-            if (container && !container.contains(e.target)) {
-                container.classList.remove('open');
-            }
-        });
+        function getAccessToken() {
+            return localStorage.getItem('sb_access_token') || '';
+        }
 
-        function openCustomerPortal() {
-            // LemonSqueezy Customer Portal URL
-            const email = encodeURIComponent(currentUser.email);
-            const portalUrl = `https://wolfewavesignals.lemonsqueezy.com/billing?email=${email}`;
-            window.open(portalUrl, '_blank');
+        function saveTokens(access, refresh) {
+            localStorage.setItem('sb_access_token', access);
+            localStorage.setItem('sb_refresh_token', refresh);
+        }
+
+        function clearTokens() {
+            localStorage.removeItem('sb_access_token');
+            localStorage.removeItem('sb_refresh_token');
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
             
-            // Close dropdown
-            const container = document.querySelector('.user-menu-container');
-            if (container) {
-                container.classList.remove('open');
+            errorEl.textContent = '';
+            
+            if (!email || !password) {
+                errorEl.textContent = 'Bitte E-Mail und Passwort eingeben';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error_description || 'Login fehlgeschlagen');
+                }
+                
+                saveTokens(data.access_token, data.refresh_token);
+                currentUser = data.user;
+                
+                await checkSubscription();
+                await checkAdminStatus();
+                updateUIForUser();
+                closeAuthModal();
+                fetchSignals();
+                renderSuccessStats();
+                
+            } catch (error) {
+                errorEl.textContent = error.message === 'Invalid login credentials' 
+                    ? 'Falsche E-Mail oder Passwort' 
+                    : error.message;
             }
         }
 
+        async function handleRegister() {
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const errorEl = document.getElementById('registerError');
+            
+            errorEl.textContent = '';
+            
+            if (!email || !password) {
+                errorEl.textContent = 'Bitte alle Felder ausfüllen';
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorEl.textContent = 'Passwort muss mindestens 6 Zeichen haben';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error_description || 'Registrierung fehlgeschlagen');
+                }
+                
+                if (data.access_token) {
+                    saveTokens(data.access_token, data.refresh_token);
+                    currentUser = data.user;
+                    await checkSubscription();
+                    updateUIForUser();
+                    closeAuthModal();
+                    fetchSignals();
+                } else {
+                    errorEl.style.color = 'var(--accent-green)';
+                    errorEl.textContent = '✓ Bestätigungs-E-Mail gesendet!';
+                }
+                
+            } catch (error) {
+                errorEl.textContent = error.message;
+            }
+        }
+
+        function handleLogout() {
+            clearTokens();
+            currentUser = null;
+            isSubscribed = false;
+            isAdmin = false;
+            updateUIForGuest();
+            fetchSignals();
+            renderSuccessStats();
+        }
+
+        // ==================== UI UPDATES ====================
         function updateUIForUser() {
             const headerRight = document.querySelector('.header-right');
             const initial = currentUser.email ? currentUser.email.charAt(0).toUpperCase() : '?';
             
-            // Determine status text
             let statusText = 'Free Account';
-            let statusClass = 'free';
-            if (isAdmin) {
-                statusText = '🛡️ Admin';
-                statusClass = '';
-            } else if (isSubscribed) {
-                statusText = '✓ Premium';
-                statusClass = '';
-            }
+            if (isAdmin) statusText = '🛡️ Admin';
+            else if (isSubscribed) statusText = '✓ Premium';
             
             headerRight.innerHTML = `
                 <div class="live-indicator">
                     <div class="live-dot"></div>
                     <span>LIVE</span>
                 </div>
-                ${isAdmin ? '<button class="btn-admin" onclick="openAdminPanel()">Admin Panel</button>' : ''}
                 <div class="user-menu-container">
                     <div class="user-menu-trigger" onclick="toggleUserMenu()">
                         <div class="user-avatar">${initial}</div>
                         <div class="user-info">
                             <span class="user-email">${currentUser.email}</span>
-                            <span class="user-status ${statusClass}">${statusText}</span>
+                            <span class="user-status">${statusText}</span>
                         </div>
-                        <span class="user-menu-arrow">▼</span>
                     </div>
-                    <div class="user-dropdown" id="userDropdown">
-                        <div class="dropdown-header">
-                            <div class="dropdown-avatar">${initial}</div>
-                            <div>
-                                <div class="dropdown-email">${currentUser.email}</div>
-                                <div class="dropdown-status ${statusClass}">${statusText}</div>
-                            </div>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        ${isSubscribed ? `
-                            <a class="dropdown-item" onclick="openCustomerPortal()">
-                                <span class="dropdown-icon">💳</span>
-                                Abo verwalten
-                            </a>
-                            <a class="dropdown-item" onclick="openCustomerPortal()">
-                                <span class="dropdown-icon">📄</span>
-                                Rechnungen
-                            </a>
-                        ` : `
-                            <a class="dropdown-item" onclick="showCheckout()">
-                                <span class="dropdown-icon">⭐</span>
-                                Auf Premium upgraden
-                            </a>
-                        `}
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item dropdown-logout" onclick="handleLogout()">
-                            <span class="dropdown-icon">🚪</span>
-                            Ausloggen
-                        </a>
+                    <div class="user-dropdown">
+                        <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
                     </div>
                 </div>
             `;
             
-            // Update section header based on subscription
-            const previewHeader = document.getElementById('previewHeader');
-            if (previewHeader) {
-                if (isSubscribed || isAdmin) {
-                    previewHeader.innerHTML = `
-                        <div class="section-title">
-                            🐺 Alle Signale
-                            <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
-                        </div>
-                        <div class="section-subtitle">— Du hast Zugriff auf alle ${allSignals.length} Signale</div>
-                    `;
-                } else {
-                    previewHeader.innerHTML = `
-                        <div class="section-title">
-                            🎁 Kostenlose Vorschau
-                            <span class="section-badge">Gratis</span>
-                        </div>
-                        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
-                    `;
-                }
-            }
-            
-            // If subscribed OR admin, hide paywall
             if (isSubscribed || isAdmin) {
-                const premiumSection = document.querySelector('.premium-section');
-                if (premiumSection) {
-                    premiumSection.style.display = 'none';
-                }
-                // Show tabs for logged in users with access
-                const tabsSection = document.getElementById('tabsSection');
-                if (tabsSection) {
-                    tabsSection.style.display = 'block';
-                }
+                document.querySelector('.premium-section').style.display = 'none';
             }
         }
 
         function updateUIForGuest() {
             const headerRight = document.querySelector('.header-right');
-            
             headerRight.innerHTML = `
                 <div class="live-indicator">
                     <div class="live-dot"></div>
@@ -2747,543 +1912,16 @@
                 <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
             `;
             
-            // Reset section header
-            const previewHeader = document.getElementById('previewHeader');
-            if (previewHeader) {
-                previewHeader.innerHTML = `
-                    <div class="section-title">
-                        🎁 Kostenlose Vorschau
-                        <span class="section-badge">Gratis</span>
-                    </div>
-                    <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
-                `;
-            }
-            
-            // Hide tabs for guests
-            const tabsSection = document.getElementById('tabsSection');
-            if (tabsSection) {
-                tabsSection.style.display = 'none';
-            }
-            
-            // Show paywall again
-            const premiumSection = document.querySelector('.premium-section');
-            if (premiumSection) {
-                premiumSection.style.display = 'block';
-            }
+            document.querySelector('.premium-section').style.display = 'block';
         }
 
-        // ==================== TAB & FILTER FUNCTIONS ====================
-
-        function getFilteredSignals() {
-            const market = document.getElementById('filterMarket')?.value || '';
-            const timeframe = document.getElementById('filterTimeframe')?.value || '';
-            const direction = document.getElementById('filterDirection')?.value || '';
-            
-            // Success tab uses different data source
-            if (currentTab === 'success') {
-                let filtered = [...successSignals];
-                // Use symbol_markets for market filtering
-                if (market) filtered = filtered.filter(s => signalMatchesMarket(s, market));
-                if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
-                if (direction) filtered = filtered.filter(s => s.direction === direction);
-                return filtered;
-            }
-            
-            let filtered = [...allSignals];
-            
-            // Tab filter
-            const now = new Date();
-            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
-            
-            if (currentTab === 'new') {
-                filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
-            } else if (currentTab === 'bullish') {
-                filtered = filtered.filter(s => s.direction === 'BULLISH');
-            } else if (currentTab === 'bearish') {
-                filtered = filtered.filter(s => s.direction === 'BEARISH');
-            }
-            
-            // Dropdown filters - use symbol_markets for market filtering
-            if (market) filtered = filtered.filter(s => signalMatchesMarket(s, market));
-            if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
-            if (direction) filtered = filtered.filter(s => s.direction === direction);
-            
-            return filtered;
+        function toggleUserMenu() {
+            document.querySelector('.user-menu-container').classList.toggle('open');
         }
 
-        function applyFiltersAndRender() {
-            if (currentUser && (isSubscribed || isAdmin)) {
-                const filtered = getFilteredSignals();
-                const grid = document.getElementById('previewGrid');
-                const isSuccessTab = currentTab === 'success';
-                
-                if (filtered.length === 0) {
-                    grid.innerHTML = isSuccessTab ? 
-                        '<div class="loading"><p>Noch keine erfolgreichen Signale</p></div>' :
-                        '<div class="loading"><p>Keine Signale gefunden</p></div>';
-                    return;
-                }
-                
-                grid.innerHTML = filtered.map(signal => renderSignalCard(signal, true, isSuccessTab)).join('');
-                
-                // Update header count
-                const previewHeader = document.getElementById('previewHeader');
-                if (previewHeader) {
-                    if (isSuccessTab) {
-                        previewHeader.innerHTML = `
-                            <div class="section-title">
-                                🏆 Erfolgreiche Trades
-                                <span class="section-badge" style="background: var(--accent-gold);">✓ TP erreicht</span>
-                            </div>
-                            <div class="section-subtitle">— ${filtered.length} Signale haben ihr Ziel erreicht</div>
-                        `;
-                    } else {
-                        previewHeader.innerHTML = `
-                            <div class="section-title">
-                                🐺 Alle Signale
-                                <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
-                            </div>
-                            <div class="section-subtitle">— ${filtered.length} von ${allSignals.length} Signale</div>
-                        `;
-                    }
-                }
-            } else {
-                renderPreviewSignals();
-            }
-        }
-
-        function updateNewCount() {
-            const now = new Date();
-            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
-            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
-            const newCountEl = document.getElementById('newCount');
-            if (newCountEl) {
-                newCountEl.textContent = newSignals.length;
-            }
-            
-            // Update success count
-            const successTabCountEl = document.getElementById('successTabCount');
-            if (successTabCountEl) {
-                successTabCountEl.textContent = successSignals.length;
-            }
-        }
-
-        // ==================== MODAL FUNCTIONS ====================
-
-        function showLogin() {
-            toggleAuthForm('login');
-            document.getElementById('authModal').classList.add('active');
-        }
-
-        function showRegister() {
-            toggleAuthForm('register');
-            document.getElementById('authModal').classList.add('active');
-        }
-
-        function showForgotPassword() {
-            toggleAuthForm('forgot');
-        }
-
-        function toggleAuthForm(form) {
-            document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
-            document.getElementById('registerForm').style.display = form === 'register' ? 'block' : 'none';
-            document.getElementById('forgotForm').style.display = form === 'forgot' ? 'block' : 'none';
-            
-            // Clear errors
-            document.getElementById('loginError').textContent = '';
-            document.getElementById('registerError').textContent = '';
-            document.getElementById('forgotError').textContent = '';
-            document.getElementById('forgotSuccess').textContent = '';
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('active');
-            // Clear inputs
-            document.querySelectorAll('.auth-form input').forEach(input => input.value = '');
-        }
-
-        // ==================== ADMIN PANEL FUNCTIONS ====================
-        
-        function openAdminPanel() {
-            if (!isAdmin) return;
-            document.getElementById('adminModal').classList.add('active');
-            loadAdminUsers();
-            loadAdminStats();
-        }
-        
-        function closeAdminPanel() {
-            document.getElementById('adminModal').classList.remove('active');
-        }
-        
-        function switchAdminTab(tab) {
-            // Update tab buttons
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.admin-tab[data-tab="${tab}"]`).classList.add('active');
-            
-            // Show/hide content
-            document.getElementById('adminUsersTab').style.display = tab === 'users' ? 'block' : 'none';
-            document.getElementById('adminSubscriptionsTab').style.display = tab === 'subscriptions' ? 'block' : 'none';
-            document.getElementById('adminStatsTab').style.display = tab === 'stats' ? 'block' : 'none';
-            
-            // Load data
-            if (tab === 'users') loadAdminUsers();
-            if (tab === 'subscriptions') loadAdminSubscriptions();
-            if (tab === 'stats') loadAdminStats();
-        }
-        
-        async function loadAdminUsers() {
-            const tbody = document.getElementById('usersTableBody');
-            tbody.innerHTML = '<tr><td colspan="5" class="loading-cell">Lade Users...</td></tr>';
-            
-            try {
-                // Get users with their subscriptions
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/users_with_subscriptions?select=*&order=registered_at.desc`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`
-                        }
-                    }
-                );
-                
-                if (!response.ok) throw new Error('Failed to fetch users');
-                
-                adminUsers = await response.json();
-                renderUsersTable(adminUsers);
-                
-            } catch (e) {
-                console.error('Error loading users:', e);
-                tbody.innerHTML = '<tr><td colspan="5" class="loading-cell">Fehler beim Laden. View existiert evtl. noch nicht.</td></tr>';
-            }
-        }
-        
-        function renderUsersTable(users) {
-            const tbody = document.getElementById('usersTableBody');
-            
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="loading-cell">Keine User gefunden</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = users.map(user => {
-                let statusBadge = '<span class="status-badge status-free">Free</span>';
-                if (user.is_admin) {
-                    statusBadge = '<span class="status-badge status-admin">Admin</span>';
-                } else if (user.subscription_status === 'active') {
-                    statusBadge = '<span class="status-badge status-active">Active</span>';
-                }
-                
-                return `
-                    <tr>
-                        <td>${user.email || '—'}</td>
-                        <td>${formatDate(user.registered_at)}</td>
-                        <td>${statusBadge}</td>
-                        <td>${user.subscription_plan || '—'}</td>
-                        <td>
-                            <button class="action-btn" onclick="grantSubToUser('${user.email}')">+Abo</button>
-                            ${!user.is_admin ? `<button class="action-btn" onclick="makeAdmin('${user.id}')">+Admin</button>` : ''}
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-        
-        function filterUsers() {
-            const search = document.getElementById('userSearch').value.toLowerCase();
-            const filtered = adminUsers.filter(u => 
-                u.email && u.email.toLowerCase().includes(search)
-            );
-            renderUsersTable(filtered);
-        }
-        
-        async function loadAdminSubscriptions() {
-            const tbody = document.getElementById('subscriptionsTableBody');
-            tbody.innerHTML = '<tr><td colspan="6" class="loading-cell">Lade Subscriptions...</td></tr>';
-            
-            const statusFilter = document.getElementById('subStatusFilter').value;
-            let url = `${SUPABASE_URL}/rest/v1/subscriptions?select=*,user:user_id(email)&order=created_at.desc`;
-            if (statusFilter) {
-                url += `&status=eq.${statusFilter}`;
-            }
-            
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`
-                    }
-                });
-                
-                if (!response.ok) throw new Error('Failed to fetch');
-                
-                adminSubscriptions = await response.json();
-                renderSubscriptionsTable(adminSubscriptions);
-                
-            } catch (e) {
-                console.error('Error loading subscriptions:', e);
-                tbody.innerHTML = '<tr><td colspan="6" class="loading-cell">Fehler beim Laden</td></tr>';
-            }
-        }
-        
-        function renderSubscriptionsTable(subs) {
-            const tbody = document.getElementById('subscriptionsTableBody');
-            
-            if (subs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading-cell">Keine Subscriptions</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = subs.map(sub => {
-                const statusClass = sub.status === 'active' ? 'status-active' : 
-                                   sub.status === 'cancelled' ? 'status-cancelled' : 'status-free';
-                
-                return `
-                    <tr>
-                        <td>${sub.user?.email || sub.user_id}</td>
-                        <td>${sub.plan}</td>
-                        <td><span class="status-badge ${statusClass}">${sub.status}</span></td>
-                        <td>${sub.current_period_end ? formatDate(sub.current_period_end) : '—'}</td>
-                        <td style="font-size:11px; color:var(--text-secondary);">${sub.stripe_subscription_id || '—'}</td>
-                        <td>
-                            ${sub.status === 'active' ? 
-                                `<button class="action-btn danger" onclick="cancelSubscription('${sub.id}')">Kündigen</button>` :
-                                `<button class="action-btn" onclick="reactivateSubscription('${sub.id}')">Aktivieren</button>`
-                            }
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-        
-        async function loadAdminStats() {
-            // Total users
-            document.getElementById('statTotalUsers').textContent = adminUsers.length || '—';
-            
-            // Active subscriptions
-            const activeCount = adminUsers.filter(u => u.subscription_status === 'active').length;
-            document.getElementById('statActiveSubscriptions').textContent = activeCount;
-            
-            // MRR (Monthly Recurring Revenue)
-            const mrr = activeCount * 9.90;
-            document.getElementById('statMRR').textContent = mrr.toFixed(2) + '€';
-            
-            // Conversion rate
-            const conversionRate = adminUsers.length > 0 ? 
-                ((activeCount / adminUsers.length) * 100).toFixed(1) : '0';
-            document.getElementById('statConversionRate').textContent = conversionRate + '%';
-        }
-        
-        function showGrantSubscription() {
-            document.getElementById('grantSubModal').classList.add('active');
-            document.getElementById('grantSubError').textContent = '';
-            document.getElementById('grantSubSuccess').textContent = '';
-        }
-        
-        function closeGrantSubModal() {
-            document.getElementById('grantSubModal').classList.remove('active');
-        }
-        
-        function grantSubToUser(email) {
-            document.getElementById('grantSubEmail').value = email;
-            showGrantSubscription();
-        }
-        
-        async function handleGrantSubscription() {
-            const email = document.getElementById('grantSubEmail').value.trim();
-            const plan = document.getElementById('grantSubPlan').value;
-            const days = parseInt(document.getElementById('grantSubDays').value) || 30;
-            const errorEl = document.getElementById('grantSubError');
-            const successEl = document.getElementById('grantSubSuccess');
-            
-            errorEl.textContent = '';
-            successEl.textContent = '';
-            
-            if (!email) {
-                errorEl.textContent = 'Bitte E-Mail eingeben';
-                return;
-            }
-            
-            try {
-                // First, find the user ID by email
-                const userResponse = await fetch(
-                    `${SUPABASE_URL}/rest/v1/users_with_subscriptions?email=eq.${encodeURIComponent(email)}&select=id`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`
-                        }
-                    }
-                );
-                
-                const users = await userResponse.json();
-                if (!users || users.length === 0) {
-                    errorEl.textContent = 'User nicht gefunden';
-                    return;
-                }
-                
-                const userId = users[0].id;
-                const periodEnd = new Date();
-                periodEnd.setDate(periodEnd.getDate() + days);
-                
-                // Check if subscription already exists
-                const existingResponse = await fetch(
-                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${userId}&select=id`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`
-                        }
-                    }
-                );
-                
-                const existing = await existingResponse.json();
-                
-                let response;
-                if (existing && existing.length > 0) {
-                    // UPDATE existing subscription
-                    response = await fetch(`${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${userId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            status: 'active',
-                            plan: plan,
-                            current_period_start: new Date().toISOString(),
-                            current_period_end: periodEnd.toISOString()
-                        })
-                    });
-                } else {
-                    // INSERT new subscription
-                    response = await fetch(`${SUPABASE_URL}/rest/v1/subscriptions`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            user_id: userId,
-                            status: 'active',
-                            plan: plan,
-                            current_period_start: new Date().toISOString(),
-                            current_period_end: periodEnd.toISOString()
-                        })
-                    });
-                }
-                
-                if (!response.ok) {
-                    const err = await response.json();
-                    throw new Error(err.message || 'Failed to create subscription');
-                }
-                
-                successEl.textContent = `✓ ${plan} Abo für ${email} aktiviert (${days} Tage)`;
-                loadAdminUsers();
-                loadAdminSubscriptions();
-                
-            } catch (e) {
-                console.error(e);
-                errorEl.textContent = 'Fehler: ' + e.message;
-            }
-        }
-        
-        async function makeAdmin(userId) {
-            if (!confirm('User zum Admin machen?')) return;
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/admins`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        role: 'admin'
-                    })
-                });
-                
-                if (!response.ok) throw new Error('Failed');
-                
-                alert('✓ User ist jetzt Admin');
-                loadAdminUsers();
-                
-            } catch (e) {
-                alert('Fehler: ' + e.message);
-            }
-        }
-        
-        function showAddAdmin() {
-            const email = prompt('Admin E-Mail eingeben:');
-            if (!email) return;
-            grantSubToUser(email); // Reuse the grant modal flow
-        }
-        
-        async function cancelSubscription(subId) {
-            if (!confirm('Subscription wirklich kündigen?')) return;
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/subscriptions?id=eq.${subId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status: 'cancelled' })
-                });
-                
-                if (!response.ok) throw new Error('Failed');
-                
-                loadAdminSubscriptions();
-                
-            } catch (e) {
-                alert('Fehler: ' + e.message);
-            }
-        }
-        
-        async function reactivateSubscription(subId) {
-            const days = prompt('Für wie viele Tage aktivieren?', '30');
-            if (!days) return;
-            
-            const periodEnd = new Date();
-            periodEnd.setDate(periodEnd.getDate() + parseInt(days));
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/subscriptions?id=eq.${subId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        status: 'active',
-                        current_period_start: new Date().toISOString(),
-                        current_period_end: periodEnd.toISOString()
-                    })
-                });
-                
-                if (!response.ok) throw new Error('Failed');
-                
-                loadAdminSubscriptions();
-                
-            } catch (e) {
-                alert('Fehler: ' + e.message);
-            }
-        }
-
-        // ==================== SIGNAL FUNCTIONS ====================
-
-        let currentTab = 'all';
-
+        // ==================== FETCH DATA ====================
         async function fetchSignals() {
             try {
-                // Fetch active signals
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&order=created_at.desc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -3294,202 +1932,319 @@
                 if (!response.ok) throw new Error('Failed to fetch');
                 allSignals = await response.json();
                 
-                // Fetch success signals for count
-                try {
-                    const successResponse = await fetch(`${SUPABASE_URL}/rest/v1/success_signals?select=*&order=created_at.desc`, {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${SUPABASE_KEY}`
-                        }
-                    });
-                    if (successResponse.ok) {
-                        successSignals = await successResponse.json();
-                    }
-                } catch (e) {
-                    console.log('No success_signals table yet');
-                }
-                
                 updateStats();
                 renderPreviewSignals();
                 renderLockedSignals();
                 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('previewGrid').innerHTML = '<div class="loading"><p>Fehler beim Laden</p></div>';
             }
         }
 
+        async function fetchCompletedSignals() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/completed_signals?select=*&order=created_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                
+                if (response.ok) {
+                    completedSignals = await response.json();
+                }
+            } catch (e) {
+                console.log('No completed_signals yet');
+                completedSignals = [];
+            }
+        }
+
+        // ==================== SUCCESS STATS ====================
+        function renderSuccessStats() {
+            const container = document.getElementById('successStatsContent');
+            const section = document.getElementById('successStatsSection');
+            
+            // Berechne Statistiken
+            const total = completedSignals.length;
+            const tp3Count = completedSignals.filter(s => s.result === 'TP3_HIT').length;
+            const tp2Count = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
+            const tp1Count = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
+            const slCount = completedSignals.filter(s => s.result === 'SL_HIT').length;
+            const successCount = completedSignals.filter(s => s.result_folder === 'success').length;
+            const failedCount = completedSignals.filter(s => s.result_folder === 'failed').length;
+            
+            const successRate = total > 0 ? ((successCount / total) * 100).toFixed(1) : 0;
+            
+            // Berechne nach Market
+            const marketStats = {};
+            completedSignals.forEach(s => {
+                if (!marketStats[s.market]) {
+                    marketStats[s.market] = { total: 0, success: 0 };
+                }
+                marketStats[s.market].total++;
+                if (s.result_folder === 'success') marketStats[s.market].success++;
+            });
+            
+            // Berechne nach Timeframe
+            const tfStats = {};
+            completedSignals.forEach(s => {
+                if (!tfStats[s.timeframe]) {
+                    tfStats[s.timeframe] = { total: 0, success: 0 };
+                }
+                tfStats[s.timeframe].total++;
+                if (s.result_folder === 'success') tfStats[s.timeframe].success++;
+            });
+            
+            // Für nicht eingeloggte oder Free-User: Blur anzeigen
+            const isPremium = currentUser && (isSubscribed || isAdmin);
+            
+            if (!isPremium) {
+                container.innerHTML = `
+                    <div class="success-stats-locked">
+                        ${renderStatsHTML(total, tp3Count, tp2Count, tp1Count, slCount, successRate, successCount, failedCount, marketStats, tfStats)}
+                        <div class="success-unlock-overlay">
+                            <div class="success-unlock-icon">🔒</div>
+                            <div class="success-unlock-title">Performance freischalten</div>
+                            <div class="success-unlock-text">Werde Premium um alle Statistiken zu sehen</div>
+                            <button class="paywall-btn" onclick="showCheckout()">Premium werden</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = renderStatsHTML(total, tp3Count, tp2Count, tp1Count, slCount, successRate, successCount, failedCount, marketStats, tfStats);
+            }
+            
+            // Animate ring
+            setTimeout(() => {
+                const ring = document.querySelector('.success-ring-progress');
+                if (ring) {
+                    const circumference = 2 * Math.PI * 70;
+                    const offset = circumference - (successRate / 100) * circumference;
+                    ring.style.strokeDasharray = circumference;
+                    ring.style.strokeDashoffset = offset;
+                }
+            }, 100);
+        }
+
+        function renderStatsHTML(total, tp3Count, tp2Count, tp1Count, slCount, successRate, successCount, failedCount, marketStats, tfStats) {
+            // Recent trades
+            const recentTrades = completedSignals.slice(0, 6);
+            
+            return `
+                <!-- Main Stats Cards -->
+                <div class="success-main-stats">
+                    <div class="success-stat-card gold">
+                        <div class="success-stat-icon">🏆</div>
+                        <div class="success-stat-value gold">${tp3Count}</div>
+                        <div class="success-stat-label">TP3 erreicht</div>
+                        <div class="success-stat-pct" style="color: var(--accent-gold)">Volles Ziel</div>
+                    </div>
+                    <div class="success-stat-card green">
+                        <div class="success-stat-icon">✅</div>
+                        <div class="success-stat-value green">${tp2Count}</div>
+                        <div class="success-stat-label">TP2 erreicht</div>
+                        <div class="success-stat-pct" style="color: var(--accent-green)">66% Ziel</div>
+                    </div>
+                    <div class="success-stat-card">
+                        <div class="success-stat-icon">📈</div>
+                        <div class="success-stat-value blue">${tp1Count}</div>
+                        <div class="success-stat-label">TP1 erreicht</div>
+                        <div class="success-stat-pct" style="color: var(--accent-blue)">33% Ziel</div>
+                    </div>
+                    <div class="success-stat-card red">
+                        <div class="success-stat-icon">🛑</div>
+                        <div class="success-stat-value red">${slCount}</div>
+                        <div class="success-stat-label">Stop Loss</div>
+                        <div class="success-stat-pct" style="color: var(--accent-red)">Ausgestoppt</div>
+                    </div>
+                </div>
+
+                <!-- Success Rate Ring -->
+                <div class="success-rate-container">
+                    <div class="success-ring">
+                        <svg width="180" height="180">
+                            <circle class="success-ring-bg" cx="90" cy="90" r="70"/>
+                            <circle class="success-ring-progress" cx="90" cy="90" r="70" 
+                                    stroke-dasharray="439.82" stroke-dashoffset="439.82"/>
+                        </svg>
+                        <div class="success-ring-center">
+                            <div class="success-ring-value">${successRate}%</div>
+                            <div class="success-ring-label">Success Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; color: var(--text-primary)">${total}</div>
+                        <div style="color: var(--text-secondary); margin-bottom: 16px">Abgeschlossene Trades</div>
+                        <div style="display: flex; gap: 24px; justify-content: center;">
+                            <div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--accent-green)">${successCount}</div>
+                                <div style="font-size: 12px; color: var(--text-secondary)">Gewinner</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--accent-red)">${failedCount}</div>
+                                <div style="font-size: 12px; color: var(--text-secondary)">Verlierer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breakdown by Market & Timeframe -->
+                <div class="success-breakdown">
+                    <div class="breakdown-card">
+                        <div class="breakdown-title">📊 Nach Markt</div>
+                        ${Object.entries(marketStats).map(([market, stats]) => {
+                            const pct = stats.total > 0 ? ((stats.success / stats.total) * 100).toFixed(0) : 0;
+                            return `
+                                <div class="breakdown-item">
+                                    <div class="breakdown-name">${market}</div>
+                                    <div class="breakdown-stats">
+                                        <div class="breakdown-count">${stats.success}/${stats.total}</div>
+                                        <div class="breakdown-bar">
+                                            <div class="breakdown-bar-fill" style="width: ${pct}%"></div>
+                                        </div>
+                                        <div class="breakdown-pct">${pct}%</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div class="breakdown-card">
+                        <div class="breakdown-title">⏱️ Nach Timeframe</div>
+                        ${Object.entries(tfStats).map(([tf, stats]) => {
+                            const pct = stats.total > 0 ? ((stats.success / stats.total) * 100).toFixed(0) : 0;
+                            return `
+                                <div class="breakdown-item">
+                                    <div class="breakdown-name">${tf}</div>
+                                    <div class="breakdown-stats">
+                                        <div class="breakdown-count">${stats.success}/${stats.total}</div>
+                                        <div class="breakdown-bar">
+                                            <div class="breakdown-bar-fill" style="width: ${pct}%"></div>
+                                        </div>
+                                        <div class="breakdown-pct">${pct}%</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Recent Success Trades -->
+                <div class="recent-success">
+                    <div class="recent-success-title">🕐 Letzte abgeschlossene Trades</div>
+                    <div class="recent-success-grid">
+                        ${recentTrades.map(trade => {
+                            let badgeClass = 'badge-sl';
+                            let badgeText = 'SL';
+                            let cardClass = 'sl';
+                            
+                            if (trade.tp3_hit) {
+                                badgeClass = 'badge-tp3';
+                                badgeText = '🏆 TP3';
+                                cardClass = 'tp3';
+                            } else if (trade.tp2_hit) {
+                                badgeClass = 'badge-tp2';
+                                badgeText = '✅ TP2';
+                                cardClass = 'tp2';
+                            } else if (trade.tp1_hit) {
+                                badgeClass = 'badge-tp1';
+                                badgeText = '📈 TP1';
+                                cardClass = 'tp1';
+                            }
+                            
+                            return `
+                                <div class="recent-success-card ${cardClass}">
+                                    <div class="recent-success-info">
+                                        <div class="recent-success-symbol">${trade.symbol}</div>
+                                        <div class="recent-success-meta">${trade.market} • ${trade.timeframe} • ${trade.direction}</div>
+                                    </div>
+                                    <div class="recent-success-result">
+                                        <div class="recent-success-badge ${badgeClass}">${badgeText}</div>
+                                        <div class="recent-success-time">${formatTimeAgo(trade.created_at)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatTimeAgo(dateStr) {
+            const now = new Date();
+            const date = new Date(dateStr);
+            const diffMs = now - date;
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffHours < 1) return 'gerade eben';
+            if (diffHours < 24) return `vor ${diffHours}h`;
+            return `vor ${diffDays}d`;
+        }
+
+        // ==================== SIGNALS RENDERING ====================
         function updateStats() {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
             document.getElementById('totalSignals').textContent = allSignals.length;
-            document.getElementById('successCount').textContent = successSignals.length || '87';
+            document.getElementById('successCount').textContent = completedSignals.filter(s => s.result_folder === 'success').length || '0';
             
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
             document.getElementById('todayCount').textContent = todaySignals.length;
             
-            // Premium count (total minus 3 preview)
             const premiumCount = Math.max(0, allSignals.length - 3);
             document.getElementById('premiumCount').textContent = `+${premiumCount} weitere Signale`;
-            
-            // Update new count for tabs
-            updateNewCount();
         }
 
         function getPreviewSignals() {
-            // Get 1 signal from each preview market using symbol_markets
             const preview = [];
-            
             for (const market of PREVIEW_MARKETS) {
-                const signal = allSignals.find(s => 
-                    signalMatchesMarket(s, market) && !preview.some(p => p.id === s.id)
-                );
-                if (signal) {
-                    preview.push(signal);
-                }
+                const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
+                if (signal) preview.push(signal);
             }
-            
-            // If we don't have all 4, fill with any available signals
-            if (preview.length < 4) {
-                for (const signal of allSignals) {
-                    if (preview.length >= 4) break;
-                    if (!preview.some(p => p.id === signal.id)) {
-                        preview.push(signal);
-                    }
-                }
+            while (preview.length < 3 && preview.length < allSignals.length) {
+                const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
+                if (signal) preview.push(signal);
+                else break;
             }
-            
             return preview;
         }
 
         function renderPreviewSignals() {
             const grid = document.getElementById('previewGrid');
             
-            // If user is subscribed OR admin, use filtered signals
             if (currentUser && (isSubscribed || isAdmin)) {
-                const filtered = getFilteredSignals();
-                if (filtered.length === 0) {
-                    grid.innerHTML = '<div class="loading"><p>Keine Signale gefunden</p></div>';
-                    return;
-                }
-                grid.innerHTML = filtered.map(signal => renderSignalCard(signal, true)).join('');
+                grid.innerHTML = allSignals.map(s => renderSignalCard(s, true)).join('');
                 return;
             }
             
-            // Otherwise show preview only
-            const previewSignals = getPreviewSignals();
-            
-            if (previewSignals.length === 0) {
-                grid.innerHTML = '<div class="loading"><p>Keine Signale verfügbar</p></div>';
-                return;
-            }
-
-            grid.innerHTML = previewSignals.map(signal => renderSignalCard(signal, true)).join('');
+            const preview = getPreviewSignals();
+            grid.innerHTML = preview.map(s => renderSignalCard(s, true)).join('');
         }
 
         function renderLockedSignals() {
             const grid = document.getElementById('lockedGrid');
-            const premiumSection = document.querySelector('.premium-section');
-            
-            // Hide entire premium section if subscribed OR admin
-            if (currentUser && (isSubscribed || isAdmin)) {
-                if (premiumSection) premiumSection.style.display = 'none';
-                return;
-            }
-            
-            // Show premium section for free/guest users
-            if (premiumSection) premiumSection.style.display = 'block';
-            
             const previewIds = new Set(getPreviewSignals().map(s => s.id));
-            const lockedSignals = allSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
+            const locked = allSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
             
-            if (lockedSignals.length === 0) {
-                // Show placeholder locked cards
-                grid.innerHTML = Array(4).fill(0).map(() => `
-                    <div class="signal-card-locked">
-                        <div class="signal-image-container">
-                            <div class="placeholder-image">📈</div>
-                        </div>
-                        <div class="signal-info">
-                            <div class="signal-header">
-                                <div>
-                                    <div class="signal-title">â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ</div>
-                                    <div class="signal-symbol">â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ</div>
-                                </div>
-                            </div>
-                            <div class="price-grid">
-                                <div class="price-item"><div class="price-label">Entry</div><div class="price-value">â–ˆâ–ˆâ–ˆ</div></div>
-                                <div class="price-item"><div class="price-label">Stop</div><div class="price-value">â–ˆâ–ˆâ–ˆ</div></div>
-                                <div class="price-item"><div class="price-label">TP1</div><div class="price-value">â–ˆâ–ˆâ–ˆ</div></div>
-                                <div class="price-item"><div class="price-label">TP2</div><div class="price-value">â–ˆâ–ˆâ–ˆ</div></div>
-                                <div class="price-item"><div class="price-label">TP3</div><div class="price-value">â–ˆâ–ˆâ–ˆ</div></div>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                return;
-            }
-
-            grid.innerHTML = lockedSignals.map(signal => renderSignalCard(signal, false)).join('');
+            grid.innerHTML = locked.map(s => renderSignalCard(s, false)).join('');
         }
 
-        function renderSignalCard(signal, isPreview, isSuccess = false) {
-            const imageUrl = signal.image_path ? 
-                (signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`) : '';
-            
+        function renderSignalCard(signal, isPreview) {
+            const imageUrl = signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
             const isBullish = signal.direction === 'BULLISH';
-            const isNew = isNewSignal(signal.created_at);
             
-            const entry = parseFloat(signal.entry) || 0;
-            const calcPct = (tp) => entry > 0 ? (((parseFloat(tp) - entry) / entry) * 100) : 0;
-            
-            const tp1Pct = signal.tp1_pct ? Math.abs(signal.tp1_pct).toFixed(1) : Math.abs(calcPct(signal.tp1)).toFixed(1);
-            const tp2Pct = signal.tp2_pct ? Math.abs(signal.tp2_pct).toFixed(1) : Math.abs(calcPct(signal.tp2)).toFixed(1);
-            const tp3Pct = signal.tp3_pct ? Math.abs(signal.tp3_pct).toFixed(1) : Math.abs(calcPct(signal.tp3)).toFixed(1);
-            const slPct = signal.sl_pct ? Math.abs(signal.sl_pct).toFixed(1) : Math.abs(calcPct(signal.sl)).toFixed(1);
-
-            // Count images
-            let imageCount = 0;
-            if (signal.image_path) imageCount++;
-            if (signal.image_path_2) imageCount++;
-            if (signal.image_path_3) imageCount++;
-
-            // Determine which badge to show
-            let badgeHTML = '';
-            if (isSuccess) {
-                badgeHTML = '<div class="success-badge">✓ TP erreicht</div>';
-            } else if (isPreview && !currentUser) {
-                badgeHTML = '<div class="preview-badge">Vorschau</div>';
-            } else if (isNew) {
-                badgeHTML = '<div class="new-badge">NEU</div>';
-            }
-
-            // Show image count badge if multiple images
-            let imageCountBadge = '';
-            if (imageCount > 1) {
-                imageCountBadge = `<div class="image-count-badge">📷 ${imageCount}</div>`;
-            }
-
-            // Store signal index for click handler
-            const signalIndex = isSuccess ? successSignals.indexOf(signal) : allSignals.indexOf(signal);
-
-            // Get all markets for this signal to display as tags
-            const markets = getMarketsForSymbol(signal);
-            const marketTags = markets.map(m => `<span class="signal-tag">${m}</span>`).join('');
-
             return `
-                <div class="signal-card ${isNew && !isSuccess ? 'is-new' : ''} ${isSuccess ? 'is-success' : ''}" data-signal-index="${signalIndex}" data-is-success="${isSuccess}">
-                    ${badgeHTML}
-                    ${imageCountBadge}
+                <div class="signal-card" onclick="openModal('${imageUrl}')">
+                    ${isPreview && !currentUser ? '<div class="preview-badge">Vorschau</div>' : ''}
                     <div class="signal-image-container">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image">📈</div>'}
-                        <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">
-                            ${signal.direction}
-                        </span>
+                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
+                        <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
-                            ${marketTags}
-                            <span class="signal-tag">${signal.timeframe || 'N/A'}</span>
+                            <span class="signal-tag">${signal.market}</span>
+                            <span class="signal-tag">${signal.timeframe}</span>
                         </div>
                     </div>
                     <div class="signal-info">
@@ -3500,450 +2255,77 @@
                             </div>
                             <div class="signal-time">
                                 <div class="signal-date">${formatDate(signal.created_at)}</div>
-                                <div class="signal-ago">${getTimeAgo(signal.created_at)}</div>
                             </div>
                         </div>
                         <div class="price-grid">
-                            <div class="price-item">
-                                <div class="price-label">Entry</div>
-                                <div class="price-value">${formatPrice(signal.entry)}</div>
-                            </div>
-                            <div class="price-item">
-                                <div class="price-label">Stop</div>
-                                <div class="price-value">${formatPrice(signal.sl)}</div>
-                                <div class="price-pct pct-red">-${slPct}%</div>
-                            </div>
-                            <div class="price-item">
-                                <div class="price-label">TP1</div>
-                                <div class="price-value">${formatPrice(signal.tp1)}</div>
-                                <div class="price-pct pct-green">+${tp1Pct}%</div>
-                            </div>
-                            <div class="price-item">
-                                <div class="price-label">TP2</div>
-                                <div class="price-value">${formatPrice(signal.tp2)}</div>
-                                <div class="price-pct pct-green">+${tp2Pct}%</div>
-                            </div>
-                            <div class="price-item">
-                                <div class="price-label">TP3</div>
-                                <div class="price-value">${formatPrice(signal.tp3)}</div>
-                                <div class="price-pct pct-green">+${tp3Pct}%</div>
-                            </div>
+                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
+                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
                         </div>
-                        <div class="rr-badge">
-                            R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span>
-                        </div>
+                        <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
                 </div>
             `;
         }
 
-        // Event delegation for signal cards
-        document.addEventListener('click', function(e) {
-            const card = e.target.closest('.signal-card');
-            if (!card) return;
-            
-            const index = parseInt(card.dataset.signalIndex);
-            const isSuccess = card.dataset.isSuccess === 'true';
-            
-            const signal = isSuccess ? successSignals[index] : allSignals[index];
-            if (!signal) return;
-            
-            const images = buildImagesArray(signal);
-            const signalName = signal.symbol_name || signal.symbol;
-            
-            openSlider(images, signalName);
-        });
-
-        function buildImagesArray(signal) {
-            const images = [];
-            
-            // Main image
-            if (signal.image_path) {
-                const url = signal.image_path.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
-                images.push({
-                    url: url,
-                    date: formatDateTime(signal.created_at),
-                    label: 'Signal erkannt'
-                });
-            }
-            
-            // Additional images (image_path_2, image_path_3, etc.)
-            if (signal.image_path_2) {
-                const url = signal.image_path_2.startsWith('http') ? signal.image_path_2 : `${STORAGE_URL}/${signal.image_path_2}`;
-                images.push({
-                    url: url,
-                    date: formatDateTime(signal.image_date_2) || 'Update',
-                    label: signal.image_label_2 || 'Zwischenstand'
-                });
-            }
-            
-            if (signal.image_path_3) {
-                const url = signal.image_path_3.startsWith('http') ? signal.image_path_3 : `${STORAGE_URL}/${signal.image_path_3}`;
-                images.push({
-                    url: url,
-                    date: formatDateTime(signal.image_date_3) || 'Aktuell',
-                    label: signal.image_label_3 || 'Aktueller Stand'
-                });
-            }
-            
-            return images;
-        }
-
-        function formatDateTime(dateStr) {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-        }
-
-        function isNewSignal(createdAt) {
-            const now = new Date();
-            const signalTime = new Date(createdAt);
-            const hoursDiff = (now - signalTime) / (1000 * 60 * 60);
-            return hoursDiff < 2;
-        }
-
-        function getTimeAgo(createdAt) {
-            const now = new Date();
-            const signalTime = new Date(createdAt);
-            const diffMs = now - signalTime;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-            
-            if (diffMins < 60) return `vor ${diffMins} Min`;
-            if (diffHours < 24) return `vor ${diffHours} Std`;
-            return `vor ${diffDays} Tag${diffDays > 1 ? 'en' : ''}`;
-        }
-
         function formatPrice(price) {
-            if (!price) return '—';
-            return parseFloat(price).toFixed(2);
+            return price ? parseFloat(price).toFixed(2) : '—';
         }
 
         function formatDate(dateStr) {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('de-DE');
+            return new Date(dateStr).toLocaleDateString('de-DE');
+        }
+
+        // ==================== MODALS ====================
+        function showLogin() {
+            toggleAuthForm('login');
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function toggleAuthForm(form) {
+            document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = form === 'register' ? 'block' : 'none';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
         }
 
         function openModal(imageUrl) {
-            if (!imageUrl) return;
-            // Single image fallback
-            openSlider([{ url: imageUrl, date: '', label: '' }], '');
-        }
-
-        function openSlider(images, signalName) {
-            if (!images || images.length === 0) return;
-            
-            currentSliderImages = images;
-            currentSlideIndex = 0;
-            
-            document.getElementById('sliderTitle').textContent = signalName || 'Signal';
-            
-            // Build dots
-            const dotsContainer = document.getElementById('sliderDots');
-            dotsContainer.innerHTML = images.map((_, i) => 
-                `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
-            ).join('');
-            
-            // Build timeline
-            const timelineContainer = document.getElementById('sliderTimeline');
-            if (images.length > 1 && images[0].date) {
-                timelineContainer.innerHTML = images.map((img, i) => `
-                    <div class="timeline-item ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})">
-                        <div class="timeline-date">${img.date}</div>
-                        <div class="timeline-label ${img.label?.includes('TP') ? 'success' : ''}">${img.label || ''}</div>
-                    </div>
-                `).join('');
-                timelineContainer.style.display = 'flex';
-            } else {
-                timelineContainer.style.display = 'none';
-            }
-            
-            updateSlide();
+            document.getElementById('modalImage').src = imageUrl;
             document.getElementById('imageModal').classList.add('active');
-        }
-
-        let currentSliderImages = [];
-        let currentSlideIndex = 0;
-
-        function updateSlide() {
-            const img = document.getElementById('sliderImages');
-            img.innerHTML = `<img src="${currentSliderImages[currentSlideIndex].url}" alt="Chart">`;
-            
-            // Update counter
-            document.getElementById('sliderCounter').textContent = 
-                `${currentSlideIndex + 1} / ${currentSliderImages.length}`;
-            
-            // Update dots
-            document.querySelectorAll('.slider-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSlideIndex);
-            });
-            
-            // Update timeline
-            document.querySelectorAll('.timeline-item').forEach((item, i) => {
-                item.classList.toggle('active', i === currentSlideIndex);
-            });
-            
-            // Update arrows
-            document.querySelector('.slider-prev').disabled = currentSlideIndex === 0;
-            document.querySelector('.slider-next').disabled = currentSlideIndex === currentSliderImages.length - 1;
-        }
-
-        function nextSlide() {
-            if (currentSlideIndex < currentSliderImages.length - 1) {
-                currentSlideIndex++;
-                updateSlide();
-            }
-        }
-
-        function prevSlide() {
-            if (currentSlideIndex > 0) {
-                currentSlideIndex--;
-                updateSlide();
-            }
-        }
-
-        function goToSlide(index) {
-            currentSlideIndex = index;
-            updateSlide();
         }
 
         function closeModal() {
             document.getElementById('imageModal').classList.remove('active');
         }
 
-        // Keyboard navigation for slider
-        document.addEventListener('keydown', (e) => {
-            if (!document.getElementById('imageModal').classList.contains('active')) return;
-            
-            if (e.key === 'ArrowLeft') prevSlide();
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'Escape') closeModal();
-        });
-
-        // ==================== LEMONSQUEEZY INTEGRATION ====================
-        const LEMONSQUEEZY_STORE = 'wolfewavesignals';
-        const LEMONSQUEEZY_VARIANT_ID = 'c700c757-aa10-4752-a8ab-ad37d664fa4f';
-
-        function getLemonSqueezyCheckoutUrl(userEmail, userId) {
-            const baseUrl = `https://${LEMONSQUEEZY_STORE}.lemonsqueezy.com/checkout/buy/${LEMONSQUEEZY_VARIANT_ID}`;
-            const params = new URLSearchParams({
-                'checkout[email]': userEmail,
-                'checkout[custom][user_id]': userId,
-                'checkout[custom][user_email]': userEmail
-            });
-            return `${baseUrl}?${params.toString()}`;
-        }
-
         function showCheckout() {
-            // Wenn nicht eingeloggt, erst Login zeigen
             if (!currentUser) {
-                sessionStorage.setItem('checkoutIntent', 'true');
                 showLogin();
                 return;
             }
-
-            // LemonSqueezy Checkout URL erstellen
-            const checkoutUrl = getLemonSqueezyCheckoutUrl(currentUser.email, currentUser.id);
-            
-            // Checkout in neuem Tab öffnen
-            window.open(checkoutUrl, '_blank');
+            // LemonSqueezy checkout
+            window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
         }
 
-        function showSuccessMessage() {
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.id = 'successModal';
-            modal.innerHTML = `
-                <div class="auth-card" style="text-align: center;">
-                    <div class="auth-icon">🎉</div>
-                    <h2 style="margin-bottom: 12px;">Willkommen bei Premium!</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                        Deine Zahlung war erfolgreich.<br>
-                        Du hast jetzt Zugriff auf alle Signale!
-                    </p>
-                    <button class="auth-btn" onclick="closeSuccessModal()">
-                        Los geht's!
-                    </button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
-        function closeSuccessModal() {
-            const modal = document.getElementById('successModal');
-            if (modal) {
-                modal.remove();
-                location.reload();
-            }
-        }
-
-        // Modal handling
-        document.getElementById('imageModal').addEventListener('click', (e) => {
-            if (e.target.id === 'imageModal') closeModal();
-        });
-        document.getElementById('authModal').addEventListener('click', (e) => {
+        // Event Listeners
+        document.getElementById('authModal').addEventListener('click', e => {
             if (e.target.id === 'authModal') closeAuthModal();
         });
-        document.getElementById('adminModal').addEventListener('click', (e) => {
-            if (e.target.id === 'adminModal') closeAdminPanel();
+        document.getElementById('imageModal').addEventListener('click', e => {
+            if (e.target.id === 'imageModal') closeModal();
         });
-        document.getElementById('grantSubModal').addEventListener('click', (e) => {
-            if (e.target.id === 'grantSubModal') closeGrantSubModal();
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { closeModal(); closeAuthModal(); }
         });
-        document.addEventListener('keydown', (e) => { 
-            if (e.key === 'Escape') {
-                closeModal();
-                closeAuthModal();
-                closeAdminPanel();
-                closeGrantSubModal();
-            }
-        });
-        
-        // Enter key for forms
-        document.getElementById('loginPassword').addEventListener('keydown', (e) => {
+        document.getElementById('loginPassword').addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
         });
-        document.getElementById('registerPasswordConfirm').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleRegister();
-        });
-        document.getElementById('forgotEmail').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleForgotPassword();
-        });
 
-        // Tab handling
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentTab = tab.dataset.tab;
-                applyFiltersAndRender();
-            });
-        });
-
-        // Filter handling
-        document.getElementById('filterMarket')?.addEventListener('change', applyFiltersAndRender);
-        document.getElementById('filterTimeframe')?.addEventListener('change', applyFiltersAndRender);
-        document.getElementById('filterDirection')?.addEventListener('change', applyFiltersAndRender);
-
-        // Initialize
-        async function init() {
-            // Check for email confirmation tokens in URL hash
-            await handleEmailConfirmation();
-            
-            // Load symbol_markets mapping first
-            await fetchSymbolMarkets();
-            
-            await checkSession();
-            await fetchSignals();
-
-            // Check for checkout intent after login
-            if (sessionStorage.getItem('checkoutIntent') === 'true') {
-                sessionStorage.removeItem('checkoutIntent');
-                if (currentUser && !isSubscribed && !isAdmin) {
-                    setTimeout(() => showCheckout(), 500);
-                }
-            }
-
-            // Check URL params for payment success/cancel
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('success') === 'true') {
-                showSuccessMessage();
-                window.history.replaceState({}, '', window.location.pathname);
-            }
-            if (urlParams.get('canceled') === 'true') {
-                alert('Zahlung abgebrochen. Du kannst es jederzeit erneut versuchen.');
-                window.history.replaceState({}, '', window.location.pathname);
-            }
-            
-            // Check for email confirmation success
-            if (urlParams.get('confirmed') === 'true') {
-                showEmailConfirmedMessage();
-                window.history.replaceState({}, '', window.location.pathname);
-            }
-        }
-        
-        async function handleEmailConfirmation() {
-            // Check if there's an access token in the URL hash (from email confirmation)
-            const hash = window.location.hash;
-            if (hash && hash.includes('access_token')) {
-                try {
-                    const params = new URLSearchParams(hash.substring(1));
-                    const accessToken = params.get('access_token');
-                    const refreshToken = params.get('refresh_token');
-                    
-                    if (accessToken && refreshToken) {
-                        saveTokens(accessToken, refreshToken);
-                        
-                        // Get user info
-                        const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                            headers: {
-                                'apikey': SUPABASE_KEY,
-                                'Authorization': `Bearer ${accessToken}`
-                            }
-                        });
-                        
-                        if (response.ok) {
-                            currentUser = await response.json();
-                            await createSession(currentUser.id);
-                            await checkSubscription();
-                            await checkAdminStatus();
-                            updateUIForUser();
-                            
-                            // Show success and clean URL
-                            showEmailConfirmedMessage();
-                            window.history.replaceState({}, '', window.location.pathname);
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.error('Error handling email confirmation:', e);
-                }
-                
-                // Clean URL even on error
-                window.history.replaceState({}, '', window.location.pathname);
-            }
-        }
-        
-        function showEmailConfirmedMessage() {
-            // Create modal
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.id = 'emailConfirmedModal';
-            modal.innerHTML = `
-                <div class="auth-card">
-                    <div class="auth-header">
-                        <div class="auth-icon">🎉</div>
-                        <h2>E-Mail bestätigt!</h2>
-                        <p style="color: var(--accent-green);">Dein Account ist jetzt aktiv.</p>
-                    </div>
-                    <div style="text-align: center; margin: 20px 0; color: var(--text-secondary);">
-                        ${currentUser ? 'Du bist jetzt eingeloggt und kannst alle Funktionen nutzen!' : 'Du kannst dich jetzt einloggen.'}
-                    </div>
-                    <button class="auth-btn" onclick="closeEmailConfirmedModal()">
-                        ${currentUser ? 'Weiter zur Website' : 'Zum Login'}
-                    </button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Close on backdrop click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeEmailConfirmedModal();
-            });
-        }
-        
-        function closeEmailConfirmedModal() {
-            const modal = document.getElementById('emailConfirmedModal');
-            if (modal) {
-                modal.remove();
-                if (!currentUser) {
-                    showLogin();
-                }
-            }
-        }
-        
+        // Start
         init();
     </script>
 </body>
