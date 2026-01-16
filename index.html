@@ -405,6 +405,196 @@
             margin-bottom: 8px;
         }
 
+        /* Admin Controls */
+        .admin-controls {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 6px;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .signal-card:hover .admin-controls {
+            opacity: 1;
+        }
+
+        .admin-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            backdrop-filter: blur(8px);
+        }
+
+        .admin-btn-success {
+            background: rgba(0, 255, 136, 0.9);
+            color: #000;
+        }
+
+        .admin-btn-success:hover {
+            background: var(--accent-green);
+            transform: scale(1.1);
+        }
+
+        .admin-btn-delete {
+            background: rgba(255, 71, 87, 0.9);
+            color: #fff;
+        }
+
+        .admin-btn-delete:hover {
+            background: var(--accent-red);
+            transform: scale(1.1);
+        }
+
+        /* Admin Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-modal.active {
+            display: flex;
+        }
+
+        .admin-modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .admin-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .admin-modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .admin-modal-body {
+            margin-bottom: 24px;
+        }
+
+        .admin-modal-body p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .admin-form-group {
+            margin-bottom: 16px;
+        }
+
+        .admin-form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .admin-form-group select {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .admin-form-group select:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+
+        .admin-modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .admin-modal-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .admin-modal-btn-cancel {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .admin-modal-btn-cancel:hover {
+            background: var(--border-color);
+        }
+
+        .admin-modal-btn-danger {
+            background: var(--accent-red);
+            color: #fff;
+        }
+
+        .admin-modal-btn-danger:hover {
+            background: #ff6b7a;
+        }
+
+        .admin-modal-btn-success {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .admin-modal-btn-success:hover {
+            background: #00cc6a;
+        }
+
+        /* Admin indicator */
+        .admin-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-gold);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            display: none;
+            z-index: 100;
+        }
+
+        .admin-badge.visible {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* Success Stats Bar (compact) */
         .success-stats-bar {
             display: none;
@@ -1538,6 +1728,64 @@
         <img src="" alt="Chart" id="modalImage">
     </div>
 
+    <!-- Admin Delete Modal -->
+    <div class="admin-modal" id="deleteModal">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <span style="font-size: 28px;">🗑️</span>
+                <h3>Signal löschen</h3>
+            </div>
+            <div class="admin-modal-body">
+                <p>Bist du sicher, dass du dieses Signal löschen möchtest?</p>
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
+                    <strong id="deleteSignalInfo"></strong>
+                </div>
+                <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
+                    ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
+                </p>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-modal-btn admin-modal-btn-cancel" onclick="closeDeleteModal()">Abbrechen</button>
+                <button class="admin-modal-btn admin-modal-btn-danger" onclick="confirmDelete()">Löschen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Success Modal -->
+    <div class="admin-modal" id="successModal">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <span style="font-size: 28px;">🏆</span>
+                <h3>Zu Success hinzufügen</h3>
+            </div>
+            <div class="admin-modal-body">
+                <p>Markiere dieses Signal als abgeschlossen:</p>
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <strong id="successSignalInfo"></strong>
+                </div>
+                <div class="admin-form-group">
+                    <label>Ergebnis auswählen:</label>
+                    <select id="successResult">
+                        <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
+                        <option value="TP2_HIT">✅ TP2 erreicht</option>
+                        <option value="TP1_HIT">📈 TP1 erreicht</option>
+                        <option value="SL_HIT">🛑 Stop Loss getroffen</option>
+                        <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-modal-btn admin-modal-btn-cancel" onclick="closeSuccessModal()">Abbrechen</button>
+                <button class="admin-modal-btn admin-modal-btn-success" onclick="confirmSuccess()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Badge -->
+    <div class="admin-badge" id="adminBadge">
+        🛡️ Admin-Modus aktiv
+    </div>
+
     <script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
@@ -1794,6 +2042,13 @@
                     <div class="section-subtitle">— Du hast Zugriff auf alle Signale</div>
                 `;
             }
+            
+            // Show admin badge
+            if (isAdmin) {
+                document.getElementById('adminBadge').classList.add('visible');
+            } else {
+                document.getElementById('adminBadge').classList.remove('visible');
+            }
         }
 
         function updateUIForGuest() {
@@ -1810,6 +2065,7 @@
             document.getElementById('tabsSection').classList.remove('visible');
             document.getElementById('premiumSection').style.display = 'block';
             document.getElementById('successStatsBar').classList.remove('visible');
+            document.getElementById('adminBadge').classList.remove('visible');
             
             document.getElementById('previewHeader').innerHTML = `
                 <div class="section-title">
@@ -2061,9 +2317,18 @@
                 badge = '<div class="new-badge">NEU</div>';
             }
             
+            // Admin controls (nur für Admins sichtbar)
+            const adminControls = isAdmin && isVisible ? `
+                <div class="admin-controls">
+                    <button class="admin-btn admin-btn-success" onclick="event.stopPropagation(); showSuccessModal('${signal.id}')" title="Zu Success hinzufügen">✓</button>
+                    <button class="admin-btn admin-btn-delete" onclick="event.stopPropagation(); showDeleteModal('${signal.id}')" title="Signal löschen">×</button>
+                </div>
+            ` : '';
+            
             return `
                 <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}')">
                     ${badge}
+                    ${adminControls}
                     <div class="signal-image-container">
                         <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
@@ -2119,9 +2384,17 @@
                 cardClass = 'is-success tp1';
             }
             
+            // Admin delete button for completed signals
+            const adminControls = isAdmin ? `
+                <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
+                    <button class="admin-btn admin-btn-delete" onclick="event.stopPropagation(); showDeleteCompletedModal('${signal.id}')" title="Aus Success entfernen">×</button>
+                </div>
+            ` : '';
+            
             return `
                 <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}')">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
+                    ${adminControls}
                     <div class="signal-image-container">
                         ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">📈</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
@@ -2292,12 +2565,218 @@
         document.getElementById('imageModal').addEventListener('click', e => {
             if (e.target.id === 'imageModal') closeModal();
         });
+        document.getElementById('deleteModal').addEventListener('click', e => {
+            if (e.target.id === 'deleteModal') closeDeleteModal();
+        });
+        document.getElementById('successModal').addEventListener('click', e => {
+            if (e.target.id === 'successModal') closeSuccessModal();
+        });
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(); closeAuthModal(); }
+            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); }
         });
         document.getElementById('loginPassword').addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
         });
+
+        // ==================== ADMIN FUNCTIONS ====================
+        let pendingDeleteId = null;
+        let pendingDeleteType = null; // 'signal' or 'completed'
+        let pendingSuccessId = null;
+
+        function showDeleteModal(signalId) {
+            const signal = allSignals.find(s => s.id === signalId);
+            if (!signal) return;
+            
+            pendingDeleteId = signalId;
+            pendingDeleteType = 'signal';
+            document.getElementById('deleteSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function showDeleteCompletedModal(signalId) {
+            const signal = completedSignals.find(s => s.id === signalId);
+            if (!signal) return;
+            
+            pendingDeleteId = signalId;
+            pendingDeleteType = 'completed';
+            document.getElementById('deleteSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (Completed)`;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            pendingDeleteId = null;
+            pendingDeleteType = null;
+        }
+
+        async function confirmDelete() {
+            if (!pendingDeleteId || !isAdmin) return;
+            
+            const table = pendingDeleteType === 'completed' ? 'completed_signals' : 'signals';
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${pendingDeleteId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Remove from local array
+                    if (pendingDeleteType === 'completed') {
+                        completedSignals = completedSignals.filter(s => s.id !== pendingDeleteId);
+                    } else {
+                        allSignals = allSignals.filter(s => s.id !== pendingDeleteId);
+                    }
+                    
+                    closeDeleteModal();
+                    updateStats();
+                    renderSignals();
+                    showToast('✓ Signal gelöscht', 'success');
+                } else {
+                    throw new Error('Delete failed');
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('✗ Fehler beim Löschen', 'error');
+            }
+        }
+
+        function showSuccessModal(signalId) {
+            const signal = allSignals.find(s => s.id === signalId);
+            if (!signal) return;
+            
+            pendingSuccessId = signalId;
+            document.getElementById('successSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
+            document.getElementById('successResult').value = 'TP3_HIT';
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+            pendingSuccessId = null;
+        }
+
+        async function confirmSuccess() {
+            if (!pendingSuccessId || !isAdmin) return;
+            
+            const signal = allSignals.find(s => s.id === pendingSuccessId);
+            if (!signal) return;
+            
+            const result = document.getElementById('successResult').value;
+            
+            // Determine TP/SL flags based on result
+            let tp1_hit = false, tp2_hit = false, tp3_hit = false, sl_hit = false;
+            let result_folder = 'failed';
+            
+            switch (result) {
+                case 'TP3_HIT':
+                    tp1_hit = tp2_hit = tp3_hit = true;
+                    result_folder = 'success';
+                    break;
+                case 'TP2_HIT':
+                    tp1_hit = tp2_hit = true;
+                    result_folder = 'success';
+                    break;
+                case 'TP1_HIT':
+                    tp1_hit = true;
+                    result_folder = 'success';
+                    break;
+                case 'SL_HIT':
+                    sl_hit = true;
+                    result_folder = 'failed';
+                    break;
+                case 'EXPIRED':
+                    result_folder = 'failed';
+                    break;
+            }
+            
+            // Create completed signal entry
+            const completedData = {
+                wedge_id: signal.wedge_id || `manual_${signal.id}`,
+                original_path: signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`,
+                result_folder: result_folder,
+                result: result,
+                symbol: signal.symbol,
+                market: signal.market,
+                timeframe: signal.timeframe,
+                direction: signal.direction,
+                tp1_hit: tp1_hit,
+                tp2_hit: tp2_hit,
+                tp3_hit: tp3_hit,
+                sl_hit: sl_hit
+            };
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/completed_signals`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(completedData)
+                });
+                
+                if (response.ok) {
+                    const newCompleted = await response.json();
+                    completedSignals.unshift(newCompleted[0]);
+                    
+                    closeSuccessModal();
+                    updateStats();
+                    renderSignals();
+                    showToast('✓ Zu Success hinzugefügt', 'success');
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed');
+                }
+            } catch (error) {
+                console.error('Success add error:', error);
+                showToast('✗ Fehler: ' + error.message, 'error');
+            }
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--accent-green)' : 'var(--accent-red)'};
+                color: ${type === 'success' ? '#000' : '#fff'};
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add toast animations
+        const toastStyle = document.createElement('style');
+        toastStyle.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(toastStyle);
 
         // Start
         init();
