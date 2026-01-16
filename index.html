@@ -1697,6 +1697,7 @@
                         </div>
                     </div>
                     <div class="user-dropdown">
+                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
                         <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
                     </div>
                 </div>
@@ -2152,6 +2153,11 @@
                 return;
             }
             window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
+        }
+
+        function manageSubscription() {
+            // Lemon Squeezy Customer Portal
+            window.open('https://wolfewavesignals.lemonsqueezy.com/billing', '_blank');
         }
 
         // Modal event listeners
