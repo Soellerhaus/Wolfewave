@@ -2156,8 +2156,12 @@
         }
 
         function manageSubscription() {
-            // Lemon Squeezy Customer Portal
-            window.open('https://wolfewavesignals.lemonsqueezy.com/billing', '_blank');
+            // Lemon Squeezy Customer Portal - benötigt aktivierten Store
+            // Alternativ: E-Mail an Support
+            const choice = confirm('Abo verwalten / kündigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.\n\nSobald der Shop aktiviert ist, kannst du dein Abo selbst verwalten.');
+            if (choice) {
+                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+            }
         }
 
         // Modal event listeners
