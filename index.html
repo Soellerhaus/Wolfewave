@@ -72,7 +72,7 @@
         "description": "Alle Wolfe Wave Trading-Signale in Echtzeit",
         "offers": {
             "@type": "Offer",
-            "price": "9.90",
+            "price": "19.90",
             "priceCurrency": "EUR",
             "availability": "https://schema.org/InStock"
         }
@@ -1816,7 +1816,7 @@
                 <span>LIVE</span>
             </div>
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
-            <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
         </div>
     </header>
 
@@ -1833,7 +1833,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-number stat-gold" id="successCount">—</div>
-            <div class="stat-label">âœ“ Erfolgreiche Trades</div>
+            <div class="stat-label">✔ Erfolgreiche Trades</div>
         </div>
         <div class="stat-card">
             <div class="stat-number" id="todayCount">—</div>
@@ -1882,10 +1882,10 @@
                     <option value="W1">Weekly</option>
                 </select>
                 <div class="zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">âˆ’</button>
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
                     <span class="zoom-indicator" id="zoomIndicator">4</span>
                     <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
-                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">â¬œ</button>
+                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
                 </div>
             </div>
         </div>
@@ -1904,7 +1904,7 @@
                 <div class="stat-label">TP3 erreicht</div>
             </div>
             <div class="success-stat-mini green">
-                <div class="stat-icon">âœ…</div>
+                <div class="stat-icon">✅</div>
                 <div class="stat-value green" id="tp2Count">0</div>
                 <div class="stat-label">TP2 erreicht</div>
             </div>
@@ -1962,25 +1962,25 @@
 
                     <div class="paywall-features">
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ“</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ“</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Performance-Statistiken & Success-Tracking</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ“</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ“</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Jederzeit kündbar — keine Bindung</span>
                         </div>
                     </div>
 
                     <div class="paywall-price">
-                        <span class="paywall-price-amount">9,90€</span>
+                        <span class="paywall-price-amount">19,90€</span>
                         <span class="paywall-price-period">/ Monat</span>
                     </div>
 
@@ -2006,7 +2006,7 @@
         <div style="color: var(--text-secondary); font-size: 11px;">
             © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
             <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
-                âš  Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
+                ⚠ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
             </span>
         </div>
     </footer>
@@ -2014,7 +2014,7 @@
     <!-- Auth Modal -->
     <div class="modal" id="authModal">
         <div class="auth-card">
-            <span class="modal-close" onclick="closeAuthModal()">âœ•</span>
+            <span class="modal-close" onclick="closeAuthModal()">✕</span>
             <div id="loginForm" class="auth-form">
                 <div class="auth-header">
                     <div class="auth-icon">🦊</div>
@@ -2064,7 +2064,7 @@
 
     <!-- Image Modal -->
     <div class="modal" id="imageModal">
-        <span class="modal-close" onclick="closeModal()">âœ•</span>
+        <span class="modal-close" onclick="closeModal()">✕</span>
         <div class="image-slider-container">
             <!-- Navigation Buttons -->
             <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">‹</button>
@@ -2097,7 +2097,7 @@
                     <strong id="deleteSignalInfo"></strong>
                 </div>
                 <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
-                    âš  Diese Aktion kann nicht rckgängig gemacht werden!
+                    ⚠ Diese Aktion kann nicht rckgängig gemacht werden!
                 </p>
             </div>
             <div class="admin-modal-footer">
@@ -2123,10 +2123,10 @@
                     <label>Ergebnis auswählen:</label>
                     <select id="successResult">
                         <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
-                        <option value="TP2_HIT">âœ… TP2 erreicht</option>
+                        <option value="TP2_HIT">✅ TP2 erreicht</option>
                         <option value="TP1_HIT">📈 TP1 erreicht</option>
                         <option value="SL_HIT">🛑 Stop Loss getroffen</option>
-                        <option value="EXPIRED">â° Abgelaufen (kein Ziel)</option>
+                        <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
                     </select>
                 </div>
             </div>
@@ -2375,7 +2375,7 @@
                     renderSignals();
                 } else {
                     errorEl.style.color = 'var(--accent-green)';
-                    errorEl.textContent = 'âœ“ Bestätigungs-E-Mail gesendet!';
+                    errorEl.textContent = '✔ Bestätigungs-E-Mail gesendet!';
                 }
                 
             } catch (error) {
@@ -2400,7 +2400,7 @@
             
             let statusText = 'Free Account';
             if (isAdmin) statusText = '🛡 Admin';
-            else if (isSubscribed) statusText = 'âœ“ Premium';
+            else if (isSubscribed) statusText = '✔ Premium';
             
             headerRight.innerHTML = `
                 <div class="live-indicator">
@@ -2453,7 +2453,7 @@
                     <span>LIVE</span>
                 </div>
                 <button class="btn btn-outline" onclick="showLogin()">Login</button>
-                <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
+                <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
             `;
             
             document.getElementById('tabsSection').classList.remove('visible');
@@ -2719,8 +2719,8 @@
             // Admin controls (nur für Admins sichtbar)
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
-                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">âœ“</button>
-                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal lschen">Ã—</button>
+                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal lschen">×</button>
                 </div>
             ` : '';
             
@@ -2775,7 +2775,7 @@
                 cardClass = 'is-success tp3';
             } else if (signal.tp2_hit) {
                 resultClass = 'tp2';
-                resultBadge = 'âœ… TP2';
+                resultBadge = '✅ TP2';
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
@@ -2786,7 +2786,7 @@
             // Admin delete button for completed signals
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">Ã—</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
                 </div>
             ` : '';
             
@@ -2817,13 +2817,13 @@
                             <div class="price-item">
                                 <div class="price-label">TP1</div>
                                 <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp1_hit ? 'âœ“' : '—'}
+                                    ${signal.tp1_hit ? '✔' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
                                 <div class="price-label">TP2</div>
                                 <div class="price-value" style="color: ${signal.tp2_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp2_hit ? 'âœ“' : '—'}
+                                    ${signal.tp2_hit ? '✔' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
@@ -2835,7 +2835,7 @@
                             <div class="price-item">
                                 <div class="price-label">SL</div>
                                 <div class="price-value" style="color: ${signal.sl_hit ? 'var(--accent-red)' : 'var(--text-secondary)'}">
-                                    ${signal.sl_hit ? 'âœ—' : '—'}
+                                    ${signal.sl_hit ? '✗' : '—'}
                                 </div>
                             </div>
                         </div>
@@ -3181,7 +3181,7 @@
 
         async function confirmDelete() {
             if (!pendingDeleteId || !isAdmin) {
-                showToast('âœ— Keine Berechtigung', 'error');
+                showToast('✗ Keine Berechtigung', 'error');
                 return;
             }
             
@@ -3217,7 +3217,7 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('âœ“ Signal gelscht', 'success');
+                    showToast('✔ Signal gelscht', 'success');
                 } else if (response.status === 404 || responseText === '[]') {
                     // Nicht gefunden - vielleicht schon gelscht
                     if (pendingDeleteType === 'completed') {
@@ -3228,13 +3228,13 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('âœ“ Signal entfernt', 'success');
+                    showToast('✔ Signal entfernt', 'success');
                 } else {
                     throw new Error(`Status ${response.status}: ${responseText}`);
                 }
             } catch (error) {
                 console.error('Delete error:', error);
-                showToast('âœ— ' + error.message, 'error');
+                showToast('✗ ' + error.message, 'error');
             }
         }
 
@@ -3259,13 +3259,13 @@
 
         async function confirmSuccess() {
             if (!pendingSuccessId || !isAdmin) {
-                showToast('âœ— Keine Berechtigung', 'error');
+                showToast('✗ Keine Berechtigung', 'error');
                 return;
             }
             
             const signal = allSignals.find(s => String(s.id) === String(pendingSuccessId));
             if (!signal) {
-                showToast('âœ— Signal nicht gefunden', 'error');
+                showToast('✗ Signal nicht gefunden', 'error');
                 return;
             }
             
@@ -3332,14 +3332,14 @@
                     closeSuccessModal();
                     updateStats();
                     renderSignals();
-                    showToast('âœ“ Zu Success hinzugefgt', 'success');
+                    showToast('✔ Zu Success hinzugefgt', 'success');
                 } else {
                     const error = await response.json();
                     throw new Error(error.message || 'Failed');
                 }
             } catch (error) {
                 console.error('Success add error:', error);
-                showToast('âœ— Fehler: ' + error.message, 'error');
+                showToast('✗ Fehler: ' + error.message, 'error');
             }
         }
 
