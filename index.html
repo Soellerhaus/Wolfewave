@@ -4,33 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Google Analytics (wird erst nach Cookie-Consent geladen) -->
-    <script>
-        window.gaLoaded = false;
-        function loadGoogleAnalytics() {
-            if (window.gaLoaded) return;
-            window.gaLoaded = true;
-            
-            var script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X';
-            document.head.appendChild(script);
-            
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            window.gtag = gtag;
-            gtag('js', new Date());
-            gtag('config', 'G-F3BQLK365X', { 'anonymize_ip': true });
-            
-            console.log('Google Analytics geladen');
-        }
-        
-        // Prüfe ob bereits zugestimmt wurde
-        if (localStorage.getItem('cookieConsent') === 'accepted') {
-            loadGoogleAnalytics();
-        }
-    </script>
-    
     <!-- SEO Meta Tags -->
     <title>WolfeWaveSignals - Professionelle Wolfe Wave Trading Signale | Echtzeit Alerts</title>
     <meta name="description" content="Erhalte täglich professionelle Wolfe Wave Trading-Signale für DAX, NASDAQ, Forex & Krypto. Automatische Erkennung mit Entry, Stop-Loss und Take-Profit. Jetzt kostenlos testen!">
@@ -85,7 +58,7 @@
         "logo": "https://wolfewavesignals.com/images/logo.png",
         "contactPoint": {
             "@type": "ContactPoint",
-            "email": "walserfly@gmail.com",
+            "email": "support@wolfewavesignals.com",
             "contactType": "customer service"
         },
         "sameAs": []
@@ -99,11 +72,20 @@
         "description": "Alle Wolfe Wave Trading-Signale in Echtzeit",
         "offers": {
             "@type": "Offer",
-            "price": "19.90",
+            "price": "9.90",
             "priceCurrency": "EUR",
             "availability": "https://schema.org/InStock"
         }
     }
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-F3BQLK365X');
     </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,7 +102,6 @@
             --bg-card: #141414;
             --bg-hover: #1a1a1a;
             --accent-green: #00ff88;
-            --accent-lightgreen: #7dff7d;
             --accent-red: #ff4757;
             --accent-gold: #ffd700;
             --accent-blue: #4dabf7;
@@ -566,20 +547,6 @@
             opacity: 1;
         }
 
-        .admin-controls.always-visible {
-            opacity: 1 !important;
-            top: 8px;
-            right: 8px;
-        }
-
-        .admin-controls.always-visible .admin-btn {
-            width: 44px;
-            height: 44px;
-            font-size: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        }
-
         .admin-btn {
             width: 32px;
             height: 32px;
@@ -922,17 +889,6 @@
             50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
         }
 
-        /* Demo Card Styling */
-        .signal-card.is-demo {
-            border-color: rgba(255, 215, 0, 0.3);
-            cursor: default;
-        }
-
-        .signal-card.is-demo:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 215, 0, 0.5);
-        }
-
         /* Success Card Styling */
         .signal-card.is-success {
             border-color: rgba(255, 215, 0, 0.4);
@@ -1022,39 +978,11 @@
             color: #fff;
         }
 
-        /* Image Section - ERHÖHT für bessere Sichtbarkeit */
+        /* Image Section */
         .signal-image-container {
             position: relative;
-            height: 280px;
+            height: 240px;
             overflow: hidden;
-        }
-
-        /* Vollbild-Modus (1 Spalte) - Bild mit besserem Seitenverhältnis */
-        .signals-grid.fullscreen-mode .signal-image-container {
-            height: 500px;
-            max-height: 55vh;
-        }
-
-        .signals-grid.fullscreen-mode .signal-card {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .signals-grid.fullscreen-mode .signal-image {
-            object-fit: contain;
-            background: #1a1a1a;
-        }
-
-        .signals-grid.fullscreen-mode .signal-info {
-            padding: 20px 24px 24px;
-        }
-
-        .signals-grid.fullscreen-mode .price-grid {
-            padding: 16px;
-        }
-
-        .signals-grid.fullscreen-mode .price-value {
-            font-size: 14px;
         }
 
         .signal-image {
@@ -1149,7 +1077,7 @@
             margin-top: 2px;
         }
 
-        /* Price Grid - MIT FARBKODIERUNG */
+        /* Price Grid */
         .price-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -1171,25 +1099,11 @@
             margin-bottom: 2px;
         }
 
-        /* Farbkodierte Labels */
-        .price-label.entry { color: var(--accent-blue); }
-        .price-label.stop { color: var(--accent-red); }
-        .price-label.tp1 { color: var(--accent-lightgreen); }
-        .price-label.tp2 { color: var(--accent-green); }
-        .price-label.tp3 { color: var(--accent-gold); }
-
         .price-value {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
         }
-
-        /* Farbkodierte Werte */
-        .price-value.entry { color: var(--accent-blue); }
-        .price-value.stop { color: var(--accent-red); }
-        .price-value.tp1 { color: var(--accent-lightgreen); }
-        .price-value.tp2 { color: var(--accent-green); }
-        .price-value.tp3 { color: var(--accent-gold); }
 
         .price-pct {
             font-size: 9px;
@@ -1451,7 +1365,7 @@
             opacity: 1;
         }
 
-        /* Image Slider - ECHTE PFEILE */
+        /* Image Slider */
         .image-slider-container {
             position: relative;
             display: flex;
@@ -1468,7 +1382,7 @@
             background: rgba(0, 0, 0, 0.7);
             border: 2px solid var(--accent-green);
             color: var(--accent-green);
-            font-size: 32px;
+            font-size: 48px;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -1478,9 +1392,8 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
-            font-family: Arial, sans-serif;
+            font-family: sans-serif;
             line-height: 1;
-            font-weight: bold;
         }
 
         .slider-nav:hover {
@@ -1557,7 +1470,7 @@
             .slider-nav {
                 width: 50px;
                 height: 50px;
-                font-size: 28px;
+                font-size: 36px;
                 background: rgba(0, 0, 0, 0.8);
             }
         }
@@ -1566,7 +1479,7 @@
             .slider-nav {
                 width: 40px;
                 height: 40px;
-                font-size: 22px;
+                font-size: 28px;
             }
             .slider-thumbnails {
                 display: none;
@@ -1842,7 +1755,7 @@
             }
 
             .signal-image-container {
-                height: 220px;
+                height: 200px;
             }
 
             .paywall-card {
@@ -1882,276 +1795,6 @@
                 padding-bottom: 8px;
             }
         }
-
-        /* Cookie Banner */
-        .cookie-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 20px;
-            z-index: 9999;
-            display: none;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Checkout Consent Modal */
-        .checkout-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .checkout-modal.active {
-            display: flex;
-        }
-
-        .checkout-modal-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 32px;
-            max-width: 500px;
-            width: 90%;
-            margin: 20px;
-        }
-
-        .checkout-modal-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .checkout-modal-header .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .checkout-modal-header h3 {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .checkout-modal-header p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .checkout-modal-price {
-            text-align: center;
-            margin-bottom: 24px;
-            padding: 16px;
-            background: rgba(0, 255, 136, 0.1);
-            border-radius: 12px;
-        }
-
-        .checkout-modal-price .amount {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .checkout-modal-price .period {
-            color: var(--text-secondary);
-        }
-
-        .consent-checkbox {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 16px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .consent-checkbox:hover {
-            border-color: var(--accent-green);
-        }
-
-        .consent-checkbox.checked {
-            border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
-        }
-
-        .consent-checkbox input {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: var(--accent-green);
-        }
-
-        .consent-checkbox label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            cursor: pointer;
-        }
-
-        .consent-checkbox label a {
-            color: var(--accent-green);
-            text-decoration: none;
-        }
-
-        .consent-checkbox label a:hover {
-            text-decoration: underline;
-        }
-
-        .checkout-modal-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .checkout-modal-buttons button {
-            flex: 1;
-            padding: 14px 20px;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .btn-checkout-cancel {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-
-        .btn-checkout-cancel:hover {
-            background: var(--border-color);
-        }
-
-        .btn-checkout-confirm {
-            background: var(--text-secondary);
-            color: #000;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .btn-checkout-confirm.enabled {
-            background: var(--accent-green);
-            cursor: pointer;
-            opacity: 1;
-        }
-
-        .btn-checkout-confirm.enabled:hover {
-            background: #00cc6a;
-            transform: translateY(-2px);
-        }
-
-        .cookie-banner.visible {
-            display: block;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .cookie-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .cookie-text {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .cookie-text h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .cookie-text p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        .cookie-text a {
-            color: var(--accent-green);
-            text-decoration: none;
-        }
-
-        .cookie-text a:hover {
-            text-decoration: underline;
-        }
-
-        .cookie-buttons {
-            display: flex;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .cookie-btn {
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .cookie-btn-accept {
-            background: var(--accent-green);
-            color: #000;
-        }
-
-        .cookie-btn-accept:hover {
-            background: #00cc6a;
-        }
-
-        .cookie-btn-decline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        .cookie-btn-decline:hover {
-            border-color: var(--text-secondary);
-            color: var(--text-primary);
-        }
-
-        @media (max-width: 768px) {
-            .cookie-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .cookie-buttons {
-                width: 100%;
-                justify-content: center;
-            }
-            .cookie-text {
-                min-width: auto;
-            }
-        }
     </style>
 </head>
 <body>
@@ -2173,7 +1816,7 @@
                 <span>LIVE</span>
             </div>
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
-            <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
         </div>
     </header>
 
@@ -2190,7 +1833,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-number stat-gold" id="successCount">—</div>
-            <div class="stat-label">✔ Erfolgreiche Trades</div>
+            <div class="stat-label">âœ“ Erfolgreiche Trades</div>
         </div>
         <div class="stat-card">
             <div class="stat-number" id="todayCount">—</div>
@@ -2239,10 +1882,10 @@
                     <option value="W1">Weekly</option>
                 </select>
                 <div class="zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">âˆ’</button>
                     <span class="zoom-indicator" id="zoomIndicator">4</span>
                     <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
-                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
+                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">â¬œ</button>
                 </div>
             </div>
         </div>
@@ -2261,7 +1904,7 @@
                 <div class="stat-label">TP3 erreicht</div>
             </div>
             <div class="success-stat-mini green">
-                <div class="stat-icon">✅</div>
+                <div class="stat-icon">âœ…</div>
                 <div class="stat-value green" id="tp2Count">0</div>
                 <div class="stat-label">TP2 erreicht</div>
             </div>
@@ -2319,25 +1962,25 @@
 
                     <div class="paywall-features">
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">âœ“</span>
                             <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">âœ“</span>
                             <span>Performance-Statistiken & Success-Tracking</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">âœ“</span>
                             <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">âœ“</span>
                             <span>Jederzeit kündbar — keine Bindung</span>
                         </div>
                     </div>
 
                     <div class="paywall-price">
-                        <span class="paywall-price-amount">19,90€</span>
+                        <span class="paywall-price-amount">9,90€</span>
                         <span class="paywall-price-period">/ Monat</span>
                     </div>
 
@@ -2353,50 +1996,29 @@
         </div>
     </section>
 
-    <!-- Disclaimer Section -->
-    <section style="padding: 40px; background: rgba(255, 71, 87, 0.05); border-top: 1px solid rgba(255, 71, 87, 0.2);">
-        <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-            <h3 style="color: #ff6b7a; font-size: 14px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">
-                ⚠️ Wichtiger Hinweis
-            </h3>
-            <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.8; margin-bottom: 12px;">
-                <strong style="color: var(--text-primary);">Keine Anlageberatung:</strong> 
-                Die auf dieser Website bereitgestellten Trading-Signale stellen keine Anlageberatung, Finanzberatung oder Empfehlung zum Kauf oder Verkauf von Finanzinstrumenten dar. 
-                Alle Signale werden durch eine <strong>automatisierte Software</strong> generiert und können fehlerhaft sein.
-            </p>
-            <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.8; margin-bottom: 12px;">
-                <strong style="color: var(--text-primary);">Risikowarnung:</strong> 
-                Der Handel mit Finanzinstrumenten ist mit erheblichen Risiken verbunden und kann zum Totalverlust des eingesetzten Kapitals führen. 
-                Vergangene Ergebnisse garantieren keine zukünftigen Gewinne. Handeln Sie nur mit Kapital, dessen Verlust Sie verkraften können.
-            </p>
-            <p style="color: #666; font-size: 11px;">
-                Mit der Nutzung dieser Website akzeptieren Sie unsere <a href="agb.html" style="color: var(--accent-green);">AGB</a> und den vollständigen <a href="agb.html#haftung" style="color: var(--accent-green);">Haftungsausschluss</a>.
-            </p>
-        </div>
-    </section>
-
     <footer class="footer">
         <div style="margin-bottom: 16px;">
             <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
             <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
             <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
-            <a href="agb.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">AGB</a>
-            <a href="widerruf.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Widerruf</a>
         </div>
         <div style="color: var(--text-secondary); font-size: 11px;">
-            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler
+            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
+            <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
+                âš  Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
+            </span>
         </div>
     </footer>
 
     <!-- Auth Modal -->
     <div class="modal" id="authModal">
         <div class="auth-card">
-            <span class="modal-close" onclick="closeAuthModal()">✕</span>
+            <span class="modal-close" onclick="closeAuthModal()">âœ•</span>
             <div id="loginForm" class="auth-form">
                 <div class="auth-header">
                     <div class="auth-icon">🦊</div>
-                    <h2>Willkommen zurück</h2>
+                    <h2>Willkommen zurck</h2>
                     <p>Melde dich an, um alle Signale zu sehen</p>
                 </div>
                 <div class="auth-fields">
@@ -2440,13 +2062,13 @@
         </div>
     </div>
 
-    <!-- Image Modal - MIT ECHTEN PFEILEN -->
+    <!-- Image Modal -->
     <div class="modal" id="imageModal">
-        <span class="modal-close" onclick="closeModal()">✕</span>
+        <span class="modal-close" onclick="closeModal()">âœ•</span>
         <div class="image-slider-container">
-            <!-- Navigation Buttons - ECHTE PFEILE -->
-            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">←</button>
-            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">→</button>
+            <!-- Navigation Buttons -->
+            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">‹</button>
+            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
             
             <!-- Main Image -->
             <img src="" alt="Chart" id="modalImage">
@@ -2466,21 +2088,21 @@
     <div class="admin-modal" id="deleteModal">
         <div class="admin-modal-card">
             <div class="admin-modal-header">
-                <span style="font-size: 28px;">🗑️</span>
-                <h3>Signal löschen</h3>
+                <span style="font-size: 28px;">🗑</span>
+                <h3>Signal lschen</h3>
             </div>
             <div class="admin-modal-body">
-                <p>Bist du sicher, dass du dieses Signal löschen möchtest?</p>
+                <p>Bist du sicher, dass du dieses Signal lschen möchtest?</p>
                 <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
                     <strong id="deleteSignalInfo"></strong>
                 </div>
                 <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
-                    ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
+                    âš  Diese Aktion kann nicht rckgängig gemacht werden!
                 </p>
             </div>
             <div class="admin-modal-footer">
                 <button class="admin-modal-btn admin-modal-btn-cancel" onclick="closeDeleteModal()">Abbrechen</button>
-                <button class="admin-modal-btn admin-modal-btn-danger" onclick="confirmDelete()">Löschen</button>
+                <button class="admin-modal-btn admin-modal-btn-danger" onclick="confirmDelete()">Lschen</button>
             </div>
         </div>
     </div>
@@ -2501,10 +2123,10 @@
                     <label>Ergebnis auswählen:</label>
                     <select id="successResult">
                         <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
-                        <option value="TP2_HIT">✅ TP2 erreicht</option>
+                        <option value="TP2_HIT">âœ… TP2 erreicht</option>
                         <option value="TP1_HIT">📈 TP1 erreicht</option>
                         <option value="SL_HIT">🛑 Stop Loss getroffen</option>
-                        <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
+                        <option value="EXPIRED">â° Abgelaufen (kein Ziel)</option>
                     </select>
                 </div>
             </div>
@@ -2517,9 +2139,8 @@
 
     <!-- Admin Badge -->
     <div class="admin-badge" id="adminBadge">
-        🛡️ Admin-Modus aktiv
+        🛡 Admin-Modus aktiv
     </div>
-
 
     <script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
@@ -2542,14 +2163,6 @@
             document.documentElement.style.setProperty('--grid-columns', gridColumns);
             document.getElementById('zoomIndicator').textContent = gridColumns;
             localStorage.setItem('gridZoom', gridColumns);
-            
-            // Fullscreen-Modus bei 1 Spalte
-            const grid = document.getElementById('previewGrid');
-            if (gridColumns === 1) {
-                grid.classList.add('fullscreen-mode');
-            } else {
-                grid.classList.remove('fullscreen-mode');
-            }
         }
 
         function zoomIn() {
@@ -2580,115 +2193,9 @@
 
         const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
 
-        // Demo-Signale für leere Datenbank (Marketing)
-        const DEMO_SIGNALS = [
-            {
-                id: 'demo1',
-                symbol: 'AAPL.OQ',
-                symbol_name: 'Apple Inc.',
-                market: 'NASDAQ',
-                timeframe: 'H4',
-                direction: 'BULLISH',
-                entry: 178.50,
-                sl: 172.35,
-                tp1: 184.65,
-                tp2: 190.80,
-                tp3: 196.95,
-                rr: 2.4,
-                created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/apple_bullish.png',
-                isDemo: true
-            },
-            {
-                id: 'demo2',
-                symbol: 'EURUSD',
-                symbol_name: 'Euro / US Dollar',
-                market: 'FOREX',
-                timeframe: 'H1',
-                direction: 'BEARISH',
-                entry: 1.0845,
-                sl: 1.0895,
-                tp1: 1.0795,
-                tp2: 1.0745,
-                tp3: 1.0695,
-                rr: 2.0,
-                created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/eurusd_bearish.png',
-                isDemo: true
-            },
-            {
-                id: 'demo3',
-                symbol: 'SAP.DE',
-                symbol_name: 'SAP SE',
-                market: 'DAX',
-                timeframe: 'D1',
-                direction: 'BULLISH',
-                entry: 185.20,
-                sl: 178.50,
-                tp1: 192.00,
-                tp2: 198.80,
-                tp3: 205.60,
-                rr: 2.5,
-                created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/sap_bullish.png',
-                isDemo: true
-            },
-            {
-                id: 'demo4',
-                symbol: 'TSLA.OQ',
-                symbol_name: 'Tesla Inc.',
-                market: 'NASDAQ',
-                timeframe: 'H4',
-                direction: 'BEARISH',
-                entry: 245.80,
-                sl: 258.20,
-                tp1: 233.40,
-                tp2: 221.00,
-                tp3: 208.60,
-                rr: 3.0,
-                created_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/tesla_bearish.png',
-                isDemo: true
-            },
-            {
-                id: 'demo5',
-                symbol: 'BTCUSD',
-                symbol_name: 'Bitcoin / USD',
-                market: 'CRYPTO',
-                timeframe: 'H4',
-                direction: 'BULLISH',
-                entry: 42500,
-                sl: 40800,
-                tp1: 44200,
-                tp2: 45900,
-                tp3: 47600,
-                rr: 2.8,
-                created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/btc_bullish.png',
-                isDemo: true
-            },
-            {
-                id: 'demo6',
-                symbol: 'NVDA.OQ',
-                symbol_name: 'NVIDIA Corp.',
-                market: 'NASDAQ',
-                timeframe: 'D1',
-                direction: 'BULLISH',
-                entry: 485.50,
-                sl: 462.00,
-                tp1: 509.00,
-                tp2: 532.50,
-                tp3: 556.00,
-                rr: 3.0,
-                created_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
-                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/nvidia_bullish.png',
-                isDemo: true
-            }
-        ];
-
         // ==================== INIT ====================
         async function init() {
-            updateGridZoom();
+            updateGridZoom(); // Zoom-Indikator setzen
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
@@ -2834,7 +2341,7 @@
             errorEl.textContent = '';
             
             if (!email || !password) {
-                errorEl.textContent = 'Bitte alle Felder ausfüllen';
+                errorEl.textContent = 'Bitte alle Felder ausfllen';
                 return;
             }
             
@@ -2868,7 +2375,7 @@
                     renderSignals();
                 } else {
                     errorEl.style.color = 'var(--accent-green)';
-                    errorEl.textContent = '✔ Bestätigungs-E-Mail gesendet!';
+                    errorEl.textContent = 'âœ“ Bestätigungs-E-Mail gesendet!';
                 }
                 
             } catch (error) {
@@ -2892,8 +2399,8 @@
             const initial = currentUser.email ? currentUser.email.charAt(0).toUpperCase() : '?';
             
             let statusText = 'Free Account';
-            if (isAdmin) statusText = '🛡️ Admin';
-            else if (isSubscribed) statusText = '✔ Premium';
+            if (isAdmin) statusText = '🛡 Admin';
+            else if (isSubscribed) statusText = 'âœ“ Premium';
             
             headerRight.innerHTML = `
                 <div class="live-indicator">
@@ -2915,10 +2422,12 @@
                 </div>
             `;
             
+            // Show tabs for premium users
             if (isSubscribed || isAdmin) {
                 document.getElementById('tabsSection').classList.add('visible');
                 document.getElementById('premiumSection').style.display = 'none';
                 
+                // Update header
                 document.getElementById('previewHeader').innerHTML = `
                     <div class="section-title">
                         🦊 Alle Signale
@@ -2928,6 +2437,7 @@
                 `;
             }
             
+            // Show admin badge
             if (isAdmin) {
                 document.getElementById('adminBadge').classList.add('visible');
             } else {
@@ -2943,7 +2453,7 @@
                     <span>LIVE</span>
                 </div>
                 <button class="btn btn-outline" onclick="showLogin()">Login</button>
-                <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
+                <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
             `;
             
             document.getElementById('tabsSection').classList.remove('visible');
@@ -2967,6 +2477,7 @@
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
             try {
+                // Nur pending und active Signale laden (nicht inactive, expired, etc.)
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -3006,46 +2517,31 @@
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
-            // Nutze echte Signale oder Demo-Signale für die Anzeige
-            const displaySignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
-            const isUsingDemo = allSignals.length === 0;
-            
-            document.getElementById('totalSignals').textContent = displaySignals.length + (isUsingDemo ? '*' : '');
+            document.getElementById('totalSignals').textContent = allSignals.length;
             
             const successTotal = completedSignals.filter(s => s.result_folder === 'success').length;
-            document.getElementById('successCount').textContent = successTotal || (isUsingDemo ? '127*' : '0');
+            document.getElementById('successCount').textContent = successTotal;
             
-            const todaySignals = displaySignals.filter(s => new Date(s.created_at) >= today);
-            document.getElementById('todayCount').textContent = todaySignals.length + (isUsingDemo ? '*' : '');
+            const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
+            document.getElementById('todayCount').textContent = todaySignals.length;
             
-            const newSignals = displaySignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            // New count for tab
+            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
             document.getElementById('newCount').textContent = newSignals.length;
             
-            document.getElementById('successTabCount').textContent = completedSignals.length || (isUsingDemo ? '127' : '0');
+            // Success tab count
+            document.getElementById('successTabCount').textContent = completedSignals.length;
             
-            const premiumCount = Math.max(0, displaySignals.length - 3);
-            document.getElementById('premiumCount').textContent = `+${premiumCount > 0 ? premiumCount : 42} weitere Signale`;
+            // Premium count
+            const premiumCount = Math.max(0, allSignals.length - 3);
+            document.getElementById('premiumCount').textContent = `+${premiumCount} weitere Signale`;
             
+            // Update success stats bar
             updateSuccessStats();
         }
 
         function updateSuccessStats() {
             const total = completedSignals.length;
-            const isUsingDemo = allSignals.length === 0;
-            
-            if (isUsingDemo && total === 0) {
-                // Demo-Werte für Marketing
-                document.getElementById('successRateValue').textContent = '73.2%';
-                document.getElementById('tp3Count').textContent = '48';
-                document.getElementById('tp2Count').textContent = '31';
-                document.getElementById('tp1Count').textContent = '15';
-                document.getElementById('slCount').textContent = '33';
-                
-                const headerValue = document.getElementById('headerSuccessValue');
-                if(headerValue) headerValue.textContent = '73.2%';
-                return;
-            }
-            
             const tp3 = completedSignals.filter(s => s.tp3_hit).length;
             const tp2 = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
             const tp1 = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
@@ -3059,6 +2555,7 @@
             document.getElementById('tp1Count').textContent = tp1;
             document.getElementById('slCount').textContent = sl;
             
+            // NEU: Header Success Rate aktualisieren
             const headerValue = document.getElementById('headerSuccessValue');
             if(headerValue) headerValue.textContent = rate + '%';
         }
@@ -3068,6 +2565,7 @@
             const grid = document.getElementById('previewGrid');
             const isPremium = currentUser && (isSubscribed || isAdmin);
             
+            // Handle success stats bar visibility
             const statsBar = document.getElementById('successStatsBar');
             if (currentTab === 'success' && isPremium) {
                 statsBar.classList.add('visible');
@@ -3076,12 +2574,14 @@
             }
             
             if (!isPremium) {
+                // Show preview for guests
                 const preview = getPreviewSignals();
                 grid.innerHTML = preview.map(s => renderSignalCard(s, true, false)).join('');
                 renderLockedSignals();
                 return;
             }
             
+            // Premium user - apply filters
             let signals = [];
             
             if (currentTab === 'success') {
@@ -3106,6 +2606,7 @@
                       </div>`;
             }
             
+            // Update header count
             const header = document.getElementById('previewHeader');
             const searchTerm = document.getElementById('searchSymbol').value.trim();
             
@@ -3129,16 +2630,13 @@
         }
 
         function getPreviewSignals() {
-            // Nutze echte Signale oder Demo-Signale als Fallback
-            const sourceSignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
-            
             const preview = [];
             for (const market of PREVIEW_MARKETS) {
-                const signal = sourceSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
+                const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
             }
-            while (preview.length < 3 && preview.length < sourceSignals.length) {
-                const signal = sourceSignals.find(s => !preview.some(p => p.id === s.id));
+            while (preview.length < 3 && preview.length < allSignals.length) {
+                const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
                 else break;
             }
@@ -3152,10 +2650,9 @@
             const now = new Date();
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
-            // Nutze echte Signale oder Demo-Signale als Fallback
-            const sourceSignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
-            let filtered = [...sourceSignals];
+            let filtered = [...allSignals];
             
+            // Tab filter
             if (currentTab === 'new') {
                 filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
             } else if (currentTab === 'bullish') {
@@ -3164,9 +2661,11 @@
                 filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
+            // Dropdown filters
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
+            // Search filter
             if (searchTerm) {
                 filtered = filtered.filter(s => 
                     (s.symbol && s.symbol.toLowerCase().includes(searchTerm)) ||
@@ -3187,6 +2686,7 @@
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
+            // Search filter
             if (searchTerm) {
                 filtered = filtered.filter(s => 
                     (s.symbol && s.symbol.toLowerCase().includes(searchTerm))
@@ -3198,49 +2698,38 @@
 
         function renderLockedSignals() {
             const grid = document.getElementById('lockedGrid');
-            // Nutze echte Signale oder Demo-Signale als Fallback
-            const sourceSignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
             const previewIds = new Set(getPreviewSignals().map(s => s.id));
-            const locked = sourceSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
+            const locked = allSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
             
             grid.innerHTML = locked.map(s => renderSignalCard(s, false, false)).join('');
         }
 
-        // ==================== SIGNAL CARD MIT FARBKODIERUNG ====================
         function renderSignalCard(signal, isVisible, isPreview) {
             const imageUrl = signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
             const isBullish = signal.direction === 'BULLISH';
             const isNew = isNewSignal(signal.created_at);
-            const isDemo = signal.isDemo === true;
             
             let badge = '';
-            if (isDemo) {
-                badge = '<div class="preview-badge" style="background: linear-gradient(135deg, #ffd700, #ffaa00);">BEISPIEL</div>';
-            } else if (isPreview) {
+            if (isPreview) {
                 badge = '<div class="preview-badge">Vorschau</div>';
             } else if (isNew && isVisible) {
                 badge = '<div class="new-badge">NEU</div>';
             }
             
-            // Admin controls nur für echte Signale
-            const adminControls = isAdmin && isVisible && !isDemo ? `
-                <div class="admin-controls${gridColumns === 1 ? ' always-visible' : ''}">
-                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
-                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
+            // Admin controls (nur für Admins sichtbar)
+            const adminControls = isAdmin && isVisible ? `
+                <div class="admin-controls">
+                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">âœ“</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal lschen">Ã—</button>
                 </div>
             ` : '';
             
-            // Placeholder-Bild für Demo-Signale
-            const chartImage = isDemo 
-                ? `<div class="signal-image" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; font-size: 64px; height: 100%;">📈</div>`
-                : `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:#1a1a2e;\\'>📊</div>'">`;
-            
             return `
-                <div class="signal-card ${isNew ? 'is-new' : ''} ${isDemo ? 'is-demo' : ''}" onclick="${isDemo ? '' : `openModal('${imageUrl}', '${signal.wedge_id || ''}')`}">
+                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     ${badge}
                     ${adminControls}
                     <div class="signal-image-container">
-                        ${chartImage}
+                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -3259,11 +2748,11 @@
                             </div>
                         </div>
                         <div class="price-grid">
-                            <div class="price-item"><div class="price-label entry">Entry</div><div class="price-value entry">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label stop">Stop</div><div class="price-value stop">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label tp1">TP1</div><div class="price-value tp1">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label tp2">TP2</div><div class="price-value tp2">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label tp3">TP3</div><div class="price-value tp3">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
+                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
@@ -3275,6 +2764,7 @@
             const imageUrl = signal.original_path || '';
             const isBullish = signal.direction === 'BULLISH';
             
+            // Determine result styling
             let resultClass = 'sl';
             let resultBadge = '🛑 SL';
             let cardClass = 'is-failed';
@@ -3285,7 +2775,7 @@
                 cardClass = 'is-success tp3';
             } else if (signal.tp2_hit) {
                 resultClass = 'tp2';
-                resultBadge = '✅ TP2';
+                resultBadge = 'âœ… TP2';
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
@@ -3293,9 +2783,10 @@
                 cardClass = 'is-success tp1';
             }
             
+            // Admin delete button for completed signals
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">Ã—</button>
                 </div>
             ` : '';
             
@@ -3324,27 +2815,27 @@
                         </div>
                         <div class="price-grid" style="grid-template-columns: repeat(4, 1fr);">
                             <div class="price-item">
-                                <div class="price-label tp1">TP1</div>
-                                <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-lightgreen)' : 'var(--text-secondary)'}">
-                                    ${signal.tp1_hit ? '✔' : '—'}
+                                <div class="price-label">TP1</div>
+                                <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
+                                    ${signal.tp1_hit ? 'âœ“' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
-                                <div class="price-label tp2">TP2</div>
+                                <div class="price-label">TP2</div>
                                 <div class="price-value" style="color: ${signal.tp2_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp2_hit ? '✔' : '—'}
+                                    ${signal.tp2_hit ? 'âœ“' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
-                                <div class="price-label tp3">TP3</div>
+                                <div class="price-label">TP3</div>
                                 <div class="price-value" style="color: ${signal.tp3_hit ? 'var(--accent-gold)' : 'var(--text-secondary)'}">
                                     ${signal.tp3_hit ? '🏆' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
-                                <div class="price-label stop">SL</div>
+                                <div class="price-label">SL</div>
                                 <div class="price-value" style="color: ${signal.sl_hit ? 'var(--accent-red)' : 'var(--text-secondary)'}">
-                                    ${signal.sl_hit ? '✗' : '—'}
+                                    ${signal.sl_hit ? 'âœ—' : '—'}
                                 </div>
                             </div>
                         </div>
@@ -3386,6 +2877,7 @@
 
         // ==================== EVENT LISTENERS ====================
         function setupEventListeners() {
+            // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -3395,15 +2887,18 @@
                 });
             });
             
+            // Filters
             document.getElementById('filterMarket').addEventListener('change', renderSignals);
             document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
             
+            // Search with debounce
             let searchTimeout;
             document.getElementById('searchSymbol').addEventListener('input', () => {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(renderSignals, 300);
             });
             
+            // Clear search on Escape
             document.getElementById('searchSymbol').addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     e.target.value = '';
@@ -3411,27 +2906,32 @@
                 }
             });
             
+            // Close user menu on outside click
             document.addEventListener('click', (e) => {
                 const menu = document.querySelector('.user-menu-container');
                 if (menu && !menu.contains(e.target)) {
                     menu.classList.remove('open');
                 }
                 
+                // Admin button handlers via event delegation
                 if (e.target.matches('[data-delete-signal]')) {
                     e.stopPropagation();
                     const signalId = e.target.getAttribute('data-delete-signal');
+                    console.log('Delete signal clicked:', signalId);
                     showDeleteModal(signalId);
                 }
                 
                 if (e.target.matches('[data-delete-completed]')) {
                     e.stopPropagation();
                     const signalId = e.target.getAttribute('data-delete-completed');
+                    console.log('Delete completed clicked:', signalId);
                     showDeleteCompletedModal(signalId);
                 }
                 
                 if (e.target.matches('[data-success-signal]')) {
                     e.stopPropagation();
                     const signalId = e.target.getAttribute('data-success-signal');
+                    console.log('Success signal clicked:', signalId);
                     showSuccessModal(signalId);
                 }
             });
@@ -3464,9 +2964,11 @@
             sliderImages = [{ url: imageUrl, scanned_at: null }];
             sliderCurrentIndex = 0;
             
+            // Zeige erstmal das aktuelle Bild
             updateSliderDisplay();
             document.getElementById('imageModal').classList.add('active');
             
+            // Wenn wedge_id vorhanden, lade Bild-Historie
             if (wedgeId) {
                 await loadImageHistory(wedgeId, imageUrl);
             }
@@ -3489,11 +2991,14 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
+                    // Konvertiere zu unserem Format
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
+                    // Aktuelles Bild an den Anfang (neuestes)
+                    // Stelle sicher dass es nicht doppelt ist
                     if (sliderImages[0].url !== currentImageUrl) {
                         sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
                     }
@@ -3511,9 +3016,11 @@
             const img = sliderImages[sliderCurrentIndex];
             document.getElementById('modalImage').src = img.url;
             
+            // Counter aktualisieren
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
+            // Datum anzeigen
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
@@ -3522,9 +3029,11 @@
                 dateEl.textContent = 'Aktuell';
             }
             
+            // Navigation Buttons
             const prevBtn = document.getElementById('sliderPrev');
             const nextBtn = document.getElementById('sliderNext');
             
+            // Verstecke Buttons wenn nur 1 Bild
             if (sliderImages.length <= 1) {
                 prevBtn.classList.add('hidden');
                 nextBtn.classList.add('hidden');
@@ -3535,6 +3044,7 @@
                 nextBtn.disabled = sliderCurrentIndex === sliderImages.length - 1;
             }
             
+            // Thumbnails aktualisieren
             document.querySelectorAll('.slider-thumb').forEach((thumb, i) => {
                 thumb.classList.toggle('active', i === sliderCurrentIndex);
             });
@@ -3543,6 +3053,7 @@
         function renderThumbnails() {
             const container = document.getElementById('sliderThumbnails');
             
+            // Nur bei mehr als 1 Bild anzeigen
             if (sliderImages.length <= 1) {
                 container.innerHTML = '';
                 return;
@@ -3583,6 +3094,7 @@
             document.getElementById('sliderThumbnails').innerHTML = '';
         }
 
+        // Keyboard Navigation
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('imageModal').classList.contains('active')) return;
             
@@ -3591,80 +3103,24 @@
             if (e.key === 'Escape') closeModal();
         });
 
-        // Checkout Modal Functions
         function showCheckout() {
             if (!currentUser) {
                 showLogin();
                 return;
             }
-            // Reset both checkboxes
-            document.getElementById('agbCheckbox').checked = false;
-            document.getElementById('widerrufCheckbox').checked = false;
-            document.getElementById('agbCheckboxWrapper').classList.remove('checked');
-            document.getElementById('widerrufCheckboxWrapper').classList.remove('checked');
-            document.getElementById('btnCheckoutConfirm').classList.remove('enabled');
-            // Show modal
-            document.getElementById('checkoutModal').classList.add('active');
-        }
-
-        function toggleAgbConsent() {
-            const checkbox = document.getElementById('agbCheckbox');
-            checkbox.checked = !checkbox.checked;
-            document.getElementById('agbCheckboxWrapper').classList.toggle('checked', checkbox.checked);
-            updateCheckoutButton();
-        }
-
-        function toggleWiderrufConsent() {
-            const checkbox = document.getElementById('widerrufCheckbox');
-            checkbox.checked = !checkbox.checked;
-            document.getElementById('widerrufCheckboxWrapper').classList.toggle('checked', checkbox.checked);
-            updateCheckoutButton();
-        }
-
-        function updateCheckoutButton() {
-            const agb = document.getElementById('agbCheckbox').checked;
-            const widerruf = document.getElementById('widerrufCheckbox').checked;
-            const btn = document.getElementById('btnCheckoutConfirm');
-            
-            if (agb && widerruf) {
-                btn.classList.add('enabled');
-            } else {
-                btn.classList.remove('enabled');
-            }
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById('checkoutModal').classList.remove('active');
-        }
-
-        function proceedToCheckout() {
-            const agb = document.getElementById('agbCheckbox').checked;
-            const widerruf = document.getElementById('widerrufCheckbox').checked;
-            
-            if (!agb || !widerruf) {
-                alert('Bitte akzeptiere die AGB und den Widerrufsverzicht, um fortzufahren.');
-                return;
-            }
-            // Close modal and open LemonSqueezy
-            closeCheckoutModal();
             window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
-            
-            // Track conversion
-            trackEvent('checkout_started', 'conversion', 'consent_given');
         }
 
         function manageSubscription() {
-            const choice = confirm('Abo verwalten / kündigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.');
+            // Lemon Squeezy Customer Portal - bentigt aktivierten Store
+            // Alternativ: E-Mail an Support
+            const choice = confirm('Abo verwalten / kndigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.\n\nSobald der Shop aktiviert ist, kannst du dein Abo selbst verwalten.');
             if (choice) {
-                window.location.href = 'mailto:walserfly@gmail.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20mchte%20mein%20Abo%20verwalten%2Fkndigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
             }
         }
 
-        // Close checkout modal on outside click
-        document.getElementById('checkoutModal').addEventListener('click', e => {
-            if (e.target.id === 'checkoutModal') closeCheckoutModal();
-        });
-
+        // Modal event listeners
         document.getElementById('authModal').addEventListener('click', e => {
             if (e.target.id === 'authModal') closeAuthModal();
         });
@@ -3678,7 +3134,7 @@
             if (e.target.id === 'successModal') closeSuccessModal();
         });
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); closeCheckoutModal(); }
+            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); }
         });
         document.getElementById('loginPassword').addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
@@ -3686,12 +3142,16 @@
 
         // ==================== ADMIN FUNCTIONS ====================
         let pendingDeleteId = null;
-        let pendingDeleteType = null;
+        let pendingDeleteType = null; // 'signal' or 'completed'
         let pendingSuccessId = null;
 
         function showDeleteModal(signalId) {
+            console.log('showDeleteModal called with ID:', signalId);
             const signal = allSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) return;
+            if (!signal) {
+                console.error('Signal not found:', signalId);
+                return;
+            }
             
             pendingDeleteId = signalId;
             pendingDeleteType = 'signal';
@@ -3700,8 +3160,12 @@
         }
 
         function showDeleteCompletedModal(signalId) {
+            console.log('showDeleteCompletedModal called with ID:', signalId);
             const signal = completedSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) return;
+            if (!signal) {
+                console.error('Completed signal not found:', signalId);
+                return;
+            }
             
             pendingDeleteId = signalId;
             pendingDeleteType = 'completed';
@@ -3717,14 +3181,18 @@
 
         async function confirmDelete() {
             if (!pendingDeleteId || !isAdmin) {
-                showToast('✗ Keine Berechtigung', 'error');
+                showToast('âœ— Keine Berechtigung', 'error');
                 return;
             }
             
             const table = pendingDeleteType === 'completed' ? 'completed_signals' : 'signals';
             const deleteId = String(pendingDeleteId);
             
+            console.log('Deleting from:', table, 'ID:', deleteId);
+            console.log('Token:', getAccessToken().substring(0, 20) + '...');
+            
             try {
+                // Supabase erwartet UUID format
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${deleteId}`, {
                     method: 'DELETE',
                     headers: {
@@ -3734,7 +3202,12 @@
                     }
                 });
                 
+                console.log('Delete response status:', response.status);
+                const responseText = await response.text();
+                console.log('Response body:', responseText);
+                
                 if (response.status === 204 || response.status === 200) {
+                    // Success - remove from local array
                     if (pendingDeleteType === 'completed') {
                         completedSignals = completedSignals.filter(s => String(s.id) !== deleteId);
                     } else {
@@ -3744,18 +3217,34 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('✔ Signal gelöscht', 'success');
+                    showToast('âœ“ Signal gelscht', 'success');
+                } else if (response.status === 404 || responseText === '[]') {
+                    // Nicht gefunden - vielleicht schon gelscht
+                    if (pendingDeleteType === 'completed') {
+                        completedSignals = completedSignals.filter(s => String(s.id) !== deleteId);
+                    } else {
+                        allSignals = allSignals.filter(s => String(s.id) !== deleteId);
+                    }
+                    closeDeleteModal();
+                    updateStats();
+                    renderSignals();
+                    showToast('âœ“ Signal entfernt', 'success');
                 } else {
-                    throw new Error('Delete failed');
+                    throw new Error(`Status ${response.status}: ${responseText}`);
                 }
             } catch (error) {
-                showToast('✗ ' + error.message, 'error');
+                console.error('Delete error:', error);
+                showToast('âœ— ' + error.message, 'error');
             }
         }
 
         function showSuccessModal(signalId) {
+            console.log('showSuccessModal called with ID:', signalId);
             const signal = allSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) return;
+            if (!signal) {
+                console.error('Signal not found for success:', signalId);
+                return;
+            }
             
             pendingSuccessId = signalId;
             document.getElementById('successSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
@@ -3770,15 +3259,19 @@
 
         async function confirmSuccess() {
             if (!pendingSuccessId || !isAdmin) {
-                showToast('✗ Keine Berechtigung', 'error');
+                showToast('âœ— Keine Berechtigung', 'error');
                 return;
             }
             
             const signal = allSignals.find(s => String(s.id) === String(pendingSuccessId));
-            if (!signal) return;
+            if (!signal) {
+                showToast('âœ— Signal nicht gefunden', 'error');
+                return;
+            }
             
             const result = document.getElementById('successResult').value;
             
+            // Determine TP/SL flags based on result
             let tp1_hit = false, tp2_hit = false, tp3_hit = false, sl_hit = false;
             let result_folder = 'failed';
             
@@ -3804,6 +3297,7 @@
                     break;
             }
             
+            // Create completed signal entry
             const completedData = {
                 wedge_id: signal.wedge_id || `manual_${signal.id}`,
                 original_path: signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`,
@@ -3838,15 +3332,18 @@
                     closeSuccessModal();
                     updateStats();
                     renderSignals();
-                    showToast('✔ Zu Success hinzugefügt', 'success');
+                    showToast('âœ“ Zu Success hinzugefgt', 'success');
                 } else {
-                    throw new Error('Failed');
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed');
                 }
             } catch (error) {
-                showToast('✗ Fehler: ' + error.message, 'error');
+                console.error('Success add error:', error);
+                showToast('âœ— Fehler: ' + error.message, 'error');
             }
         }
 
+        // Toast notification
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.style.cssText = `
@@ -3870,6 +3367,7 @@
             }, 3000);
         }
 
+        // Add toast animations
         const toastStyle = document.createElement('style');
         toastStyle.textContent = `
             @keyframes slideIn {
@@ -3883,116 +3381,172 @@
         `;
         document.head.appendChild(toastStyle);
 
+        // Start
         init();
     </script>
 
-    <!-- Checkout Consent Modal -->
-    <div class="checkout-modal" id="checkoutModal">
-        <div class="checkout-modal-card">
-            <div class="checkout-modal-header">
-                <div class="icon">🦊</div>
-                <h3>WolfeWave Premium</h3>
-                <p>Zugriff auf alle Trading-Signale in Echtzeit</p>
-            </div>
-            
-            <div class="checkout-modal-price">
-                <span class="amount">19,90€</span>
-                <span class="period">/ Monat</span>
-            </div>
-            
-            <div class="consent-checkbox" id="agbCheckboxWrapper" onclick="toggleAgbConsent()">
-                <input type="checkbox" id="agbCheckbox">
-                <label for="agbCheckbox">
-                    Ich habe die <a href="agb.html" target="_blank">AGB</a> und den <a href="agb.html#haftung" target="_blank">Haftungsausschluss</a> gelesen und akzeptiere diese.
-                </label>
-            </div>
-            
-            <div class="consent-checkbox" id="widerrufCheckboxWrapper" onclick="toggleWiderrufConsent()">
-                <input type="checkbox" id="widerrufCheckbox">
-                <label for="widerrufCheckbox">
-                    Ich stimme zu, dass die Dienstleistung <strong>sofort beginnt</strong> und mein <a href="widerruf.html" target="_blank">Widerrufsrecht</a> damit erlischt.
-                </label>
-            </div>
-            
-            <div class="checkout-modal-buttons">
-                <button class="btn-checkout-cancel" onclick="closeCheckoutModal()">Abbrechen</button>
-                <button class="btn-checkout-confirm" id="btnCheckoutConfirm" onclick="proceedToCheckout()">Jetzt abonnieren</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Cookie Banner -->
-    <div class="cookie-banner" id="cookieBanner">
+    <div id="cookieBanner" class="cookie-banner">
         <div class="cookie-content">
             <div class="cookie-text">
-                <h4>🍪 Cookie-Einstellungen</h4>
-                <p>
-                    Wir verwenden Cookies, um die Nutzung unserer Website zu analysieren und zu verbessern. 
-                    Mit "Akzeptieren" stimmen Sie der Verwendung von Google Analytics zu. 
-                    Mehr Informationen in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.
-                </p>
+                <span class="cookie-icon">🍪</span>
+                <p>Wir verwenden Cookies, um deine Erfahrung zu verbessern und unseren Service zu analysieren. Mit der Nutzung stimmst du unserer <a href="datenschutz.html">Datenschutzerklärung</a> zu.</p>
             </div>
             <div class="cookie-buttons">
-                <button class="cookie-btn cookie-btn-decline" onclick="declineCookies()">Nur notwendige</button>
-                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Akzeptieren</button>
+                <button class="cookie-btn cookie-btn-reject" onclick="rejectCookies()">Nur notwendige</button>
+                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Alle akzeptieren</button>
             </div>
         </div>
     </div>
 
+    <style>
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 20px 40px;
+            z-index: 9999;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .cookie-banner.visible {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .cookie-icon {
+            font-size: 28px;
+        }
+
+        .cookie-text p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+
+        .cookie-text a:hover {
+            text-decoration: underline;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .cookie-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .cookie-btn-reject {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .cookie-btn-reject:hover {
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+
+        .cookie-btn-accept {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .cookie-btn-accept:hover {
+            background: #00cc6a;
+        }
+
+        @media (max-width: 768px) {
+            .cookie-banner {
+                padding: 16px 20px;
+            }
+            .cookie-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .cookie-text {
+                flex-direction: column;
+                min-width: auto;
+            }
+            .cookie-buttons {
+                width: 100%;
+            }
+            .cookie-btn {
+                flex: 1;
+            }
+        }
+    </style>
+
     <script>
-        // Cookie Banner Logic
-        function showCookieBanner() {
-            if (!localStorage.getItem('cookieConsent')) {
+        // Cookie Banner Funktionen
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
                 document.getElementById('cookieBanner').classList.add('visible');
             }
         }
 
         function acceptCookies() {
-            localStorage.setItem('cookieConsent', 'accepted');
+            localStorage.setItem('cookieConsent', 'all');
             document.getElementById('cookieBanner').classList.remove('visible');
-            loadGoogleAnalytics();
-            
-            // Track consent event
-            if (window.gtag) {
-                gtag('event', 'cookie_consent', {
-                    'consent_type': 'accepted'
-                });
-            }
+            // Analytics ist bereits geladen
         }
 
-        function declineCookies() {
-            localStorage.setItem('cookieConsent', 'declined');
+        function rejectCookies() {
+            localStorage.setItem('cookieConsent', 'necessary');
             document.getElementById('cookieBanner').classList.remove('visible');
+            // Deaktiviere Analytics
+            window['ga-disable-G-F3BQLK365X'] = true;
         }
 
-        // Zeige Banner nach kurzer Verzögerung
-        setTimeout(showCookieBanner, 1000);
-
-        // Event Tracking Funktionen (nur wenn Analytics geladen)
-        function trackEvent(action, category, label) {
-            if (window.gtag && localStorage.getItem('cookieConsent') === 'accepted') {
-                gtag('event', action, {
-                    'event_category': category,
-                    'event_label': label
-                });
-            }
-        }
-
-        // Beispiel: Track wichtige Aktionen
+        // Prfe Cookie-Consent beim Laden
         document.addEventListener('DOMContentLoaded', function() {
-            // Track Abo-Button Klicks
-            document.querySelectorAll('[onclick*="showCheckout"]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    trackEvent('click', 'conversion', 'abo_button');
-                });
-            });
-
-            // Track Login
-            document.querySelectorAll('[onclick*="showLogin"]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    trackEvent('click', 'engagement', 'login_button');
-                });
-            });
+            checkCookieConsent();
+            
+            // Wenn abgelehnt, Analytics deaktivieren
+            if (localStorage.getItem('cookieConsent') === 'necessary') {
+                window['ga-disable-G-F3BQLK365X'] = true;
+            }
         });
     </script>
 </body>
