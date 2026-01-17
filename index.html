@@ -538,6 +538,21 @@
             opacity: 1;
         }
 
+        /* Admin Controls im Success-Tab IMMER sichtbar und größer */
+        .admin-controls.always-visible {
+            opacity: 1 !important;
+            top: 8px;
+            right: 8px;
+        }
+
+        .admin-controls.always-visible .admin-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
         .admin-btn {
             width: 32px;
             height: 32px;
@@ -974,6 +989,34 @@
             position: relative;
             height: 240px;
             overflow: hidden;
+        }
+
+        /* Vollbild-Modus (1 Spalte) - Bild mit besserem Seitenverhältnis */
+        .signals-grid.fullscreen-mode .signal-image-container {
+            height: 450px;
+            max-height: 50vh;
+        }
+
+        .signals-grid.fullscreen-mode .signal-card {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .signals-grid.fullscreen-mode .signal-image {
+            object-fit: contain;
+            background: #1a1a1a;
+        }
+
+        .signals-grid.fullscreen-mode .signal-info {
+            padding: 20px 24px 24px;
+        }
+
+        .signals-grid.fullscreen-mode .price-grid {
+            padding: 16px;
+        }
+
+        .signals-grid.fullscreen-mode .price-value {
+            font-size: 14px;
         }
 
         .signal-image {
@@ -1791,11 +1834,11 @@
 <body>
     <header class="header">
         <div class="logo">
-            <div class="logo-icon">🐺</div>
+            <div class="logo-icon">🦊</div>
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
-            <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
+            <a href="wolfewaves.html" class="nav-link">�– Tutorial</a>
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
@@ -1824,7 +1867,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-number stat-gold" id="successCount">—</div>
-            <div class="stat-label">✓ Erfolgreiche Trades</div>
+            <div class="stat-label">✔ Erfolgreiche Trades</div>
         </div>
         <div class="stat-card">
             <div class="stat-number" id="todayCount">—</div>
@@ -1900,7 +1943,7 @@
                 <div class="stat-label">TP2 erreicht</div>
             </div>
             <div class="success-stat-mini blue">
-                <div class="stat-icon">📈</div>
+                <div class="stat-icon">📖</div>
                 <div class="stat-value blue" id="tp1Count">0</div>
                 <div class="stat-label">TP1 erreicht</div>
             </div>
@@ -1915,7 +1958,7 @@
     <!-- Free Preview Section -->
     <section class="section-header" id="previewHeader">
         <div class="section-title">
-            🎁 Kostenlose Vorschau
+            🎁 Kostenlose Vorschau
             <span class="section-badge">Gratis</span>
         </div>
         <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
@@ -1934,7 +1977,7 @@
     <section class="premium-section" id="premiumSection">
         <div class="premium-header">
             <div class="premium-title">
-                <span class="lock-icon">🔒</span>
+                <span class="lock-icon">🔓</span>
                 Premium Signale
             </div>
             <div class="premium-count" id="premiumCount">+42 weitere Signale</div>
@@ -1945,7 +1988,7 @@
 
             <div class="paywall-overlay">
                 <div class="paywall-card">
-                    <div class="paywall-icon">🔓</div>
+                    <div class="paywall-icon">🔒</div>
                     <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
                     <div class="paywall-subtitle">
                         Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
@@ -1953,19 +1996,19 @@
 
                     <div class="paywall-features">
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Performance-Statistiken & Success-Tracking</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✓</span>
+                            <span class="paywall-feature-icon">✔</span>
                             <span>Jederzeit kündbar — keine Bindung</span>
                         </div>
                     </div>
@@ -1997,7 +2040,7 @@
         <div style="color: var(--text-secondary); font-size: 11px;">
             © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
             <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
-                ⚠️ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
+                ⚠️ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
             </span>
         </div>
     </footer>
@@ -2008,7 +2051,7 @@
             <span class="modal-close" onclick="closeAuthModal()">✕</span>
             <div id="loginForm" class="auth-form">
                 <div class="auth-header">
-                    <div class="auth-icon">🐺</div>
+                    <div class="auth-icon">🦊</div>
                     <h2>Willkommen zurück</h2>
                     <p>Melde dich an, um alle Signale zu sehen</p>
                 </div>
@@ -2019,7 +2062,7 @@
                     </div>
                     <div class="input-group">
                         <label>Passwort</label>
-                        <input type="password" id="loginPassword" placeholder="••••••••">
+                        <input type="password" id="loginPassword" placeholder=""¢"¢"¢"¢"¢"¢"¢"¢">
                     </div>
                 </div>
                 <div class="auth-error" id="loginError"></div>
@@ -2058,8 +2101,8 @@
         <span class="modal-close" onclick="closeModal()">✕</span>
         <div class="image-slider-container">
             <!-- Navigation Buttons -->
-            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">‹</button>
-            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
+            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">"¹</button>
+            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">"º</button>
             
             <!-- Main Image -->
             <img src="" alt="Chart" id="modalImage">
@@ -2079,7 +2122,7 @@
     <div class="admin-modal" id="deleteModal">
         <div class="admin-modal-card">
             <div class="admin-modal-header">
-                <span style="font-size: 28px;">🗑️</span>
+                <span style="font-size: 28px;">🗑️</span>
                 <h3>Signal löschen</h3>
             </div>
             <div class="admin-modal-body">
@@ -2088,7 +2131,7 @@
                     <strong id="deleteSignalInfo"></strong>
                 </div>
                 <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
-                    ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
+                    ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
                 </p>
             </div>
             <div class="admin-modal-footer">
@@ -2115,7 +2158,7 @@
                     <select id="successResult">
                         <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
                         <option value="TP2_HIT">✅ TP2 erreicht</option>
-                        <option value="TP1_HIT">📈 TP1 erreicht</option>
+                        <option value="TP1_HIT">📖 TP1 erreicht</option>
                         <option value="SL_HIT">🛑 Stop Loss getroffen</option>
                         <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
                     </select>
@@ -2130,7 +2173,7 @@
 
     <!-- Admin Badge -->
     <div class="admin-badge" id="adminBadge">
-        🛡️ Admin-Modus aktiv
+        🛡️ Admin-Modus aktiv
     </div>
 
     <script>
@@ -2154,6 +2197,17 @@
             document.documentElement.style.setProperty('--grid-columns', gridColumns);
             document.getElementById('zoomIndicator').textContent = gridColumns;
             localStorage.setItem('gridZoom', gridColumns);
+            
+            // Fullscreen-Modus (1 Spalte) - größere Bilder
+            const grid = document.getElementById('previewGrid');
+            const premiumGrid = document.getElementById('lockedGrid');
+            if (gridColumns === 1) {
+                grid?.classList.add('fullscreen-mode');
+                premiumGrid?.classList.add('fullscreen-mode');
+            } else {
+                grid?.classList.remove('fullscreen-mode');
+                premiumGrid?.classList.remove('fullscreen-mode');
+            }
         }
 
         function zoomIn() {
@@ -2366,7 +2420,7 @@
                     renderSignals();
                 } else {
                     errorEl.style.color = 'var(--accent-green)';
-                    errorEl.textContent = '✓ Bestätigungs-E-Mail gesendet!';
+                    errorEl.textContent = '✔ Bestätigungs-E-Mail gesendet!';
                 }
                 
             } catch (error) {
@@ -2390,8 +2444,8 @@
             const initial = currentUser.email ? currentUser.email.charAt(0).toUpperCase() : '?';
             
             let statusText = 'Free Account';
-            if (isAdmin) statusText = '🛡️ Admin';
-            else if (isSubscribed) statusText = '✓ Premium';
+            if (isAdmin) statusText = '🛡️ Admin';
+            else if (isSubscribed) statusText = '✔ Premium';
             
             headerRight.innerHTML = `
                 <div class="live-indicator">
@@ -2407,7 +2461,7 @@
                         </div>
                     </div>
                     <div class="user-dropdown">
-                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
+                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
                         <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
                     </div>
                 </div>
@@ -2421,7 +2475,7 @@
                 // Update header
                 document.getElementById('previewHeader').innerHTML = `
                     <div class="section-title">
-                        🐺 Alle Signale
+                        🦊 Alle Signale
                         <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
                     </div>
                     <div class="section-subtitle">— Du hast Zugriff auf alle Signale</div>
@@ -2454,7 +2508,7 @@
             
             document.getElementById('previewHeader').innerHTML = `
                 <div class="section-title">
-                    🎁 Kostenlose Vorschau
+                    🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
                 <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
@@ -2612,7 +2666,7 @@
             } else {
                 header.innerHTML = `
                     <div class="section-title">
-                        🐺 ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
+                        🦊 ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
                         <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
                     </div>
                     <div class="section-subtitle">— ${signals.length} Signale${searchTerm ? ` für "${searchTerm}"` : ''}</div>
@@ -2710,8 +2764,8 @@
             // Admin controls (nur für Admins sichtbar)
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
-                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✓</button>
-                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
+                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">Ã—</button>
                 </div>
             ` : '';
             
@@ -2770,23 +2824,27 @@
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
-                resultBadge = '📈 TP1';
+                resultBadge = '📖 TP1';
                 cardClass = 'is-success tp1';
             }
             
-            // Admin delete button for completed signals
+            // Admin delete button for completed signals - IMMER sichtbar mit always-visible Klasse
             const adminControls = isAdmin ? `
-                <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
+                <div class="admin-controls always-visible">
+                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">✕</button>
                 </div>
             ` : '';
             
+            // Für Admin: Karte öffnet Modal NICHT automatisch - nur Klick aufs Bild
+            const cardClick = isAdmin ? '' : `onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')"`;
+            const imageClick = isAdmin ? `onclick="event.stopPropagation(); openModal('${imageUrl}', '${signal.wedge_id || ''}')" style="cursor:zoom-in;"` : '';
+            
             return `
-                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
+                <div class="signal-card ${cardClass}" ${cardClick}>
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${adminControls}
-                    <div class="signal-image-container">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">📈</div>'}
+                    <div class="signal-image-container" ${imageClick}>
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">📖</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -2808,13 +2866,13 @@
                             <div class="price-item">
                                 <div class="price-label">TP1</div>
                                 <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp1_hit ? '✓' : '—'}
+                                    ${signal.tp1_hit ? '✔' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
                                 <div class="price-label">TP2</div>
                                 <div class="price-value" style="color: ${signal.tp2_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp2_hit ? '✓' : '—'}
+                                    ${signal.tp2_hit ? '✔' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
@@ -3208,7 +3266,7 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('✓ Signal gelöscht', 'success');
+                    showToast('✔ Signal gelöscht', 'success');
                 } else if (response.status === 404 || responseText === '[]') {
                     // Nicht gefunden - vielleicht schon gelöscht
                     if (pendingDeleteType === 'completed') {
@@ -3219,7 +3277,7 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('✓ Signal entfernt', 'success');
+                    showToast('✔ Signal entfernt', 'success');
                 } else {
                     throw new Error(`Status ${response.status}: ${responseText}`);
                 }
@@ -3323,7 +3381,7 @@
                     closeSuccessModal();
                     updateStats();
                     renderSignals();
-                    showToast('✓ Zu Success hinzugefügt', 'success');
+                    showToast('✔ Zu Success hinzugefügt', 'success');
                 } else {
                     const error = await response.json();
                     throw new Error(error.message || 'Failed');
