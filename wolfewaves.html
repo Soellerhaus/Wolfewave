@@ -47,6 +47,8 @@
             --accent-red: #ff4757;
             --accent-blue: #4dabf7;
             --accent-gold: #ffd700;
+            --accent-purple: #a855f7;
+            --accent-orange: #ff9f43;
             --text-primary: #ffffff;
             --text-secondary: #6b7280;
             --border-color: #1f1f1f;
@@ -129,7 +131,7 @@
         
         /* Content */
         .content {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 60px 40px;
         }
@@ -154,6 +156,7 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            flex-shrink: 0;
         }
         
         h3 {
@@ -190,10 +193,11 @@
             padding: 28px;
             margin: 28px 0;
         }
-        .info-box.green { border-color: rgba(0, 255, 136, 0.3); }
-        .info-box.blue { border-color: rgba(77, 171, 247, 0.3); }
-        .info-box.gold { border-color: rgba(255, 215, 0, 0.3); }
-        .info-box.red { border-color: rgba(255, 71, 87, 0.3); }
+        .info-box.green { border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.05); }
+        .info-box.blue { border-color: rgba(77, 171, 247, 0.3); background: rgba(77, 171, 247, 0.05); }
+        .info-box.gold { border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+        .info-box.red { border-color: rgba(255, 71, 87, 0.3); background: rgba(255, 71, 87, 0.05); }
+        .info-box.purple { border-color: rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.05); }
         
         .info-box h4 {
             font-size: 18px;
@@ -206,45 +210,80 @@
         .info-box.blue h4 { color: var(--accent-blue); }
         .info-box.gold h4 { color: var(--accent-gold); }
         .info-box.red h4 { color: var(--accent-red); }
+        .info-box.purple h4 { color: var(--accent-purple); }
         
-        /* Pattern Diagram */
-        .pattern-diagram {
+        /* SVG Diagram Container */
+        .diagram-container {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 40px;
+            padding: 30px;
             margin: 40px 0;
+            overflow-x: auto;
+        }
+        .diagram-container h4 {
             text-align: center;
+            margin-bottom: 20px;
+            color: var(--accent-gold);
+            font-size: 18px;
         }
-        .pattern-diagram pre {
-            font-family: monospace;
-            font-size: 14px;
+        .diagram-container svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+        .diagram-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .diagram-tab {
+            padding: 10px 24px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             color: var(--text-secondary);
-            line-height: 1.4;
-            text-align: left;
-            display: inline-block;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
         }
-        .pattern-diagram .green { color: var(--accent-green); }
-        .pattern-diagram .red { color: var(--accent-red); }
-        .pattern-diagram .blue { color: var(--accent-blue); }
-        .pattern-diagram .gold { color: var(--accent-gold); }
+        .diagram-tab:hover {
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+        .diagram-tab.active {
+            background: var(--accent-green);
+            color: #000;
+            border-color: var(--accent-green);
+        }
+        .diagram-content {
+            display: none;
+        }
+        .diagram-content.active {
+            display: block;
+        }
         
         /* Step Cards */
         .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px;
             margin: 32px 0;
         }
         .step-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 24px;
+            padding: 18px;
+            text-align: center;
         }
         .step-card .step-num {
-            background: var(--accent-green);
-            color: #000;
+            background: var(--accent-red);
+            color: #fff;
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -252,47 +291,146 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            margin-bottom: 12px;
+            font-size: 16px;
+            margin: 0 auto 10px;
         }
         .step-card h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--text-primary);
         }
         .step-card p {
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: 0;
+            line-height: 1.4;
+        }
+        .step-card.highlight {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        .step-card.highlight .step-num {
+            background: var(--accent-green);
+            color: #000;
+        }
+        
+        /* Status Flow */
+        .status-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 32px 0;
+            padding: 30px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+        .status-badge {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+        }
+        .status-badge.pending {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+        .status-badge.active {
+            background: rgba(77, 171, 247, 0.2);
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+        }
+        .status-badge.success {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+        .status-badge.failed {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+        .status-badge.inactive {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid var(--text-secondary);
+        }
+        .status-arrow {
+            color: var(--text-secondary);
+            font-size: 20px;
         }
         
         /* Price Levels */
         .price-levels {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
             margin: 24px 0;
         }
         .level-card {
             background: var(--bg-card);
             border-radius: 12px;
-            padding: 20px;
+            padding: 16px;
             text-align: center;
         }
         .level-card.entry { border: 2px solid var(--accent-blue); }
         .level-card.sl { border: 2px solid var(--accent-red); }
-        .level-card.tp { border: 2px solid var(--accent-green); }
+        .level-card.tp1 { border: 2px solid var(--accent-gold); }
+        .level-card.tp2 { border: 2px solid var(--accent-orange); }
+        .level-card.tp3 { border: 2px solid var(--accent-green); }
         .level-card .label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .level-card .value {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
         }
         .level-card.entry .value { color: var(--accent-blue); }
         .level-card.sl .value { color: var(--accent-red); }
-        .level-card.tp .value { color: var(--accent-green); }
+        .level-card.tp1 .value { color: var(--accent-gold); }
+        .level-card.tp2 .value { color: var(--accent-orange); }
+        .level-card.tp3 .value { color: var(--accent-green); }
+        .level-card .desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        /* Rules Table */
+        .rules-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .rules-table th {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-green);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .rules-table td {
+            padding: 14px 16px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .rules-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .rules-table .check { color: var(--accent-green); }
+        .rules-table .cross { color: var(--accent-red); }
         
         /* CTA */
         .cta-section {
@@ -342,14 +480,45 @@
         }
         .footer a:hover { color: var(--accent-green); }
         
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            border-radius: 2px;
+        }
+        .legend-line.red { background: var(--accent-red); }
+        .legend-line.green { background: var(--accent-green); }
+        .legend-line.blue { background: var(--accent-blue); }
+        .legend-line.gold { background: var(--accent-gold); }
+        .legend-line.dashed {
+            background: repeating-linear-gradient(90deg, var(--accent-red), var(--accent-red) 4px, transparent 4px, transparent 8px);
+        }
+        
         @media (max-width: 768px) {
             .header { padding: 16px 20px; }
             .hero { padding: 50px 20px; }
             .hero h1 { font-size: 32px; }
             .content { padding: 40px 20px; }
-            h2 { font-size: 24px; }
-            .pattern-diagram { padding: 20px; overflow-x: auto; }
-            .pattern-diagram pre { font-size: 11px; }
+            h2 { font-size: 22px; }
+            .diagram-container { padding: 15px; }
+            .status-flow { flex-direction: column; }
+            .status-arrow { transform: rotate(90deg); }
         }
     </style>
 </head>
@@ -364,178 +533,531 @@
 
     <section class="hero">
         <h1>Was sind <span>Wolfe Waves</span>?</h1>
-        <p>Lerne die mächtige Trading-Strategie, die von Bill Wolfe entwickelt wurde, und wie du sie für konsistente Gewinne nutzen kannst.</p>
+        <p>Lerne die mächtige Trading-Strategie und verstehe genau, wie unser Scanner funktioniert – von der Erkennung bis zum Trade-Abschluss.</p>
     </section>
 
     <main class="content">
         
         <h2><span class="num">1</span> Die Grundlagen</h2>
         
-        <p>Die <strong>Wolfe Wave</strong> ist ein natürlich vorkommendes Chartmuster, das in allen Märkten und Zeitrahmen auftritt. Sie wurde von Bill Wolfe und seinem Sohn Brian entdeckt und basiert auf dem physikalischen Prinzip von Newtons drittem Gesetz: <em>"Für jede Aktion gibt es eine gleiche und entgegengesetzte Reaktion."</em></p>
+        <p>Die <strong>Wolfe Wave</strong> ist ein natürlich vorkommendes Chartmuster, das in allen Märkten und Zeitrahmen auftritt. Sie wurde von Bill Wolfe entdeckt und basiert auf dem physikalischen Prinzip von Newtons drittem Gesetz: <em>"Für jede Aktion gibt es eine gleiche und entgegengesetzte Reaktion."</em></p>
         
         <div class="info-box green">
             <h4>💡 Kernidee</h4>
-            <p>Wolfe Waves identifizieren Punkte, an denen der Markt sein natürliches Gleichgewicht wiederherstellen wird. Sie bieten präzise Entry-Punkte mit klar definierten Zielen und minimalem Risiko.</p>
+            <p>Wolfe Waves identifizieren Punkte, an denen der Markt sein natürliches Gleichgewicht wiederherstellen wird. Das Besondere: Sie bieten ein <strong>mathematisch berechenbares Kursziel</strong> – die EPA-Linie (Estimated Price at Arrival), die durch die Punkte 1 und 4 verläuft.</p>
         </div>
         
-        <p>Im Gegensatz zu vielen anderen Chartmustern hat die Wolfe Wave ein <strong>mathematisch berechenbares Kursziel</strong> – die sogenannte EPA-Linie (Estimated Price at Arrival). Das macht sie zu einem der präzisesten Muster in der technischen Analyse.</p>
+        <h2><span class="num">2</span> Die 5 Punkte des Keils</h2>
         
-        <h2><span class="num">2</span> Die 5 Punkte der Wolfe Wave</h2>
+        <p>Eine gültige Wolfe Wave besteht aus genau <strong>5 Punkten</strong>, die ein keilförmiges Muster bilden. Die beiden Keillinien (1-3 und 2-4) müssen aufeinander zulaufen (konvergieren).</p>
         
-        <p>Eine gültige Wolfe Wave besteht aus genau <strong>5 Punkten</strong>, die ein keilförmiges Muster bilden:</p>
-        
-        <div class="pattern-diagram">
-            <pre>
-     <span class="gold">Bullish Wolfe Wave</span>                    <span class="gold">Bearish Wolfe Wave</span>
-     
-           2                                        4
-          /\                                       /
-         /  \                                     /
-        /    \  4                            2   /
-       /      \/\                            /\ /
-      /        \  \                         /  X
-     /          \  \ → EPA               3 /  / \
-    1            3  \                     |  /   \
-                     \                    | /     \ → EPA
-                      5 ← ENTRY           |/       \
-                                          1         5 ← ENTRY
-            </pre>
+        <div class="diagram-container">
+            <div class="diagram-tabs">
+                <button class="diagram-tab active" onclick="showDiagram('bullish')">📈 Bullish (Long)</button>
+                <button class="diagram-tab" onclick="showDiagram('bearish')">📉 Bearish (Short)</button>
+            </div>
+            
+            <!-- BULLISH DIAGRAM -->
+            <div id="diagram-bullish" class="diagram-content active">
+                <h4>Bullish Wolfe Wave – Preis soll STEIGEN</h4>
+                <svg viewBox="0 0 650 380" width="650" height="380">
+                    <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a1a1a" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="650" height="380" fill="#0a0a0a"/>
+                    <rect width="650" height="380" fill="url(#grid)"/>
+                    
+                    <!-- KEIL Fläche -->
+                    <polygon points="50,200 120,80 280,115 340,130 340,230 200,220" 
+                             fill="rgba(255,71,87,0.1)" stroke="rgba(255,71,87,0.4)" stroke-width="1"/>
+                    
+                    <!-- 2-4 Linie (obere Keillinie) -->
+                    <line x1="120" y1="80" x2="280" y2="115" stroke="#ff4757" stroke-width="2.5"/>
+                    <line x1="280" y1="115" x2="400" y2="140" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+                    
+                    <!-- 1-3 Linie (untere Keillinie) -->
+                    <line x1="50" y1="200" x2="550" y2="250" stroke="#ff4757" stroke-width="2.5"/>
+                    
+                    <!-- 1-4 Linie = TP3 (grün) -->
+                    <line x1="50" y1="200" x2="550" y2="50" stroke="#00ff88" stroke-width="2.5"/>
+                    
+                    <!-- SWEET ZONE (außerhalb Keil, unter 1-3) -->
+                    <rect x="320" y="255" width="80" height="60" rx="6" 
+                          fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    <text x="360" y="290" fill="#00ff88" font-size="10" text-anchor="middle" font-weight="600">Sweet Zone</text>
+                    
+                    <!-- Preisverlauf: P1 → P2 → P3 → P4 → P5 (weiß) -->
+                    <polyline points="50,200 120,80 200,220 280,115 360,290" 
+                              fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+                    
+                    <!-- Rückkehr von P5 zum Entry AUF der 1-3 Linie (blau) -->
+                    <polyline points="360,290 380,265 395,240" 
+                              fill="none" stroke="#4dabf7" stroke-width="3" stroke-linejoin="round"/>
+                    
+                    <!-- ENTRY PUNKT - genau AUF der 1-3 Linie (bei x=395, y=234.5) -->
+                    <circle cx="395" cy="235" r="7" fill="#4dabf7" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Entry horizontal Linie -->
+                    <line x1="395" y1="235" x2="550" y2="235" stroke="#4dabf7" stroke-width="2"/>
+                    
+                    <!-- SL unter Entry -->
+                    <line x1="395" y1="310" x2="550" y2="310" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    
+                    <!-- TP1 und TP2 -->
+                    <line x1="395" y1="175" x2="480" y2="175" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <line x1="395" y1="120" x2="500" y2="120" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    
+                    <!-- PUNKTE -->
+                    <circle cx="50" cy="200" r="15" fill="#ff4757"/>
+                    <text x="50" y="205" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
+                    
+                    <circle cx="120" cy="80" r="15" fill="#ff4757"/>
+                    <text x="120" y="85" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
+                    
+                    <circle cx="200" cy="220" r="15" fill="#ff4757"/>
+                    <text x="200" y="225" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+                    
+                    <circle cx="280" cy="115" r="15" fill="#ff4757"/>
+                    <text x="280" y="120" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
+                    
+                    <circle cx="360" cy="290" r="17" fill="#00ff88" stroke="#fff" stroke-width="2"/>
+                    <text x="360" y="296" fill="#000" font-size="13" font-weight="bold" text-anchor="middle">5</text>
+                    
+                    <!-- Beschriftungen -->
+                    <text x="30" y="195" fill="#666" font-size="9">Tief</text>
+                    <text x="120" y="65" fill="#666" font-size="9" text-anchor="middle">Hoch</text>
+                    <text x="200" y="245" fill="#666" font-size="9" text-anchor="middle">Tief</text>
+                    <text x="280" y="100" fill="#666" font-size="9" text-anchor="middle">Hoch</text>
+                    <text x="360" y="330" fill="#00ff88" font-size="10" text-anchor="middle" font-weight="bold">Überschuss</text>
+                    
+                    <text x="555" y="240" fill="#4dabf7" font-size="11" font-weight="bold">ENTRY</text>
+                    <text x="555" y="315" fill="#ff4757" font-size="10">SL</text>
+                    <text x="485" y="173" fill="#ffd700" font-size="9">TP1</text>
+                    <text x="505" y="118" fill="#ff9f43" font-size="9">TP2</text>
+                    <text x="555" y="55" fill="#00ff88" font-size="10" font-weight="bold">TP3</text>
+                    
+                    <!-- Linien-Labels -->
+                    <text x="100" y="225" fill="#ff4757" font-size="9">1-3</text>
+                    <text x="170" y="95" fill="#ff4757" font-size="9">2-4</text>
+                    <text x="140" y="165" fill="rgba(255,71,87,0.5)" font-size="11">Keil</text>
+                </svg>
+            </div>
+            
+            <!-- BEARISH DIAGRAM -->
+            <div id="diagram-bearish" class="diagram-content">
+                <h4>Bearish Wolfe Wave – Preis soll FALLEN</h4>
+                <svg viewBox="0 0 650 380" width="650" height="380">
+                    <rect width="650" height="380" fill="#0a0a0a"/>
+                    <rect width="650" height="380" fill="url(#grid)"/>
+                    
+                    <!-- KEIL Fläche -->
+                    <polygon points="50,180 120,300 280,265 340,250 340,150 200,160" 
+                             fill="rgba(255,71,87,0.1)" stroke="rgba(255,71,87,0.4)" stroke-width="1"/>
+                    
+                    <!-- 2-4 Linie (untere Keillinie) -->
+                    <line x1="120" y1="300" x2="280" y2="265" stroke="#ff4757" stroke-width="2.5"/>
+                    <line x1="280" y1="265" x2="400" y2="240" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+                    
+                    <!-- 1-3 Linie (obere Keillinie) -->
+                    <line x1="50" y1="180" x2="550" y2="130" stroke="#ff4757" stroke-width="2.5"/>
+                    
+                    <!-- 1-4 Linie = TP3 (grün) -->
+                    <line x1="50" y1="180" x2="550" y2="330" stroke="#00ff88" stroke-width="2.5"/>
+                    
+                    <!-- SWEET ZONE (außerhalb Keil, über 1-3) -->
+                    <rect x="320" y="60" width="80" height="60" rx="6" 
+                          fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    <text x="360" y="95" fill="#00ff88" font-size="10" text-anchor="middle" font-weight="600">Sweet Zone</text>
+                    
+                    <!-- Preisverlauf: P1 → P2 → P3 → P4 → P5 (weiß) -->
+                    <polyline points="50,180 120,300 200,160 280,265 360,90" 
+                              fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+                    
+                    <!-- Rückkehr von P5 zum Entry AUF der 1-3 Linie (blau) -->
+                    <polyline points="360,90 380,115 395,145" 
+                              fill="none" stroke="#4dabf7" stroke-width="3" stroke-linejoin="round"/>
+                    
+                    <!-- ENTRY PUNKT - genau AUF der 1-3 Linie -->
+                    <circle cx="395" cy="145" r="7" fill="#4dabf7" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Entry horizontal Linie -->
+                    <line x1="395" y1="145" x2="550" y2="145" stroke="#4dabf7" stroke-width="2"/>
+                    
+                    <!-- SL über Entry -->
+                    <line x1="395" y1="70" x2="550" y2="70" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    
+                    <!-- TP1 und TP2 (unter Entry) -->
+                    <line x1="395" y1="205" x2="480" y2="205" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <line x1="395" y1="260" x2="500" y2="260" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    
+                    <!-- PUNKTE -->
+                    <circle cx="50" cy="180" r="15" fill="#ff4757"/>
+                    <text x="50" y="185" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
+                    
+                    <circle cx="120" cy="300" r="15" fill="#ff4757"/>
+                    <text x="120" y="305" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
+                    
+                    <circle cx="200" cy="160" r="15" fill="#ff4757"/>
+                    <text x="200" y="165" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+                    
+                    <circle cx="280" cy="265" r="15" fill="#ff4757"/>
+                    <text x="280" y="270" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
+                    
+                    <circle cx="360" cy="90" r="17" fill="#00ff88" stroke="#fff" stroke-width="2"/>
+                    <text x="360" y="96" fill="#000" font-size="13" font-weight="bold" text-anchor="middle">5</text>
+                    
+                    <!-- Beschriftungen -->
+                    <text x="30" y="185" fill="#666" font-size="9">Hoch</text>
+                    <text x="120" y="325" fill="#666" font-size="9" text-anchor="middle">Tief</text>
+                    <text x="200" y="145" fill="#666" font-size="9" text-anchor="middle">Hoch</text>
+                    <text x="280" y="290" fill="#666" font-size="9" text-anchor="middle">Tief</text>
+                    <text x="360" y="55" fill="#00ff88" font-size="10" text-anchor="middle" font-weight="bold">Überschuss</text>
+                    
+                    <text x="555" y="150" fill="#4dabf7" font-size="11" font-weight="bold">ENTRY</text>
+                    <text x="555" y="75" fill="#ff4757" font-size="10">SL</text>
+                    <text x="485" y="203" fill="#ffd700" font-size="9">TP1</text>
+                    <text x="505" y="258" fill="#ff9f43" font-size="9">TP2</text>
+                    <text x="555" y="325" fill="#00ff88" font-size="10" font-weight="bold">TP3</text>
+                    
+                    <!-- Linien-Labels -->
+                    <text x="100" y="165" fill="#ff4757" font-size="9">1-3</text>
+                    <text x="170" y="290" fill="#ff4757" font-size="9">2-4</text>
+                    <text x="140" y="220" fill="rgba(255,71,87,0.5)" font-size="11">Keil</text>
+                </svg>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-line red"></div>
+                    <span>Keillinien (1-3 & 2-4)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line green"></div>
+                    <span>EPA/TP3 Linie (1-4)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line blue"></div>
+                    <span>Entry</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line dashed"></div>
+                    <span>Stop-Loss</span>
+                </div>
+            </div>
         </div>
         
         <div class="steps-grid">
             <div class="step-card">
                 <div class="step-num">1</div>
                 <h4>Punkt 1</h4>
-                <p>Der Startpunkt des Musters – ein signifikantes Tief (bullish) oder Hoch (bearish).</p>
+                <p>Startpunkt – signifikantes Tief (bullish) oder Hoch (bearish)</p>
             </div>
             <div class="step-card">
                 <div class="step-num">2</div>
                 <h4>Punkt 2</h4>
-                <p>Das erste Gegenschwung-Hoch (bullish) oder -Tief (bearish).</p>
+                <p>Erste Gegenbewegung – Hoch (bullish) oder Tief (bearish)</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
                 <h4>Punkt 3</h4>
-                <p>Ein tieferes Tief als Punkt 1 (bullish) oder höheres Hoch (bearish).</p>
+                <p><strong>Muss über/unter P1 liegen!</strong> Definiert die 1-3 Linie</p>
             </div>
             <div class="step-card">
                 <div class="step-num">4</div>
                 <h4>Punkt 4</h4>
-                <p>Zwischen Punkt 1 und 2 – bestätigt die obere Trendlinie.</p>
+                <p>Zwischen P1 und P2 – definiert die 2-4 und 1-4 Linie</p>
             </div>
-            <div class="step-card">
+            <div class="step-card highlight">
                 <div class="step-num">5</div>
-                <h4>Punkt 5</h4>
-                <p><strong>Der Entry!</strong> Berührt die 1-3 Linie und signalisiert die Umkehr.</p>
+                <h4>Punkt 5 ⭐</h4>
+                <p><strong>Überschuss!</strong> Liegt AUSSERHALB des Keils, jenseits der 1-3 Linie</p>
             </div>
         </div>
         
-        <h2><span class="num">3</span> Wie man Wolfe Waves handelt</h2>
+        <h2><span class="num">3</span> Der Signal-Lebenszyklus</h2>
         
-        <h3>Entry (Einstieg)</h3>
-        <p>Der Einstieg erfolgt bei <strong>Punkt 5</strong>, wenn der Preis die Linie zwischen Punkt 1 und 3 berührt. Dies ist der optimale Einstiegspunkt mit dem besten Risiko-Rendite-Verhältnis.</p>
+        <p>Unser Scanner durchläuft mehrere Phasen von der Erkennung bis zum Abschluss:</p>
+        
+        <div class="status-flow">
+            <div class="status-badge pending">🔍 PENDING<br><small>Keil erkannt</small></div>
+            <div class="status-arrow">→</div>
+            <div class="status-badge active">⚡ ACTIVE<br><small>Breakout!</small></div>
+            <div class="status-arrow">→</div>
+            <div class="status-badge success">✅ SUCCESS<br><small>TP erreicht</small></div>
+        </div>
+        
+        <div class="info-box purple">
+            <h4>📊 Status-Erklärung</h4>
+            <table class="rules-table" style="margin: 0;">
+                <tr>
+                    <td><strong style="color: var(--accent-gold);">PENDING</strong></td>
+                    <td>Keil wurde erkannt, Preis ist in der Sweet Zone nahe der 1-3 Linie. Warten auf Breakout.</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-blue);">ACTIVE</strong></td>
+                    <td>Breakout durch die 1-3 Linie ist passiert! Entry, SL und TPs sind berechnet. Tracking läuft.</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-green);">SUCCESS</strong></td>
+                    <td>TP3 (oder TP1/TP2 vor SL) wurde erreicht. Trade war erfolgreich!</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-red);">FAILED</strong></td>
+                    <td>Stop-Loss wurde erreicht bevor ein TP getroffen wurde.</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--text-secondary);">INACTIVE</strong></td>
+                    <td>Keil ist ungültig geworden – Preis hat Sweet Zone verlassen ohne Breakout.</td>
+                </tr>
+            </table>
+        </div>
+        
+        <h2><span class="num">4</span> Entry, Stop-Loss & Take-Profits</h2>
+        
+        <h3>🎯 Wann wird der Entry ausgelöst?</h3>
+        <p>Der Entry folgt einem speziellen Ablauf:</p>
         
         <div class="info-box blue">
-            <h4>📍 Entry-Bestätigung</h4>
-            <p>Warte auf eine Bestätigungskerze (z.B. Hammer, Engulfing) bei Punkt 5, bevor du einsteigst. Das reduziert Fehlsignale erheblich.</p>
+            <h4>📍 Entry-Regel (2 Schritte)</h4>
+            <ol style="margin-bottom: 0;">
+                <li><strong>Überschuss (P5):</strong> Der Preis durchbricht die 1-3 Linie und geht DARÜBER HINAUS. Das ist Punkt 5 – er liegt meistens AUSSERHALB des Keils!</li>
+                <li><strong>Rückkehr = ENTRY:</strong> Der Preis dreht um und kommt ZURÜCK durch die 1-3 Linie. Genau HIER ist der Entry!</li>
+            </ol>
+            <p style="margin-top: 12px; margin-bottom: 0;">
+                <strong>Bullish:</strong> P5 unterschreitet die 1-3 Linie → Rückkehr ÜBER die Linie = Long Entry<br/>
+                <strong>Bearish:</strong> P5 überschreitet die 1-3 Linie → Rückkehr UNTER die Linie = Short Entry
+            </p>
         </div>
         
-        <h3>Stop-Loss</h3>
-        <p>Der Stop-Loss wird <strong>unter Punkt 5</strong> (bei bullish) oder <strong>über Punkt 5</strong> (bei bearish) platziert. Typischerweise 1-2 ATR Abstand für etwas Spielraum.</p>
-        
-        <h3>Take-Profit (EPA-Linie)</h3>
-        <p>Das Kursziel ist die <strong>EPA-Linie</strong> (Estimated Price at Arrival). Diese wird durch eine Linie von Punkt 1 durch Punkt 4 gezogen und in die Zukunft verlängert.</p>
+        <h3>🛑 Stop-Loss Berechnung</h3>
+        <p>Der Stop-Loss wird automatisch berechnet als <strong>5% vom Entry-Preis</strong>:</p>
         
         <div class="price-levels">
             <div class="level-card entry">
                 <div class="label">Entry</div>
-                <div class="value">Punkt 5</div>
+                <div class="value">100.00</div>
+                <div class="desc">Breakout-Preis</div>
             </div>
             <div class="level-card sl">
-                <div class="label">Stop-Loss</div>
-                <div class="value">Unter/Über P5</div>
+                <div class="label">SL Bullish</div>
+                <div class="value">95.00</div>
+                <div class="desc">Entry - 5%</div>
             </div>
-            <div class="level-card tp">
-                <div class="label">Take-Profit</div>
-                <div class="value">EPA-Linie</div>
+            <div class="level-card sl">
+                <div class="label">SL Bearish</div>
+                <div class="value">105.00</div>
+                <div class="desc">Entry + 5%</div>
             </div>
         </div>
         
-        <h3>Unsere 3 Take-Profit Levels</h3>
-        <p>Bei WolfeWaveSignals verwenden wir <strong>3 gestaffelte Take-Profit Levels</strong> für optimales Risikomanagement:</p>
-        
-        <ul>
-            <li><strong>TP1 (33%):</strong> Erstes Ziel – sichere einen Teil deiner Gewinne</li>
-            <li><strong>TP2 (66%):</strong> Zweites Ziel – weiterer Teilgewinn</li>
-            <li><strong>TP3 (100%):</strong> EPA-Linie – das volle Kursziel</li>
-        </ul>
+        <h3>🎯 Take-Profit Berechnung</h3>
+        <p>Die TPs basieren auf der <strong>1-4 Linie (EPA = Estimated Price at Arrival)</strong>:</p>
         
         <div class="info-box gold">
-            <h4>🏆 Profi-Tipp</h4>
-            <p>Nach Erreichen von TP1 kannst du deinen Stop-Loss auf Break-Even setzen. So tradest du risikofrei weiter und lässt die Gewinne laufen!</p>
+            <h4>📐 TP-Berechnung</h4>
+            <ol style="margin-bottom: 0;">
+                <li><strong>TP3:</strong> Punkt auf der 1-4 Linie, projiziert um die "Keildauer" nach P5 → 100% des Moves</li>
+                <li><strong>TP2:</strong> 66% des Weges von Entry zu TP3</li>
+                <li><strong>TP1:</strong> 33% des Weges von Entry zu TP3</li>
+            </ol>
         </div>
         
-        <h2><span class="num">4</span> Regeln für gültige Wolfe Waves</h2>
+        <div class="price-levels">
+            <div class="level-card entry">
+                <div class="label">Entry</div>
+                <div class="value">100.00</div>
+            </div>
+            <div class="level-card tp1">
+                <div class="label">TP1</div>
+                <div class="value">+33%</div>
+                <div class="desc">Erster Teilgewinn</div>
+            </div>
+            <div class="level-card tp2">
+                <div class="label">TP2</div>
+                <div class="value">+66%</div>
+                <div class="desc">Zweiter Teilgewinn</div>
+            </div>
+            <div class="level-card tp3">
+                <div class="label">TP3</div>
+                <div class="value">+100%</div>
+                <div class="desc">EPA-Linie (Volles Ziel)</div>
+            </div>
+        </div>
         
-        <p>Nicht jedes keilförmige Muster ist eine gültige Wolfe Wave. Achte auf diese Kriterien:</p>
-        
-        <ol>
-            <li><strong>Punkt 3</strong> muss unter Punkt 1 liegen (bullish) oder über Punkt 1 (bearish)</li>
-            <li><strong>Punkt 4</strong> muss zwischen Punkt 1 und 2 liegen</li>
-            <li><strong>Punkt 5</strong> muss die 1-3 Linie berühren oder leicht durchbrechen</li>
-            <li>Die Linien 1-3 und 2-4 sollten <strong>konvergieren</strong> (aufeinander zulaufen)</li>
-            <li>Das Muster sollte <strong>symmetrisch</strong> sein (ähnliche Zeitabstände)</li>
-        </ol>
-        
-        <div class="info-box red">
-            <h4>⚠️ Häufige Fehler vermeiden</h4>
+        <div class="info-box green">
+            <h4>🏆 Wichtig: Richtung der TPs</h4>
             <ul style="margin-bottom: 0;">
-                <li>Nicht bei Punkt 4 einsteigen – warte auf Punkt 5!</li>
-                <li>Kein Muster "erzwingen" – wenn es nicht passt, überspringe es</li>
-                <li>Immer Stop-Loss setzen – auch das beste Muster kann scheitern</li>
-                <li>Nicht gegen den übergeordneten Trend handeln</li>
+                <li><strong>BULLISH:</strong> TPs liegen <strong>ÜBER</strong> dem Entry, SL liegt <strong>UNTER</strong> dem Entry</li>
+                <li><strong>BEARISH:</strong> TPs liegen <strong>UNTER</strong> dem Entry, SL liegt <strong>ÜBER</strong> dem Entry</li>
             </ul>
         </div>
         
-        <h2><span class="num">5</span> Beste Märkte & Zeitrahmen</h2>
+        <h2><span class="num">5</span> Wann ist ein Keil gültig/ungültig?</h2>
         
-        <p>Wolfe Waves funktionieren in <strong>allen Märkten</strong>:</p>
+        <h3>✅ Gültiger Keil (PENDING → ACTIVE)</h3>
+        <table class="rules-table">
+            <tr>
+                <th>Regel</th>
+                <th>Bullish</th>
+                <th>Bearish</th>
+            </tr>
+            <tr>
+                <td>Punkt 3 Position</td>
+                <td>Muss <strong>UNTER</strong> Punkt 1 liegen</td>
+                <td>Muss <strong>ÜBER</strong> Punkt 1 liegen</td>
+            </tr>
+            <tr>
+                <td>Punkt 4 Position</td>
+                <td>Zwischen Punkt 1 und 2</td>
+                <td>Zwischen Punkt 1 und 2</td>
+            </tr>
+            <tr>
+                <td>Linien 1-3 & 2-4</td>
+                <td colspan="2">Müssen konvergieren (aufeinander zulaufen)</td>
+            </tr>
+            <tr>
+                <td>Punkt 5 / Sweet Zone</td>
+                <td colspan="2">Preis muss die 1-3 Linie berühren oder in der Nähe sein</td>
+            </tr>
+            <tr>
+                <td>Breakout für ACTIVE</td>
+                <td>Kerze schließt <strong>ÜBER</strong> 1-3 Linie</td>
+                <td>Kerze schließt <strong>UNTER</strong> 1-3 Linie</td>
+            </tr>
+        </table>
+        
+        <h3>❌ Ungültiger Keil (→ INACTIVE)</h3>
+        <p>Ein Keil wird <strong>ungültig</strong> und auf INACTIVE gesetzt, wenn:</p>
+        
+        <div class="info-box red">
+            <h4>⚠️ Der Keil wird ungültig wenn:</h4>
+            <ul style="margin-bottom: 0;">
+                <li>Der Preis die <strong>Sweet Zone verlässt</strong> in die falsche Richtung ohne zu breaken</li>
+                <li><strong>Bullish:</strong> Preis fällt signifikant unter P3/P5</li>
+                <li><strong>Bearish:</strong> Preis steigt signifikant über P3/P5</li>
+                <li>Der Preis <strong>durch die 2-4 Linie bricht</strong> in die falsche Richtung</li>
+                <li>Zu viel <strong>Zeit vergeht</strong> ohne Breakout (Keil "verfällt")</li>
+            </ul>
+        </div>
+        
+        <h2><span class="num">6</span> Das Tracking nach dem Entry</h2>
+        
+        <p>Nach dem Breakout überwacht unser System automatisch jeden Trade:</p>
+        
+        <div class="info-box green">
+            <h4>🔄 Tracking-Regeln</h4>
+            <ol style="margin-bottom: 0;">
+                <li>Es werden <strong>nur Kerzen NACH dem Entry</strong> geprüft (nie davor!)</li>
+                <li>Bei jeder neuen Kerze: Hat High/Low ein TP oder SL erreicht?</li>
+                <li>Die <strong>Reihenfolge zählt</strong>: Wenn TP1 vor SL erreicht wird → Partial Success</li>
+                <li>TP3 erreicht vor SL = Voller Erfolg</li>
+            </ol>
+        </div>
+        
+        <h3>Mögliche Ergebnisse</h3>
+        <table class="rules-table">
+            <tr>
+                <th>Ergebnis</th>
+                <th>Bedingung</th>
+                <th>Bewertung</th>
+            </tr>
+            <tr>
+                <td><strong style="color: var(--accent-green);">TP3_HIT</strong></td>
+                <td>TP3 erreicht (vor SL)</td>
+                <td class="check">✅ Voller Erfolg</td>
+            </tr>
+            <tr>
+                <td><strong style="color: var(--accent-gold);">PARTIAL</strong></td>
+                <td>TP1 oder TP2 vor SL erreicht</td>
+                <td class="check">✅ Teilerfolg</td>
+            </tr>
+            <tr>
+                <td><strong style="color: var(--accent-red);">SL_HIT</strong></td>
+                <td>SL erreicht vor jedem TP</td>
+                <td class="cross">❌ Verlust</td>
+            </tr>
+            <tr>
+                <td><strong style="color: var(--text-secondary);">EXPIRED</strong></td>
+                <td>Timeout (zu viele Kerzen ohne Ergebnis)</td>
+                <td>⏱️ Abgelaufen</td>
+            </tr>
+        </table>
+        
+        <h2><span class="num">7</span> Beste Märkte & Zeitrahmen</h2>
+        
+        <p>Wolfe Waves funktionieren in <strong>allen Märkten</strong>. Unser Scanner überwacht:</p>
         
         <ul>
-            <li><strong>Aktien:</strong> DAX, NASDAQ, NYSE, S&P 500</li>
-            <li><strong>Forex:</strong> EUR/USD, GBP/USD, USD/JPY</li>
-            <li><strong>Krypto:</strong> Bitcoin, Ethereum</li>
-            <li><strong>Rohstoffe:</strong> Gold, Öl</li>
+            <li><strong>DAX:</strong> Deutsche Blue Chips</li>
+            <li><strong>NASDAQ / NYSE:</strong> US-Aktien</li>
+            <li><strong>FOREX:</strong> Währungspaare (EUR/USD, GBP/USD, etc.)</li>
+            <li><strong>CRYPTO:</strong> Bitcoin, Ethereum & mehr</li>
         </ul>
         
-        <p>Die besten Ergebnisse erzielst du auf <strong>höheren Zeitrahmen</strong>:</p>
+        <p>Die besten Ergebnisse gibt es auf <strong>höheren Zeitrahmen</strong>:</p>
         
-        <ul>
-            <li><strong>H1 (1-Stunde):</strong> Gut für Intraday-Trading</li>
-            <li><strong>H4 (4-Stunden):</strong> Optimaler Kompromiss</li>
-            <li><strong>D1 (Daily):</strong> Sehr zuverlässige Signale</li>
-            <li><strong>W1 (Weekly):</strong> Langfristige Positionen</li>
-        </ul>
+        <table class="rules-table">
+            <tr>
+                <th>Zeitrahmen</th>
+                <th>Beschreibung</th>
+                <th>Zuverlässigkeit</th>
+            </tr>
+            <tr>
+                <td><strong>M5</strong></td>
+                <td>Scalping (schnell, mehr Rauschen)</td>
+                <td>⭐⭐</td>
+            </tr>
+            <tr>
+                <td><strong>M15</strong></td>
+                <td>Intraday</td>
+                <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><strong>H1</strong></td>
+                <td>Intraday/Swing</td>
+                <td>⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><strong>H4</strong></td>
+                <td>Swing Trading (empfohlen)</td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><strong>D1</strong></td>
+                <td>Position Trading</td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><strong>W1</strong></td>
+                <td>Langfristige Positionen</td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+        </table>
         
         <div class="cta-section">
             <h2>🐺 Bereit zum Handeln?</h2>
-            <p>Erhalte täglich professionell identifizierte Wolfe Wave Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels.</p>
+            <p>Erhalte automatisch erkannte Wolfe Wave Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels.</p>
             <a href="index.html" class="cta-btn">Jetzt Signale ansehen →</a>
         </div>
         
-        <h2><span class="num">6</span> FAQ - Häufige Fragen</h2>
+        <h2><span class="num">8</span> FAQ - Häufige Fragen</h2>
         
-        <h3>Wie zuverlässig sind Wolfe Waves?</h3>
-        <p>Bei korrekter Identifikation haben Wolfe Waves eine Erfolgsquote von etwa 60-75%. Der Schlüssel liegt in der strikten Einhaltung der Regeln und gutem Risikomanagement.</p>
+        <h3>Wann sollte ich einsteigen?</h3>
+        <p>Bei <strong>ACTIVE</strong> Signalen ist der Breakout bereits passiert. Du kannst zum aktuellen Kurs einsteigen oder auf einen Pullback zum Entry-Level warten. Bei <strong>PENDING</strong> Signalen wartest du auf den Breakout.</p>
         
-        <h3>Brauche ich spezielle Software?</h3>
-        <p>Wolfe Waves können manuell im Chart identifiziert werden. Bei WolfeWaveSignals nutzen wir jedoch einen automatisierten Scanner, der alle Märkte in Echtzeit überwacht und nur die besten Setups liefert.</p>
+        <h3>Was bedeutet die Sweet Zone?</h3>
+        <p>Die Sweet Zone ist der Bereich nahe Punkt 5, wo der Preis die 1-3 Linie berührt. Hier ist das Risiko-Rendite-Verhältnis optimal. Ein Signal ist PENDING solange der Preis in dieser Zone ist und auf den Breakout wartet.</p>
         
-        <h3>Funktioniert das auch für Anfänger?</h3>
-        <p>Ja! Wolfe Waves sind relativ einfach zu verstehen. Mit unseren fertigen Signalen musst du nur noch die vorgegebenen Levels umsetzen.</p>
+        <h3>Warum wurde mein Signal INACTIVE?</h3>
+        <p>Der Keil wurde ungültig, weil der Preis die Sweet Zone in die falsche Richtung verlassen hat, ohne durch die 1-3 Linie zu brechen. Das Muster hat sich aufgelöst.</p>
         
-        <h3>Wie viel Kapital brauche ich?</h3>
-        <p>Das hängt von deinem Broker und den gehandelten Instrumenten ab. Generell empfehlen wir, nie mehr als 1-2% deines Kapitals pro Trade zu riskieren.</p>
+        <h3>Muss ich alle 3 TPs nutzen?</h3>
+        <p>Nein! Du kannst bei TP1 komplett aussteigen (sicherste Variante) oder gestaffelt: ⅓ bei TP1, ⅓ bei TP2, ⅓ bei TP3. Nach TP1 empfiehlt es sich, den SL auf Break-Even zu setzen.</p>
+        
+        <h3>Wie zuverlässig sind die Signale?</h3>
+        <p>Bei korrekter Identifikation haben Wolfe Waves eine Erfolgsquote von etwa 60-75%. Unser Scanner filtert nur die besten Setups. Die Ergebnisstatistik wird transparent in der App angezeigt.</p>
         
     </main>
 
@@ -547,5 +1069,19 @@
         <br><br>
         © 2025 WolfeWaveSignals. Alle Rechte vorbehalten.
     </footer>
+    
+    <script>
+        function showDiagram(type) {
+            // Hide all diagrams
+            document.querySelectorAll('.diagram-content').forEach(d => d.classList.remove('active'));
+            // Deactivate all tabs
+            document.querySelectorAll('.diagram-tab').forEach(t => t.classList.remove('active'));
+            
+            // Show selected diagram
+            document.getElementById('diagram-' + type).classList.add('active');
+            // Activate selected tab
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>
