@@ -280,8 +280,7 @@
         .market-hours-dropdown {
             position: absolute;
             top: calc(100% + 12px);
-            left: 50%;
-            transform: translateX(-50%);
+            right: 0;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
@@ -289,7 +288,7 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             opacity: 0;
             visibility: hidden;
-            transform: translateX(-50%) translateY(-10px);
+            transform: translateY(-10px);
             transition: all 0.2s ease;
             z-index: 1000;
             overflow: hidden;
@@ -298,7 +297,7 @@
         .market-hours-indicator.open .market-hours-dropdown {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) translateY(0);
+            transform: translateY(0);
         }
 
         .market-hours-header {
@@ -2084,6 +2083,16 @@
                 display: none;
             }
 
+            .market-hours-indicator {
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            .market-hours-trigger {
+                justify-content: center;
+                width: 100%;
+            }
+
             .signal-image-container {
                 height: var(--image-height, 300px);
             }
@@ -2105,6 +2114,7 @@
 
             .filters {
                 width: 100%;
+                flex-wrap: wrap;
             }
 
             .filter-select {
@@ -2138,109 +2148,6 @@
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
-            </div>
-            <!-- Market Hours Indicator -->
-            <div class="market-hours-indicator" id="marketHoursIndicator">
-                <div class="market-hours-trigger" onclick="toggleMarketHours()">
-                    <span class="market-hours-icon">🕐</span>
-                    <span class="market-hours-label">Märkte</span>
-                    <div class="market-status-dots" id="marketStatusDots">
-                        <span class="status-dot" id="dotDAX"></span>
-                        <span class="status-dot" id="dotUS"></span>
-                        <span class="status-dot" id="dotFX"></span>
-                        <span class="status-dot" id="dotEUIdx"></span>
-                    </div>
-                </div>
-                <div class="market-hours-dropdown" id="marketHoursDropdown">
-                    <div class="market-hours-header">
-                        <span>📊 Markt-Öffnungszeiten</span>
-                        <span class="market-hours-time" id="currentTime">--:--</span>
-                    </div>
-                    <div class="market-hours-list">
-                        <!-- DAX -->
-                        <div class="market-item" id="marketDAX">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightDAX"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">🇩🇪 DAX / XETRA</span>
-                                <span class="market-time">09:00 - 17:30 MEZ</span>
-                            </div>
-                            <div class="market-status" id="statusDAX">--</div>
-                        </div>
-                        <!-- US Markets -->
-                        <div class="market-item" id="marketUS">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightUS"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">🇺🇸 NASDAQ / NYSE</span>
-                                <span class="market-time">15:30 - 22:00 MEZ</span>
-                            </div>
-                            <div class="market-status" id="statusUS">--</div>
-                        </div>
-                        <!-- Forex -->
-                        <div class="market-item" id="marketFX">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightFX"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">💱 Forex</span>
-                                <span class="market-time">So 23:00 - Fr 22:00</span>
-                            </div>
-                            <div class="market-status" id="statusFX">--</div>
-                        </div>
-                        <!-- Crypto -->
-                        <div class="market-item" id="marketCrypto">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightCrypto"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">₿ Krypto</span>
-                                <span class="market-time">24/7</span>
-                            </div>
-                            <div class="market-status" id="statusCrypto">--</div>
-                        </div>
-                        <!-- S&P 500 Futures -->
-                        <div class="market-item" id="marketSP">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightSP"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">📈 S&P 500 Futures</span>
-                                <span class="market-time">Mo-Fr (fast 24h)</span>
-                            </div>
-                            <div class="market-status" id="statusSP">--</div>
-                        </div>
-                        <!-- EU Indizes CFD -->
-                        <div class="market-item" id="marketEUIdx">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightEUIdx"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">🇪🇺 EU Indizes CFD</span>
-                                <span class="market-time">08:00 - 22:00 MEZ</span>
-                            </div>
-                            <div class="market-status" id="statusEUIdx">--</div>
-                        </div>
-                        <!-- Asia Indizes CFD -->
-                        <div class="market-item" id="marketAsiaIdx">
-                            <div class="market-light">
-                                <span class="traffic-light" id="lightAsiaIdx"></span>
-                            </div>
-                            <div class="market-info">
-                                <span class="market-name">🌏 Asia Indizes CFD</span>
-                                <span class="market-time">01:00 - 22:00 MEZ</span>
-                            </div>
-                            <div class="market-status" id="statusAsiaIdx">--</div>
-                        </div>
-                    </div>
-                    <div class="market-hours-legend">
-                        <span class="legend-item"><span class="legend-dot green"></span> Geöffnet</span>
-                        <span class="legend-item"><span class="legend-dot orange"></span> Bald offen</span>
-                        <span class="legend-item"><span class="legend-dot red"></span> Geschlossen</span>
-                    </div>
-                </div>
             </div>
         </nav>
         <div class="header-right">
@@ -2334,6 +2241,109 @@
                     <span class="zoom-indicator" id="zoomIndicator">4</span>
                     <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
                     <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
+                </div>
+                <!-- Market Hours Indicator -->
+                <div class="market-hours-indicator" id="marketHoursIndicator">
+                    <div class="market-hours-trigger" onclick="toggleMarketHours()">
+                        <span class="market-hours-icon">🕐</span>
+                        <span class="market-hours-label">Märkte</span>
+                        <div class="market-status-dots" id="marketStatusDots">
+                            <span class="status-dot" id="dotDAX"></span>
+                            <span class="status-dot" id="dotUS"></span>
+                            <span class="status-dot" id="dotFX"></span>
+                            <span class="status-dot" id="dotEUIdx"></span>
+                        </div>
+                    </div>
+                    <div class="market-hours-dropdown" id="marketHoursDropdown">
+                        <div class="market-hours-header">
+                            <span>📊 Markt-Öffnungszeiten</span>
+                            <span class="market-hours-time" id="currentTime">--:--</span>
+                        </div>
+                        <div class="market-hours-list">
+                            <!-- DAX -->
+                            <div class="market-item" id="marketDAX">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightDAX"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">🇩🇪 DAX / XETRA</span>
+                                    <span class="market-time">09:00 - 17:30 MEZ</span>
+                                </div>
+                                <div class="market-status" id="statusDAX">--</div>
+                            </div>
+                            <!-- US Markets -->
+                            <div class="market-item" id="marketUS">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightUS"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">🇺🇸 NASDAQ / NYSE</span>
+                                    <span class="market-time">15:30 - 22:00 MEZ</span>
+                                </div>
+                                <div class="market-status" id="statusUS">--</div>
+                            </div>
+                            <!-- Forex -->
+                            <div class="market-item" id="marketFX">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightFX"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">💱 Forex</span>
+                                    <span class="market-time">So 23:00 - Fr 22:00</span>
+                                </div>
+                                <div class="market-status" id="statusFX">--</div>
+                            </div>
+                            <!-- Crypto -->
+                            <div class="market-item" id="marketCrypto">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightCrypto"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">₿ Krypto</span>
+                                    <span class="market-time">24/7</span>
+                                </div>
+                                <div class="market-status" id="statusCrypto">--</div>
+                            </div>
+                            <!-- S&P 500 Futures -->
+                            <div class="market-item" id="marketSP">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightSP"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">📈 S&P 500 Futures</span>
+                                    <span class="market-time">Mo-Fr (fast 24h)</span>
+                                </div>
+                                <div class="market-status" id="statusSP">--</div>
+                            </div>
+                            <!-- EU Indizes CFD -->
+                            <div class="market-item" id="marketEUIdx">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightEUIdx"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">🇪🇺 EU Indizes CFD</span>
+                                    <span class="market-time">08:00 - 22:00 MEZ</span>
+                                </div>
+                                <div class="market-status" id="statusEUIdx">--</div>
+                            </div>
+                            <!-- Asia Indizes CFD -->
+                            <div class="market-item" id="marketAsiaIdx">
+                                <div class="market-light">
+                                    <span class="traffic-light" id="lightAsiaIdx"></span>
+                                </div>
+                                <div class="market-info">
+                                    <span class="market-name">🌏 Asia Indizes CFD</span>
+                                    <span class="market-time">01:00 - 22:00 MEZ</span>
+                                </div>
+                                <div class="market-status" id="statusAsiaIdx">--</div>
+                            </div>
+                        </div>
+                        <div class="market-hours-legend">
+                            <span class="legend-item"><span class="legend-dot green"></span> Geöffnet</span>
+                            <span class="legend-item"><span class="legend-dot orange"></span> Bald offen</span>
+                            <span class="legend-item"><span class="legend-dot red"></span> Geschlossen</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
