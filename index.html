@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Google Analytics (wird erst nach Cookie-Consent geladen) -->
+    <script>
+        window.gaLoaded = false;
+        function loadGoogleAnalytics() {
+            if (window.gaLoaded) return;
+            window.gaLoaded = true;
+            
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X';
+            document.head.appendChild(script);
+            
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-F3BQLK365X', { 'anonymize_ip': true });
+            
+            console.log('Google Analytics geladen');
+        }
+        
+        // Prüfe ob bereits zugestimmt wurde
+        if (localStorage.getItem('cookieConsent') === 'accepted') {
+            loadGoogleAnalytics();
+        }
+    </script>
+    
     <!-- SEO Meta Tags -->
     <title>WolfeWaveSignals - Professionelle Wolfe Wave Trading Signale | Echtzeit Alerts</title>
     <meta name="description" content="Erhalte täglich professionelle Wolfe Wave Trading-Signale für DAX, NASDAQ, Forex & Krypto. Automatische Erkennung mit Entry, Stop-Loss und Take-Profit. Jetzt kostenlos testen!">
@@ -58,7 +85,7 @@
         "logo": "https://wolfewavesignals.com/images/logo.png",
         "contactPoint": {
             "@type": "ContactPoint",
-            "email": "support@wolfewavesignals.com",
+            "email": "walserfly@gmail.com",
             "contactType": "customer service"
         },
         "sameAs": []
@@ -72,7 +99,7 @@
         "description": "Alle Wolfe Wave Trading-Signale in Echtzeit",
         "offers": {
             "@type": "Offer",
-            "price": "9.90",
+            "price": "19.90",
             "priceCurrency": "EUR",
             "availability": "https://schema.org/InStock"
         }
@@ -1844,6 +1871,276 @@
                 padding-bottom: 8px;
             }
         }
+
+        /* Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            z-index: 9999;
+            display: none;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Checkout Consent Modal */
+        .checkout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .checkout-modal.active {
+            display: flex;
+        }
+
+        .checkout-modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            margin: 20px;
+        }
+
+        .checkout-modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .checkout-modal-header .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .checkout-modal-header h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .checkout-modal-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .checkout-modal-price {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+        }
+
+        .checkout-modal-price .amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .checkout-modal-price .period {
+            color: var(--text-secondary);
+        }
+
+        .consent-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .consent-checkbox:hover {
+            border-color: var(--accent-green);
+        }
+
+        .consent-checkbox.checked {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .consent-checkbox input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--accent-green);
+        }
+
+        .consent-checkbox label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .consent-checkbox label a {
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+
+        .consent-checkbox label a:hover {
+            text-decoration: underline;
+        }
+
+        .checkout-modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .checkout-modal-buttons button {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-checkout-cancel {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-checkout-cancel:hover {
+            background: var(--border-color);
+        }
+
+        .btn-checkout-confirm {
+            background: var(--text-secondary);
+            color: #000;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .btn-checkout-confirm.enabled {
+            background: var(--accent-green);
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .btn-checkout-confirm.enabled:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+        }
+
+        .cookie-banner.visible {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .cookie-text h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cookie-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+
+        .cookie-text a:hover {
+            text-decoration: underline;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .cookie-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .cookie-btn-accept {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .cookie-btn-accept:hover {
+            background: #00cc6a;
+        }
+
+        .cookie-btn-decline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .cookie-btn-decline:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .cookie-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .cookie-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            .cookie-text {
+                min-width: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1865,7 +2162,7 @@
                 <span>LIVE</span>
             </div>
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
-            <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
         </div>
     </header>
 
@@ -2029,7 +2326,7 @@
                     </div>
 
                     <div class="paywall-price">
-                        <span class="paywall-price-amount">9,90€</span>
+                        <span class="paywall-price-amount">19,90€</span>
                         <span class="paywall-price-period">/ Monat</span>
                     </div>
 
@@ -2045,18 +2342,39 @@
         </div>
     </section>
 
+    <!-- Disclaimer Section -->
+    <section style="padding: 40px; background: rgba(255, 71, 87, 0.05); border-top: 1px solid rgba(255, 71, 87, 0.2);">
+        <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+            <h3 style="color: #ff6b7a; font-size: 14px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">
+                ⚠️ Wichtiger Hinweis
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.8; margin-bottom: 12px;">
+                <strong style="color: var(--text-primary);">Keine Anlageberatung:</strong> 
+                Die auf dieser Website bereitgestellten Trading-Signale stellen keine Anlageberatung, Finanzberatung oder Empfehlung zum Kauf oder Verkauf von Finanzinstrumenten dar. 
+                Alle Signale werden durch eine <strong>automatisierte Software</strong> generiert und können fehlerhaft sein.
+            </p>
+            <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.8; margin-bottom: 12px;">
+                <strong style="color: var(--text-primary);">Risikowarnung:</strong> 
+                Der Handel mit Finanzinstrumenten ist mit erheblichen Risiken verbunden und kann zum Totalverlust des eingesetzten Kapitals führen. 
+                Vergangene Ergebnisse garantieren keine zukünftigen Gewinne. Handeln Sie nur mit Kapital, dessen Verlust Sie verkraften können.
+            </p>
+            <p style="color: #666; font-size: 11px;">
+                Mit der Nutzung dieser Website akzeptieren Sie unsere <a href="agb.html" style="color: var(--accent-green);">AGB</a> und den vollständigen <a href="agb.html#haftung" style="color: var(--accent-green);">Haftungsausschluss</a>.
+            </p>
+        </div>
+    </section>
+
     <footer class="footer">
         <div style="margin-bottom: 16px;">
             <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
             <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
             <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
+            <a href="agb.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">AGB</a>
+            <a href="widerruf.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Widerruf</a>
         </div>
         <div style="color: var(--text-secondary); font-size: 11px;">
-            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
-            <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
-                ⚠️ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
-            </span>
+            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler
         </div>
     </footer>
 
@@ -2508,7 +2826,7 @@
                     <span>LIVE</span>
                 </div>
                 <button class="btn btn-outline" onclick="showLogin()">Login</button>
-                <button class="btn btn-primary" onclick="showCheckout()">Abo 9,90€/Monat</button>
+                <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
             `;
             
             document.getElementById('tabsSection').classList.remove('visible');
@@ -3121,20 +3439,79 @@
             if (e.key === 'Escape') closeModal();
         });
 
+        // Checkout Modal Functions
         function showCheckout() {
             if (!currentUser) {
                 showLogin();
                 return;
             }
+            // Reset both checkboxes
+            document.getElementById('agbCheckbox').checked = false;
+            document.getElementById('widerrufCheckbox').checked = false;
+            document.getElementById('agbCheckboxWrapper').classList.remove('checked');
+            document.getElementById('widerrufCheckboxWrapper').classList.remove('checked');
+            document.getElementById('btnCheckoutConfirm').classList.remove('enabled');
+            // Show modal
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        function toggleAgbConsent() {
+            const checkbox = document.getElementById('agbCheckbox');
+            checkbox.checked = !checkbox.checked;
+            document.getElementById('agbCheckboxWrapper').classList.toggle('checked', checkbox.checked);
+            updateCheckoutButton();
+        }
+
+        function toggleWiderrufConsent() {
+            const checkbox = document.getElementById('widerrufCheckbox');
+            checkbox.checked = !checkbox.checked;
+            document.getElementById('widerrufCheckboxWrapper').classList.toggle('checked', checkbox.checked);
+            updateCheckoutButton();
+        }
+
+        function updateCheckoutButton() {
+            const agb = document.getElementById('agbCheckbox').checked;
+            const widerruf = document.getElementById('widerrufCheckbox').checked;
+            const btn = document.getElementById('btnCheckoutConfirm');
+            
+            if (agb && widerruf) {
+                btn.classList.add('enabled');
+            } else {
+                btn.classList.remove('enabled');
+            }
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        function proceedToCheckout() {
+            const agb = document.getElementById('agbCheckbox').checked;
+            const widerruf = document.getElementById('widerrufCheckbox').checked;
+            
+            if (!agb || !widerruf) {
+                alert('Bitte akzeptiere die AGB und den Widerrufsverzicht, um fortzufahren.');
+                return;
+            }
+            // Close modal and open LemonSqueezy
+            closeCheckoutModal();
             window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
+            
+            // Track conversion
+            trackEvent('checkout_started', 'conversion', 'consent_given');
         }
 
         function manageSubscription() {
             const choice = confirm('Abo verwalten / kündigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.');
             if (choice) {
-                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+                window.location.href = 'mailto:walserfly@gmail.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
             }
         }
+
+        // Close checkout modal on outside click
+        document.getElementById('checkoutModal').addEventListener('click', e => {
+            if (e.target.id === 'checkoutModal') closeCheckoutModal();
+        });
 
         document.getElementById('authModal').addEventListener('click', e => {
             if (e.target.id === 'authModal') closeAuthModal();
@@ -3149,7 +3526,7 @@
             if (e.target.id === 'successModal') closeSuccessModal();
         });
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); }
+            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); closeCheckoutModal(); }
         });
         document.getElementById('loginPassword').addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
@@ -3355,6 +3732,116 @@
         document.head.appendChild(toastStyle);
 
         init();
+    </script>
+
+    <!-- Checkout Consent Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-modal-card">
+            <div class="checkout-modal-header">
+                <div class="icon">🦊</div>
+                <h3>WolfeWave Premium</h3>
+                <p>Zugriff auf alle Trading-Signale in Echtzeit</p>
+            </div>
+            
+            <div class="checkout-modal-price">
+                <span class="amount">19,90€</span>
+                <span class="period">/ Monat</span>
+            </div>
+            
+            <div class="consent-checkbox" id="agbCheckboxWrapper" onclick="toggleAgbConsent()">
+                <input type="checkbox" id="agbCheckbox">
+                <label for="agbCheckbox">
+                    Ich habe die <a href="agb.html" target="_blank">AGB</a> und den <a href="agb.html#haftung" target="_blank">Haftungsausschluss</a> gelesen und akzeptiere diese.
+                </label>
+            </div>
+            
+            <div class="consent-checkbox" id="widerrufCheckboxWrapper" onclick="toggleWiderrufConsent()">
+                <input type="checkbox" id="widerrufCheckbox">
+                <label for="widerrufCheckbox">
+                    Ich stimme zu, dass die Dienstleistung <strong>sofort beginnt</strong> und mein <a href="widerruf.html" target="_blank">Widerrufsrecht</a> damit erlischt.
+                </label>
+            </div>
+            
+            <div class="checkout-modal-buttons">
+                <button class="btn-checkout-cancel" onclick="closeCheckoutModal()">Abbrechen</button>
+                <button class="btn-checkout-confirm" id="btnCheckoutConfirm" onclick="proceedToCheckout()">Jetzt abonnieren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h4>🍪 Cookie-Einstellungen</h4>
+                <p>
+                    Wir verwenden Cookies, um die Nutzung unserer Website zu analysieren und zu verbessern. 
+                    Mit "Akzeptieren" stimmen Sie der Verwendung von Google Analytics zu. 
+                    Mehr Informationen in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.
+                </p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-btn-decline" onclick="declineCookies()">Nur notwendige</button>
+                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Akzeptieren</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cookie Banner Logic
+        function showCookieBanner() {
+            if (!localStorage.getItem('cookieConsent')) {
+                document.getElementById('cookieBanner').classList.add('visible');
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieBanner').classList.remove('visible');
+            loadGoogleAnalytics();
+            
+            // Track consent event
+            if (window.gtag) {
+                gtag('event', 'cookie_consent', {
+                    'consent_type': 'accepted'
+                });
+            }
+        }
+
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieBanner').classList.remove('visible');
+        }
+
+        // Zeige Banner nach kurzer Verzögerung
+        setTimeout(showCookieBanner, 1000);
+
+        // Event Tracking Funktionen (nur wenn Analytics geladen)
+        function trackEvent(action, category, label) {
+            if (window.gtag && localStorage.getItem('cookieConsent') === 'accepted') {
+                gtag('event', action, {
+                    'event_category': category,
+                    'event_label': label
+                });
+            }
+        }
+
+        // Beispiel: Track wichtige Aktionen
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track Abo-Button Klicks
+            document.querySelectorAll('[onclick*="showCheckout"]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    trackEvent('click', 'conversion', 'abo_button');
+                });
+            });
+
+            // Track Login
+            document.querySelectorAll('[onclick*="showLogin"]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    trackEvent('click', 'engagement', 'login_button');
+                });
+            });
+        });
     </script>
 </body>
 </html>
