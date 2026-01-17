@@ -1795,7 +1795,7 @@
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
-            <a href="wolfe-waves-lernen.html" class="nav-link">📖 Tutorial</a>
+            <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
@@ -1990,7 +1990,7 @@
     <footer class="footer">
         <div style="margin-bottom: 16px;">
             <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
-            <a href="wolfe-waves-lernen.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
+            <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
             <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
         </div>
@@ -2468,7 +2468,8 @@
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&order=created_at.desc`, {
+                // Nur pending und active Signale laden (nicht inactive, expired, etc.)
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`
