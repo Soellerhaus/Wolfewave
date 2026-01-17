@@ -210,6 +210,245 @@
             color: var(--accent-green);
         }
 
+        /* Market Hours Indicator */
+        .market-hours-indicator {
+            position: relative;
+        }
+
+        .market-hours-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .market-hours-trigger:hover {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .market-hours-icon {
+            font-size: 14px;
+        }
+
+        .market-hours-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .market-status-dots {
+            display: flex;
+            gap: 4px;
+            margin-left: 4px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .status-dot.open {
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .status-dot.pre-market {
+            background: #ff9500;
+            box-shadow: 0 0 8px #ff9500;
+            animation: pulse-orange 2s infinite;
+        }
+
+        .status-dot.closed {
+            background: var(--accent-red);
+            opacity: 0.6;
+        }
+
+        @keyframes pulse-orange {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px #ff9500; }
+            50% { opacity: 0.6; box-shadow: 0 0 4px #ff9500; }
+        }
+
+        .market-hours-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            min-width: 320px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .market-hours-indicator.open .market-hours-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .market-hours-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(0, 255, 136, 0.05);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .market-hours-time {
+            font-family: 'Space Grotesk', monospace;
+            color: var(--accent-green);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .market-hours-list {
+            padding: 12px;
+        }
+
+        .market-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .market-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .market-light {
+            flex-shrink: 0;
+        }
+
+        .traffic-light {
+            display: block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .traffic-light.open {
+            background: var(--accent-green);
+            box-shadow: 0 0 12px var(--accent-green), 0 0 24px rgba(0, 255, 136, 0.4);
+        }
+
+        .traffic-light.pre-market {
+            background: #ff9500;
+            box-shadow: 0 0 12px #ff9500, 0 0 24px rgba(255, 149, 0, 0.4);
+            animation: glow-orange 2s infinite;
+        }
+
+        .traffic-light.closed {
+            background: var(--accent-red);
+            opacity: 0.7;
+        }
+
+        @keyframes glow-orange {
+            0%, 100% { box-shadow: 0 0 12px #ff9500, 0 0 24px rgba(255, 149, 0, 0.4); }
+            50% { box-shadow: 0 0 8px #ff9500, 0 0 16px rgba(255, 149, 0, 0.2); }
+        }
+
+        .market-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .market-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .market-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .market-status {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .market-status.open {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--accent-green);
+        }
+
+        .market-status.pre-market {
+            background: rgba(255, 149, 0, 0.15);
+            color: #ff9500;
+        }
+
+        .market-status.closed {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--accent-red);
+        }
+
+        .market-hours-legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.green {
+            background: var(--accent-green);
+        }
+
+        .legend-dot.orange {
+            background: #ff9500;
+        }
+
+        .legend-dot.red {
+            background: var(--accent-red);
+            opacity: 0.7;
+        }
+
         .live-indicator {
             display: flex;
             align-items: center;
@@ -1794,6 +2033,31 @@
                 display: none;
             }
 
+            .market-hours-label {
+                display: none;
+            }
+
+            .market-hours-trigger {
+                padding: 6px 10px;
+            }
+
+            .market-hours-dropdown {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+                border-radius: 20px 20px 0 0;
+                min-width: auto;
+                width: 100%;
+                transform: translateY(100%);
+            }
+
+            .market-hours-indicator.open .market-hours-dropdown {
+                transform: translateY(0);
+            }
+
             .header-right {
                 width: 100%;
                 justify-content: space-between;
@@ -1875,6 +2139,109 @@
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
             </div>
+            <!-- Market Hours Indicator -->
+            <div class="market-hours-indicator" id="marketHoursIndicator">
+                <div class="market-hours-trigger" onclick="toggleMarketHours()">
+                    <span class="market-hours-icon">🕐</span>
+                    <span class="market-hours-label">Märkte</span>
+                    <div class="market-status-dots" id="marketStatusDots">
+                        <span class="status-dot" id="dotDAX"></span>
+                        <span class="status-dot" id="dotUS"></span>
+                        <span class="status-dot" id="dotFX"></span>
+                        <span class="status-dot" id="dotEUIdx"></span>
+                    </div>
+                </div>
+                <div class="market-hours-dropdown" id="marketHoursDropdown">
+                    <div class="market-hours-header">
+                        <span>📊 Markt-Öffnungszeiten</span>
+                        <span class="market-hours-time" id="currentTime">--:--</span>
+                    </div>
+                    <div class="market-hours-list">
+                        <!-- DAX -->
+                        <div class="market-item" id="marketDAX">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightDAX"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">🇩🇪 DAX / XETRA</span>
+                                <span class="market-time">09:00 - 17:30 MEZ</span>
+                            </div>
+                            <div class="market-status" id="statusDAX">--</div>
+                        </div>
+                        <!-- US Markets -->
+                        <div class="market-item" id="marketUS">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightUS"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">🇺🇸 NASDAQ / NYSE</span>
+                                <span class="market-time">15:30 - 22:00 MEZ</span>
+                            </div>
+                            <div class="market-status" id="statusUS">--</div>
+                        </div>
+                        <!-- Forex -->
+                        <div class="market-item" id="marketFX">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightFX"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">💱 Forex</span>
+                                <span class="market-time">So 23:00 - Fr 22:00</span>
+                            </div>
+                            <div class="market-status" id="statusFX">--</div>
+                        </div>
+                        <!-- Crypto -->
+                        <div class="market-item" id="marketCrypto">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightCrypto"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">₿ Krypto</span>
+                                <span class="market-time">24/7</span>
+                            </div>
+                            <div class="market-status" id="statusCrypto">--</div>
+                        </div>
+                        <!-- S&P 500 Futures -->
+                        <div class="market-item" id="marketSP">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightSP"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">📈 S&P 500 Futures</span>
+                                <span class="market-time">Mo-Fr (fast 24h)</span>
+                            </div>
+                            <div class="market-status" id="statusSP">--</div>
+                        </div>
+                        <!-- EU Indizes CFD -->
+                        <div class="market-item" id="marketEUIdx">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightEUIdx"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">🇪🇺 EU Indizes CFD</span>
+                                <span class="market-time">08:00 - 22:00 MEZ</span>
+                            </div>
+                            <div class="market-status" id="statusEUIdx">--</div>
+                        </div>
+                        <!-- Asia Indizes CFD -->
+                        <div class="market-item" id="marketAsiaIdx">
+                            <div class="market-light">
+                                <span class="traffic-light" id="lightAsiaIdx"></span>
+                            </div>
+                            <div class="market-info">
+                                <span class="market-name">🌏 Asia Indizes CFD</span>
+                                <span class="market-time">01:00 - 22:00 MEZ</span>
+                            </div>
+                            <div class="market-status" id="statusAsiaIdx">--</div>
+                        </div>
+                    </div>
+                    <div class="market-hours-legend">
+                        <span class="legend-item"><span class="legend-dot green"></span> Geöffnet</span>
+                        <span class="legend-item"><span class="legend-dot orange"></span> Bald offen</span>
+                        <span class="legend-item"><span class="legend-dot red"></span> Geschlossen</span>
+                    </div>
+                </div>
+            </div>
         </nav>
         <div class="header-right">
             <div class="live-indicator">
@@ -1948,6 +2315,7 @@
                     <option value="NASDAQ">NASDAQ</option>
                     <option value="NYSE">NYSE</option>
                     <option value="SP500">S&P 500</option>
+                    <option value="INDICES">Indizes</option>
                     <option value="FOREX">Forex</option>
                     <option value="CRYPTO">Krypto</option>
                     <option value="OTHER">Andere</option>
@@ -3476,6 +3844,176 @@
             }
         `;
         document.head.appendChild(toastStyle);
+
+        // ==================== MARKET HOURS INDICATOR ====================
+        const marketSchedules = {
+            DAX: {
+                // XETRA: Mon-Fri 09:00-17:30 CET
+                open: 9 * 60,      // 09:00
+                close: 17 * 60 + 30, // 17:30
+                preMarket: 30,     // 30 min before
+                weekdays: [1, 2, 3, 4, 5]
+            },
+            US: {
+                // NYSE/NASDAQ: Mon-Fri 15:30-22:00 CET (9:30-16:00 EST)
+                open: 15 * 60 + 30, // 15:30
+                close: 22 * 60,     // 22:00
+                preMarket: 30,
+                weekdays: [1, 2, 3, 4, 5]
+            },
+            FX: {
+                // Forex: Sun 23:00 - Fri 22:00 CET
+                isForex: true,
+                weekdays: [0, 1, 2, 3, 4, 5, 6]
+            },
+            Crypto: {
+                // Crypto: 24/7
+                is24_7: true
+            },
+            SP: {
+                // S&P 500 Futures: Mon-Fri, nearly 24h (with 1h break)
+                // Open: Sun 23:00 - Fri 22:00, break 22:00-23:00 daily
+                open: 0,
+                close: 22 * 60,
+                preMarket: 60,
+                weekdays: [1, 2, 3, 4, 5],
+                isFutures: true
+            },
+            EUIdx: {
+                // EU Indizes CFD: Mon-Fri 08:00-22:00 CET
+                // DE40, F40, STOXX50, UK100, ES35, SWI20, NE25
+                open: 8 * 60,       // 08:00
+                close: 22 * 60,     // 22:00
+                preMarket: 30,
+                weekdays: [1, 2, 3, 4, 5]
+            },
+            AsiaIdx: {
+                // Asia Indizes CFD: Mon-Fri 01:00-22:00 CET (mit Pausen)
+                // JP225, HK50, AUS200
+                open: 1 * 60,       // 01:00
+                close: 22 * 60,     // 22:00
+                preMarket: 30,
+                weekdays: [1, 2, 3, 4, 5]
+            }
+        };
+
+        function getMarketStatus(marketKey) {
+            const now = new Date();
+            const schedule = marketSchedules[marketKey];
+            const dayOfWeek = now.getDay(); // 0 = Sunday
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            
+            // Crypto is always open
+            if (schedule.is24_7) {
+                return { status: 'open', text: 'Geöffnet' };
+            }
+            
+            // Forex special handling
+            if (schedule.isForex) {
+                // Closed: Friday 22:00 - Sunday 23:00
+                if (dayOfWeek === 6) {
+                    // Saturday - closed
+                    return { status: 'closed', text: 'Geschlossen' };
+                }
+                if (dayOfWeek === 0 && currentMinutes < 23 * 60) {
+                    // Sunday before 23:00
+                    const minutesToOpen = 23 * 60 - currentMinutes;
+                    if (minutesToOpen <= 60) {
+                        return { status: 'pre-market', text: `Öffnet in ${minutesToOpen} Min` };
+                    }
+                    return { status: 'closed', text: 'Öffnet 23:00' };
+                }
+                if (dayOfWeek === 5 && currentMinutes >= 22 * 60) {
+                    // Friday after 22:00
+                    return { status: 'closed', text: 'Wochenende' };
+                }
+                return { status: 'open', text: 'Geöffnet' };
+            }
+            
+            // Regular markets
+            if (!schedule.weekdays.includes(dayOfWeek)) {
+                return { status: 'closed', text: 'Wochenende' };
+            }
+            
+            const { open, close, preMarket } = schedule;
+            
+            // Check if currently open
+            if (currentMinutes >= open && currentMinutes < close) {
+                const minutesToClose = close - currentMinutes;
+                if (minutesToClose <= 30) {
+                    return { status: 'open', text: `Schließt in ${minutesToClose} Min` };
+                }
+                return { status: 'open', text: 'Geöffnet' };
+            }
+            
+            // Check pre-market
+            if (currentMinutes >= (open - preMarket) && currentMinutes < open) {
+                const minutesToOpen = open - currentMinutes;
+                return { status: 'pre-market', text: `Öffnet in ${minutesToOpen} Min` };
+            }
+            
+            // Market is closed
+            if (currentMinutes < open) {
+                const openHour = Math.floor(open / 60);
+                const openMin = open % 60;
+                return { status: 'closed', text: `Öffnet ${openHour}:${openMin.toString().padStart(2, '0')}` };
+            }
+            
+            // After close
+            return { status: 'closed', text: 'Geschlossen' };
+        }
+
+        function updateMarketHours() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            const currentTimeEl = document.getElementById('currentTime');
+            if (currentTimeEl) {
+                currentTimeEl.textContent = timeStr;
+            }
+            
+            const markets = ['DAX', 'US', 'FX', 'Crypto', 'SP', 'EUIdx', 'AsiaIdx'];
+            
+            markets.forEach(market => {
+                const { status, text } = getMarketStatus(market);
+                
+                // Update traffic light
+                const light = document.getElementById(`light${market}`);
+                if (light) {
+                    light.className = `traffic-light ${status}`;
+                }
+                
+                // Update status text
+                const statusEl = document.getElementById(`status${market}`);
+                if (statusEl) {
+                    statusEl.textContent = text;
+                    statusEl.className = `market-status ${status}`;
+                }
+                
+                // Update header dots (only for main markets)
+                const dot = document.getElementById(`dot${market}`);
+                if (dot) {
+                    dot.className = `status-dot ${status}`;
+                }
+            });
+        }
+
+        function toggleMarketHours() {
+            const indicator = document.getElementById('marketHoursIndicator');
+            indicator.classList.toggle('open');
+        }
+
+        // Close dropdown on outside click
+        document.addEventListener('click', (e) => {
+            const indicator = document.getElementById('marketHoursIndicator');
+            if (indicator && !indicator.contains(e.target)) {
+                indicator.classList.remove('open');
+            }
+        });
+
+        // Update every second
+        updateMarketHours();
+        setInterval(updateMarketHours, 1000);
 
         // Start
         init();
