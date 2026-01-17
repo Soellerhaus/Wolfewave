@@ -93,6 +93,7 @@
             --bg-card: #141414;
             --bg-hover: #1a1a1a;
             --accent-green: #00ff88;
+            --accent-lightgreen: #7dff7d;
             --accent-red: #ff4757;
             --accent-gold: #ffd700;
             --accent-blue: #4dabf7;
@@ -538,7 +539,6 @@
             opacity: 1;
         }
 
-        /* Admin Controls im Success-Tab IMMER sichtbar und größer */
         .admin-controls.always-visible {
             opacity: 1 !important;
             top: 8px;
@@ -984,21 +984,21 @@
             color: #fff;
         }
 
-        /* Image Section */
+        /* Image Section - ERHÖHT für bessere Sichtbarkeit */
         .signal-image-container {
             position: relative;
-            height: 240px;
+            height: 280px;
             overflow: hidden;
         }
 
         /* Vollbild-Modus (1 Spalte) - Bild mit besserem Seitenverhältnis */
         .signals-grid.fullscreen-mode .signal-image-container {
-            height: 450px;
-            max-height: 50vh;
+            height: 500px;
+            max-height: 55vh;
         }
 
         .signals-grid.fullscreen-mode .signal-card {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -1111,7 +1111,7 @@
             margin-top: 2px;
         }
 
-        /* Price Grid */
+        /* Price Grid - MIT FARBKODIERUNG */
         .price-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -1133,11 +1133,25 @@
             margin-bottom: 2px;
         }
 
+        /* Farbkodierte Labels */
+        .price-label.entry { color: var(--accent-blue); }
+        .price-label.stop { color: var(--accent-red); }
+        .price-label.tp1 { color: var(--accent-lightgreen); }
+        .price-label.tp2 { color: var(--accent-green); }
+        .price-label.tp3 { color: var(--accent-gold); }
+
         .price-value {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
         }
+
+        /* Farbkodierte Werte */
+        .price-value.entry { color: var(--accent-blue); }
+        .price-value.stop { color: var(--accent-red); }
+        .price-value.tp1 { color: var(--accent-lightgreen); }
+        .price-value.tp2 { color: var(--accent-green); }
+        .price-value.tp3 { color: var(--accent-gold); }
 
         .price-pct {
             font-size: 9px;
@@ -1399,7 +1413,7 @@
             opacity: 1;
         }
 
-        /* Image Slider */
+        /* Image Slider - ECHTE PFEILE */
         .image-slider-container {
             position: relative;
             display: flex;
@@ -1416,7 +1430,7 @@
             background: rgba(0, 0, 0, 0.7);
             border: 2px solid var(--accent-green);
             color: var(--accent-green);
-            font-size: 48px;
+            font-size: 32px;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -1426,8 +1440,9 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
-            font-family: sans-serif;
+            font-family: Arial, sans-serif;
             line-height: 1;
+            font-weight: bold;
         }
 
         .slider-nav:hover {
@@ -1504,7 +1519,7 @@
             .slider-nav {
                 width: 50px;
                 height: 50px;
-                font-size: 36px;
+                font-size: 28px;
                 background: rgba(0, 0, 0, 0.8);
             }
         }
@@ -1513,7 +1528,7 @@
             .slider-nav {
                 width: 40px;
                 height: 40px;
-                font-size: 28px;
+                font-size: 22px;
             }
             .slider-thumbnails {
                 display: none;
@@ -1789,7 +1804,7 @@
             }
 
             .signal-image-container {
-                height: 200px;
+                height: 220px;
             }
 
             .paywall-card {
@@ -1838,7 +1853,7 @@
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
-            <a href="wolfewaves.html" class="nav-link">�– Tutorial</a>
+            <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
@@ -1943,7 +1958,7 @@
                 <div class="stat-label">TP2 erreicht</div>
             </div>
             <div class="success-stat-mini blue">
-                <div class="stat-icon">📖</div>
+                <div class="stat-icon">📈</div>
                 <div class="stat-value blue" id="tp1Count">0</div>
                 <div class="stat-label">TP1 erreicht</div>
             </div>
@@ -1958,7 +1973,7 @@
     <!-- Free Preview Section -->
     <section class="section-header" id="previewHeader">
         <div class="section-title">
-            🎁 Kostenlose Vorschau
+            🎁 Kostenlose Vorschau
             <span class="section-badge">Gratis</span>
         </div>
         <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
@@ -1977,7 +1992,7 @@
     <section class="premium-section" id="premiumSection">
         <div class="premium-header">
             <div class="premium-title">
-                <span class="lock-icon">🔓</span>
+                <span class="lock-icon">🔒</span>
                 Premium Signale
             </div>
             <div class="premium-count" id="premiumCount">+42 weitere Signale</div>
@@ -1988,7 +2003,7 @@
 
             <div class="paywall-overlay">
                 <div class="paywall-card">
-                    <div class="paywall-icon">🔒</div>
+                    <div class="paywall-icon">🔓</div>
                     <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
                     <div class="paywall-subtitle">
                         Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
@@ -2040,7 +2055,7 @@
         <div style="color: var(--text-secondary); font-size: 11px;">
             © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
             <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
-                ⚠️ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
+                ⚠️ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
             </span>
         </div>
     </footer>
@@ -2062,7 +2077,7 @@
                     </div>
                     <div class="input-group">
                         <label>Passwort</label>
-                        <input type="password" id="loginPassword" placeholder=""¢"¢"¢"¢"¢"¢"¢"¢">
+                        <input type="password" id="loginPassword" placeholder="••••••••">
                     </div>
                 </div>
                 <div class="auth-error" id="loginError"></div>
@@ -2096,13 +2111,13 @@
         </div>
     </div>
 
-    <!-- Image Modal -->
+    <!-- Image Modal - MIT ECHTEN PFEILEN -->
     <div class="modal" id="imageModal">
         <span class="modal-close" onclick="closeModal()">✕</span>
         <div class="image-slider-container">
-            <!-- Navigation Buttons -->
-            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">"¹</button>
-            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">"º</button>
+            <!-- Navigation Buttons - ECHTE PFEILE -->
+            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">←</button>
+            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">→</button>
             
             <!-- Main Image -->
             <img src="" alt="Chart" id="modalImage">
@@ -2122,7 +2137,7 @@
     <div class="admin-modal" id="deleteModal">
         <div class="admin-modal-card">
             <div class="admin-modal-header">
-                <span style="font-size: 28px;">🗑️</span>
+                <span style="font-size: 28px;">🗑️</span>
                 <h3>Signal löschen</h3>
             </div>
             <div class="admin-modal-body">
@@ -2131,7 +2146,7 @@
                     <strong id="deleteSignalInfo"></strong>
                 </div>
                 <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
-                    ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
+                    ⚠️ Diese Aktion kann nicht rückgängig gemacht werden!
                 </p>
             </div>
             <div class="admin-modal-footer">
@@ -2158,7 +2173,7 @@
                     <select id="successResult">
                         <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
                         <option value="TP2_HIT">✅ TP2 erreicht</option>
-                        <option value="TP1_HIT">📖 TP1 erreicht</option>
+                        <option value="TP1_HIT">📈 TP1 erreicht</option>
                         <option value="SL_HIT">🛑 Stop Loss getroffen</option>
                         <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
                     </select>
@@ -2173,8 +2188,9 @@
 
     <!-- Admin Badge -->
     <div class="admin-badge" id="adminBadge">
-        🛡️ Admin-Modus aktiv
+        🛡️ Admin-Modus aktiv
     </div>
+
 
     <script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
@@ -2198,15 +2214,12 @@
             document.getElementById('zoomIndicator').textContent = gridColumns;
             localStorage.setItem('gridZoom', gridColumns);
             
-            // Fullscreen-Modus (1 Spalte) - größere Bilder
+            // Fullscreen-Modus bei 1 Spalte
             const grid = document.getElementById('previewGrid');
-            const premiumGrid = document.getElementById('lockedGrid');
             if (gridColumns === 1) {
-                grid?.classList.add('fullscreen-mode');
-                premiumGrid?.classList.add('fullscreen-mode');
+                grid.classList.add('fullscreen-mode');
             } else {
-                grid?.classList.remove('fullscreen-mode');
-                premiumGrid?.classList.remove('fullscreen-mode');
+                grid.classList.remove('fullscreen-mode');
             }
         }
 
@@ -2240,7 +2253,7 @@
 
         // ==================== INIT ====================
         async function init() {
-            updateGridZoom(); // Zoom-Indikator setzen
+            updateGridZoom();
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
@@ -2444,7 +2457,7 @@
             const initial = currentUser.email ? currentUser.email.charAt(0).toUpperCase() : '?';
             
             let statusText = 'Free Account';
-            if (isAdmin) statusText = '🛡️ Admin';
+            if (isAdmin) statusText = '🛡️ Admin';
             else if (isSubscribed) statusText = '✔ Premium';
             
             headerRight.innerHTML = `
@@ -2461,18 +2474,16 @@
                         </div>
                     </div>
                     <div class="user-dropdown">
-                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
+                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
                         <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
                     </div>
                 </div>
             `;
             
-            // Show tabs for premium users
             if (isSubscribed || isAdmin) {
                 document.getElementById('tabsSection').classList.add('visible');
                 document.getElementById('premiumSection').style.display = 'none';
                 
-                // Update header
                 document.getElementById('previewHeader').innerHTML = `
                     <div class="section-title">
                         🦊 Alle Signale
@@ -2482,7 +2493,6 @@
                 `;
             }
             
-            // Show admin badge
             if (isAdmin) {
                 document.getElementById('adminBadge').classList.add('visible');
             } else {
@@ -2508,7 +2518,7 @@
             
             document.getElementById('previewHeader').innerHTML = `
                 <div class="section-title">
-                    🎁 Kostenlose Vorschau
+                    🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
                 <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
@@ -2522,7 +2532,6 @@
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
             try {
-                // Nur pending und active Signale laden (nicht inactive, expired, etc.)
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -2570,18 +2579,14 @@
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
             document.getElementById('todayCount').textContent = todaySignals.length;
             
-            // New count for tab
             const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
             document.getElementById('newCount').textContent = newSignals.length;
             
-            // Success tab count
             document.getElementById('successTabCount').textContent = completedSignals.length;
             
-            // Premium count
             const premiumCount = Math.max(0, allSignals.length - 3);
             document.getElementById('premiumCount').textContent = `+${premiumCount} weitere Signale`;
             
-            // Update success stats bar
             updateSuccessStats();
         }
 
@@ -2600,7 +2605,6 @@
             document.getElementById('tp1Count').textContent = tp1;
             document.getElementById('slCount').textContent = sl;
             
-            // NEU: Header Success Rate aktualisieren
             const headerValue = document.getElementById('headerSuccessValue');
             if(headerValue) headerValue.textContent = rate + '%';
         }
@@ -2610,7 +2614,6 @@
             const grid = document.getElementById('previewGrid');
             const isPremium = currentUser && (isSubscribed || isAdmin);
             
-            // Handle success stats bar visibility
             const statsBar = document.getElementById('successStatsBar');
             if (currentTab === 'success' && isPremium) {
                 statsBar.classList.add('visible');
@@ -2619,14 +2622,12 @@
             }
             
             if (!isPremium) {
-                // Show preview for guests
                 const preview = getPreviewSignals();
                 grid.innerHTML = preview.map(s => renderSignalCard(s, true, false)).join('');
                 renderLockedSignals();
                 return;
             }
             
-            // Premium user - apply filters
             let signals = [];
             
             if (currentTab === 'success') {
@@ -2651,7 +2652,6 @@
                       </div>`;
             }
             
-            // Update header count
             const header = document.getElementById('previewHeader');
             const searchTerm = document.getElementById('searchSymbol').value.trim();
             
@@ -2697,7 +2697,6 @@
             
             let filtered = [...allSignals];
             
-            // Tab filter
             if (currentTab === 'new') {
                 filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
             } else if (currentTab === 'bullish') {
@@ -2706,11 +2705,9 @@
                 filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
-            // Dropdown filters
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
-            // Search filter
             if (searchTerm) {
                 filtered = filtered.filter(s => 
                     (s.symbol && s.symbol.toLowerCase().includes(searchTerm)) ||
@@ -2731,7 +2728,6 @@
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
-            // Search filter
             if (searchTerm) {
                 filtered = filtered.filter(s => 
                     (s.symbol && s.symbol.toLowerCase().includes(searchTerm))
@@ -2749,6 +2745,7 @@
             grid.innerHTML = locked.map(s => renderSignalCard(s, false, false)).join('');
         }
 
+        // ==================== SIGNAL CARD MIT FARBKODIERUNG ====================
         function renderSignalCard(signal, isVisible, isPreview) {
             const imageUrl = signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
             const isBullish = signal.direction === 'BULLISH';
@@ -2761,11 +2758,10 @@
                 badge = '<div class="new-badge">NEU</div>';
             }
             
-            // Admin controls (nur für Admins sichtbar)
             const adminControls = isAdmin && isVisible ? `
-                <div class="admin-controls">
+                <div class="admin-controls${gridColumns === 1 ? ' always-visible' : ''}">
                     <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
-                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">Ã—</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
             ` : '';
             
@@ -2793,11 +2789,11 @@
                             </div>
                         </div>
                         <div class="price-grid">
-                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item"><div class="price-label entry">Entry</div><div class="price-value entry">${formatPrice(signal.entry)}</div></div>
+                            <div class="price-item"><div class="price-label stop">Stop</div><div class="price-value stop">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item"><div class="price-label tp1">TP1</div><div class="price-value tp1">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item"><div class="price-label tp2">TP2</div><div class="price-value tp2">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item"><div class="price-label tp3">TP3</div><div class="price-value tp3">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
@@ -2809,7 +2805,6 @@
             const imageUrl = signal.original_path || '';
             const isBullish = signal.direction === 'BULLISH';
             
-            // Determine result styling
             let resultClass = 'sl';
             let resultBadge = '🛑 SL';
             let cardClass = 'is-failed';
@@ -2824,27 +2819,22 @@
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
-                resultBadge = '📖 TP1';
+                resultBadge = '📈 TP1';
                 cardClass = 'is-success tp1';
             }
             
-            // Admin delete button for completed signals - IMMER sichtbar mit always-visible Klasse
             const adminControls = isAdmin ? `
-                <div class="admin-controls always-visible">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">✕</button>
+                <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
+                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
                 </div>
             ` : '';
             
-            // Für Admin: Karte öffnet Modal NICHT automatisch - nur Klick aufs Bild
-            const cardClick = isAdmin ? '' : `onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')"`;
-            const imageClick = isAdmin ? `onclick="event.stopPropagation(); openModal('${imageUrl}', '${signal.wedge_id || ''}')" style="cursor:zoom-in;"` : '';
-            
             return `
-                <div class="signal-card ${cardClass}" ${cardClick}>
+                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${adminControls}
-                    <div class="signal-image-container" ${imageClick}>
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">📖</div>'}
+                    <div class="signal-image-container">
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">📈</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -2864,25 +2854,25 @@
                         </div>
                         <div class="price-grid" style="grid-template-columns: repeat(4, 1fr);">
                             <div class="price-item">
-                                <div class="price-label">TP1</div>
-                                <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
+                                <div class="price-label tp1">TP1</div>
+                                <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-lightgreen)' : 'var(--text-secondary)'}">
                                     ${signal.tp1_hit ? '✔' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
-                                <div class="price-label">TP2</div>
+                                <div class="price-label tp2">TP2</div>
                                 <div class="price-value" style="color: ${signal.tp2_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
                                     ${signal.tp2_hit ? '✔' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
-                                <div class="price-label">TP3</div>
+                                <div class="price-label tp3">TP3</div>
                                 <div class="price-value" style="color: ${signal.tp3_hit ? 'var(--accent-gold)' : 'var(--text-secondary)'}">
                                     ${signal.tp3_hit ? '🏆' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
-                                <div class="price-label">SL</div>
+                                <div class="price-label stop">SL</div>
                                 <div class="price-value" style="color: ${signal.sl_hit ? 'var(--accent-red)' : 'var(--text-secondary)'}">
                                     ${signal.sl_hit ? '✗' : '—'}
                                 </div>
@@ -2926,7 +2916,6 @@
 
         // ==================== EVENT LISTENERS ====================
         function setupEventListeners() {
-            // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -2936,18 +2925,15 @@
                 });
             });
             
-            // Filters
             document.getElementById('filterMarket').addEventListener('change', renderSignals);
             document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
             
-            // Search with debounce
             let searchTimeout;
             document.getElementById('searchSymbol').addEventListener('input', () => {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(renderSignals, 300);
             });
             
-            // Clear search on Escape
             document.getElementById('searchSymbol').addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     e.target.value = '';
@@ -2955,32 +2941,27 @@
                 }
             });
             
-            // Close user menu on outside click
             document.addEventListener('click', (e) => {
                 const menu = document.querySelector('.user-menu-container');
                 if (menu && !menu.contains(e.target)) {
                     menu.classList.remove('open');
                 }
                 
-                // Admin button handlers via event delegation
                 if (e.target.matches('[data-delete-signal]')) {
                     e.stopPropagation();
                     const signalId = e.target.getAttribute('data-delete-signal');
-                    console.log('Delete signal clicked:', signalId);
                     showDeleteModal(signalId);
                 }
                 
                 if (e.target.matches('[data-delete-completed]')) {
                     e.stopPropagation();
                     const signalId = e.target.getAttribute('data-delete-completed');
-                    console.log('Delete completed clicked:', signalId);
                     showDeleteCompletedModal(signalId);
                 }
                 
                 if (e.target.matches('[data-success-signal]')) {
                     e.stopPropagation();
                     const signalId = e.target.getAttribute('data-success-signal');
-                    console.log('Success signal clicked:', signalId);
                     showSuccessModal(signalId);
                 }
             });
@@ -3013,11 +2994,9 @@
             sliderImages = [{ url: imageUrl, scanned_at: null }];
             sliderCurrentIndex = 0;
             
-            // Zeige erstmal das aktuelle Bild
             updateSliderDisplay();
             document.getElementById('imageModal').classList.add('active');
             
-            // Wenn wedge_id vorhanden, lade Bild-Historie
             if (wedgeId) {
                 await loadImageHistory(wedgeId, imageUrl);
             }
@@ -3040,14 +3019,11 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // Aktuelles Bild an den Anfang (neuestes)
-                    // Stelle sicher dass es nicht doppelt ist
                     if (sliderImages[0].url !== currentImageUrl) {
                         sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
                     }
@@ -3065,11 +3041,9 @@
             const img = sliderImages[sliderCurrentIndex];
             document.getElementById('modalImage').src = img.url;
             
-            // Counter aktualisieren
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
@@ -3078,11 +3052,9 @@
                 dateEl.textContent = 'Aktuell';
             }
             
-            // Navigation Buttons
             const prevBtn = document.getElementById('sliderPrev');
             const nextBtn = document.getElementById('sliderNext');
             
-            // Verstecke Buttons wenn nur 1 Bild
             if (sliderImages.length <= 1) {
                 prevBtn.classList.add('hidden');
                 nextBtn.classList.add('hidden');
@@ -3093,7 +3065,6 @@
                 nextBtn.disabled = sliderCurrentIndex === sliderImages.length - 1;
             }
             
-            // Thumbnails aktualisieren
             document.querySelectorAll('.slider-thumb').forEach((thumb, i) => {
                 thumb.classList.toggle('active', i === sliderCurrentIndex);
             });
@@ -3102,7 +3073,6 @@
         function renderThumbnails() {
             const container = document.getElementById('sliderThumbnails');
             
-            // Nur bei mehr als 1 Bild anzeigen
             if (sliderImages.length <= 1) {
                 container.innerHTML = '';
                 return;
@@ -3143,7 +3113,6 @@
             document.getElementById('sliderThumbnails').innerHTML = '';
         }
 
-        // Keyboard Navigation
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('imageModal').classList.contains('active')) return;
             
@@ -3161,15 +3130,12 @@
         }
 
         function manageSubscription() {
-            // Lemon Squeezy Customer Portal - benötigt aktivierten Store
-            // Alternativ: E-Mail an Support
-            const choice = confirm('Abo verwalten / kündigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.\n\nSobald der Shop aktiviert ist, kannst du dein Abo selbst verwalten.');
+            const choice = confirm('Abo verwalten / kündigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.');
             if (choice) {
                 window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
             }
         }
 
-        // Modal event listeners
         document.getElementById('authModal').addEventListener('click', e => {
             if (e.target.id === 'authModal') closeAuthModal();
         });
@@ -3191,16 +3157,12 @@
 
         // ==================== ADMIN FUNCTIONS ====================
         let pendingDeleteId = null;
-        let pendingDeleteType = null; // 'signal' or 'completed'
+        let pendingDeleteType = null;
         let pendingSuccessId = null;
 
         function showDeleteModal(signalId) {
-            console.log('showDeleteModal called with ID:', signalId);
             const signal = allSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) {
-                console.error('Signal not found:', signalId);
-                return;
-            }
+            if (!signal) return;
             
             pendingDeleteId = signalId;
             pendingDeleteType = 'signal';
@@ -3209,12 +3171,8 @@
         }
 
         function showDeleteCompletedModal(signalId) {
-            console.log('showDeleteCompletedModal called with ID:', signalId);
             const signal = completedSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) {
-                console.error('Completed signal not found:', signalId);
-                return;
-            }
+            if (!signal) return;
             
             pendingDeleteId = signalId;
             pendingDeleteType = 'completed';
@@ -3237,11 +3195,7 @@
             const table = pendingDeleteType === 'completed' ? 'completed_signals' : 'signals';
             const deleteId = String(pendingDeleteId);
             
-            console.log('Deleting from:', table, 'ID:', deleteId);
-            console.log('Token:', getAccessToken().substring(0, 20) + '...');
-            
             try {
-                // Supabase erwartet UUID format
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${deleteId}`, {
                     method: 'DELETE',
                     headers: {
@@ -3251,12 +3205,7 @@
                     }
                 });
                 
-                console.log('Delete response status:', response.status);
-                const responseText = await response.text();
-                console.log('Response body:', responseText);
-                
                 if (response.status === 204 || response.status === 200) {
-                    // Success - remove from local array
                     if (pendingDeleteType === 'completed') {
                         completedSignals = completedSignals.filter(s => String(s.id) !== deleteId);
                     } else {
@@ -3267,33 +3216,17 @@
                     updateStats();
                     renderSignals();
                     showToast('✔ Signal gelöscht', 'success');
-                } else if (response.status === 404 || responseText === '[]') {
-                    // Nicht gefunden - vielleicht schon gelöscht
-                    if (pendingDeleteType === 'completed') {
-                        completedSignals = completedSignals.filter(s => String(s.id) !== deleteId);
-                    } else {
-                        allSignals = allSignals.filter(s => String(s.id) !== deleteId);
-                    }
-                    closeDeleteModal();
-                    updateStats();
-                    renderSignals();
-                    showToast('✔ Signal entfernt', 'success');
                 } else {
-                    throw new Error(`Status ${response.status}: ${responseText}`);
+                    throw new Error('Delete failed');
                 }
             } catch (error) {
-                console.error('Delete error:', error);
                 showToast('✗ ' + error.message, 'error');
             }
         }
 
         function showSuccessModal(signalId) {
-            console.log('showSuccessModal called with ID:', signalId);
             const signal = allSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) {
-                console.error('Signal not found for success:', signalId);
-                return;
-            }
+            if (!signal) return;
             
             pendingSuccessId = signalId;
             document.getElementById('successSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
@@ -3313,14 +3246,10 @@
             }
             
             const signal = allSignals.find(s => String(s.id) === String(pendingSuccessId));
-            if (!signal) {
-                showToast('✗ Signal nicht gefunden', 'error');
-                return;
-            }
+            if (!signal) return;
             
             const result = document.getElementById('successResult').value;
             
-            // Determine TP/SL flags based on result
             let tp1_hit = false, tp2_hit = false, tp3_hit = false, sl_hit = false;
             let result_folder = 'failed';
             
@@ -3346,7 +3275,6 @@
                     break;
             }
             
-            // Create completed signal entry
             const completedData = {
                 wedge_id: signal.wedge_id || `manual_${signal.id}`,
                 original_path: signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`,
@@ -3383,16 +3311,13 @@
                     renderSignals();
                     showToast('✔ Zu Success hinzugefügt', 'success');
                 } else {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Failed');
+                    throw new Error('Failed');
                 }
             } catch (error) {
-                console.error('Success add error:', error);
                 showToast('✗ Fehler: ' + error.message, 'error');
             }
         }
 
-        // Toast notification
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.style.cssText = `
@@ -3416,7 +3341,6 @@
             }, 3000);
         }
 
-        // Add toast animations
         const toastStyle = document.createElement('style');
         toastStyle.textContent = `
             @keyframes slideIn {
@@ -3430,7 +3354,6 @@
         `;
         document.head.appendChild(toastStyle);
 
-        // Start
         init();
     </script>
 </body>
