@@ -1711,8 +1711,68 @@
             background: var(--bg-hover);
         }
 
+        /* Mobile CTA - nur auf Mobile sichtbar */
+        .mobile-cta {
+            display: none;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .mobile-cta-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .mobile-cta-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-cta-icon {
+            font-size: 24px;
+        }
+
+        .mobile-cta-text strong {
+            display: block;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .mobile-cta-price {
+            font-size: 12px;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .mobile-cta-btn {
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .mobile-cta-btn:hover {
+            background: #00cc6a;
+            transform: scale(1.02);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .mobile-cta {
+                display: block;
+            }
+
             .header {
                 padding: 16px 20px;
                 flex-direction: column;
@@ -1829,6 +1889,20 @@
     <section class="hero">
         <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
         <p>Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
+    </section>
+
+    <!-- Mobile CTA (nur auf Mobile sichtbar) -->
+    <section class="mobile-cta" id="mobileCTA">
+        <div class="mobile-cta-content">
+            <div class="mobile-cta-text">
+                <span class="mobile-cta-icon">🔓</span>
+                <div>
+                    <strong>Alle Signale freischalten</strong>
+                    <span class="mobile-cta-price">19,90€/Monat</span>
+                </div>
+            </div>
+            <button class="mobile-cta-btn" onclick="showCheckout()">Jetzt starten</button>
+        </div>
     </section>
 
     <!-- Stats -->
