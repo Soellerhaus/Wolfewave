@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widerrufsbelehrung - WolfeWaveSignals</title>
+    <meta name="description" content="Widerrufsbelehrung für WolfeWaveSignals Trading-Signal-Abonnements.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://wolfewavesignals.com/widerruf.html">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-F3BQLK365X');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --accent-green: #00ff88;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --border-color: #1f1f1f;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(12, 12, 12, 0.95);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .back-link {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 16px;
+            color: var(--accent-green);
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            font-size: 16px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        p, li {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-green);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text-primary);
+        }
+
+        .warning-box {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-left: 3px solid #ff4757;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .warning-box p {
+            color: #ff4757;
+            margin-bottom: 0;
+        }
+
+        .form-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .form-box h3 {
+            margin-top: 0;
+            color: var(--accent-green);
+        }
+
+        .form-field {
+            border-bottom: 1px dashed var(--border-color);
+            padding: 8px 0;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .contact-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--accent-green);
+        }
+
+        .contact-info p {
+            margin-bottom: 4px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        .footer a:hover {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .content {
+                padding: 40px 20px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🦊</div>
+            <div>Wolfe<span>Wave</span>Signals</div>
+        </a>
+        <a href="index.html" class="back-link">← Zurück zur Startseite</a>
+    </header>
+
+    <main class="content">
+        <h1>Widerrufsbelehrung</h1>
+        <p class="last-updated">Stand: Januar 2025</p>
+
+        <h2>Widerrufsrecht</h2>
+        <p>Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>
+        
+        <p>Die Widerrufsfrist beträgt <strong>vierzehn Tage ab dem Tag des Vertragsabschlusses</strong>.</p>
+
+        <p>Um Ihr Widerrufsrecht auszuüben, müssen Sie uns:</p>
+        
+        <div class="contact-info">
+            <p><strong>Claudio Scheiwiller</strong></p>
+            <p>Schöntalweg 10</p>
+            <p>6992 Hirschegg, Österreich</p>
+            <p>E-Mail: <a href="mailto:walserfly@gmail.com" style="color: var(--accent-green);">walserfly@gmail.com</a></p>
+        </div>
+
+        <p style="margin-top: 16px;">mittels einer eindeutigen Erklärung (z.B. ein mit der Post versandter Brief oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.</p>
+
+        <p>Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.</p>
+
+        <h2>Folgen des Widerrufs</h2>
+        <p>Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.</p>
+        
+        <p>Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung Entgelte berechnet.</p>
+
+        <h2>Vorzeitiges Erlöschen des Widerrufsrechts</h2>
+        
+        <div class="warning-box">
+            <p><strong>⚠️ Wichtiger Hinweis:</strong></p>
+            <p style="margin-top: 12px; color: var(--text-secondary);">Bei WolfeWaveSignals handelt es sich um eine digitale Dienstleistung (Zugang zu Trading-Signalen), die sofort nach Kaufabschluss bereitgestellt wird.</p>
+        </div>
+
+        <p>Gemäß § 18 Abs. 1 Z 11 FAGG (Fern- und Auswärtsgeschäfte-Gesetz) bzw. Art. 16 lit. m der EU-Verbraucherrechterichtlinie erlischt das Widerrufsrecht bei digitalen Inhalten vorzeitig, wenn:</p>
+        
+        <ul>
+            <li>Der Verbraucher <strong>ausdrücklich zugestimmt</strong> hat, dass der Unternehmer mit der Ausführung des Vertrags vor Ablauf der Widerrufsfrist beginnt</li>
+            <li>Der Verbraucher seine <strong>Kenntnis davon bestätigt</strong> hat, dass er durch seine Zustimmung sein Widerrufsrecht verliert</li>
+            <li>Der Unternehmer dem Verbraucher eine <strong>Bestätigung</strong> über diese Zustimmung übermittelt hat</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><strong>🔒 Bei WolfeWaveSignals:</strong></p>
+            <p style="margin-top: 8px;">Beim Checkout bestätigen Sie durch Aktivieren der Checkbox:</p>
+            <p style="margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-style: italic;">
+                ☑️ „Ich stimme zu, dass die Dienstleistung (Zugang zu Trading-Signalen) sofort nach Zahlungseingang beginnt. Mir ist bekannt, dass ich mein Widerrufsrecht mit Beginn der Dienstleistung verliere."
+            </p>
+            <p style="margin-top: 12px; color: var(--accent-green);"><strong>→ Mit dieser Zustimmung erlischt Ihr Widerrufsrecht, sobald Sie Zugang zu den Signalen erhalten.</strong></p>
+        </div>
+
+        <h3>Warum diese Regelung?</h3>
+        <p>Da Sie sofort nach dem Kauf vollen Zugriff auf alle Trading-Signale erhalten, würde ein nachträglicher Widerruf bedeuten, dass Sie die Dienstleistung kostenlos genutzt haben. Die Zustimmung zum sofortigen Beginn schützt sowohl Sie (sofortiger Zugang) als auch uns (faire Vergütung).</p>
+
+        <h3>Sie haben trotzdem Rechte:</h3>
+        <ul>
+            <li><strong>Kündigung:</strong> Sie können Ihr Abo jederzeit zum Monatsende kündigen</li>
+            <li><strong>Keine automatische Verlängerung ohne Info:</strong> Sie werden vor jeder Verlängerung informiert</li>
+            <li><strong>Kostenlose Vorschau:</strong> Sie können 3 Signale kostenlos ansehen, bevor Sie sich entscheiden</li>
+        </ul>
+
+        <h2>Muster-Widerrufsformular</h2>
+        <p>(Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es zurück.)</p>
+
+        <div class="form-box">
+            <h3>📝 Widerrufsformular</h3>
+            <p>An:</p>
+            <p>Claudio Scheiwiller<br>
+            Schöntalweg 10<br>
+            6992 Hirschegg, Österreich<br>
+            E-Mail: walserfly@gmail.com</p>
+            
+            <p style="margin-top: 20px;">Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung:</p>
+            
+            <div class="form-field">WolfeWaveSignals Premium-Abonnement</div>
+            
+            <p>Bestellt am (*) / erhalten am (*):</p>
+            <div class="form-field">____________________</div>
+            
+            <p>Name des/der Verbraucher(s):</p>
+            <div class="form-field">____________________</div>
+            
+            <p>Anschrift des/der Verbraucher(s):</p>
+            <div class="form-field">____________________</div>
+            
+            <p>E-Mail-Adresse (für Rückabwicklung):</p>
+            <div class="form-field">____________________</div>
+            
+            <p style="margin-top: 20px;">Datum: ____________________</p>
+            <p>Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier):</p>
+            <div class="form-field">____________________</div>
+            
+            <p style="margin-top: 16px; font-size: 12px; color: var(--text-secondary);">(*) Unzutreffendes streichen.</p>
+        </div>
+
+        <div class="highlight-box">
+            <p><strong>💡 Tipp:</strong> Am einfachsten widerrufen Sie per E-Mail an <a href="mailto:walserfly@gmail.com" style="color: var(--accent-green);">walserfly@gmail.com</a> mit dem Betreff "Widerruf" und Ihren Kontaktdaten.</p>
+        </div>
+
+        <h2>Fragen?</h2>
+        <p>Bei Fragen zum Widerrufsrecht kontaktieren Sie uns gerne:</p>
+        
+        <div class="contact-info">
+            <h3>Kontakt</h3>
+            <p><strong>Claudio Scheiwiller</strong></p>
+            <p>E-Mail: <a href="mailto:walserfly@gmail.com" style="color: var(--accent-green);">walserfly@gmail.com</a></p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div style="margin-bottom: 16px;">
+            <a href="index.html">Startseite</a>
+            <a href="wolfewaves.html">Was sind Wolfe Waves?</a>
+            <a href="impressum.html">Impressum</a>
+            <a href="datenschutz.html">Datenschutz</a>
+            <a href="agb.html">AGB</a>
+            <a href="widerruf.html">Widerruf</a>
+        </div>
+        <div>
+            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler
+        </div>
+    </footer>
+</body>
+</html>
