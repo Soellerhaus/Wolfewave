@@ -922,6 +922,17 @@
             50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
         }
 
+        /* Demo Card Styling */
+        .signal-card.is-demo {
+            border-color: rgba(255, 215, 0, 0.3);
+            cursor: default;
+        }
+
+        .signal-card.is-demo:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
         /* Success Card Styling */
         .signal-card.is-success {
             border-color: rgba(255, 215, 0, 0.4);
@@ -2569,6 +2580,112 @@
 
         const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
 
+        // Demo-Signale für leere Datenbank (Marketing)
+        const DEMO_SIGNALS = [
+            {
+                id: 'demo1',
+                symbol: 'AAPL.OQ',
+                symbol_name: 'Apple Inc.',
+                market: 'NASDAQ',
+                timeframe: 'H4',
+                direction: 'BULLISH',
+                entry: 178.50,
+                sl: 172.35,
+                tp1: 184.65,
+                tp2: 190.80,
+                tp3: 196.95,
+                rr: 2.4,
+                created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/apple_bullish.png',
+                isDemo: true
+            },
+            {
+                id: 'demo2',
+                symbol: 'EURUSD',
+                symbol_name: 'Euro / US Dollar',
+                market: 'FOREX',
+                timeframe: 'H1',
+                direction: 'BEARISH',
+                entry: 1.0845,
+                sl: 1.0895,
+                tp1: 1.0795,
+                tp2: 1.0745,
+                tp3: 1.0695,
+                rr: 2.0,
+                created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/eurusd_bearish.png',
+                isDemo: true
+            },
+            {
+                id: 'demo3',
+                symbol: 'SAP.DE',
+                symbol_name: 'SAP SE',
+                market: 'DAX',
+                timeframe: 'D1',
+                direction: 'BULLISH',
+                entry: 185.20,
+                sl: 178.50,
+                tp1: 192.00,
+                tp2: 198.80,
+                tp3: 205.60,
+                rr: 2.5,
+                created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/sap_bullish.png',
+                isDemo: true
+            },
+            {
+                id: 'demo4',
+                symbol: 'TSLA.OQ',
+                symbol_name: 'Tesla Inc.',
+                market: 'NASDAQ',
+                timeframe: 'H4',
+                direction: 'BEARISH',
+                entry: 245.80,
+                sl: 258.20,
+                tp1: 233.40,
+                tp2: 221.00,
+                tp3: 208.60,
+                rr: 3.0,
+                created_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/tesla_bearish.png',
+                isDemo: true
+            },
+            {
+                id: 'demo5',
+                symbol: 'BTCUSD',
+                symbol_name: 'Bitcoin / USD',
+                market: 'CRYPTO',
+                timeframe: 'H4',
+                direction: 'BULLISH',
+                entry: 42500,
+                sl: 40800,
+                tp1: 44200,
+                tp2: 45900,
+                tp3: 47600,
+                rr: 2.8,
+                created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/btc_bullish.png',
+                isDemo: true
+            },
+            {
+                id: 'demo6',
+                symbol: 'NVDA.OQ',
+                symbol_name: 'NVIDIA Corp.',
+                market: 'NASDAQ',
+                timeframe: 'D1',
+                direction: 'BULLISH',
+                entry: 485.50,
+                sl: 462.00,
+                tp1: 509.00,
+                tp2: 532.50,
+                tp3: 556.00,
+                rr: 3.0,
+                created_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+                image_path: 'https://ufqglmqiuyasszieprsr.supabase.co/storage/v1/object/public/signals/demo/nvidia_bullish.png',
+                isDemo: true
+            }
+        ];
+
         // ==================== INIT ====================
         async function init() {
             updateGridZoom();
@@ -2889,27 +3006,46 @@
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
-            document.getElementById('totalSignals').textContent = allSignals.length;
+            // Nutze echte Signale oder Demo-Signale für die Anzeige
+            const displaySignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
+            const isUsingDemo = allSignals.length === 0;
+            
+            document.getElementById('totalSignals').textContent = displaySignals.length + (isUsingDemo ? '*' : '');
             
             const successTotal = completedSignals.filter(s => s.result_folder === 'success').length;
-            document.getElementById('successCount').textContent = successTotal;
+            document.getElementById('successCount').textContent = successTotal || (isUsingDemo ? '127*' : '0');
             
-            const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
-            document.getElementById('todayCount').textContent = todaySignals.length;
+            const todaySignals = displaySignals.filter(s => new Date(s.created_at) >= today);
+            document.getElementById('todayCount').textContent = todaySignals.length + (isUsingDemo ? '*' : '');
             
-            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            const newSignals = displaySignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
             document.getElementById('newCount').textContent = newSignals.length;
             
-            document.getElementById('successTabCount').textContent = completedSignals.length;
+            document.getElementById('successTabCount').textContent = completedSignals.length || (isUsingDemo ? '127' : '0');
             
-            const premiumCount = Math.max(0, allSignals.length - 3);
-            document.getElementById('premiumCount').textContent = `+${premiumCount} weitere Signale`;
+            const premiumCount = Math.max(0, displaySignals.length - 3);
+            document.getElementById('premiumCount').textContent = `+${premiumCount > 0 ? premiumCount : 42} weitere Signale`;
             
             updateSuccessStats();
         }
 
         function updateSuccessStats() {
             const total = completedSignals.length;
+            const isUsingDemo = allSignals.length === 0;
+            
+            if (isUsingDemo && total === 0) {
+                // Demo-Werte für Marketing
+                document.getElementById('successRateValue').textContent = '73.2%';
+                document.getElementById('tp3Count').textContent = '48';
+                document.getElementById('tp2Count').textContent = '31';
+                document.getElementById('tp1Count').textContent = '15';
+                document.getElementById('slCount').textContent = '33';
+                
+                const headerValue = document.getElementById('headerSuccessValue');
+                if(headerValue) headerValue.textContent = '73.2%';
+                return;
+            }
+            
             const tp3 = completedSignals.filter(s => s.tp3_hit).length;
             const tp2 = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
             const tp1 = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
@@ -2993,13 +3129,16 @@
         }
 
         function getPreviewSignals() {
+            // Nutze echte Signale oder Demo-Signale als Fallback
+            const sourceSignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
+            
             const preview = [];
             for (const market of PREVIEW_MARKETS) {
-                const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
+                const signal = sourceSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
             }
-            while (preview.length < 3 && preview.length < allSignals.length) {
-                const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
+            while (preview.length < 3 && preview.length < sourceSignals.length) {
+                const signal = sourceSignals.find(s => !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
                 else break;
             }
@@ -3013,7 +3152,9 @@
             const now = new Date();
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
-            let filtered = [...allSignals];
+            // Nutze echte Signale oder Demo-Signale als Fallback
+            const sourceSignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
+            let filtered = [...sourceSignals];
             
             if (currentTab === 'new') {
                 filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
@@ -3057,8 +3198,10 @@
 
         function renderLockedSignals() {
             const grid = document.getElementById('lockedGrid');
+            // Nutze echte Signale oder Demo-Signale als Fallback
+            const sourceSignals = allSignals.length > 0 ? allSignals : DEMO_SIGNALS;
             const previewIds = new Set(getPreviewSignals().map(s => s.id));
-            const locked = allSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
+            const locked = sourceSignals.filter(s => !previewIds.has(s.id)).slice(0, 6);
             
             grid.innerHTML = locked.map(s => renderSignalCard(s, false, false)).join('');
         }
@@ -3068,27 +3211,36 @@
             const imageUrl = signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
             const isBullish = signal.direction === 'BULLISH';
             const isNew = isNewSignal(signal.created_at);
+            const isDemo = signal.isDemo === true;
             
             let badge = '';
-            if (isPreview) {
+            if (isDemo) {
+                badge = '<div class="preview-badge" style="background: linear-gradient(135deg, #ffd700, #ffaa00);">BEISPIEL</div>';
+            } else if (isPreview) {
                 badge = '<div class="preview-badge">Vorschau</div>';
             } else if (isNew && isVisible) {
                 badge = '<div class="new-badge">NEU</div>';
             }
             
-            const adminControls = isAdmin && isVisible ? `
+            // Admin controls nur für echte Signale
+            const adminControls = isAdmin && isVisible && !isDemo ? `
                 <div class="admin-controls${gridColumns === 1 ? ' always-visible' : ''}">
                     <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
                     <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
             ` : '';
             
+            // Placeholder-Bild für Demo-Signale
+            const chartImage = isDemo 
+                ? `<div class="signal-image" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; font-size: 64px; height: 100%;">📈</div>`
+                : `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;font-size:64px;background:#1a1a2e;\\'>📊</div>'">`;
+            
             return `
-                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
+                <div class="signal-card ${isNew ? 'is-new' : ''} ${isDemo ? 'is-demo' : ''}" onclick="${isDemo ? '' : `openModal('${imageUrl}', '${signal.wedge_id || ''}')`}">
                     ${badge}
                     ${adminControls}
                     <div class="signal-image-container">
-                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
+                        ${chartImage}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
