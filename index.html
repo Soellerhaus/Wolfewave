@@ -1987,7 +1987,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .mobile-cta {
-                display: block;
+                display: none;
             }
 
             .header {
@@ -2027,6 +2027,31 @@
             .section-header, .stats-section, .main, .premium-header, .premium-grid-container, .tabs-section {
                 padding-left: 16px;
                 padding-right: 16px;
+            }
+
+            /* Stats auf einer Zeile für Mobile */
+            .stats-section {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                gap: 8px;
+                padding-bottom: 16px;
+            }
+
+            .stat-card {
+                flex: 1;
+                min-width: 0;
+                padding: 12px 8px;
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 22px;
+            }
+
+            .stat-label {
+                font-size: 10px;
+                white-space: nowrap;
             }
 
             .signals-grid, .premium-grid {
@@ -2347,6 +2372,7 @@
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
+            <a href="maerkte.html" class="nav-link">📊 Märkte</a>
             <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
@@ -2593,6 +2619,7 @@
         <div style="margin-bottom: 16px;">
             <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
             <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
+            <a href="maerkte.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Handelbare Märkte</a>
             <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
         </div>
