@@ -2627,7 +2627,7 @@
                 4: '240px',
                 3: '320px',
                 2: '420px',
-                1: '550px'
+                1: '800px'  // 50% größer für Vollbild-Ansicht
             };
             const imageHeight = imageHeights[gridColumns] || '240px';
             document.documentElement.style.setProperty('--image-height', imageHeight);
@@ -2661,7 +2661,7 @@
             gridColumns = parseInt(savedZoom);
             document.documentElement.style.setProperty('--grid-columns', gridColumns);
             // Auch Bildhöhe setzen
-            const imageHeights = { 6: '180px', 5: '200px', 4: '240px', 3: '320px', 2: '420px', 1: '550px' };
+            const imageHeights = { 6: '180px', 5: '200px', 4: '240px', 3: '320px', 2: '420px', 1: '800px' };
             document.documentElement.style.setProperty('--image-height', imageHeights[gridColumns] || '240px');
         }
 
