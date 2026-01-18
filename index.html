@@ -174,6 +174,16 @@
             gap: 16px;
         }
 
+        /* Mobile Header - hidden on desktop */
+        .mobile-header-right {
+            display: none;
+        }
+
+        .mobile-menu-overlay,
+        .mobile-menu {
+            display: none;
+        }
+
         .header-nav {
             display: flex;
             align-items: center;
@@ -1996,29 +2006,225 @@
             }
 
             .header {
-                padding: 16px 20px;
-                flex-direction: column;
-                gap: 16px;
+                padding: 12px 16px;
+                flex-direction: row;
+                gap: 0;
+                justify-content: space-between;
             }
 
             .header-nav {
-                margin-left: 0;
-                width: 100%;
-                justify-content: center;
-                gap: 16px;
-            }
-
-            .header-success-rate {
-                padding: 4px 10px;
-            }
-
-            .success-label {
                 display: none;
             }
 
             .header-right {
-                width: 100%;
+                display: none;
+            }
+
+            /* Mobile Header Controls */
+            .mobile-header-right {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .btn-mobile-abo {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            .burger-menu {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                cursor: pointer;
+                gap: 5px;
+                padding: 10px;
+            }
+
+            .burger-menu span {
+                display: block;
+                width: 20px;
+                height: 2px;
+                background: var(--text-primary);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .burger-menu.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .burger-menu.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .burger-menu.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+
+            /* Mobile Menu */
+            .mobile-menu-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 998;
+            }
+
+            .mobile-menu-overlay.active {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+                position: fixed;
+                top: 0;
+                right: -280px;
+                width: 280px;
+                height: 100vh;
+                background: var(--bg-card);
+                border-left: 1px solid var(--border-color);
+                z-index: 999;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .mobile-menu.active {
+                right: 0;
+            }
+
+            .mobile-menu-header {
+                display: flex;
                 justify-content: space-between;
+                align-items: center;
+                padding: 16px 20px;
+                border-bottom: 1px solid var(--border-color);
+                font-weight: 600;
+                font-size: 16px;
+            }
+
+            .mobile-menu-close {
+                background: none;
+                border: none;
+                color: var(--text-secondary);
+                font-size: 20px;
+                cursor: pointer;
+                padding: 4px 8px;
+            }
+
+            .mobile-menu-links {
+                padding: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .mobile-menu-link {
+                display: block;
+                padding: 14px 16px;
+                color: var(--text-primary);
+                text-decoration: none;
+                font-size: 15px;
+                border-radius: 8px;
+                transition: background 0.2s;
+            }
+
+            .mobile-menu-link:hover {
+                background: var(--bg-hover);
+            }
+
+            .mobile-menu-divider {
+                height: 1px;
+                background: var(--border-color);
+                margin: 8px 0;
+            }
+
+            .mobile-menu-stats {
+                display: flex;
+                gap: 12px;
+                padding: 12px 0;
+            }
+
+            .mobile-stat {
+                flex: 1;
+                background: var(--bg-primary);
+                border-radius: 8px;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .mobile-stat-label {
+                display: block;
+                font-size: 10px;
+                color: var(--text-secondary);
+                margin-bottom: 4px;
+            }
+
+            .mobile-stat-value {
+                display: block;
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--accent-green);
+            }
+
+            .mobile-stat-value.live {
+                color: var(--accent-green);
+            }
+
+            .mobile-menu-btn {
+                width: 100%;
+                padding: 14px 16px;
+                border: 1px solid var(--border-color);
+                background: transparent;
+                color: var(--text-primary);
+                font-family: inherit;
+                font-size: 14px;
+                font-weight: 500;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-align: left;
+            }
+
+            .mobile-menu-btn:hover {
+                border-color: var(--accent-green);
+                color: var(--accent-green);
+            }
+
+            .mobile-menu-btn.primary {
+                background: var(--accent-green);
+                border-color: var(--accent-green);
+                color: #000;
+                font-weight: 600;
+                text-align: center;
+            }
+
+            .mobile-menu-btn.primary:hover {
+                background: #00cc6a;
+            }
+
+            /* Logo kleiner auf Mobile */
+            .logo {
+                font-size: 16px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-icon img {
+                width: 40px;
+                height: 40px;
             }
 
             .hero {
@@ -2392,7 +2598,48 @@
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
             <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
         </div>
+        
+        <!-- Mobile Header Controls -->
+        <div class="mobile-header-right">
+            <button class="btn btn-primary btn-mobile-abo" onclick="showCheckout()">Abo</button>
+            <button class="burger-menu" id="burgerMenu" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </header>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+    <nav class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span>Menü</span>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="maerkte.html" class="mobile-menu-link">📊 Märkte</a>
+            <a href="wolfewaves.html" class="mobile-menu-link">📖 Tutorial</a>
+            <div class="mobile-menu-divider"></div>
+            <div class="mobile-menu-stats">
+                <div class="mobile-stat">
+                    <span class="mobile-stat-label">Success Rate</span>
+                    <span class="mobile-stat-value" id="mobileSuccessRate">—%</span>
+                </div>
+                <div class="mobile-stat">
+                    <span class="mobile-stat-label">Status</span>
+                    <span class="mobile-stat-value live">🟢 LIVE</span>
+                </div>
+            </div>
+            <div class="mobile-menu-divider"></div>
+            <button class="mobile-menu-btn" onclick="showLogin(); closeMobileMenu();">
+                🔐 Login
+            </button>
+            <button class="mobile-menu-btn primary" onclick="showCheckout(); closeMobileMenu();">
+                ⭐ Premium Abo — 19,90€/Monat
+            </button>
+        </div>
+    </nav>
 
     <section class="hero">
         <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
@@ -2603,16 +2850,16 @@
                         </div>
                     </div>
 
-                    <div class="paywall-price">
-                        <span class="paywall-price-amount">19,90€</span>
-                        <span class="paywall-price-period">/ Monat</span>
-                    </div>
-
-                    <div class="widerruf-checkbox" style="margin-bottom: 16px; text-align: left;">
+                    <div class="widerruf-checkbox" style="margin-bottom: 20px; text-align: left;">
                         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
                             <input type="checkbox" id="widerrufCheckbox" style="margin-top: 3px; accent-color: var(--accent-green); width: 16px; height: 16px; flex-shrink: 0;">
                             <span>Ich stimme zu, dass die Ausführung des Vertrages sofort beginnt und verzichte auf mein 14-tägiges Widerrufsrecht gemäß § 356 Abs. 5 BGB.</span>
                         </label>
+                    </div>
+
+                    <div class="paywall-price">
+                        <span class="paywall-price-amount">19,90€</span>
+                        <span class="paywall-price-period">/ Monat</span>
                     </div>
 
                     <button class="paywall-btn" id="checkoutBtn" onclick="handleCheckout()" style="opacity: 0.5; cursor: not-allowed;" disabled>
@@ -4292,6 +4539,38 @@
                 updateCountdown();
                 setInterval(updateCountdown, 1000);
             }
+        }
+
+        // ==================== MOBILE BURGER MENU ====================
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const burger = document.getElementById('burgerMenu');
+            
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            burger.classList.toggle('active');
+            
+            // Body scroll verhindern wenn Menü offen
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+            
+            // Update mobile success rate
+            const mobileRate = document.getElementById('mobileSuccessRate');
+            const headerRate = document.getElementById('headerSuccessValue');
+            if (mobileRate && headerRate) {
+                mobileRate.textContent = headerRate.textContent;
+            }
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const burger = document.getElementById('burgerMenu');
+            
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+            burger.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         // Mobile Header Hide on Scroll
