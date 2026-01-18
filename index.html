@@ -673,9 +673,133 @@
             color: #000;
         }
 
+        /* Bullish Tab - Grün */
+        .tab-bullish {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .tab-bullish:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .tab-bullish.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        /* Bearish Tab - Rot */
+        .tab-bearish {
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .tab-bearish:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .tab-bearish.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: #fff;
+        }
+
         .tab-badge-gold {
             background: rgba(255, 215, 0, 0.2);
             color: var(--accent-gold);
+        }
+
+        /* Filter Buttons Section */
+        .filter-buttons-section {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .filter-group-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            min-width: 80px;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .filter-chip.active {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .filter-chip.selected {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        /* Stats Cards klickbar */
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 24px;
+            min-width: 120px;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.1);
+        }
+
+        .stat-card.clickable {
+            cursor: pointer;
+        }
+
+        /* Hero für Premium verstecken */
+        .hero.hide-for-premium {
+            display: none;
         }
 
         .tab-success.active .tab-badge-gold {
@@ -2450,7 +2574,7 @@
         </div>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="heroSection">
         <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
         <p>Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
     </section>
@@ -2471,15 +2595,15 @@
 
     <!-- Stats -->
     <section class="stats-section">
-        <div class="stat-card">
+        <div class="stat-card" onclick="goToTab('all')" style="cursor: pointer;" title="Alle Signale anzeigen">
             <div class="stat-number" id="totalSignals">—</div>
             <div class="stat-label">Aktive Signale</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" onclick="goToTab('success')" style="cursor: pointer;" title="Erfolgreiche Trades anzeigen">
             <div class="stat-number stat-gold" id="successCount">—</div>
             <div class="stat-label">✔ Erfolgreiche Trades</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" onclick="goToTab('new')" style="cursor: pointer;" title="Neue Signale anzeigen">
             <div class="stat-number" id="todayCount">—</div>
             <div class="stat-label">Neu heute</div>
         </div>
@@ -2494,44 +2618,23 @@
                     Neu
                     <span class="tab-badge" id="newCount">0</span>
                 </button>
-                <button class="tab" data-tab="bullish">Bullish</button>
-                <button class="tab" data-tab="bearish">Bearish</button>
+                <button class="tab tab-bullish" data-tab="bullish">Bullish</button>
+                <button class="tab tab-bearish" data-tab="bearish">Bearish</button>
                 <button class="tab tab-success" data-tab="success">
                     🏆 Success
                     <span class="tab-badge tab-badge-gold" id="successTabCount">0</span>
                 </button>
             </div>
-            <div class="filters">
+        </div>
+        
+        <!-- Filter Buttons Section -->
+        <div class="filter-buttons-section">
+            <div class="filter-row">
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="searchSymbol" placeholder="Symbol suchen... (z.B. Henkel, Apple, EURUSD)">
+                    <input type="text" class="search-input" id="searchSymbol" placeholder="Symbol suchen...">
                 </div>
-                <select class="filter-select" id="filterMarket">
-                    <option value="">Alle Märkte</option>
-                    <option value="DAX">DAX</option>
-                    <option value="NASDAQ">NASDAQ</option>
-                    <option value="NYSE">NYSE</option>
-                    <option value="SP500">S&P 500</option>
-                    <option value="INDICES">Indizes</option>
-                    <option value="FOREX">Forex</option>
-                    <option value="CRYPTO">Krypto</option>
-                    <option value="OTHER">Andere</option>
-                </select>
-                <select class="filter-select" id="filterTimeframe">
-                    <option value="">Alle TF</option>
-                    <option value="M5">M5</option>
-                    <option value="M15">M15</option>
-                    <option value="H1">H1</option>
-                    <option value="H4">H4</option>
-                    <option value="D1">Daily</option>
-                    <option value="W1">Weekly</option>
-                </select>
-                <div class="zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
-                    <span class="zoom-indicator" id="zoomIndicator">4</span>
-                    <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
-                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
-                </div>
+                
                 <!-- Market Hours Indicator -->
                 <div class="market-hours-indicator" id="marketHoursIndicator">
                     <div class="market-hours-trigger" onclick="toggleMarketHours()">
@@ -2541,7 +2644,7 @@
                             <span class="status-dot" id="dotDAX"></span>
                             <span class="status-dot" id="dotUS"></span>
                             <span class="status-dot" id="dotFX"></span>
-                            <span class="status-dot" id="dotEUIdx"></span>
+                            <span class="status-dot" id="dotCrypto"></span>
                         </div>
                     </div>
                     <div class="market-hours-dropdown" id="marketHoursDropdown">
@@ -2550,77 +2653,56 @@
                             <span class="market-hours-time" id="currentTime">--:--</span>
                         </div>
                         <div class="market-hours-list">
-                            <!-- DAX -->
                             <div class="market-item" id="marketDAX">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightDAX"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light" id="lightDAX"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">🇩🇪 DAX / XETRA</span>
                                     <span class="market-time">09:00 - 17:30 MEZ</span>
                                 </div>
                                 <div class="market-status" id="statusDAX">--</div>
                             </div>
-                            <!-- US Markets -->
                             <div class="market-item" id="marketUS">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightUS"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light" id="lightUS"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">🇺🇸 NASDAQ / NYSE</span>
                                     <span class="market-time">15:30 - 22:00 MEZ</span>
                                 </div>
                                 <div class="market-status" id="statusUS">--</div>
                             </div>
-                            <!-- Forex -->
                             <div class="market-item" id="marketFX">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightFX"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light" id="lightFX"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">💱 Forex</span>
                                     <span class="market-time">So 23:00 - Fr 22:00</span>
                                 </div>
                                 <div class="market-status" id="statusFX">--</div>
                             </div>
-                            <!-- Crypto -->
                             <div class="market-item" id="marketCrypto">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightCrypto"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light open" id="lightCrypto"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">₿ Krypto</span>
                                     <span class="market-time">24/7</span>
                                 </div>
-                                <div class="market-status" id="statusCrypto">--</div>
+                                <div class="market-status" id="statusCrypto" style="color: var(--accent-green);">Offen</div>
                             </div>
-                            <!-- S&P 500 Futures -->
                             <div class="market-item" id="marketSP">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightSP"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light" id="lightSP"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">📈 S&P 500 Futures</span>
                                     <span class="market-time">Mo-Fr (fast 24h)</span>
                                 </div>
                                 <div class="market-status" id="statusSP">--</div>
                             </div>
-                            <!-- EU Indizes CFD -->
                             <div class="market-item" id="marketEUIdx">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightEUIdx"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light" id="lightEUIdx"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">🇪🇺 EU Indizes CFD</span>
                                     <span class="market-time">08:00 - 22:00 MEZ</span>
                                 </div>
                                 <div class="market-status" id="statusEUIdx">--</div>
                             </div>
-                            <!-- Asia Indizes CFD -->
                             <div class="market-item" id="marketAsiaIdx">
-                                <div class="market-light">
-                                    <span class="traffic-light" id="lightAsiaIdx"></span>
-                                </div>
+                                <div class="market-light"><span class="traffic-light" id="lightAsiaIdx"></span></div>
                                 <div class="market-info">
                                     <span class="market-name">🌏 Asia Indizes CFD</span>
                                     <span class="market-time">01:00 - 22:00 MEZ</span>
@@ -2634,6 +2716,42 @@
                             <span class="legend-item"><span class="legend-dot red"></span> Geschlossen</span>
                         </div>
                     </div>
+                </div>
+                
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
+                    <span class="zoom-indicator" id="zoomIndicator">4</span>
+                    <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
+                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild">⬜</button>
+                </div>
+            </div>
+            
+            <!-- Multi-Select Market Buttons -->
+            <div class="filter-group">
+                <span class="filter-group-label">Märkte:</span>
+                <div class="filter-chips" id="marketChips">
+                    <button class="filter-chip active" data-market="">Alle</button>
+                    <button class="filter-chip" data-market="DAX">🇩🇪 DAX</button>
+                    <button class="filter-chip" data-market="NASDAQ">🇺🇸 NASDAQ</button>
+                    <button class="filter-chip" data-market="NYSE">🇺🇸 NYSE</button>
+                    <button class="filter-chip" data-market="SP500">📊 S&P</button>
+                    <button class="filter-chip" data-market="FOREX">💱 Forex</button>
+                    <button class="filter-chip" data-market="CRYPTO">₿ Krypto</button>
+                    <button class="filter-chip" data-market="INDICES">📈 Indizes</button>
+                </div>
+            </div>
+            
+            <!-- Multi-Select Timeframe Buttons -->
+            <div class="filter-group">
+                <span class="filter-group-label">Timeframes:</span>
+                <div class="filter-chips" id="timeframeChips">
+                    <button class="filter-chip active" data-tf="">Alle</button>
+                    <button class="filter-chip" data-tf="M5">M5</button>
+                    <button class="filter-chip" data-tf="M15">M15</button>
+                    <button class="filter-chip" data-tf="H1">H1</button>
+                    <button class="filter-chip" data-tf="H4">H4</button>
+                    <button class="filter-chip" data-tf="D1">Daily</button>
+                    <button class="filter-chip" data-tf="W1">Weekly</button>
                 </div>
             </div>
         </div>
@@ -3201,6 +3319,8 @@
             if (isSubscribed || isAdmin) {
                 document.getElementById('tabsSection').classList.add('visible');
                 document.getElementById('premiumSection').style.display = 'none';
+                document.getElementById('heroSection').style.display = 'none';
+                document.getElementById('mobileCTA').style.display = 'none';
                 
                 // Update header
                 document.getElementById('previewHeader').innerHTML = `
@@ -3235,6 +3355,8 @@
             document.getElementById('premiumSection').style.display = 'block';
             document.getElementById('successStatsBar').classList.remove('visible');
             document.getElementById('adminBadge').classList.remove('visible');
+            document.getElementById('heroSection').style.display = 'block';
+            document.getElementById('mobileCTA').style.display = 'block';
             
             document.getElementById('previewHeader').innerHTML = `
                 <div class="section-title">
@@ -3650,7 +3772,55 @@
             return new Date(dateStr).toLocaleDateString('de-DE');
         }
 
+        // Funktion um zu einem Tab zu navigieren (für klickbare Stats)
+        function goToTab(tabName) {
+            // Nur für Premium-User
+            if (!currentUser || (!isSubscribed && !isAdmin)) {
+                showLogin();
+                return;
+            }
+            
+            // Tab aktivieren
+            currentTab = tabName;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const targetTab = document.querySelector(`.tab[data-tab="${tabName}"]`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            // Scroll zu den Signalen
+            document.getElementById('previewHeader').scrollIntoView({ behavior: 'smooth' });
+            
+            renderSignals();
+        }
+
+        // ==================== GO TO TAB (von Stats Cards) ====================
+        function goToTab(tabName) {
+            // Prüfe ob User Premium ist
+            if (!currentUser || (!isSubscribed && !isAdmin)) {
+                // Für Gäste: Zeige Login
+                showLogin();
+                return;
+            }
+            
+            // Tab aktivieren
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const targetTab = document.querySelector(`.tab[data-tab="${tabName}"]`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            currentTab = tabName;
+            renderSignals();
+            
+            // Scroll zu den Signalen
+            document.getElementById('tabsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
         // ==================== EVENT LISTENERS ====================
+        // Multi-Select Filter Arrays
+        let selectedMarkets = [];
+        let selectedTimeframes = [];
+
         function setupEventListeners() {
             // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
@@ -3662,9 +3832,67 @@
                 });
             });
             
-            // Filters
-            document.getElementById('filterMarket').addEventListener('change', renderSignals);
-            document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
+            // Market Chips (Multi-Select)
+            document.querySelectorAll('#marketChips .filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const market = chip.dataset.market;
+                    
+                    if (market === '') {
+                        // "Alle" wurde geklickt - Reset
+                        selectedMarkets = [];
+                        document.querySelectorAll('#marketChips .filter-chip').forEach(c => c.classList.remove('active', 'selected'));
+                        chip.classList.add('active');
+                    } else {
+                        // Toggle einzelnen Markt
+                        document.querySelector('#marketChips .filter-chip[data-market=""]').classList.remove('active');
+                        
+                        if (selectedMarkets.includes(market)) {
+                            selectedMarkets = selectedMarkets.filter(m => m !== market);
+                            chip.classList.remove('selected');
+                        } else {
+                            selectedMarkets.push(market);
+                            chip.classList.add('selected');
+                        }
+                        
+                        // Wenn alle abgewählt, zeige "Alle" als aktiv
+                        if (selectedMarkets.length === 0) {
+                            document.querySelector('#marketChips .filter-chip[data-market=""]').classList.add('active');
+                        }
+                    }
+                    renderSignals();
+                });
+            });
+            
+            // Timeframe Chips (Multi-Select)
+            document.querySelectorAll('#timeframeChips .filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const tf = chip.dataset.tf;
+                    
+                    if (tf === '') {
+                        // "Alle" wurde geklickt - Reset
+                        selectedTimeframes = [];
+                        document.querySelectorAll('#timeframeChips .filter-chip').forEach(c => c.classList.remove('active', 'selected'));
+                        chip.classList.add('active');
+                    } else {
+                        // Toggle einzelnen Timeframe
+                        document.querySelector('#timeframeChips .filter-chip[data-tf=""]').classList.remove('active');
+                        
+                        if (selectedTimeframes.includes(tf)) {
+                            selectedTimeframes = selectedTimeframes.filter(t => t !== tf);
+                            chip.classList.remove('selected');
+                        } else {
+                            selectedTimeframes.push(tf);
+                            chip.classList.add('selected');
+                        }
+                        
+                        // Wenn alle abgewählt, zeige "Alle" als aktiv
+                        if (selectedTimeframes.length === 0) {
+                            document.querySelector('#timeframeChips .filter-chip[data-tf=""]').classList.add('active');
+                        }
+                    }
+                    renderSignals();
+                });
+            });
             
             // Search with debounce
             let searchTimeout;
