@@ -2608,7 +2608,14 @@
                         <span class="paywall-price-period">/ Monat</span>
                     </div>
 
-                    <button class="paywall-btn" onclick="showCheckout()">
+                    <div class="widerruf-checkbox" style="margin-bottom: 16px; text-align: left;">
+                        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+                            <input type="checkbox" id="widerrufCheckbox" style="margin-top: 3px; accent-color: var(--accent-green); width: 16px; height: 16px; flex-shrink: 0;">
+                            <span>Ich stimme zu, dass die Ausführung des Vertrages sofort beginnt und verzichte auf mein 14-tägiges Widerrufsrecht gemäß § 356 Abs. 5 BGB.</span>
+                        </label>
+                    </div>
+
+                    <button class="paywall-btn" id="checkoutBtn" onclick="handleCheckout()" style="opacity: 0.5; cursor: not-allowed;" disabled>
                         Jetzt Abonnieren
                     </button>
 
@@ -3843,8 +3850,62 @@
                 showLogin();
                 return;
             }
+            // Scroll zur Paywall, damit User den Widerrufsverzicht sieht
+            const paywall = document.getElementById('premiumSection');
+            if (paywall && paywall.style.display !== 'none') {
+                paywall.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Highlight die Checkbox kurz
+                setTimeout(() => {
+                    const checkbox = document.getElementById('widerrufCheckbox');
+                    if (checkbox) {
+                        checkbox.parentElement.style.animation = 'highlightPulse 1s ease';
+                        setTimeout(() => {
+                            checkbox.parentElement.style.animation = '';
+                        }, 1000);
+                    }
+                }, 500);
+            } else {
+                // User ist bereits Premium
+                alert('Du hast bereits ein aktives Abo!');
+            }
+        }
+
+        function proceedToCheckout() {
+            if (!currentUser) {
+                showLogin();
+                return;
+            }
             window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
         }
+
+        function handleCheckout() {
+            const checkbox = document.getElementById('widerrufCheckbox');
+            if (!checkbox || !checkbox.checked) {
+                alert('Bitte bestätige den Widerrufsverzicht, um fortzufahren.');
+                return;
+            }
+            proceedToCheckout();
+        }
+
+        // Widerrufsverzicht Checkbox Event Listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkbox = document.getElementById('widerrufCheckbox');
+            const btn = document.getElementById('checkoutBtn');
+            
+            if (checkbox && btn) {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    } else {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    }
+                });
+            }
+        });
 
         function manageSubscription() {
             // Lemon Squeezy Customer Portal - bentigt aktivierten Store
@@ -4112,6 +4173,10 @@
             @keyframes slideOut {
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
+            }
+            @keyframes highlightPulse {
+                0%, 100% { background: transparent; }
+                50% { background: rgba(0, 255, 136, 0.2); border-radius: 8px; }
             }
         `;
         document.head.appendChild(toastStyle);
