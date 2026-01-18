@@ -3020,10 +3020,11 @@
 
         async function checkAdminStatus() {
             try {
-                // Prüfe is_admin in users_with_subscriptions View
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/users_with_subscriptions?user_id=eq.${currentUser.id}&select=is_admin`,
-                    {
+                // Prüfe in admins Tabelle
+                const url = `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=id`;
+                console.log('Admin check URL:', url);
+                
+                const response = await fetch(url, {
                         headers: {
                             'apikey': SUPABASE_KEY,
                             'Authorization': `Bearer ${getAccessToken()}`
@@ -3031,12 +3032,29 @@
                     }
                 );
                 
+                console.log('Admin check response status:', response.status);
+                
                 if (response.ok) {
                     const data = await response.json();
-                    isAdmin = data.length > 0 && data[0].is_admin === true;
+                    console.log('Admin check data:', data);
+                    isAdmin = data.length > 0;
+                    console.log('isAdmin set to:', isAdmin);
+                } else {
+                    // Fallback: Prüfe per Email (hardcoded für dich)
+                    if (currentUser.email === 'claudio-sch@hotmail.com') {
+                        isAdmin = true;
+                        console.log('Admin via email fallback');
+                    }
                 }
             } catch (e) {
-                isAdmin = false;
+                console.error('Admin check error:', e);
+                // Fallback: Prüfe per Email
+                if (currentUser && currentUser.email === 'claudio-sch@hotmail.com') {
+                    isAdmin = true;
+                    console.log('Admin via email fallback (catch)');
+                } else {
+                    isAdmin = false;
+                }
             }
         }
 
