@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Scanner Universum - Alle handelbaren Märkte | WolfeWaveSignals</title>
+    <meta name="description" content="Übersicht aller Märkte und Instrumente die unser Wolfe Wave Scanner analysiert. DAX, NASDAQ, NYSE, Forex, Krypto und mehr.">
+    <meta name="keywords" content="Wolfe Wave Scanner, DAX Aktien, NASDAQ Aktien, NYSE Aktien, Forex Paare, Krypto Trading, CFD Trading">
+    <meta name="author" content="WolfeWaveSignals">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://wolfewavesignals.com/maerkte.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --bg-hover: #1a1a1a;
+            --accent-green: #00ff88;
+            --accent-red: #ff4757;
+            --accent-gold: #ffd700;
+            --accent-blue: #4dabf7;
+            --accent-purple: #a855f7;
+            --accent-orange: #f97316;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --border-color: #1f1f1f;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .logo-icon img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-green);
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: var(--accent-green);
+            color: #000;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 40px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--accent-green);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Search Box */
+        .search-section {
+            padding: 0 40px 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 16px 20px 16px 50px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
+        }
+
+        .search-results-count {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 0 40px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Market Section */
+        .market-section {
+            margin-bottom: 50px;
+        }
+
+        .market-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .market-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .market-icon {
+            font-size: 28px;
+        }
+
+        .market-badge {
+            background: var(--accent-green);
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .market-badge.dax { background: var(--accent-blue); color: #fff; }
+        .market-badge.nasdaq { background: var(--accent-green); }
+        .market-badge.nyse { background: var(--accent-purple); color: #fff; }
+        .market-badge.forex { background: var(--accent-gold); }
+        .market-badge.crypto { background: var(--accent-orange); }
+        .market-badge.indices { background: #22c55e; }
+        .market-badge.commodities { background: #f59e0b; }
+
+        .market-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Instrument Grid */
+        .instrument-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .instrument-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 16px;
+            transition: all 0.2s;
+            cursor: default;
+        }
+
+        .instrument-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .instrument-card.highlight {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .instrument-symbol {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-green);
+            margin-bottom: 4px;
+        }
+
+        .instrument-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Timeframes Info */
+        .timeframes-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .timeframes-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timeframes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .timeframe-card {
+            background: var(--bg-hover);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .timeframe-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .timeframe-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .info-box h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        .footer a:hover {
+            color: var(--accent-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header-nav {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .search-section, .main {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .stats-bar {
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 28px;
+            }
+
+            .market-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .instrument-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .timeframes-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Hidden class for search */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
+            <div>Wolfe<span>Wave</span>Signals</div>
+        </a>
+        <nav class="header-nav">
+            <a href="index.html" class="nav-link">🏠 Signale</a>
+            <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
+            <a href="maerkte.html" class="nav-link active">🌍 Märkte</a>
+            <a href="index.html" class="btn-primary">Jetzt starten</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>🔍 Scanner <span>Universum</span></h1>
+        <p>Unser Wolfe Wave Scanner analysiert kontinuierlich über 700 Instrumente auf allen Timeframes. Hier siehst du alle Märkte, die wir abdecken.</p>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalInstruments">700+</div>
+                <div class="stat-label">Instrumente</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Timeframes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Märkte</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/5</div>
+                <div class="stat-label">Scanning</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Symbol oder Name suchen... (z.B. Apple, EURUSD, DAX)">
+        </div>
+        <div class="search-results-count" id="searchResults"></div>
+    </section>
+
+    <main class="main">
+        <!-- Timeframes Info -->
+        <section class="timeframes-section">
+            <h2 class="timeframes-title">⏱️ Analysierte Timeframes</h2>
+            <div class="timeframes-grid">
+                <div class="timeframe-card">
+                    <div class="timeframe-value">M5</div>
+                    <div class="timeframe-label">5 Minuten</div>
+                </div>
+                <div class="timeframe-card">
+                    <div class="timeframe-value">M15</div>
+                    <div class="timeframe-label">15 Minuten</div>
+                </div>
+                <div class="timeframe-card">
+                    <div class="timeframe-value">H1</div>
+                    <div class="timeframe-label">1 Stunde</div>
+                </div>
+                <div class="timeframe-card">
+                    <div class="timeframe-value">H4</div>
+                    <div class="timeframe-label">4 Stunden</div>
+                </div>
+                <div class="timeframe-card">
+                    <div class="timeframe-value">D1</div>
+                    <div class="timeframe-label">Daily</div>
+                </div>
+                <div class="timeframe-card">
+                    <div class="timeframe-value">W1</div>
+                    <div class="timeframe-label">Weekly</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Box -->
+        <section class="info-box">
+            <h3>💡 So funktioniert unser Scanner</h3>
+            <p>Unser automatisierter Wolfe Wave Scanner durchsucht alle unten aufgeführten Instrumente kontinuierlich auf allen Timeframes nach gültigen Wolfe Wave Formationen. Sobald ein Signal erkannt wird, berechnet der Scanner automatisch Entry, Stop-Loss und drei Take-Profit-Levels basierend auf der Wolfe Wave Geometrie. Die Signale werden in Echtzeit auf unserer Plattform veröffentlicht. <strong>Alle Instrumente sind als CFDs bei GBE Brokers handelbar.</strong></p>
+        </section>
+
+        <!-- DAX / XETRA -->
+        <section class="market-section" data-market="dax">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">🇩🇪</span>
+                    DAX / XETRA
+                    <span class="market-badge dax">DE</span>
+                </h2>
+                <span class="market-count"><span class="count">40</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="daxGrid"></div>
+        </section>
+
+        <!-- NASDAQ -->
+        <section class="market-section" data-market="nasdaq">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">🇺🇸</span>
+                    NASDAQ
+                    <span class="market-badge nasdaq">US</span>
+                </h2>
+                <span class="market-count"><span class="count">0</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="nasdaqGrid"></div>
+        </section>
+
+        <!-- NYSE -->
+        <section class="market-section" data-market="nyse">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">🏛️</span>
+                    NYSE
+                    <span class="market-badge nyse">US</span>
+                </h2>
+                <span class="market-count"><span class="count">0</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="nyseGrid"></div>
+        </section>
+
+        <!-- Forex -->
+        <section class="market-section" data-market="forex">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">💱</span>
+                    Forex
+                    <span class="market-badge forex">FX</span>
+                </h2>
+                <span class="market-count"><span class="count">0</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="forexGrid"></div>
+        </section>
+
+        <!-- Indices -->
+        <section class="market-section" data-market="indices">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">📊</span>
+                    Indices CFD
+                    <span class="market-badge indices">IDX</span>
+                </h2>
+                <span class="market-count"><span class="count">0</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="indicesGrid"></div>
+        </section>
+
+        <!-- Crypto -->
+        <section class="market-section" data-market="crypto">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">₿</span>
+                    Kryptowährungen
+                    <span class="market-badge crypto">CRYPTO</span>
+                </h2>
+                <span class="market-count"><span class="count">0</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="cryptoGrid"></div>
+        </section>
+
+        <!-- Commodities -->
+        <section class="market-section" data-market="commodities">
+            <div class="market-header">
+                <h2 class="market-title">
+                    <span class="market-icon">🛢️</span>
+                    Rohstoffe & Metalle
+                    <span class="market-badge commodities">CMD</span>
+                </h2>
+                <span class="market-count"><span class="count">0</span> Instrumente</span>
+            </div>
+            <div class="instrument-grid market-content" id="commoditiesGrid"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div style="margin-bottom: 16px;">
+            <a href="index.html">Startseite</a>
+            <a href="wolfewaves.html">Was sind Wolfe Waves?</a>
+            <a href="maerkte.html">Märkte</a>
+            <a href="impressum.html">Impressum</a>
+            <a href="datenschutz.html">Datenschutz</a>
+        </div>
+        <div style="color: var(--text-secondary); font-size: 11px;">
+            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
+            <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
+                ⚠ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // All instruments data from GBE Brokers Product Specifications
+        const instruments = {
+            dax: [
+                { symbol: 'ADS.DE', name: 'Adidas AG' },
+                { symbol: 'AIR.DE', name: 'Airbus SE' },
+                { symbol: 'ALV.DE', name: 'Allianz SE' },
+                { symbol: 'BAS.DE', name: 'BASF SE' },
+                { symbol: 'BAYN.DE', name: 'Bayer AG' },
+                { symbol: 'BEI.DE', name: 'Beiersdorf AG' },
+                { symbol: 'BMW.DE', name: 'BMW AG' },
+                { symbol: 'BNR.DE', name: 'Brenntag SE' },
+                { symbol: 'CON.DE', name: 'Continental AG' },
+                { symbol: 'COV.DE', name: 'Covestro AG' },
+                { symbol: 'DBK.DE', name: 'Deutsche Bank AG' },
+                { symbol: 'DB1.DE', name: 'Deutsche Börse AG' },
+                { symbol: 'DHL.DE', name: 'DHL Group' },
+                { symbol: 'DTE.DE', name: 'Deutsche Telekom AG' },
+                { symbol: 'EOAN.DE', name: 'E.ON SE' },
+                { symbol: 'FRE.DE', name: 'Fresenius SE' },
+                { symbol: 'HEI.DE', name: 'Heidelberg Materials' },
+                { symbol: 'HEN3.DE', name: 'Henkel AG' },
+                { symbol: 'IFX.DE', name: 'Infineon Technologies' },
+                { symbol: 'MBG.DE', name: 'Mercedes-Benz Group' },
+                { symbol: 'MRK.DE', name: 'Merck KGaA' },
+                { symbol: 'MTX.DE', name: 'MTU Aero Engines' },
+                { symbol: 'MUV2.DE', name: 'Munich Re' },
+                { symbol: 'P911.DE', name: 'Porsche AG' },
+                { symbol: 'PAH3.DE', name: 'Porsche Automobil' },
+                { symbol: 'QIA.DE', name: 'Qiagen NV' },
+                { symbol: 'RHM.DE', name: 'Rheinmetall AG' },
+                { symbol: 'RWE.DE', name: 'RWE AG' },
+                { symbol: 'SAP.DE', name: 'SAP SE' },
+                { symbol: 'SHL.DE', name: 'Siemens Healthineers' },
+                { symbol: 'SIE.DE', name: 'Siemens AG' },
+                { symbol: 'ENR.DE', name: 'Siemens Energy AG' },
+                { symbol: 'SRT3.DE', name: 'Sartorius AG' },
+                { symbol: 'SY1.DE', name: 'Symrise AG' },
+                { symbol: 'VNA.DE', name: 'Vonovia SE' },
+                { symbol: 'VOW3.DE', name: 'Volkswagen AG' },
+                { symbol: 'ZAL.DE', name: 'Zalando SE' },
+                { symbol: 'HNR1.DE', name: 'Hannover Rück SE' },
+                { symbol: 'CBK.DE', name: 'Commerzbank AG' },
+                { symbol: 'DPW.DE', name: 'Deutsche Post AG' }
+            ],
+            nasdaq: [
+                { symbol: 'AAPL.OQ', name: 'Apple Inc' },
+                { symbol: 'MSFT.OQ', name: 'Microsoft Corp' },
+                { symbol: 'GOOGL.OQ', name: 'Alphabet Inc' },
+                { symbol: 'AMZN.OQ', name: 'Amazon.com Inc' },
+                { symbol: 'NVDA.OQ', name: 'NVIDIA Corp' },
+                { symbol: 'META.OQ', name: 'Meta Platforms Inc' },
+                { symbol: 'TSLA.OQ', name: 'Tesla Inc' },
+                { symbol: 'AVGO.OQ', name: 'Broadcom Inc' },
+                { symbol: 'ASML.OQ', name: 'ASML Holding NV' },
+                { symbol: 'ADBE.OQ', name: 'Adobe Inc' },
+                { symbol: 'COST.OQ', name: 'Costco Wholesale' },
+                { symbol: 'PEP.OQ', name: 'PepsiCo Inc' },
+                { symbol: 'CSCO.OQ', name: 'Cisco Systems' },
+                { symbol: 'NFLX.OQ', name: 'Netflix Inc' },
+                { symbol: 'AMD.OQ', name: 'Advanced Micro Devices' },
+                { symbol: 'INTC.OQ', name: 'Intel Corp' },
+                { symbol: 'CMCSA.OQ', name: 'Comcast Corp' },
+                { symbol: 'INTU.OQ', name: 'Intuit Inc' },
+                { symbol: 'AMGN.OQ', name: 'Amgen Inc' },
+                { symbol: 'QCOM.OQ', name: 'Qualcomm Inc' },
+                { symbol: 'TXN.OQ', name: 'Texas Instruments' },
+                { symbol: 'AMAT.OQ', name: 'Applied Materials' },
+                { symbol: 'BKNG.OQ', name: 'Booking Holdings' },
+                { symbol: 'ISRG.OQ', name: 'Intuitive Surgical' },
+                { symbol: 'LRCX.OQ', name: 'Lam Research' },
+                { symbol: 'MDLZ.OQ', name: 'Mondelez International' },
+                { symbol: 'ADI.OQ', name: 'Analog Devices' },
+                { symbol: 'REGN.OQ', name: 'Regeneron Pharma' },
+                { symbol: 'VRTX.OQ', name: 'Vertex Pharma' },
+                { symbol: 'PANW.OQ', name: 'Palo Alto Networks' },
+                { symbol: 'KLAC.OQ', name: 'KLA Corp' },
+                { symbol: 'SNPS.OQ', name: 'Synopsys Inc' },
+                { symbol: 'CDNS.OQ', name: 'Cadence Design' },
+                { symbol: 'MELI.OQ', name: 'MercadoLibre Inc' },
+                { symbol: 'CRWD.OQ', name: 'CrowdStrike Holdings' },
+                { symbol: 'FTNT.OQ', name: 'Fortinet Inc' },
+                { symbol: 'MAR.OQ', name: 'Marriott International' },
+                { symbol: 'ORLY.OQ', name: "O'Reilly Automotive" },
+                { symbol: 'ABNB.OQ', name: 'Airbnb Inc' },
+                { symbol: 'DXCM.OQ', name: 'DexCom Inc' },
+                { symbol: 'MRVL.OQ', name: 'Marvell Technology' },
+                { symbol: 'WDAY.OQ', name: 'Workday Inc' },
+                { symbol: 'IDXX.OQ', name: 'IDEXX Laboratories' },
+                { symbol: 'CTAS.OQ', name: 'Cintas Corp' },
+                { symbol: 'ODFL.OQ', name: 'Old Dominion Freight' },
+                { symbol: 'BIIB.OQ', name: 'Biogen Inc' },
+                { symbol: 'ILMN.OQ', name: 'Illumina Inc' },
+                { symbol: 'TEAM.OQ', name: 'Atlassian Corp' },
+                { symbol: 'ZS.OQ', name: 'Zscaler Inc' },
+                { symbol: 'DDOG.OQ', name: 'Datadog Inc' },
+                { symbol: 'COIN.OQ', name: 'Coinbase Global' },
+                { symbol: 'HOOD.OQ', name: 'Robinhood Markets' },
+                { symbol: 'LCID.OQ', name: 'Lucid Group' },
+                { symbol: 'RIVN.OQ', name: 'Rivian Automotive' },
+                { symbol: 'PLTR.OQ', name: 'Palantir Technologies' },
+                { symbol: 'SNOW.OQ', name: 'Snowflake Inc' },
+                { symbol: 'NET.OQ', name: 'Cloudflare Inc' },
+                { symbol: 'OKTA.OQ', name: 'Okta Inc' },
+                { symbol: 'MDB.OQ', name: 'MongoDB Inc' },
+                { symbol: 'TTD.OQ', name: 'The Trade Desk' },
+                { symbol: 'ARM.OQ', name: 'ARM Holdings PLC' },
+                { symbol: 'MARA.OQ', name: 'Marathon Digital' },
+                { symbol: 'CLSK.OQ', name: 'CleanSpark Inc' },
+                { symbol: 'BITF.OQ', name: 'Bitfarms Ltd' },
+                { symbol: 'CIFR.OQ', name: 'Cipher Mining' }
+            ],
+            nyse: [
+                { symbol: 'JPM.N', name: 'JPMorgan Chase' },
+                { symbol: 'V.N', name: 'Visa Inc' },
+                { symbol: 'JNJ.N', name: 'Johnson & Johnson' },
+                { symbol: 'WMT.N', name: 'Walmart Inc' },
+                { symbol: 'PG.N', name: 'Procter & Gamble' },
+                { symbol: 'MA.N', name: 'Mastercard Inc' },
+                { symbol: 'UNH.N', name: 'UnitedHealth Group' },
+                { symbol: 'HD.N', name: 'Home Depot' },
+                { symbol: 'BAC.N', name: 'Bank of America' },
+                { symbol: 'XOM.N', name: 'Exxon Mobil' },
+                { symbol: 'CVX.N', name: 'Chevron Corp' },
+                { symbol: 'KO.N', name: 'Coca-Cola Co' },
+                { symbol: 'DIS.N', name: 'Walt Disney Co' },
+                { symbol: 'PFE.N', name: 'Pfizer Inc' },
+                { symbol: 'MRK.N', name: 'Merck & Co' },
+                { symbol: 'VZ.N', name: 'Verizon Communications' },
+                { symbol: 'T.N', name: 'AT&T Inc' },
+                { symbol: 'NKE.N', name: 'Nike Inc' },
+                { symbol: 'MCD.N', name: "McDonald's Corp" },
+                { symbol: 'WFC.N', name: 'Wells Fargo' },
+                { symbol: 'IBM.N', name: 'IBM Corp' },
+                { symbol: 'GE.N', name: 'General Electric' },
+                { symbol: 'CAT.N', name: 'Caterpillar Inc' },
+                { symbol: 'BA.N', name: 'Boeing Co' },
+                { symbol: 'GS.N', name: 'Goldman Sachs' },
+                { symbol: 'MMM.N', name: '3M Company' },
+                { symbol: 'AXP.N', name: 'American Express' },
+                { symbol: 'UBER.N', name: 'Uber Technologies' },
+                { symbol: 'CRM.N', name: 'Salesforce Inc' },
+                { symbol: 'ORCL.N', name: 'Oracle Corp' },
+                { symbol: 'LMT.N', name: 'Lockheed Martin' },
+                { symbol: 'RTX.N', name: 'RTX Corp' },
+                { symbol: 'HON.N', name: 'Honeywell International' },
+                { symbol: 'UPS.N', name: 'United Parcel Service' },
+                { symbol: 'LOW.N', name: "Lowe's Companies" },
+                { symbol: 'SPGI.N', name: 'S&P Global' },
+                { symbol: 'BLK.N', name: 'BlackRock Inc' },
+                { symbol: 'AMT.N', name: 'American Tower' },
+                { symbol: 'C.N', name: 'Citigroup Inc' },
+                { symbol: 'TGT.N', name: 'Target Corp' },
+                { symbol: 'CVS.N', name: 'CVS Health' },
+                { symbol: 'SYK.N', name: 'Stryker Corp' },
+                { symbol: 'PLD.N', name: 'Prologis Inc' },
+                { symbol: 'DE.N', name: 'Deere & Company' },
+                { symbol: 'BDX.N', name: 'Becton Dickinson' },
+                { symbol: 'CI.N', name: 'Cigna Group' },
+                { symbol: 'SO.N', name: 'Southern Company' },
+                { symbol: 'DUK.N', name: 'Duke Energy' },
+                { symbol: 'USB.N', name: 'U.S. Bancorp' },
+                { symbol: 'PNC.N', name: 'PNC Financial' },
+                { symbol: 'GME.N', name: 'GameStop Corp' },
+                { symbol: 'AMC.N', name: 'AMC Entertainment' },
+                { symbol: 'GOLD.N', name: 'Barrick Gold' },
+                { symbol: 'NEM.N', name: 'Newmont Corp' }
+            ],
+            forex: [
+                { symbol: 'EURUSD', name: 'Euro / US Dollar' },
+                { symbol: 'GBPUSD', name: 'British Pound / US Dollar' },
+                { symbol: 'USDJPY', name: 'US Dollar / Japanese Yen' },
+                { symbol: 'USDCHF', name: 'US Dollar / Swiss Franc' },
+                { symbol: 'AUDUSD', name: 'Australian Dollar / US Dollar' },
+                { symbol: 'USDCAD', name: 'US Dollar / Canadian Dollar' },
+                { symbol: 'NZDUSD', name: 'New Zealand Dollar / US Dollar' },
+                { symbol: 'EURGBP', name: 'Euro / British Pound' },
+                { symbol: 'EURJPY', name: 'Euro / Japanese Yen' },
+                { symbol: 'GBPJPY', name: 'British Pound / Japanese Yen' },
+                { symbol: 'EURCHF', name: 'Euro / Swiss Franc' },
+                { symbol: 'AUDJPY', name: 'Australian Dollar / Japanese Yen' },
+                { symbol: 'EURAUD', name: 'Euro / Australian Dollar' },
+                { symbol: 'EURCAD', name: 'Euro / Canadian Dollar' },
+                { symbol: 'GBPCHF', name: 'British Pound / Swiss Franc' },
+                { symbol: 'GBPAUD', name: 'British Pound / Australian Dollar' },
+                { symbol: 'GBPCAD', name: 'British Pound / Canadian Dollar' },
+                { symbol: 'CHFJPY', name: 'Swiss Franc / Japanese Yen' },
+                { symbol: 'CADJPY', name: 'Canadian Dollar / Japanese Yen' },
+                { symbol: 'AUDNZD', name: 'Australian Dollar / New Zealand Dollar' },
+                { symbol: 'NZDJPY', name: 'New Zealand Dollar / Japanese Yen' },
+                { symbol: 'AUDCAD', name: 'Australian Dollar / Canadian Dollar' },
+                { symbol: 'AUDCHF', name: 'Australian Dollar / Swiss Franc' },
+                { symbol: 'CADCHF', name: 'Canadian Dollar / Swiss Franc' },
+                { symbol: 'EURNZD', name: 'Euro / New Zealand Dollar' },
+                { symbol: 'GBPNZD', name: 'British Pound / New Zealand Dollar' },
+                { symbol: 'NZDCAD', name: 'New Zealand Dollar / Canadian Dollar' },
+                { symbol: 'NZDCHF', name: 'New Zealand Dollar / Swiss Franc' },
+                { symbol: 'USDSEK', name: 'US Dollar / Swedish Krona' },
+                { symbol: 'USDNOK', name: 'US Dollar / Norwegian Krone' },
+                { symbol: 'USDDKK', name: 'US Dollar / Danish Krone' },
+                { symbol: 'USDPLN', name: 'US Dollar / Polish Zloty' },
+                { symbol: 'USDMXN', name: 'US Dollar / Mexican Peso' },
+                { symbol: 'USDZAR', name: 'US Dollar / South African Rand' },
+                { symbol: 'USDTRY', name: 'US Dollar / Turkish Lira' },
+                { symbol: 'USDSGD', name: 'US Dollar / Singapore Dollar' },
+                { symbol: 'USDHKD', name: 'US Dollar / Hong Kong Dollar' },
+                { symbol: 'USDCNH', name: 'US Dollar / Chinese Yuan' },
+                { symbol: 'EURSEK', name: 'Euro / Swedish Krona' },
+                { symbol: 'EURNOK', name: 'Euro / Norwegian Krone' },
+                { symbol: 'EURPLN', name: 'Euro / Polish Zloty' },
+                { symbol: 'EURTRY', name: 'Euro / Turkish Lira' },
+                { symbol: 'EURHUF', name: 'Euro / Hungarian Forint' },
+                { symbol: 'GBPSEK', name: 'British Pound / Swedish Krona' },
+                { symbol: 'GBPNOK', name: 'British Pound / Norwegian Krone' },
+                { symbol: 'GBPPLN', name: 'British Pound / Polish Zloty' }
+            ],
+            indices: [
+                { symbol: 'DE40.c', name: 'Germany 40 (DAX)' },
+                { symbol: 'US500.c', name: 'S&P 500' },
+                { symbol: 'DJ30.c', name: 'Dow Jones 30' },
+                { symbol: 'USTEC.c', name: 'NASDAQ 100' },
+                { symbol: 'UK100.c', name: 'UK 100 (FTSE)' },
+                { symbol: 'F40.c', name: 'France 40 (CAC)' },
+                { symbol: 'STOXX50.c', name: 'Euro Stoxx 50' },
+                { symbol: 'ES35.c', name: 'Spain 35 (IBEX)' },
+                { symbol: 'JP225.c', name: 'Nikkei 225' },
+                { symbol: 'AUS200.c', name: 'Australia 200' },
+                { symbol: 'HK50.c', name: 'Hong Kong 50' },
+                { symbol: 'SWI20.c', name: 'Switzerland 20' },
+                { symbol: 'NE25.c', name: 'Netherlands 25' },
+                { symbol: 'US2000.c', name: 'Russell 2000' }
+            ],
+            crypto: [
+                { symbol: 'BTCUSD', name: 'Bitcoin / US Dollar' },
+                { symbol: 'ETHUSD', name: 'Ethereum / US Dollar' },
+                { symbol: 'LTCUSD', name: 'Litecoin / US Dollar' },
+                { symbol: 'XRPUSD', name: 'Ripple / US Dollar' },
+                { symbol: 'BCHUSD', name: 'Bitcoin Cash / US Dollar' },
+                { symbol: 'ADAUSD', name: 'Cardano / US Dollar' },
+                { symbol: 'DOTUSD', name: 'Polkadot / US Dollar' },
+                { symbol: 'SOLUSD', name: 'Solana / US Dollar' },
+                { symbol: 'DOGEUSD', name: 'Dogecoin / US Dollar' },
+                { symbol: 'SHIBUSD', name: 'Shiba Inu / US Dollar' },
+                { symbol: 'AVAXUSD', name: 'Avalanche / US Dollar' },
+                { symbol: 'MATICUSD', name: 'Polygon / US Dollar' },
+                { symbol: 'LINKUSD', name: 'Chainlink / US Dollar' },
+                { symbol: 'UNIUSD', name: 'Uniswap / US Dollar' },
+                { symbol: 'XLMUSD', name: 'Stellar / US Dollar' }
+            ],
+            commodities: [
+                { symbol: 'XAUUSD', name: 'Gold / US Dollar' },
+                { symbol: 'XAGUSD', name: 'Silver / US Dollar' },
+                { symbol: 'XAUEUR', name: 'Gold / Euro' },
+                { symbol: 'XAGEUR', name: 'Silver / Euro' },
+                { symbol: 'XPTUSD', name: 'Platinum / US Dollar' },
+                { symbol: 'XPDUSD', name: 'Palladium / US Dollar' },
+                { symbol: 'USOIL.c', name: 'WTI Crude Oil' },
+                { symbol: 'UKOIL.c', name: 'Brent Crude Oil' },
+                { symbol: 'NGAS', name: 'Natural Gas' },
+                { symbol: 'COPPER', name: 'Copper' }
+            ]
+        };
+
+        // Render all instruments
+        function renderInstruments() {
+            let totalCount = 0;
+            
+            Object.keys(instruments).forEach(market => {
+                const grid = document.getElementById(market + 'Grid');
+                const list = instruments[market];
+                totalCount += list.length;
+                
+                grid.innerHTML = list.map(inst => `
+                    <div class="instrument-card" data-symbol="${inst.symbol.toLowerCase()}" data-name="${inst.name.toLowerCase()}">
+                        <div class="instrument-symbol">${inst.symbol}</div>
+                        <div class="instrument-name">${inst.name}</div>
+                    </div>
+                `).join('');
+                
+                // Update count
+                const section = document.querySelector(`[data-market="${market}"]`);
+                section.querySelector('.count').textContent = list.length;
+            });
+            
+            document.getElementById('totalInstruments').textContent = totalCount + '+';
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const resultsEl = document.getElementById('searchResults');
+            
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                let visibleCount = 0;
+                let totalCount = 0;
+                
+                document.querySelectorAll('.instrument-card').forEach(card => {
+                    totalCount++;
+                    const symbol = card.dataset.symbol;
+                    const name = card.dataset.name;
+                    
+                    if (!term || symbol.includes(term) || name.includes(term)) {
+                        card.classList.remove('hidden');
+                        card.classList.toggle('highlight', term && (symbol.includes(term) || name.includes(term)));
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                        card.classList.remove('highlight');
+                    }
+                });
+                
+                // Show/hide sections based on content
+                document.querySelectorAll('.market-section').forEach(section => {
+                    const visibleCards = section.querySelectorAll('.instrument-card:not(.hidden)').length;
+                    section.style.display = visibleCards > 0 ? 'block' : 'none';
+                });
+                
+                // Update results count
+                if (term) {
+                    resultsEl.textContent = `${visibleCount} von ${totalCount} Instrumenten gefunden`;
+                } else {
+                    resultsEl.textContent = '';
+                }
+            });
+            
+            // Clear on Escape
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            });
+        }
+
+        // Initialize
+        renderInstruments();
+        setupSearch();
+    </script>
+</body>
+</html>
