@@ -1205,11 +1205,19 @@
             margin-bottom: 2px;
         }
 
+        .price-label.label-stop { color: var(--accent-red); }
+        .price-label.label-tp { color: var(--accent-green); }
+
         .price-value {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
         }
+
+        .price-value.value-stop { color: var(--accent-red); }
+        .price-value.value-tp1 { color: var(--accent-green); }
+        .price-value.value-tp2 { color: var(--accent-green); }
+        .price-value.value-tp3 { color: var(--accent-gold); }
 
         .price-pct {
             font-size: 9px;
@@ -1218,6 +1226,115 @@
 
         .pct-green { color: var(--accent-green); }
         .pct-red { color: var(--accent-red); }
+
+        /* Market Hours Indicator */
+        .market-hours-section {
+            padding: 16px 40px;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.02) 0%, transparent 100%);
+        }
+
+        .market-hours-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .market-hours-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .market-hours-label img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .market-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .market-indicator .market-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .market-indicator.open {
+            border-color: rgba(0, 255, 136, 0.4);
+        }
+
+        .market-indicator.open .market-dot {
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .market-indicator.pre-market {
+            border-color: rgba(255, 165, 0, 0.4);
+        }
+
+        .market-indicator.pre-market .market-dot {
+            background: #ffa500;
+            animation: pulse-orange 2s infinite;
+        }
+
+        @keyframes pulse-orange {
+            0%, 100% { opacity: 1; box-shadow: 0 0 4px #ffa500; }
+            50% { opacity: 0.6; box-shadow: 0 0 12px #ffa500; }
+        }
+
+        .market-indicator.closed {
+            border-color: rgba(255, 71, 87, 0.3);
+            opacity: 0.7;
+        }
+
+        .market-indicator.closed .market-dot {
+            background: var(--accent-red);
+        }
+
+        .market-indicator .market-name {
+            color: var(--text-primary);
+        }
+
+        .market-indicator .market-status {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .market-indicator.open .market-status {
+            color: var(--accent-green);
+        }
+
+        .market-indicator.pre-market .market-status {
+            color: #ffa500;
+        }
+
+        @media (max-width: 768px) {
+            .market-hours-section {
+                padding: 12px 16px;
+            }
+            .market-hours-container {
+                gap: 8px;
+            }
+            .market-indicator {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
 
         /* RR Badge */
         .rr-badge {
@@ -2005,6 +2122,41 @@
         </div>
     </section>
 
+    <!-- Market Hours Indicator -->
+    <section class="market-hours-section" id="marketHoursSection">
+        <div class="market-hours-container">
+            <div class="market-hours-label">
+                <img src="/images/Wolf.png" alt="Wolf">
+                <span>Handelszeiten:</span>
+            </div>
+            <div class="market-indicator" id="marketXetra" data-market="XETRA">
+                <span class="market-dot"></span>
+                <span class="market-name">XETRA</span>
+                <span class="market-status">—</span>
+            </div>
+            <div class="market-indicator" id="marketUS" data-market="US">
+                <span class="market-dot"></span>
+                <span class="market-name">NYSE/NASDAQ</span>
+                <span class="market-status">—</span>
+            </div>
+            <div class="market-indicator" id="marketForex" data-market="FOREX">
+                <span class="market-dot"></span>
+                <span class="market-name">Forex</span>
+                <span class="market-status">—</span>
+            </div>
+            <div class="market-indicator" id="marketCrypto" data-market="CRYPTO">
+                <span class="market-dot"></span>
+                <span class="market-name">Krypto</span>
+                <span class="market-status">—</span>
+            </div>
+            <div class="market-indicator" id="marketAsia" data-market="ASIA">
+                <span class="market-dot"></span>
+                <span class="market-name">Asien</span>
+                <span class="market-status">—</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats -->
     <section class="stats-section">
         <div class="stat-card" onclick="switchToTab('all')" title="Alle Signale anzeigen">
@@ -2270,10 +2422,10 @@
         <div class="admin-modal-card">
             <div class="admin-modal-header">
                 <span style="font-size: 28px;">🗑</span>
-                <h3>Signal lschen</h3>
+                <h3>Signal löschen</h3>
             </div>
             <div class="admin-modal-body">
-                <p>Bist du sicher, dass du dieses Signal lschen möchtest?</p>
+                <p>Bist du sicher, dass du dieses Signal löschen möchtest?</p>
                 <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
                     <strong id="deleteSignalInfo"></strong>
                 </div>
@@ -2401,6 +2553,8 @@
             updateStats();
             renderSignals();
             setupEventListeners();
+            updateMarketHours(); // Market hours indicator
+            setInterval(updateMarketHours, 60000); // Update every minute
         }
 
         // ==================== AUTH ====================
@@ -2801,7 +2955,7 @@
                     : `<div class="no-results">
                         <div class="no-results-icon">🔍</div>
                         <h3>${searchTerm ? `Keine Signale für "${searchTerm}"` : 'Keine Signale gefunden'}</h3>
-                        <p>${searchTerm ? 'Versuche einen anderen Suchbegriff oder ändere die Filter' : 'Ã„ndere die Filter um mehr Signale zu sehen'}</p>
+                        <p>${searchTerm ? 'Versuche einen anderen Suchbegriff oder ändere die Filter' : 'Ändere die Filter um mehr Signale zu sehen'}</p>
                       </div>`;
             }
             
@@ -2928,7 +3082,7 @@
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
                     <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
-                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal lschen">Ã—</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
             ` : '';
             
@@ -2957,10 +3111,10 @@
                         </div>
                         <div class="price-grid">
                             <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item"><div class="price-label label-stop">Stop</div><div class="price-value value-stop">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item"><div class="price-label label-tp">TP1</div><div class="price-value value-tp1">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item"><div class="price-label label-tp">TP2</div><div class="price-value value-tp2">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item"><div class="price-label label-tp">TP3</div><div class="price-value value-tp3">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
@@ -2994,7 +3148,7 @@
             // Admin delete button for completed signals
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">Ã—</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
                 </div>
             ` : '';
             
@@ -3101,6 +3255,15 @@
             }
             
             currentTab = tabName;
+            
+            // Reset filters when "Alle Signale" is clicked
+            if (tabName === 'all') {
+                selectedMarkets = [];
+                selectedTimeframes = [];
+                document.querySelectorAll('[data-market]').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('[data-timeframe]').forEach(btn => btn.classList.remove('active'));
+            }
+            
             renderSignals();
             
             // Scroll to tabs section
@@ -3149,6 +3312,15 @@
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     currentTab = tab.dataset.tab;
+                    
+                    // Reset filters when "Alle Signale" is clicked
+                    if (currentTab === 'all') {
+                        selectedMarkets = [];
+                        selectedTimeframes = [];
+                        document.querySelectorAll('[data-market]').forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('[data-timeframe]').forEach(btn => btn.classList.remove('active'));
+                    }
+                    
                     renderSignals();
                 });
             });
@@ -3651,6 +3823,80 @@
             }
         `;
         document.head.appendChild(toastStyle);
+
+        // ==================== MARKET HOURS ====================
+        function updateMarketHours() {
+            const now = new Date();
+            const utcHours = now.getUTCHours();
+            const utcMinutes = now.getUTCMinutes();
+            const utcDay = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
+            const isWeekend = utcDay === 0 || utcDay === 6;
+            
+            // Convert to different timezones
+            const cetOffset = 1; // CET (Winter), adjust for DST if needed
+            const estOffset = -5; // EST
+            const jstOffset = 9; // JST (Tokyo)
+            
+            const cetHours = (utcHours + cetOffset + 24) % 24;
+            const estHours = (utcHours + estOffset + 24) % 24;
+            const jstHours = (utcHours + jstOffset + 24) % 24;
+            
+            // XETRA/DAX: 9:00-17:30 CET, Mon-Fri
+            updateMarketIndicator('marketXetra', 
+                !isWeekend && cetHours >= 9 && (cetHours < 17 || (cetHours === 17 && utcMinutes <= 30)),
+                !isWeekend && cetHours >= 8 && cetHours < 9,
+                'XETRA'
+            );
+            
+            // US Markets (NYSE/NASDAQ): 9:30-16:00 EST, Mon-Fri
+            // Pre-market: 4:00-9:30 EST
+            updateMarketIndicator('marketUS',
+                !isWeekend && ((estHours === 9 && utcMinutes >= 30) || (estHours >= 10 && estHours < 16)),
+                !isWeekend && estHours >= 4 && (estHours < 9 || (estHours === 9 && utcMinutes < 30)),
+                'NYSE/NASDAQ'
+            );
+            
+            // Forex: 24/5 (Sunday 22:00 UTC - Friday 22:00 UTC)
+            const forexOpen = (utcDay > 0 && utcDay < 5) || 
+                              (utcDay === 0 && utcHours >= 22) || 
+                              (utcDay === 5 && utcHours < 22);
+            updateMarketIndicator('marketForex', forexOpen, false, 'Forex');
+            
+            // Crypto: 24/7
+            updateMarketIndicator('marketCrypto', true, false, 'Krypto');
+            
+            // Asia (Tokyo): 9:00-15:00 JST, Mon-Fri
+            // Lunch break: 11:30-12:30 JST
+            const asiaOpen = !isWeekend && jstHours >= 9 && jstHours < 15 && 
+                            !(jstHours === 11 && utcMinutes >= 30) && 
+                            !(jstHours === 12 && utcMinutes < 30);
+            const asiaLunch = !isWeekend && ((jstHours === 11 && utcMinutes >= 30) || (jstHours === 12 && utcMinutes < 30));
+            updateMarketIndicator('marketAsia', asiaOpen, !isWeekend && jstHours >= 8 && jstHours < 9, 'Asien', asiaLunch);
+        }
+        
+        function updateMarketIndicator(elementId, isOpen, isPreMarket, name, isLunch = false) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            el.classList.remove('open', 'pre-market', 'closed');
+            
+            let statusText = '';
+            if (isOpen && !isLunch) {
+                el.classList.add('open');
+                statusText = 'Offen';
+            } else if (isLunch) {
+                el.classList.add('pre-market');
+                statusText = 'Pause';
+            } else if (isPreMarket) {
+                el.classList.add('pre-market');
+                statusText = 'Pre-Market';
+            } else {
+                el.classList.add('closed');
+                statusText = 'Geschlossen';
+            }
+            
+            el.querySelector('.market-status').textContent = statusText;
+        }
 
         // Start
         init();
