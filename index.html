@@ -3020,8 +3020,9 @@
 
         async function checkAdminStatus() {
             try {
+                // Prüfe is_admin in users_with_subscriptions View
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=*`,
+                    `${SUPABASE_URL}/rest/v1/users_with_subscriptions?user_id=eq.${currentUser.id}&select=is_admin`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -3031,8 +3032,8 @@
                 );
                 
                 if (response.ok) {
-                    const admins = await response.json();
-                    isAdmin = admins.length > 0;
+                    const data = await response.json();
+                    isAdmin = data.length > 0 && data[0].is_admin === true;
                 }
             } catch (e) {
                 isAdmin = false;
