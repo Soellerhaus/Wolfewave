@@ -3966,7 +3966,7 @@
         async function loadImageHistory(wedgeId, currentImageUrl) {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at,version&order=scanned_at.desc`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at,version&order=scanned_at.desc&limit=20`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
