@@ -4007,24 +4007,11 @@
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen - Zeitzone-Korrektur
+            // Datum anzeigen - ISO UTC wird automatisch in lokale Zeit konvertiert
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
-                const now = new Date();
-                
-                // Wenn das Datum in der Zukunft liegt (Broker-Zeit UTC+1/+2), korrigiere
-                let displayDate = date;
-                const diffMinutes = (date - now) / (1000 * 60);
-                
-                // Wenn mehr als 30 Min in der Zukunft, ziehe 1-2 Stunden ab
-                if (diffMinutes > 30 && diffMinutes < 180) {
-                    // Runde auf volle Stunden (wahrscheinlich 1 oder 2 Stunden Offset)
-                    const hoursOffset = Math.round(diffMinutes / 60);
-                    displayDate = new Date(date.getTime() - hoursOffset * 60 * 60 * 1000);
-                }
-                
-                dateEl.textContent = displayDate.toLocaleDateString('de-DE') + ' ' + displayDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                dateEl.textContent = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
             } else {
                 dateEl.textContent = 'Aktuell';
             }
