@@ -504,6 +504,58 @@
             color: #fff;
         }
 
+        /* ACTIVE Tab (blau) - Entry erfolgt */
+        .tab-active {
+            border-color: rgba(77, 171, 247, 0.3);
+        }
+
+        .tab-active:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .tab-active.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: #000;
+        }
+
+        .tab-badge-blue {
+            background: rgba(77, 171, 247, 0.2);
+            color: var(--accent-blue);
+        }
+
+        .tab-active.active .tab-badge-blue {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
+        /* PENDING Tab (orange) - Sweet Zone */
+        .tab-pending {
+            border-color: rgba(255, 165, 0, 0.3);
+        }
+
+        .tab-pending:hover {
+            border-color: #ffa500;
+            color: #ffa500;
+        }
+
+        .tab-pending.active {
+            background: #ffa500;
+            border-color: #ffa500;
+            color: #000;
+        }
+
+        .tab-badge-orange {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .tab-pending.active .tab-badge-orange {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
         /* Filter Button Groups */
         .filter-button-group {
             display: flex;
@@ -2705,7 +2757,7 @@
             <div class="stat-number stat-gold" id="successCount">—</div>
             <div class="stat-label">✔ Erfolgreiche Trades</div>
         </div>
-        <div class="stat-card" onclick="switchToTab('new')" title="Neue Signale anzeigen">
+        <div class="stat-card" onclick="switchToTab('today')" title="Signale von heute anzeigen">
             <div class="stat-number" id="todayCount">—</div>
             <div class="stat-label">Neu heute</div>
         </div>
@@ -2716,9 +2768,17 @@
         <div class="tabs-container">
             <div class="tabs">
                 <button class="tab active" data-tab="all">Alle Signale</button>
-                <button class="tab" data-tab="new">
-                    Neu
-                    <span class="tab-badge" id="newCount">0</span>
+                <button class="tab" data-tab="today">
+                    📅 Heute
+                    <span class="tab-badge" id="todayTabCount">0</span>
+                </button>
+                <button class="tab tab-active" data-tab="active">
+                    🎯 ACTIVE
+                    <span class="tab-badge tab-badge-blue" id="activeCount">0</span>
+                </button>
+                <button class="tab tab-pending" data-tab="pending">
+                    ⏳ PENDING
+                    <span class="tab-badge tab-badge-orange" id="pendingCount">0</span>
                 </button>
                 <button class="tab tab-bullish" data-tab="bullish">📈 Bullish</button>
                 <button class="tab tab-bearish" data-tab="bearish">📉 Bearish</button>
@@ -3414,19 +3474,24 @@
         function updateStats() {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
             document.getElementById('totalSignals').textContent = allSignals.length;
             
             const successTotal = completedSignals.filter(s => s.result_folder === 'success').length;
             document.getElementById('successCount').textContent = successTotal;
             
+            // Heute = alle Signale von heute
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
             document.getElementById('todayCount').textContent = todaySignals.length;
+            document.getElementById('todayTabCount').textContent = todaySignals.length;
             
-            // New count for tab
-            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
-            document.getElementById('newCount').textContent = newSignals.length;
+            // ACTIVE = Entry erfolgt, Trade läuft
+            const activeSignals = allSignals.filter(s => s.status === 'active');
+            document.getElementById('activeCount').textContent = activeSignals.length;
+            
+            // PENDING = Sweet Zone, wartet auf Entry
+            const pendingSignals = allSignals.filter(s => s.status === 'pending');
+            document.getElementById('pendingCount').textContent = pendingSignals.length;
             
             // Success tab count
             document.getElementById('successTabCount').textContent = completedSignals.length;
@@ -3509,23 +3574,27 @@
             const header = document.getElementById('previewHeader');
             const searchTerm = document.getElementById('searchSymbol').value.trim();
             
-            if (currentTab === 'success') {
-                header.innerHTML = `
-                    <div class="section-title">
-                        🏆 Abgeschlossene Trades
-                        <span class="section-badge" style="background: var(--accent-gold);">Success</span>
-                    </div>
-                    <div class="section-subtitle">— ${signals.length} Trades${searchTerm ? ` für "${searchTerm}"` : ''}</div>
-                `;
-            } else {
-                header.innerHTML = `
-                    <div class="section-title">
-                        🦊 ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
-                        <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
-                    </div>
-                    <div class="section-subtitle">— ${signals.length} Signale${searchTerm ? ` für "${searchTerm}"` : ''}</div>
-                `;
-            }
+            // Tab-spezifische Labels
+            const tabConfig = {
+                'all': { icon: '🦊', name: 'Alle Signale', color: isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)' },
+                'today': { icon: '📅', name: 'Heute', color: 'var(--accent-green)' },
+                'active': { icon: '🎯', name: 'ACTIVE (Entry erfolgt)', color: 'var(--accent-blue)' },
+                'pending': { icon: '⏳', name: 'PENDING (Sweet Zone)', color: '#ffa500' },
+                'bullish': { icon: '📈', name: 'Bullish', color: 'var(--accent-green)' },
+                'bearish': { icon: '📉', name: 'Bearish', color: 'var(--accent-red)' },
+                'success': { icon: '🏆', name: 'Abgeschlossene Trades', color: 'var(--accent-gold)' }
+            };
+            
+            const tab = tabConfig[currentTab] || tabConfig['all'];
+            const badgeText = currentTab === 'success' ? 'Success' : (isAdmin ? 'Admin' : 'Premium');
+            
+            header.innerHTML = `
+                <div class="section-title">
+                    ${tab.icon} ${tab.name}
+                    <span class="section-badge" style="background: ${tab.color};">${badgeText}</span>
+                </div>
+                <div class="section-subtitle">— ${signals.length} ${currentTab === 'success' ? 'Trades' : 'Signale'}${searchTerm ? ` für "${searchTerm}"` : ''}</div>
+            `;
         }
 
         function getPreviewSignals() {
@@ -3545,13 +3614,20 @@
         function getFilteredSignals() {
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             const now = new Date();
-            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
             let filtered = [...allSignals];
             
             // Tab filter
-            if (currentTab === 'new') {
-                filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            if (currentTab === 'today') {
+                // Alle Signale von heute
+                filtered = filtered.filter(s => new Date(s.created_at) >= today);
+            } else if (currentTab === 'active') {
+                // ACTIVE = Entry erfolgt, Trade läuft
+                filtered = filtered.filter(s => s.status === 'active');
+            } else if (currentTab === 'pending') {
+                // PENDING = Sweet Zone, wartet auf Entry
+                filtered = filtered.filter(s => s.status === 'pending');
             } else if (currentTab === 'bullish') {
                 filtered = filtered.filter(s => s.direction === 'BULLISH');
             } else if (currentTab === 'bearish') {
@@ -3787,8 +3863,8 @@
         function switchToTab(tabName) {
             const isPremium = currentUser && (isSubscribed || isAdmin);
             
-            // For success and new tabs, require premium
-            if ((tabName === 'success' || tabName === 'new') && !isPremium) {
+            // All tabs except 'all' require premium
+            if (tabName !== 'all' && !isPremium) {
                 showLogin();
                 return;
             }
