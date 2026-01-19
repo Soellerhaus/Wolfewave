@@ -3980,17 +3980,15 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format
+                    // Konvertiere zu unserem Format - neueste zuerst (durch order=scanned_at.desc)
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // Aktuelles Bild an den Anfang (neuestes)
-                    // Stelle sicher dass es nicht doppelt ist
-                    if (sliderImages[0].url !== currentImageUrl) {
-                        sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
-                    }
+                    // NICHT mehr das aktuelle Karten-Bild an den Anfang setzen
+                    // Die signal_images Tabelle hat bereits alle Bilder korrekt sortiert
+                    // Das neueste Bild ist bereits an Index 0 durch order=scanned_at.desc
                     
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
@@ -4009,11 +4007,24 @@
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen
+            // Datum anzeigen - Zeitzone-Korrektur
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
-                dateEl.textContent = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                const now = new Date();
+                
+                // Wenn das Datum in der Zukunft liegt (Broker-Zeit UTC+1/+2), korrigiere
+                let displayDate = date;
+                const diffMinutes = (date - now) / (1000 * 60);
+                
+                // Wenn mehr als 30 Min in der Zukunft, ziehe 1-2 Stunden ab
+                if (diffMinutes > 30 && diffMinutes < 180) {
+                    // Runde auf volle Stunden (wahrscheinlich 1 oder 2 Stunden Offset)
+                    const hoursOffset = Math.round(diffMinutes / 60);
+                    displayDate = new Date(date.getTime() - hoursOffset * 60 * 60 * 1000);
+                }
+                
+                dateEl.textContent = displayDate.toLocaleDateString('de-DE') + ' ' + displayDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
             } else {
                 dateEl.textContent = 'Aktuell';
             }
