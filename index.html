@@ -1083,6 +1083,65 @@
             border-color: rgba(77, 171, 247, 0.5);
         }
 
+        /* Checked/Kontrolliert Card Styling */
+        .signal-card.is-checked {
+            border-color: rgba(0, 255, 136, 0.6);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .signal-card.is-checked::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent-green);
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        .check-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--text-secondary);
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 10;
+            transition: all 0.2s ease;
+            opacity: 0;
+        }
+
+        .signal-card:hover .check-btn {
+            opacity: 1;
+        }
+
+        .check-btn:hover {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        .signal-card.is-checked .check-btn {
+            display: none;
+        }
+
         .signal-card.is-failed {
             border-color: rgba(255, 71, 87, 0.4);
         }
@@ -3735,11 +3794,18 @@
                     <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
             ` : '';
-            
+
+            // Check-Button (nur für Admins, wenn noch nicht gecheckt)
+            const isChecked = signal.checked === true;
+            const checkButton = isAdmin && isVisible && !isChecked ? `
+                <button class="check-btn" onclick="event.stopPropagation(); toggleChecked('${signal.id}')" title="Als kontrolliert markieren">✓</button>
+            ` : '';
+
             return `
-                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', '${signal.id}')">
+                <div class="signal-card ${isNew ? 'is-new' : ''} ${isChecked ? 'is-checked' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', '${signal.id}')">
                     ${badge}
                     ${adminControls}
+                    ${checkButton}
                     <div class="signal-image-container">
                         <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
@@ -4542,6 +4608,48 @@
             } catch (error) {
                 console.error('Success add error:', error);
                 showToast('✔ Fehler: ' + error.message, 'error');
+            }
+        }
+
+        // ==================== CHECKED/KONTROLLIERT FUNCTION ====================
+        async function toggleChecked(signalId) {
+            if (!isAdmin) {
+                showToast('Keine Berechtigung', 'error');
+                return;
+            }
+
+            const signal = allSignals.find(s => String(s.id) === String(signalId));
+            if (!signal) {
+                showToast('Signal nicht gefunden', 'error');
+                return;
+            }
+
+            const newCheckedState = !signal.checked;
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({ checked: newCheckedState })
+                });
+
+                if (response.ok) {
+                    // Update local state
+                    signal.checked = newCheckedState;
+                    renderSignals();
+                    showToast(newCheckedState ? '✓ Als kontrolliert markiert' : '✓ Markierung entfernt', 'success');
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Update failed');
+                }
+            } catch (error) {
+                console.error('Toggle checked error:', error);
+                showToast('Fehler: ' + error.message, 'error');
             }
         }
 
