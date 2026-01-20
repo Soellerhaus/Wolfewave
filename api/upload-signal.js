@@ -11,39 +11,129 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
+// Erlaubte Origins für CORS
+const ALLOWED_ORIGINS = [
+  'https://wolfewavesignals.com',
+  'https://www.wolfewavesignals.com',
+  'http://localhost:3000'
+];
+
+// Erlaubte Werte für Validierung
+const VALID_MARKETS = ['FOREX', 'CRYPTO', 'INDICES', 'STOCKS', 'COMMODITIES', 'OTHER'];
+const VALID_TIMEFRAMES = ['M1', 'M5', 'M15', 'M30', 'H1', 'H4', 'D1', 'W1', 'MN'];
+const VALID_DIRECTIONS = ['LONG', 'SHORT', ''];
+
+function getCorsHeaders(origin) {
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+}
+
+function validateSignalData(data) {
+  const errors = [];
+
+  if (!data || typeof data !== 'object') {
+    return ['Request body must be a valid JSON object'];
+  }
+
+  if (!data.wedgeId || typeof data.wedgeId !== 'string') {
+    errors.push('wedgeId is required and must be a string');
+  }
+
+  if (data.market && !VALID_MARKETS.includes(data.market)) {
+    errors.push(`market must be one of: ${VALID_MARKETS.join(', ')}`);
+  }
+
+  if (data.timeframe && !VALID_TIMEFRAMES.includes(data.timeframe)) {
+    errors.push(`timeframe must be one of: ${VALID_TIMEFRAMES.join(', ')}`);
+  }
+
+  if (data.direction && !VALID_DIRECTIONS.includes(data.direction)) {
+    errors.push(`direction must be one of: ${VALID_DIRECTIONS.filter(d => d).join(', ')}`);
+  }
+
+  // Preiswerte validieren (falls vorhanden)
+  const priceFields = ['entry', 'sl', 'tp1', 'tp2', 'tp3'];
+  for (const field of priceFields) {
+    if (data[field] !== undefined && data[field] !== '') {
+      const value = parseFloat(data[field]);
+      if (isNaN(value) || value < 0) {
+        errors.push(`${field} must be a valid positive number`);
+      }
+    }
+  }
+
+  return errors;
+}
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  const origin = req.headers.origin || '';
+  const corsHeaders = getCorsHeaders(origin);
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  // CORS Headers setzen
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+
+  // Preflight Request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Nur POST erlauben
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
   try {
     const data = req.body;
-    
-    if (!data || !data.wedgeId) {
-      return res.status(400).json({ error: 'Missing wedgeId' });
+
+    // Eingabe validieren
+    const validationErrors = validateSignalData(data);
+    if (validationErrors.length > 0) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: validationErrors
+      });
     }
 
     let imageUrl = '';
-    
+
+    // Bild hochladen falls vorhanden
     if (data.imageBase64) {
-      const imageBuffer = Buffer.from(data.imageBase64, 'base64');
-      const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0];
-      const imagePath = `${data.market || 'OTHER'}/${data.timeframe || 'H1'}/${data.wedgeId}/v_${timestamp}.png`;
+      try {
+        const imageBuffer = Buffer.from(data.imageBase64, 'base64');
+        const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0];
+        const market = data.market || 'OTHER';
+        const timeframe = data.timeframe || 'H1';
+        const imagePath = `${market}/${timeframe}/${data.wedgeId}/v_${timestamp}.png`;
 
-      await supabase.storage.from('signals').upload(imagePath, imageBuffer, {
-        contentType: 'image/png',
-        upsert: true
-      });
+        const { error: uploadError } = await supabase.storage
+          .from('signals')
+          .upload(imagePath, imageBuffer, {
+            contentType: 'image/png',
+            upsert: true
+          });
 
-      const { data: urlData } = supabase.storage.from('signals').getPublicUrl(imagePath);
-      imageUrl = urlData?.publicUrl || '';
+        if (uploadError) {
+          console.error('Image upload error:', uploadError);
+          // Weitermachen auch wenn Bild-Upload fehlschlägt
+        } else {
+          const { data: urlData } = supabase.storage.from('signals').getPublicUrl(imagePath);
+          imageUrl = urlData?.publicUrl || '';
+        }
+      } catch (imageError) {
+        console.error('Image processing error:', imageError);
+        // Weitermachen auch wenn Bildverarbeitung fehlschlägt
+      }
     }
 
+    // Signal-Daten vorbereiten
     const signalData = {
       wedge_id: data.wedgeId,
       symbol: data.symbol || '',
@@ -60,20 +150,48 @@ export default async function handler(req, res) {
       created_at: new Date().toISOString()
     };
 
-    const { data: existing } = await supabase
+    // Prüfen ob Signal bereits existiert
+    const { data: existing, error: selectError } = await supabase
       .from('signals')
       .select('id')
       .eq('wedge_id', data.wedgeId)
       .maybeSingle();
 
-    if (existing) {
-      await supabase.from('signals').update(signalData).eq('wedge_id', data.wedgeId);
-    } else {
-      await supabase.from('signals').insert([signalData]);
+    if (selectError) {
+      console.error('Database select error:', selectError);
+      return res.status(500).json({ error: 'Database error while checking existing signal' });
     }
 
-    return res.status(200).json({ success: true, wedgeId: data.wedgeId });
+    // Update oder Insert
+    if (existing) {
+      const { error: updateError } = await supabase
+        .from('signals')
+        .update(signalData)
+        .eq('wedge_id', data.wedgeId);
+
+      if (updateError) {
+        console.error('Database update error:', updateError);
+        return res.status(500).json({ error: 'Failed to update signal' });
+      }
+    } else {
+      const { error: insertError } = await supabase
+        .from('signals')
+        .insert([signalData]);
+
+      if (insertError) {
+        console.error('Database insert error:', insertError);
+        return res.status(500).json({ error: 'Failed to insert signal' });
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      wedgeId: data.wedgeId,
+      action: existing ? 'updated' : 'created'
+    });
+
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
