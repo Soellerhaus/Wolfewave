@@ -4053,24 +4053,34 @@
 
         async function openModal(imageUrl, wedgeId = null, signalId = null) {
             if (!imageUrl) return;
-            
+
             currentWedgeId = wedgeId;
             currentModalSignalId = signalId;
             sliderImages = [{ url: imageUrl, scanned_at: null }];
             sliderCurrentIndex = 0;
-            
-            // Admin Controls im Modal anzeigen
+
+            // Prüfe ob es ein aktives oder completed Signal ist
+            const isActiveSignal = signalId && allSignals.some(s => String(s.id) === String(signalId));
+            const isCompletedSignal = signalId && completedSignals.some(s => String(s.id) === String(signalId));
+
+            // Admin Controls im Modal anzeigen - aber nur für aktive Signale den "Erfolg" Button
             const adminControls = document.getElementById('modalAdminControls');
+            const successBtn = adminControls?.querySelector('.admin-modal-btn-success');
+
             if (adminControls && isAdmin && signalId) {
                 adminControls.style.display = 'flex';
+                // "Als Erfolg markieren" nur für aktive Signale
+                if (successBtn) {
+                    successBtn.style.display = isActiveSignal ? 'block' : 'none';
+                }
             } else if (adminControls) {
                 adminControls.style.display = 'none';
             }
-            
+
             // Zeige erstmal das aktuelle Bild
             updateSliderDisplay();
             document.getElementById('imageModal').classList.add('active');
-            
+
             // Wenn wedge_id vorhanden, lade Bild-Historie
             if (wedgeId) {
                 await loadImageHistory(wedgeId, imageUrl);
@@ -4416,12 +4426,28 @@
 
         function showSuccessModal(signalId) {
             console.log('showSuccessModal called with ID:', signalId);
+            console.log('allSignals count:', allSignals.length);
+            console.log('allSignals IDs:', allSignals.map(s => s.id));
+
+            if (!signalId) {
+                showToast('Kein Signal ausgewählt', 'error');
+                console.error('showSuccessModal: signalId is null/undefined');
+                return;
+            }
+
             const signal = allSignals.find(s => String(s.id) === String(signalId));
             if (!signal) {
+                // Prüfe ob es vielleicht ein completed signal ist
+                const completedSignal = completedSignals.find(s => String(s.id) === String(signalId));
+                if (completedSignal) {
+                    showToast('Dieses Signal ist bereits abgeschlossen', 'error');
+                } else {
+                    showToast('Signal nicht gefunden - bitte Seite neu laden', 'error');
+                }
                 console.error('Signal not found for success:', signalId);
                 return;
             }
-            
+
             pendingSuccessId = signalId;
             document.getElementById('successSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
             document.getElementById('successResult').value = 'TP3_HIT';
