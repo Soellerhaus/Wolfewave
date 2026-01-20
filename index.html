@@ -1110,32 +1110,28 @@
         .check-btn {
             position: absolute;
             top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid var(--text-secondary);
-            color: var(--text-secondary);
-            width: 32px;
-            height: 32px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            z-index: 10;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 15;
             transition: all 0.2s ease;
-            opacity: 0;
-        }
-
-        .signal-card:hover .check-btn {
-            opacity: 1;
         }
 
         .check-btn:hover {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
             color: #000;
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
         .signal-card.is-checked .check-btn {
