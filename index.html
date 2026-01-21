@@ -132,11 +132,6 @@
             background: rgba(12, 12, 12, 0.95);
             backdrop-filter: blur(10px);
             z-index: 100;
-            transition: transform 0.3s ease;
-        }
-
-        .header.header-hidden {
-            transform: translateY(-100%);
         }
 
         .logo {
@@ -172,16 +167,6 @@
             display: flex;
             align-items: center;
             gap: 16px;
-        }
-
-        /* Mobile Header - hidden on desktop */
-        .mobile-header-right {
-            display: none;
-        }
-
-        .mobile-menu-overlay,
-        .mobile-menu {
-            display: none;
         }
 
         .header-nav {
@@ -349,18 +334,6 @@
             border-radius: 12px;
             padding: 16px 24px;
             min-width: 120px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .stat-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.15);
-        }
-
-        .stat-card:active {
-            transform: translateY(0);
         }
 
         .stat-number {
@@ -472,146 +445,6 @@
             color: #000;
         }
 
-        /* Bullish Tab (grün) */
-        .tab-bullish {
-            border-color: rgba(0, 255, 136, 0.3);
-        }
-
-        .tab-bullish:hover {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .tab-bullish.active {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
-            color: #000;
-        }
-
-        /* Bearish Tab (rot) */
-        .tab-bearish {
-            border-color: rgba(255, 71, 87, 0.3);
-        }
-
-        .tab-bearish:hover {
-            border-color: var(--accent-red);
-            color: var(--accent-red);
-        }
-
-        .tab-bearish.active {
-            background: var(--accent-red);
-            border-color: var(--accent-red);
-            color: #fff;
-        }
-
-        /* ACTIVE Tab (blau) - Entry erfolgt */
-        .tab-active {
-            border-color: rgba(77, 171, 247, 0.3);
-        }
-
-        .tab-active:hover {
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
-        }
-
-        .tab-active.active {
-            background: var(--accent-blue);
-            border-color: var(--accent-blue);
-            color: #000;
-        }
-
-        .tab-badge-blue {
-            background: rgba(77, 171, 247, 0.2);
-            color: var(--accent-blue);
-        }
-
-        .tab-active.active .tab-badge-blue {
-            background: rgba(0, 0, 0, 0.2);
-            color: #000;
-        }
-
-        /* PENDING Tab (orange) - Sweet Zone */
-        .tab-pending {
-            border-color: rgba(255, 165, 0, 0.3);
-        }
-
-        .tab-pending:hover {
-            border-color: #ffa500;
-            color: #ffa500;
-        }
-
-        .tab-pending.active {
-            background: #ffa500;
-            border-color: #ffa500;
-            color: #000;
-        }
-
-        .tab-badge-orange {
-            background: rgba(255, 165, 0, 0.2);
-            color: #ffa500;
-        }
-
-        .tab-pending.active .tab-badge-orange {
-            background: rgba(0, 0, 0, 0.2);
-            color: #000;
-        }
-
-        /* Filter Button Groups */
-        .filter-button-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .filter-group-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-right: 4px;
-        }
-
-        .filter-btn {
-            padding: 8px 14px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--accent-green);
-            color: var(--text-primary);
-        }
-
-        .filter-btn.active {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
-            color: #000;
-        }
-
-        .filter-divider {
-            width: 1px;
-            height: 24px;
-            background: var(--border-color);
-            margin: 0 8px;
-        }
-
-        @media (max-width: 768px) {
-            .filter-button-group {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                padding-bottom: 8px;
-            }
-            .filter-divider {
-                display: none;
-            }
-        }
-
         .filters {
             display: flex;
             gap: 12px;
@@ -712,7 +545,8 @@
             display: flex;
             gap: 6px;
             z-index: 20;
-            opacity: 1;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
         .signal-card:hover .admin-controls {
@@ -1083,61 +917,6 @@
             border-color: rgba(77, 171, 247, 0.5);
         }
 
-        /* Checked/Kontrolliert Card Styling */
-        .signal-card.is-checked {
-            border-color: rgba(0, 255, 136, 0.6);
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
-        }
-
-        .signal-card.is-checked::before {
-            content: '✓';
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--accent-green);
-            color: #000;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-            z-index: 10;
-        }
-
-        .check-btn {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--accent-blue);
-            color: var(--accent-blue);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            z-index: 15;
-            transition: all 0.2s ease;
-        }
-
-        .check-btn:hover {
-            background: var(--accent-blue);
-            border-color: var(--accent-blue);
-            color: #000;
-            transform: scale(1.15);
-        }
-
-        .signal-card.is-checked .check-btn {
-            display: none;
-        }
-
         .signal-card.is-failed {
             border-color: rgba(255, 71, 87, 0.4);
         }
@@ -1326,19 +1105,11 @@
             margin-bottom: 2px;
         }
 
-        .price-label.label-stop { color: var(--accent-red); }
-        .price-label.label-tp { color: var(--accent-green); }
-
         .price-value {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
         }
-
-        .price-value.value-stop { color: var(--accent-red); }
-        .price-value.value-tp1 { color: var(--accent-green); }
-        .price-value.value-tp2 { color: var(--accent-green); }
-        .price-value.value-tp3 { color: var(--accent-gold); }
 
         .price-pct {
             font-size: 9px;
@@ -1347,115 +1118,6 @@
 
         .pct-green { color: var(--accent-green); }
         .pct-red { color: var(--accent-red); }
-
-        /* Market Hours Indicator */
-        .market-hours-section {
-            padding: 16px 40px;
-            background: linear-gradient(180deg, rgba(0, 255, 136, 0.02) 0%, transparent 100%);
-        }
-
-        .market-hours-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .market-hours-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .market-hours-label img {
-            width: 28px;
-            height: 28px;
-        }
-
-        .market-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .market-indicator .market-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-
-        .market-indicator.open {
-            border-color: rgba(0, 255, 136, 0.4);
-        }
-
-        .market-indicator.open .market-dot {
-            background: var(--accent-green);
-            box-shadow: 0 0 8px var(--accent-green);
-        }
-
-        .market-indicator.pre-market {
-            border-color: rgba(255, 165, 0, 0.4);
-        }
-
-        .market-indicator.pre-market .market-dot {
-            background: #ffa500;
-            animation: pulse-orange 2s infinite;
-        }
-
-        @keyframes pulse-orange {
-            0%, 100% { opacity: 1; box-shadow: 0 0 4px #ffa500; }
-            50% { opacity: 0.6; box-shadow: 0 0 12px #ffa500; }
-        }
-
-        .market-indicator.closed {
-            border-color: rgba(255, 71, 87, 0.3);
-            opacity: 0.7;
-        }
-
-        .market-indicator.closed .market-dot {
-            background: var(--accent-red);
-        }
-
-        .market-indicator .market-name {
-            color: var(--text-primary);
-        }
-
-        .market-indicator .market-status {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .market-indicator.open .market-status {
-            color: var(--accent-green);
-        }
-
-        .market-indicator.pre-market .market-status {
-            color: #ffa500;
-        }
-
-        @media (max-width: 768px) {
-            .market-hours-section {
-                padding: 12px 16px;
-            }
-            .market-hours-container {
-                gap: 8px;
-            }
-            .market-indicator {
-                padding: 4px 8px;
-                font-size: 11px;
-            }
-        }
 
         /* RR Badge */
         .rr-badge {
@@ -1695,27 +1357,18 @@
         }
 
         .modal-close {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            position: absolute;
+            top: 30px;
+            right: 40px;
             font-size: 32px;
             color: #fff;
             cursor: pointer;
-            z-index: 1001;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 71, 87, 0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            border: 2px solid #fff;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
 
         .modal-close:hover {
-            background: var(--accent-red);
-            transform: scale(1.1);
+            opacity: 1;
         }
 
         /* Image Slider */
@@ -1732,43 +1385,196 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 255, 136, 0.9);
-            border: 3px solid #fff;
-            color: #000;
-            font-size: 36px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+            font-size: 48px;
             width: 60px;
             height: 60px;
             border-radius: 50%;
             cursor: pointer;
-            z-index: 100;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
             font-family: sans-serif;
             line-height: 1;
-            font-weight: bold;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .slider-nav:hover {
-            background: #fff;
-            color: var(--accent-green);
-            transform: translateY(-50%) scale(1.1);
+            background: var(--accent-green);
+            color: #000;
         }
 
         .slider-nav:disabled {
             opacity: 0.3;
             cursor: not-allowed;
-            background: rgba(100, 100, 100, 0.5);
         }
 
         .slider-nav.hidden {
             display: none;
         }
 
-        .slider-prev { left: 20px; }
-        .slider-next { right: 20px; }
+        .slider-prev { left: -80px; }
+        .slider-next { right: -80px; }
+
+        /* Signal Navigation (up/down) */
+        .signal-nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 32px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: sans-serif;
+            line-height: 1;
+        }
+
+        .signal-nav:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .signal-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .signal-nav-prev { top: -70px; }
+        .signal-nav-next { bottom: -70px; }
+
+        /* Signal Info Header */
+        .signal-header-info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 15;
+        }
+
+        .signal-header-info .signal-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .signal-header-info .signal-meta {
+            display: flex;
+            gap: 8px;
+        }
+
+        .signal-header-info .signal-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .signal-header-info .signal-direction {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .signal-header-info .signal-direction.bullish {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        .signal-header-info .signal-direction.bearish {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+        }
+
+        .signal-counter {
+            font-size: 14px;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .signal-nav {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+                opacity: 0.8;
+            }
+            .signal-nav-prev { top: -50px; }
+            .signal-nav-next { bottom: -50px; }
+            .signal-header-info {
+                top: 10px;
+                padding: 8px 12px;
+                gap: 8px;
+                max-width: 90%;
+            }
+            .signal-header-info .signal-name {
+                font-size: 13px;
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .signal-header-info .signal-tag,
+            .signal-header-info .signal-direction {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            .signal-counter {
+                font-size: 12px;
+            }
+            /* Swipe Hint */
+            .swipe-hint {
+                display: block;
+            }
+        }
+
+        /* Swipe Hint (nur Mobile) */
+        .swipe-hint {
+            display: none;
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            z-index: 20;
+            pointer-events: none;
+            animation: fadeOutHint 3s forwards;
+        }
+
+        .swipe-hint span {
+            color: var(--accent-gold);
+        }
+
+        @keyframes fadeOutHint {
+            0%, 70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
 
         .slider-info {
             display: flex;
@@ -1827,25 +1633,19 @@
             .slider-nav {
                 width: 50px;
                 height: 50px;
-                font-size: 28px;
+                font-size: 36px;
+                background: rgba(0, 0, 0, 0.8);
             }
         }
 
         @media (max-width: 768px) {
             .slider-nav {
-                width: 45px;
-                height: 45px;
-                font-size: 24px;
+                width: 40px;
+                height: 40px;
+                font-size: 28px;
             }
             .slider-thumbnails {
                 display: none;
-            }
-            .modal-close {
-                top: 10px;
-                right: 10px;
-                width: 45px;
-                height: 45px;
-                font-size: 28px;
             }
         }
 
@@ -2127,229 +1927,33 @@
         /* Responsive */
         @media (max-width: 768px) {
             .mobile-cta {
-                display: none;
+                display: block;
             }
 
             .header {
-                padding: 12px 16px;
-                flex-direction: row;
-                gap: 0;
-                justify-content: space-between;
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
             }
 
             .header-nav {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                gap: 16px;
+            }
+
+            .header-success-rate {
+                padding: 4px 10px;
+            }
+
+            .success-label {
                 display: none;
             }
 
             .header-right {
-                display: none;
-            }
-
-            /* Mobile Header Controls */
-            .mobile-header-right {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .btn-mobile-abo {
-                padding: 8px 14px;
-                font-size: 12px;
-            }
-
-            .burger-menu {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                width: 40px;
-                height: 40px;
-                background: var(--bg-card);
-                border: 1px solid var(--border-color);
-                border-radius: 8px;
-                cursor: pointer;
-                gap: 5px;
-                padding: 10px;
-            }
-
-            .burger-menu span {
-                display: block;
-                width: 20px;
-                height: 2px;
-                background: var(--text-primary);
-                border-radius: 2px;
-                transition: all 0.3s ease;
-            }
-
-            .burger-menu.active span:nth-child(1) {
-                transform: rotate(45deg) translate(5px, 5px);
-            }
-
-            .burger-menu.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .burger-menu.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(5px, -5px);
-            }
-
-            /* Mobile Menu */
-            .mobile-menu-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.7);
-                z-index: 998;
-            }
-
-            .mobile-menu-overlay.active {
-                display: block;
-            }
-
-            .mobile-menu {
-                display: block;
-                position: fixed;
-                top: 0;
-                right: -280px;
-                width: 280px;
-                height: 100vh;
-                background: var(--bg-card);
-                border-left: 1px solid var(--border-color);
-                z-index: 999;
-                transition: right 0.3s ease;
-                overflow-y: auto;
-            }
-
-            .mobile-menu.active {
-                right: 0;
-            }
-
-            .mobile-menu-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 16px 20px;
-                border-bottom: 1px solid var(--border-color);
-                font-weight: 600;
-                font-size: 16px;
-            }
-
-            .mobile-menu-close {
-                background: none;
-                border: none;
-                color: var(--text-secondary);
-                font-size: 20px;
-                cursor: pointer;
-                padding: 4px 8px;
-            }
-
-            .mobile-menu-links {
-                padding: 16px;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .mobile-menu-link {
-                display: block;
-                padding: 14px 16px;
-                color: var(--text-primary);
-                text-decoration: none;
-                font-size: 15px;
-                border-radius: 8px;
-                transition: background 0.2s;
-            }
-
-            .mobile-menu-link:hover {
-                background: var(--bg-hover);
-            }
-
-            .mobile-menu-divider {
-                height: 1px;
-                background: var(--border-color);
-                margin: 8px 0;
-            }
-
-            .mobile-menu-stats {
-                display: flex;
-                gap: 12px;
-                padding: 12px 0;
-            }
-
-            .mobile-stat {
-                flex: 1;
-                background: var(--bg-primary);
-                border-radius: 8px;
-                padding: 12px;
-                text-align: center;
-            }
-
-            .mobile-stat-label {
-                display: block;
-                font-size: 10px;
-                color: var(--text-secondary);
-                margin-bottom: 4px;
-            }
-
-            .mobile-stat-value {
-                display: block;
-                font-size: 14px;
-                font-weight: 600;
-                color: var(--accent-green);
-            }
-
-            .mobile-stat-value.live {
-                color: var(--accent-green);
-            }
-
-            .mobile-menu-btn {
                 width: 100%;
-                padding: 14px 16px;
-                border: 1px solid var(--border-color);
-                background: transparent;
-                color: var(--text-primary);
-                font-family: inherit;
-                font-size: 14px;
-                font-weight: 500;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: all 0.2s;
-                text-align: left;
-            }
-
-            .mobile-menu-btn:hover {
-                border-color: var(--accent-green);
-                color: var(--accent-green);
-            }
-
-            .mobile-menu-btn.primary {
-                background: var(--accent-green);
-                border-color: var(--accent-green);
-                color: #000;
-                font-weight: 600;
-                text-align: center;
-            }
-
-            .mobile-menu-btn.primary:hover {
-                background: #00cc6a;
-            }
-
-            /* Logo kleiner auf Mobile */
-            .logo {
-                font-size: 16px;
-            }
-
-            .logo-icon {
-                width: 40px;
-                height: 40px;
-            }
-
-            .logo-icon img {
-                width: 40px;
-                height: 40px;
+                justify-content: space-between;
             }
 
             .hero {
@@ -2363,31 +1967,6 @@
             .section-header, .stats-section, .main, .premium-header, .premium-grid-container, .tabs-section {
                 padding-left: 16px;
                 padding-right: 16px;
-            }
-
-            /* Stats auf einer Zeile für Mobile */
-            .stats-section {
-                display: flex;
-                flex-wrap: nowrap;
-                justify-content: space-between;
-                gap: 8px;
-                padding-bottom: 16px;
-            }
-
-            .stat-card {
-                flex: 1;
-                min-width: 0;
-                padding: 12px 8px;
-                text-align: center;
-            }
-
-            .stat-number {
-                font-size: 22px;
-            }
-
-            .stat-label {
-                font-size: 10px;
-                white-space: nowrap;
             }
 
             .signals-grid, .premium-grid {
@@ -2439,276 +2018,15 @@
                 padding-bottom: 8px;
             }
         }
-
-        /* Coming Soon Banner Styles */
-        .coming-soon-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #0a0a0a 0%, #0c1a12 50%, #0a0a0a 100%);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .coming-soon-banner.hidden {
-            display: none;
-        }
-
-        .coming-soon-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.05) 0%, transparent 30%);
-            pointer-events: none;
-        }
-
-        .coming-soon-content {
-            text-align: center;
-            z-index: 1;
-            padding: 40px;
-            max-width: 700px;
-        }
-
-        .coming-soon-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
-            color: #000;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 8px 20px;
-            border-radius: 20px;
-            margin-bottom: 24px;
-            letter-spacing: 2px;
-            animation: pulse-badge 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
-            50% { transform: scale(1.02); box-shadow: 0 0 40px rgba(0, 255, 136, 0.5); }
-        }
-
-        .coming-soon-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
-
-        .wolf-icon {
-            display: block;
-            margin-bottom: 12px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .wolf-logo-large {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .launch-date {
-            color: var(--accent-green);
-            display: block;
-            font-size: 44px;
-            margin-top: 8px;
-        }
-
-        .coming-soon-subtitle {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 40px;
-        }
-
-        .countdown-item {
-            background: var(--bg-card);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 12px;
-            padding: 20px 24px;
-            min-width: 90px;
-        }
-
-        .countdown-value {
-            display: block;
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--accent-green);
-            line-height: 1;
-        }
-
-        .countdown-label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
-        }
-
-        .countdown-separator {
-            font-size: 36px;
-            color: var(--accent-green);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            opacity: 0.5;
-        }
-
-        .coming-soon-features {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .feature-item {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .feature-item::before {
-            color: var(--accent-green);
-        }
-
-        .coming-soon-close {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 12px 32px;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .coming-soon-close:hover {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        @media (max-width: 768px) {
-            .coming-soon-content {
-                padding: 20px;
-            }
-
-            .coming-soon-title {
-                font-size: 24px;
-            }
-
-            .launch-date {
-                font-size: 28px;
-            }
-
-            .countdown-item {
-                padding: 12px 16px;
-                min-width: 60px;
-            }
-
-            .countdown-value {
-                font-size: 28px;
-            }
-
-            .countdown-separator {
-                font-size: 24px;
-            }
-
-            .coming-soon-features {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .wolf-logo-large {
-                width: 60px;
-                height: 60px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- ============================================== -->
-    <!-- 🚀 COMING SOON BANNER - NACH LAUNCH LÖSCHEN! -->
-    <!-- Einfach diesen ganzen Block entfernen wenn live -->
-    <!-- ============================================== -->
-    <div class="coming-soon-banner" id="comingSoonBanner">
-        <div class="coming-soon-content">
-            <div class="coming-soon-badge">🚀 LAUNCHING SOON</div>
-            <div class="wolf-icon">
-                <img src="/images/Wolf.png" alt="Wolf" class="wolf-logo-large">
-            </div>
-            <h2 class="coming-soon-title">
-                WolfeWaveSignals startet am <span class="launch-date">25. Januar 2026</span>
-            </h2>
-            <p class="coming-soon-subtitle">Professionelle Wolfe Wave Trading-Signale für DAX, NASDAQ, Forex & Crypto</p>
-            
-            <div class="countdown-container" id="countdown">
-                <div class="countdown-item">
-                    <span class="countdown-value" id="days">00</span>
-                    <span class="countdown-label">Tage</span>
-                </div>
-                <div class="countdown-separator">:</div>
-                <div class="countdown-item">
-                    <span class="countdown-value" id="hours">00</span>
-                    <span class="countdown-label">Stunden</span>
-                </div>
-                <div class="countdown-separator">:</div>
-                <div class="countdown-item">
-                    <span class="countdown-value" id="minutes">00</span>
-                    <span class="countdown-label">Minuten</span>
-                </div>
-                <div class="countdown-separator">:</div>
-                <div class="countdown-item">
-                    <span class="countdown-value" id="seconds">00</span>
-                    <span class="countdown-label">Sekunden</span>
-                </div>
-            </div>
-            
-            <div class="coming-soon-features">
-                <div class="feature-item">✓ Echtzeit-Signale für alle Märkte</div>
-                <div class="feature-item">✓ Entry, Stop-Loss & Take-Profit</div>
-                <div class="feature-item">✓ Performance-Tracking</div>
-            </div>
-            
-            <button class="coming-soon-close" onclick="closeComingSoonBanner()" title="Vorschau ansehen">
-                Vorschau ansehen ↓
-            </button>
-        </div>
-        <div class="coming-soon-particles"></div>
-    </div>
-    <!-- ============================================== -->
-    <!-- 🚀 ENDE COMING SOON BANNER                    -->
-    <!-- ============================================== -->
-
     <header class="header">
         <div class="logo">
             <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
-            <a href="maerkte.html" class="nav-link">📊 Märkte</a>
             <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
@@ -2723,48 +2041,7 @@
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
             <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
         </div>
-        
-        <!-- Mobile Header Controls -->
-        <div class="mobile-header-right">
-            <button class="btn btn-primary btn-mobile-abo" onclick="showCheckout()">Abo</button>
-            <button class="burger-menu" id="burgerMenu" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
     </header>
-    
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
-    <nav class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <span>Menü</span>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
-        </div>
-        <div class="mobile-menu-links">
-            <a href="maerkte.html" class="mobile-menu-link">📊 Märkte</a>
-            <a href="wolfewaves.html" class="mobile-menu-link">📖 Tutorial</a>
-            <div class="mobile-menu-divider"></div>
-            <div class="mobile-menu-stats">
-                <div class="mobile-stat">
-                    <span class="mobile-stat-label">Success Rate</span>
-                    <span class="mobile-stat-value" id="mobileSuccessRate">—%</span>
-                </div>
-                <div class="mobile-stat">
-                    <span class="mobile-stat-label">Status</span>
-                    <span class="mobile-stat-value live">🟢 LIVE</span>
-                </div>
-            </div>
-            <div class="mobile-menu-divider"></div>
-            <button class="mobile-menu-btn" onclick="showLogin(); closeMobileMenu();">
-                🔐 Login
-            </button>
-            <button class="mobile-menu-btn primary" onclick="showCheckout(); closeMobileMenu();">
-                ⭐ Premium Abo — 19,90€/Monat
-            </button>
-        </div>
-    </nav>
 
     <section class="hero">
         <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
@@ -2775,7 +2052,7 @@
     <section class="mobile-cta" id="mobileCTA">
         <div class="mobile-cta-content">
             <div class="mobile-cta-text">
-                <span class="mobile-cta-icon">🔓</span>
+                <span class="mobile-cta-icon">🔍</span>
                 <div>
                     <strong>Alle Signale freischalten</strong>
                     <span class="mobile-cta-price">19,90€/Monat</span>
@@ -2785,52 +2062,17 @@
         </div>
     </section>
 
-    <!-- Market Hours Indicator -->
-    <section class="market-hours-section" id="marketHoursSection">
-        <div class="market-hours-container">
-            <div class="market-hours-label">
-                <img src="/images/Wolf.png" alt="Wolf">
-                <span>Handelszeiten:</span>
-            </div>
-            <div class="market-indicator" id="marketXetra" data-market="XETRA">
-                <span class="market-dot"></span>
-                <span class="market-name">XETRA</span>
-                <span class="market-status">—</span>
-            </div>
-            <div class="market-indicator" id="marketUS" data-market="US">
-                <span class="market-dot"></span>
-                <span class="market-name">NYSE/NASDAQ</span>
-                <span class="market-status">—</span>
-            </div>
-            <div class="market-indicator" id="marketForex" data-market="FOREX">
-                <span class="market-dot"></span>
-                <span class="market-name">Forex</span>
-                <span class="market-status">—</span>
-            </div>
-            <div class="market-indicator" id="marketCrypto" data-market="CRYPTO">
-                <span class="market-dot"></span>
-                <span class="market-name">Krypto</span>
-                <span class="market-status">—</span>
-            </div>
-            <div class="market-indicator" id="marketAsia" data-market="ASIA">
-                <span class="market-dot"></span>
-                <span class="market-name">Asien</span>
-                <span class="market-status">—</span>
-            </div>
-        </div>
-    </section>
-
     <!-- Stats -->
     <section class="stats-section">
-        <div class="stat-card" onclick="switchToTab('all')" title="Alle Signale anzeigen">
+        <div class="stat-card">
             <div class="stat-number" id="totalSignals">—</div>
             <div class="stat-label">Aktive Signale</div>
         </div>
-        <div class="stat-card" onclick="switchToTab('success')" title="Erfolgreiche Trades anzeigen">
+        <div class="stat-card">
             <div class="stat-number stat-gold" id="successCount">—</div>
-            <div class="stat-label">✔ Erfolgreiche Trades</div>
+            <div class="stat-label">✓ Erfolgreiche Trades</div>
         </div>
-        <div class="stat-card" onclick="switchToTab('today')" title="Signale von heute anzeigen">
+        <div class="stat-card">
             <div class="stat-number" id="todayCount">—</div>
             <div class="stat-label">Neu heute</div>
         </div>
@@ -2841,20 +2083,12 @@
         <div class="tabs-container">
             <div class="tabs">
                 <button class="tab active" data-tab="all">Alle Signale</button>
-                <button class="tab" data-tab="today">
-                    📅 Heute
-                    <span class="tab-badge" id="todayTabCount">0</span>
+                <button class="tab" data-tab="new">
+                    Neu
+                    <span class="tab-badge" id="newCount">0</span>
                 </button>
-                <button class="tab tab-active" data-tab="active">
-                    🎯 ACTIVE
-                    <span class="tab-badge tab-badge-blue" id="activeCount">0</span>
-                </button>
-                <button class="tab tab-pending" data-tab="pending">
-                    ⏳ PENDING
-                    <span class="tab-badge tab-badge-orange" id="pendingCount">0</span>
-                </button>
-                <button class="tab tab-bullish" data-tab="bullish">📈 Bullish</button>
-                <button class="tab tab-bearish" data-tab="bearish">📉 Bearish</button>
+                <button class="tab" data-tab="bullish">Bullish</button>
+                <button class="tab" data-tab="bearish">Bearish</button>
                 <button class="tab tab-success" data-tab="success">
                     🏆 Success
                     <span class="tab-badge tab-badge-gold" id="successTabCount">0</span>
@@ -2865,28 +2099,27 @@
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchSymbol" placeholder="Symbol suchen... (z.B. Henkel, Apple, EURUSD)">
                 </div>
-                <div class="filter-button-group">
-                    <span class="filter-group-label">Märkte:</span>
-                    <button class="filter-btn" data-market="DAX">DAX</button>
-                    <button class="filter-btn" data-market="NASDAQ">NASDAQ</button>
-                    <button class="filter-btn" data-market="NYSE">NYSE</button>
-                    <button class="filter-btn" data-market="SP500">S&P 500</button>
-                    <button class="filter-btn" data-market="INDICES">Indizes</button>
-                    <button class="filter-btn" data-market="FOREX">Forex</button>
-                    <button class="filter-btn" data-market="CRYPTO">Krypto</button>
-                </div>
-                <div class="filter-divider"></div>
-                <div class="filter-button-group">
-                    <span class="filter-group-label">Zeit:</span>
-                    <button class="filter-btn" data-timeframe="M5">M5</button>
-                    <button class="filter-btn" data-timeframe="M15">M15</button>
-                    <button class="filter-btn" data-timeframe="H1">H1</button>
-                    <button class="filter-btn" data-timeframe="H4">H4</button>
-                    <button class="filter-btn" data-timeframe="D1">D1</button>
-                    <button class="filter-btn" data-timeframe="W1">W1</button>
-                </div>
+                <select class="filter-select" id="filterMarket">
+                    <option value="">Alle Märkte</option>
+                    <option value="DAX">DAX</option>
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="NYSE">NYSE</option>
+                    <option value="SP500">S&P 500</option>
+                    <option value="FOREX">Forex</option>
+                    <option value="CRYPTO">Krypto</option>
+                    <option value="OTHER">Andere</option>
+                </select>
+                <select class="filter-select" id="filterTimeframe">
+                    <option value="">Alle TF</option>
+                    <option value="M5">M5</option>
+                    <option value="M15">M15</option>
+                    <option value="H1">H1</option>
+                    <option value="H4">H4</option>
+                    <option value="D1">Daily</option>
+                    <option value="W1">Weekly</option>
+                </select>
                 <div class="zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">★</button>
                     <span class="zoom-indicator" id="zoomIndicator">4</span>
                     <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
                     <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
@@ -2908,12 +2141,12 @@
                 <div class="stat-label">TP3 erreicht</div>
             </div>
             <div class="success-stat-mini green">
-                <div class="stat-icon">✅</div>
+                <div class="stat-icon">✗</div>
                 <div class="stat-value green" id="tp2Count">0</div>
                 <div class="stat-label">TP2 erreicht</div>
             </div>
             <div class="success-stat-mini blue">
-                <div class="stat-icon">📈</div>
+                <div class="stat-icon">🔍</div>
                 <div class="stat-value blue" id="tp1Count">0</div>
                 <div class="stat-label">TP1 erreicht</div>
             </div>
@@ -2958,7 +2191,7 @@
 
             <div class="paywall-overlay">
                 <div class="paywall-card">
-                    <div class="paywall-icon">🔓</div>
+                    <div class="paywall-icon">🔍</div>
                     <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
                     <div class="paywall-subtitle">
                         Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
@@ -2966,28 +2199,21 @@
 
                     <div class="paywall-features">
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">✓</span>
                             <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">✓</span>
                             <span>Performance-Statistiken & Success-Tracking</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">✓</span>
                             <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">✔</span>
+                            <span class="paywall-feature-icon">✓</span>
                             <span>Jederzeit kündbar — keine Bindung</span>
                         </div>
-                    </div>
-
-                    <div class="widerruf-checkbox" id="widerrufContainer" style="margin-bottom: 20px; text-align: left; display: none;">
-                        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
-                            <input type="checkbox" id="widerrufCheckbox" style="margin-top: 3px; accent-color: var(--accent-green); width: 16px; height: 16px; flex-shrink: 0;">
-                            <span>Ich stimme zu, dass die Ausführung des Vertrages sofort beginnt und verzichte auf mein 14-tägiges Widerrufsrecht gemäß § 356 Abs. 5 BGB.</span>
-                        </label>
                     </div>
 
                     <div class="paywall-price">
@@ -2995,7 +2221,7 @@
                         <span class="paywall-price-period">/ Monat</span>
                     </div>
 
-                    <button class="paywall-btn" id="checkoutBtn" onclick="handleCheckout()">
+                    <button class="paywall-btn" onclick="showCheckout()">
                         Jetzt Abonnieren
                     </button>
 
@@ -3011,12 +2237,11 @@
         <div style="margin-bottom: 16px;">
             <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
             <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
-            <a href="maerkte.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Handelbare Märkte</a>
             <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
         </div>
         <div style="color: var(--text-secondary); font-size: 11px;">
-            Â© 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
+            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
             <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
                 ⚠ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
             </span>
@@ -3029,7 +2254,7 @@
             <span class="modal-close" onclick="closeAuthModal()">✕</span>
             <div id="loginForm" class="auth-form">
                 <div class="auth-header">
-                    <div class="auth-icon"><img src="/images/Wolf.png" alt="Wolf" style="width:64px;height:64px;"></div>
+                    <div class="auth-icon"><img src="data:image/png;base64,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" alt="Wolf" style="width:48px;height:48px;"></div>
                     <h2>Willkommen zurück</h2>
                     <p>Melde dich an, um alle Signale zu sehen</p>
                 </div>
@@ -3051,7 +2276,7 @@
             </div>
             <div id="registerForm" class="auth-form" style="display:none;">
                 <div class="auth-header">
-                    <div class="auth-icon"><img src="/images/Wolf.png" alt="Wolf" style="width:64px;height:64px;"></div>
+                    <div class="auth-icon">🏆</div>
                     <h2>Account erstellen</h2>
                     <p>Starte mit deinem kostenlosen Account</p>
                 </div>
@@ -3076,11 +2301,27 @@
 
     <!-- Image Modal -->
     <div class="modal" id="imageModal">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <div class="image-slider-container" onclick="event.stopPropagation()">
-            <!-- Navigation Buttons -->
-            <button class="slider-nav slider-prev" onclick="event.stopPropagation(); prevImage()" id="sliderPrev">&lsaquo;</button>
-            <button class="slider-nav slider-next" onclick="event.stopPropagation(); nextImage()" id="sliderNext">&rsaquo;</button>
+        <span class="modal-close" onclick="closeModal()">✕</span>
+        
+        <!-- Signal Info Header -->
+        <div class="signal-header-info" id="signalHeaderInfo">
+            <span class="signal-counter" id="signalCounter">1 / 10</span>
+            <span class="signal-name" id="signalName">Loading...</span>
+            <div class="signal-meta">
+                <span class="signal-tag" id="signalMarket">-</span>
+                <span class="signal-tag" id="signalTimeframe">-</span>
+                <span class="signal-direction" id="signalDirection">-</span>
+            </div>
+        </div>
+        
+        <div class="image-slider-container">
+            <!-- Signal Navigation (up/down for prev/next signal) -->
+            <button class="signal-nav signal-nav-prev" onclick="prevSignal()" id="signalPrev" title="Vorheriges Signal (↑)">▲</button>
+            <button class="signal-nav signal-nav-next" onclick="nextSignal()" id="signalNext" title="Nächstes Signal (↓)">▼</button>
+            
+            <!-- Image Navigation (left/right for image history) -->
+            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">‹</button>
+            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
             
             <!-- Main Image -->
             <img src="" alt="Chart" id="modalImage">
@@ -3091,18 +2332,13 @@
                 <span id="sliderDate"></span>
             </div>
             
-            <!-- Admin Controls im Modal -->
-            <div class="modal-admin-controls" id="modalAdminControls" style="display: none; margin-top: 16px; gap: 12px; justify-content: center;">
-                <button class="admin-modal-btn admin-modal-btn-success" onclick="event.stopPropagation(); showSuccessModal(currentModalSignalId)" style="padding: 12px 24px;">
-                    ✔ Als Erfolg markieren
-                </button>
-                <button class="admin-modal-btn admin-modal-btn-danger" onclick="event.stopPropagation(); showDeleteModal(currentModalSignalId)" style="padding: 12px 24px;">
-                    × Löschen
-                </button>
-            </div>
-            
             <!-- Thumbnail Strip (wenn mehrere Bilder) -->
             <div class="slider-thumbnails" id="sliderThumbnails"></div>
+            
+            <!-- Swipe Hint for Mobile -->
+            <div class="swipe-hint" id="swipeHint">
+                ↔ Wischen für Bilder | ↕ Wischen für <span>nächstes Signal</span>
+            </div>
         </div>
     </div>
 
@@ -3119,7 +2355,7 @@
                     <strong id="deleteSignalInfo"></strong>
                 </div>
                 <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
-                    ⚠ Diese Aktion kann nicht rckgängig gemacht werden!
+                    ⚠ Diese Aktion kann nicht rückgängig gemacht werden!
                 </p>
             </div>
             <div class="admin-modal-footer">
@@ -3145,7 +2381,7 @@
                     <label>Ergebnis auswählen:</label>
                     <select id="successResult">
                         <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
-                        <option value="TP2_HIT">✅ TP2 erreicht</option>
+                        <option value="TP2_HIT">✗ TP2 erreicht</option>
                         <option value="TP1_HIT">📈 TP1 erreicht</option>
                         <option value="SL_HIT">🛑 Stop Loss getroffen</option>
                         <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
@@ -3175,8 +2411,6 @@
         let isSubscribed = false;
         let isAdmin = false;
         let currentTab = 'all';
-        let selectedMarkets = [];
-        let selectedTimeframes = [];
 
         // Zoom-Steuerung
         let gridColumns = 4;
@@ -3242,8 +2476,6 @@
             updateStats();
             renderSignals();
             setupEventListeners();
-            updateMarketHours(); // Market hours indicator
-            setInterval(updateMarketHours, 60000); // Update every minute
         }
 
         // ==================== AUTH ====================
@@ -3383,7 +2615,7 @@
             errorEl.textContent = '';
             
             if (!email || !password) {
-                errorEl.textContent = 'Bitte alle Felder ausfllen';
+                errorEl.textContent = 'Bitte alle Felder ausfüllen';
                 return;
             }
             
@@ -3417,7 +2649,7 @@
                     renderSignals();
                 } else {
                     errorEl.style.color = 'var(--accent-green)';
-                    errorEl.textContent = '✔ Bestätigungs-E-Mail gesendet!';
+                    errorEl.textContent = '✓ Bestätigungs-E-Mail gesendet!';
                 }
                 
             } catch (error) {
@@ -3442,7 +2674,7 @@
             
             let statusText = 'Free Account';
             if (isAdmin) statusText = '🛡 Admin';
-            else if (isSubscribed) statusText = '✔ Premium';
+            else if (isSubscribed) statusText = '✓ Premium';
             
             headerRight.innerHTML = `
                 <div class="live-indicator">
@@ -3557,24 +2789,19 @@
         function updateStats() {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
             document.getElementById('totalSignals').textContent = allSignals.length;
             
             const successTotal = completedSignals.filter(s => s.result_folder === 'success').length;
             document.getElementById('successCount').textContent = successTotal;
             
-            // Heute = alle Signale von heute
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
             document.getElementById('todayCount').textContent = todaySignals.length;
-            document.getElementById('todayTabCount').textContent = todaySignals.length;
             
-            // ACTIVE = Entry erfolgt, Trade läuft
-            const activeSignals = allSignals.filter(s => s.status === 'active');
-            document.getElementById('activeCount').textContent = activeSignals.length;
-            
-            // PENDING = Sweet Zone, wartet auf Entry
-            const pendingSignals = allSignals.filter(s => s.status === 'pending');
-            document.getElementById('pendingCount').textContent = pendingSignals.length;
+            // New count for tab
+            const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            document.getElementById('newCount').textContent = newSignals.length;
             
             // Success tab count
             document.getElementById('successTabCount').textContent = completedSignals.length;
@@ -3657,27 +2884,23 @@
             const header = document.getElementById('previewHeader');
             const searchTerm = document.getElementById('searchSymbol').value.trim();
             
-            // Tab-spezifische Labels
-            const tabConfig = {
-                'all': { icon: '🦊', name: 'Alle Signale', color: isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)' },
-                'today': { icon: '📅', name: 'Heute', color: 'var(--accent-green)' },
-                'active': { icon: '🎯', name: 'ACTIVE (Entry erfolgt)', color: 'var(--accent-blue)' },
-                'pending': { icon: '⏳', name: 'PENDING (Sweet Zone)', color: '#ffa500' },
-                'bullish': { icon: '📈', name: 'Bullish', color: 'var(--accent-green)' },
-                'bearish': { icon: '📉', name: 'Bearish', color: 'var(--accent-red)' },
-                'success': { icon: '🏆', name: 'Abgeschlossene Trades', color: 'var(--accent-gold)' }
-            };
-            
-            const tab = tabConfig[currentTab] || tabConfig['all'];
-            const badgeText = currentTab === 'success' ? 'Success' : (isAdmin ? 'Admin' : 'Premium');
-            
-            header.innerHTML = `
-                <div class="section-title">
-                    ${tab.icon} ${tab.name}
-                    <span class="section-badge" style="background: ${tab.color};">${badgeText}</span>
-                </div>
-                <div class="section-subtitle">— ${signals.length} ${currentTab === 'success' ? 'Trades' : 'Signale'}${searchTerm ? ` für "${searchTerm}"` : ''}</div>
-            `;
+            if (currentTab === 'success') {
+                header.innerHTML = `
+                    <div class="section-title">
+                        🏆 Abgeschlossene Trades
+                        <span class="section-badge" style="background: var(--accent-gold);">Success</span>
+                    </div>
+                    <div class="section-subtitle">— ${signals.length} Trades${searchTerm ? ` für "${searchTerm}"` : ''}</div>
+                `;
+            } else {
+                header.innerHTML = `
+                    <div class="section-title">
+                        🦊 ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
+                        <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
+                    </div>
+                    <div class="section-subtitle">— ${signals.length} Signale${searchTerm ? ` für "${searchTerm}"` : ''}</div>
+                `;
+            }
         }
 
         function getPreviewSignals() {
@@ -3695,37 +2918,26 @@
         }
 
         function getFilteredSignals() {
+            const market = document.getElementById('filterMarket').value;
+            const timeframe = document.getElementById('filterTimeframe').value;
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
             
             let filtered = [...allSignals];
             
             // Tab filter
-            if (currentTab === 'today') {
-                // Alle Signale von heute
-                filtered = filtered.filter(s => new Date(s.created_at) >= today);
-            } else if (currentTab === 'active') {
-                // ACTIVE = Entry erfolgt, Trade läuft
-                filtered = filtered.filter(s => s.status === 'active');
-            } else if (currentTab === 'pending') {
-                // PENDING = Sweet Zone, wartet auf Entry
-                filtered = filtered.filter(s => s.status === 'pending');
+            if (currentTab === 'new') {
+                filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
             } else if (currentTab === 'bullish') {
                 filtered = filtered.filter(s => s.direction === 'BULLISH');
             } else if (currentTab === 'bearish') {
                 filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
-            // Multi-select market filter
-            if (selectedMarkets.length > 0) {
-                filtered = filtered.filter(s => selectedMarkets.includes(s.market));
-            }
-            
-            // Multi-select timeframe filter
-            if (selectedTimeframes.length > 0) {
-                filtered = filtered.filter(s => selectedTimeframes.includes(s.timeframe));
-            }
+            // Dropdown filters
+            if (market) filtered = filtered.filter(s => s.market === market);
+            if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
             // Search filter
             if (searchTerm) {
@@ -3739,19 +2951,14 @@
         }
 
         function getFilteredCompletedSignals() {
+            const market = document.getElementById('filterMarket').value;
+            const timeframe = document.getElementById('filterTimeframe').value;
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             
             let filtered = [...completedSignals];
             
-            // Multi-select market filter
-            if (selectedMarkets.length > 0) {
-                filtered = filtered.filter(s => selectedMarkets.includes(s.market));
-            }
-            
-            // Multi-select timeframe filter
-            if (selectedTimeframes.length > 0) {
-                filtered = filtered.filter(s => selectedTimeframes.includes(s.timeframe));
-            }
+            if (market) filtered = filtered.filter(s => s.market === market);
+            if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
             // Search filter
             if (searchTerm) {
@@ -3786,22 +2993,15 @@
             // Admin controls (nur für Admins sichtbar)
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
-                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✔</button>
+                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✓</button>
                     <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
             ` : '';
-
-            // Check-Button (nur für Admins, wenn noch nicht gecheckt)
-            const isChecked = signal.checked === true;
-            const checkButton = isAdmin && isVisible && !isChecked ? `
-                <button class="check-btn" onclick="event.stopPropagation(); toggleChecked('${signal.id}')" title="Als kontrolliert markieren">✓</button>
-            ` : '';
-
+            
             return `
-                <div class="signal-card ${isNew ? 'is-new' : ''} ${isChecked ? 'is-checked' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', '${signal.id}')">
+                <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     ${badge}
                     ${adminControls}
-                    ${checkButton}
                     <div class="signal-image-container">
                         <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
@@ -3823,10 +3023,10 @@
                         </div>
                         <div class="price-grid">
                             <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label label-stop">Stop</div><div class="price-value value-stop">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label label-tp">TP1</div><div class="price-value value-tp1">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label label-tp">TP2</div><div class="price-value value-tp2">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label label-tp">TP3</div><div class="price-value value-tp3">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
@@ -3849,7 +3049,7 @@
                 cardClass = 'is-success tp3';
             } else if (signal.tp2_hit) {
                 resultClass = 'tp2';
-                resultBadge = '✅ TP2';
+                resultBadge = '✗ TP2';
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
@@ -3865,11 +3065,11 @@
             ` : '';
             
             return `
-                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', '${signal.id}')">
+                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${adminControls}
                     <div class="signal-image-container">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">📈</div>'}
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -3891,13 +3091,13 @@
                             <div class="price-item">
                                 <div class="price-label">TP1</div>
                                 <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp1_hit ? '✔' : '—'}
+                                    ${signal.tp1_hit ? '✓' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
                                 <div class="price-label">TP2</div>
                                 <div class="price-value" style="color: ${signal.tp2_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp2_hit ? '✔' : '—'}
+                                    ${signal.tp2_hit ? '✓' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
@@ -3949,73 +3149,6 @@
             return new Date(dateStr).toLocaleDateString('de-DE');
         }
 
-        // ==================== FILTER HELPERS ====================
-        function switchToTab(tabName) {
-            const isPremium = currentUser && (isSubscribed || isAdmin);
-            
-            // All tabs except 'all' require premium
-            if (tabName !== 'all' && !isPremium) {
-                showLogin();
-                return;
-            }
-            
-            // Update tab UI
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            const targetTab = document.querySelector(`[data-tab="${tabName}"]`);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            }
-            
-            currentTab = tabName;
-            
-            // Reset filters when "Alle Signale" is clicked
-            if (tabName === 'all') {
-                selectedMarkets = [];
-                selectedTimeframes = [];
-                document.querySelectorAll('[data-market]').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('[data-timeframe]').forEach(btn => btn.classList.remove('active'));
-            }
-            
-            renderSignals();
-            
-            // Scroll to tabs section
-            const tabsSection = document.getElementById('tabsSection');
-            if (tabsSection && isPremium) {
-                tabsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        function toggleFilterButton(button, type) {
-            const value = type === 'market' ? button.dataset.market : button.dataset.timeframe;
-            const array = type === 'market' ? selectedMarkets : selectedTimeframes;
-            
-            button.classList.toggle('active');
-            
-            const index = array.indexOf(value);
-            if (index > -1) {
-                array.splice(index, 1);
-            } else {
-                array.push(value);
-            }
-            
-            renderSignals();
-        }
-
-        function clearFilters() {
-            // Clear search
-            document.getElementById('searchSymbol').value = '';
-            
-            // Clear market filters
-            selectedMarkets = [];
-            document.querySelectorAll('[data-market]').forEach(btn => btn.classList.remove('active'));
-            
-            // Clear timeframe filters
-            selectedTimeframes = [];
-            document.querySelectorAll('[data-timeframe]').forEach(btn => btn.classList.remove('active'));
-            
-            renderSignals();
-        }
-
         // ==================== EVENT LISTENERS ====================
         function setupEventListeners() {
             // Tabs
@@ -4024,28 +3157,13 @@
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     currentTab = tab.dataset.tab;
-                    
-                    // Reset filters when "Alle Signale" is clicked
-                    if (currentTab === 'all') {
-                        selectedMarkets = [];
-                        selectedTimeframes = [];
-                        document.querySelectorAll('[data-market]').forEach(btn => btn.classList.remove('active'));
-                        document.querySelectorAll('[data-timeframe]').forEach(btn => btn.classList.remove('active'));
-                    }
-                    
                     renderSignals();
                 });
             });
             
-            // Filter buttons - Markets
-            document.querySelectorAll('[data-market]').forEach(btn => {
-                btn.addEventListener('click', () => toggleFilterButton(btn, 'market'));
-            });
-            
-            // Filter buttons - Timeframes
-            document.querySelectorAll('[data-timeframe]').forEach(btn => {
-                btn.addEventListener('click', () => toggleFilterButton(btn, 'timeframe'));
-            });
+            // Filters
+            document.getElementById('filterMarket').addEventListener('change', renderSignals);
+            document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
             
             // Search with debounce
             let searchTimeout;
@@ -4054,10 +3172,11 @@
                 searchTimeout = setTimeout(renderSignals, 300);
             });
             
-            // Clear search and filters on Escape
+            // Clear search on Escape
             document.getElementById('searchSymbol').addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
-                    clearFilters();
+                    e.target.value = '';
+                    renderSignals();
                 }
             });
             
@@ -4111,48 +3230,148 @@
         let sliderImages = [];
         let sliderCurrentIndex = 0;
         let currentWedgeId = null;
-        let currentModalSignalId = null;
+        
+        // Signal Navigation
+        let currentSignalsList = [];
+        let currentSignalIndex = 0;
 
-        async function openModal(imageUrl, wedgeId = null, signalId = null) {
+        function getDisplayedSignals() {
+            // Hole die aktuell angezeigte Signal-Liste basierend auf Tab und Filtern
+            const isPremium = currentUser && (isSubscribed || isAdmin);
+            
+            if (!isPremium) {
+                return getPreviewSignals();
+            }
+            
+            if (currentTab === 'success') {
+                return getFilteredCompletedSignals();
+            }
+            
+            return getFilteredSignals();
+        }
+
+        async function openModal(imageUrl, wedgeId = null, signalData = null) {
             if (!imageUrl) return;
-
+            
+            // Aktualisiere Signal-Liste
+            currentSignalsList = getDisplayedSignals();
+            
+            // Finde den Index des aktuellen Signals
+            if (wedgeId) {
+                currentSignalIndex = currentSignalsList.findIndex(s => s.wedge_id === wedgeId);
+                if (currentSignalIndex === -1) currentSignalIndex = 0;
+            } else {
+                currentSignalIndex = 0;
+            }
+            
             currentWedgeId = wedgeId;
-            currentModalSignalId = signalId;
             sliderImages = [{ url: imageUrl, scanned_at: null }];
             sliderCurrentIndex = 0;
-
-            // Prüfe ob es ein aktives oder completed Signal ist
-            const isActiveSignal = signalId && allSignals.some(s => String(s.id) === String(signalId));
-            const isCompletedSignal = signalId && completedSignals.some(s => String(s.id) === String(signalId));
-
-            // Admin Controls im Modal anzeigen - aber nur für aktive Signale den "Erfolg" Button
-            const adminControls = document.getElementById('modalAdminControls');
-            const successBtn = adminControls?.querySelector('.admin-modal-btn-success');
-
-            if (adminControls && isAdmin && signalId) {
-                adminControls.style.display = 'flex';
-                // "Als Erfolg markieren" nur für aktive Signale
-                if (successBtn) {
-                    successBtn.style.display = isActiveSignal ? 'block' : 'none';
-                }
-            } else if (adminControls) {
-                adminControls.style.display = 'none';
-            }
-
+            
             // Zeige erstmal das aktuelle Bild
             updateSliderDisplay();
+            updateSignalNavDisplay();
             document.getElementById('imageModal').classList.add('active');
-
+            
+            // Zeige Swipe-Hint auf Mobile (nur beim ersten Mal)
+            if ('ontouchstart' in window && !localStorage.getItem('swipeHintShown')) {
+                const hint = document.getElementById('swipeHint');
+                if (hint) {
+                    hint.style.display = 'block';
+                    localStorage.setItem('swipeHintShown', 'true');
+                    setTimeout(() => { hint.style.display = 'none'; }, 4000);
+                }
+            }
+            
             // Wenn wedge_id vorhanden, lade Bild-Historie
             if (wedgeId) {
                 await loadImageHistory(wedgeId, imageUrl);
             }
         }
 
+        function updateSignalNavDisplay() {
+            const signal = currentSignalsList[currentSignalIndex];
+            const total = currentSignalsList.length;
+            
+            // Counter
+            document.getElementById('signalCounter').textContent = `${currentSignalIndex + 1} / ${total}`;
+            
+            // Signal Info
+            if (signal) {
+                document.getElementById('signalName').textContent = signal.symbol_name || signal.symbol || 'Signal';
+                document.getElementById('signalMarket').textContent = signal.market || '-';
+                document.getElementById('signalTimeframe').textContent = signal.timeframe || '-';
+                
+                const directionEl = document.getElementById('signalDirection');
+                const direction = signal.direction || '';
+                directionEl.textContent = direction;
+                directionEl.className = 'signal-direction ' + (direction === 'BULLISH' ? 'bullish' : 'bearish');
+            }
+            
+            // Navigation Buttons
+            const prevBtn = document.getElementById('signalPrev');
+            const nextBtn = document.getElementById('signalNext');
+            
+            prevBtn.disabled = currentSignalIndex === 0;
+            nextBtn.disabled = currentSignalIndex >= total - 1;
+            
+            // Verstecke wenn nur 1 Signal
+            if (total <= 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                document.getElementById('signalHeaderInfo').style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+                document.getElementById('signalHeaderInfo').style.display = 'flex';
+            }
+        }
+
+        async function prevSignal() {
+            if (currentSignalIndex > 0) {
+                currentSignalIndex--;
+                await loadSignalAtIndex(currentSignalIndex);
+            }
+        }
+
+        async function nextSignal() {
+            if (currentSignalIndex < currentSignalsList.length - 1) {
+                currentSignalIndex++;
+                await loadSignalAtIndex(currentSignalIndex);
+            }
+        }
+
+        async function loadSignalAtIndex(index) {
+            const signal = currentSignalsList[index];
+            if (!signal) return;
+            
+            // Bestimme die Bild-URL
+            let imageUrl;
+            if (currentTab === 'success') {
+                imageUrl = signal.original_path || '';
+            } else {
+                imageUrl = signal.image_path?.startsWith('http') 
+                    ? signal.image_path 
+                    : `${STORAGE_URL}/${signal.image_path}`;
+            }
+            
+            currentWedgeId = signal.wedge_id;
+            sliderImages = [{ url: imageUrl, scanned_at: null }];
+            sliderCurrentIndex = 0;
+            
+            updateSliderDisplay();
+            updateSignalNavDisplay();
+            
+            // Lade Bild-Historie
+            if (signal.wedge_id) {
+                await loadImageHistory(signal.wedge_id, imageUrl);
+            }
+        }
+
         async function loadImageHistory(wedgeId, currentImageUrl) {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at,version&order=scanned_at.desc&limit=20`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at,version&order=scanned_at.desc`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -4166,15 +3385,17 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format - neueste zuerst (durch order=scanned_at.desc)
+                    // Konvertiere zu unserem Format
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // NICHT mehr das aktuelle Karten-Bild an den Anfang setzen
-                    // Die signal_images Tabelle hat bereits alle Bilder korrekt sortiert
-                    // Das neueste Bild ist bereits an Index 0 durch order=scanned_at.desc
+                    // Aktuelles Bild an den Anfang (neuestes)
+                    // Stelle sicher dass es nicht doppelt ist
+                    if (sliderImages[0].url !== currentImageUrl) {
+                        sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
+                    }
                     
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
@@ -4193,7 +3414,7 @@
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen - ISO UTC wird automatisch in lokale Zeit konvertiert
+            // Datum anzeigen
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
@@ -4264,45 +3485,81 @@
             sliderImages = [];
             sliderCurrentIndex = 0;
             currentWedgeId = null;
-            currentModalSignalId = null;
+            currentSignalsList = [];
+            currentSignalIndex = 0;
             document.getElementById('sliderThumbnails').innerHTML = '';
+            const hint = document.getElementById('swipeHint');
+            if (hint) hint.style.display = 'none';
         }
 
         // Keyboard Navigation
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('imageModal').classList.contains('active')) return;
             
+            // Image history navigation (left/right)
             if (e.key === 'ArrowLeft') prevImage();
             if (e.key === 'ArrowRight') nextImage();
+            
+            // Signal navigation (up/down)
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSignal();
+            }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                nextSignal();
+            }
+            
             if (e.key === 'Escape') closeModal();
         });
 
-        function showCheckout() {
-            if (!currentUser) {
-                showLogin();
-                return;
-            }
-            // Scroll zur Paywall
-            const paywall = document.getElementById('premiumSection');
-            if (paywall && paywall.style.display !== 'none') {
-                paywall.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // Highlight den Button kurz
-                setTimeout(() => {
-                    const btn = document.getElementById('checkoutBtn');
-                    if (btn) {
-                        btn.style.animation = 'highlightPulse 1s ease';
-                        setTimeout(() => {
-                            btn.style.animation = '';
-                        }, 1000);
-                    }
-                }, 500);
-            } else {
-                // User ist bereits Premium
-                alert('Du hast bereits ein aktives Abo!');
+        // Touch/Swipe Navigation for Mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        const minSwipeDistance = 50;
+
+        document.getElementById('imageModal').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.getElementById('imageModal').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Bestimme ob horizontal oder vertikal gescrollt wurde
+            const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+            
+            if (isHorizontal && Math.abs(deltaX) > minSwipeDistance) {
+                // Horizontal swipe: Bild-Historie
+                if (deltaX > 0) {
+                    // Swipe rechts = vorheriges Bild (älteres)
+                    prevImage();
+                } else {
+                    // Swipe links = nächstes Bild (neueres)
+                    nextImage();
+                }
+            } else if (!isHorizontal && Math.abs(deltaY) > minSwipeDistance) {
+                // Vertical swipe: Signal wechseln
+                if (deltaY > 0) {
+                    // Swipe runter = vorheriges Signal
+                    prevSignal();
+                } else {
+                    // Swipe hoch = nächstes Signal
+                    nextSignal();
+                }
             }
         }
 
-        function proceedToCheckout() {
+        function showCheckout() {
             if (!currentUser) {
                 showLogin();
                 return;
@@ -4310,61 +3567,12 @@
             window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
         }
 
-        function handleCheckout() {
-            const container = document.getElementById('widerrufContainer');
-            const checkbox = document.getElementById('widerrufCheckbox');
-            const btn = document.getElementById('checkoutBtn');
-            
-            // Wenn Checkbox noch versteckt ist → anzeigen
-            if (container && container.style.display === 'none') {
-                container.style.display = 'block';
-                // Button deaktivieren bis Checkbox gecheckt
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-                btn.style.cursor = 'not-allowed';
-                btn.innerHTML = 'Bestätigen & Abonnieren';
-                // Scroll zur Checkbox
-                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // Highlight
-                container.style.animation = 'highlightPulse 1s ease';
-                setTimeout(() => { container.style.animation = ''; }, 1000);
-                return;
-            }
-            
-            // Checkbox ist sichtbar - prüfen ob aktiviert
-            if (!checkbox || !checkbox.checked) {
-                alert('Bitte bestätige den Widerrufsverzicht, um fortzufahren.');
-                return;
-            }
-            proceedToCheckout();
-        }
-
-        // Widerrufsverzicht Checkbox Event Listener
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkbox = document.getElementById('widerrufCheckbox');
-            const btn = document.getElementById('checkoutBtn');
-            
-            if (checkbox && btn) {
-                checkbox.addEventListener('change', function() {
-                    if (this.checked) {
-                        btn.disabled = false;
-                        btn.style.opacity = '1';
-                        btn.style.cursor = 'pointer';
-                    } else {
-                        btn.disabled = true;
-                        btn.style.opacity = '0.5';
-                        btn.style.cursor = 'not-allowed';
-                    }
-                });
-            }
-        });
-
         function manageSubscription() {
             // Lemon Squeezy Customer Portal - bentigt aktivierten Store
             // Alternativ: E-Mail an Support
             const choice = confirm('Abo verwalten / kndigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.\n\nSobald der Shop aktiviert ist, kannst du dein Abo selbst verwalten.');
             if (choice) {
-                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20mchte%20mein%20Abo%20verwalten%2Fkndigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkndigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
             }
         }
 
@@ -4465,7 +3673,7 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('✔ Signal gelscht', 'success');
+                    showToast('✓ Signal gelscht', 'success');
                 } else if (response.status === 404 || responseText === '[]') {
                     // Nicht gefunden - vielleicht schon gelscht
                     if (pendingDeleteType === 'completed') {
@@ -4476,7 +3684,7 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('✔ Signal entfernt', 'success');
+                    showToast('✓ Signal entfernt', 'success');
                 } else {
                     throw new Error(`Status ${response.status}: ${responseText}`);
                 }
@@ -4488,28 +3696,12 @@
 
         function showSuccessModal(signalId) {
             console.log('showSuccessModal called with ID:', signalId);
-            console.log('allSignals count:', allSignals.length);
-            console.log('allSignals IDs:', allSignals.map(s => s.id));
-
-            if (!signalId) {
-                showToast('Kein Signal ausgewählt', 'error');
-                console.error('showSuccessModal: signalId is null/undefined');
-                return;
-            }
-
             const signal = allSignals.find(s => String(s.id) === String(signalId));
             if (!signal) {
-                // Prüfe ob es vielleicht ein completed signal ist
-                const completedSignal = completedSignals.find(s => String(s.id) === String(signalId));
-                if (completedSignal) {
-                    showToast('Dieses Signal ist bereits abgeschlossen', 'error');
-                } else {
-                    showToast('Signal nicht gefunden - bitte Seite neu laden', 'error');
-                }
                 console.error('Signal not found for success:', signalId);
                 return;
             }
-
+            
             pendingSuccessId = signalId;
             document.getElementById('successSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
             document.getElementById('successResult').value = 'TP3_HIT';
@@ -4596,7 +3788,7 @@
                     closeSuccessModal();
                     updateStats();
                     renderSignals();
-                    showToast('✔ Zu Success hinzugefgt', 'success');
+                    showToast('✓ Zu Success hinzugefgt', 'success');
                 } else {
                     const error = await response.json();
                     throw new Error(error.message || 'Failed');
@@ -4604,48 +3796,6 @@
             } catch (error) {
                 console.error('Success add error:', error);
                 showToast('✔ Fehler: ' + error.message, 'error');
-            }
-        }
-
-        // ==================== CHECKED/KONTROLLIERT FUNCTION ====================
-        async function toggleChecked(signalId) {
-            if (!isAdmin) {
-                showToast('Keine Berechtigung', 'error');
-                return;
-            }
-
-            const signal = allSignals.find(s => String(s.id) === String(signalId));
-            if (!signal) {
-                showToast('Signal nicht gefunden', 'error');
-                return;
-            }
-
-            const newCheckedState = !signal.checked;
-
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${getAccessToken()}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify({ checked: newCheckedState })
-                });
-
-                if (response.ok) {
-                    // Update local state
-                    signal.checked = newCheckedState;
-                    renderSignals();
-                    showToast(newCheckedState ? '✓ Als kontrolliert markiert' : '✓ Markierung entfernt', 'success');
-                } else {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Update failed');
-                }
-            } catch (error) {
-                console.error('Toggle checked error:', error);
-                showToast('Fehler: ' + error.message, 'error');
             }
         }
 
@@ -4684,204 +3834,10 @@
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
             }
-            @keyframes highlightPulse {
-                0%, 100% { background: transparent; }
-                50% { background: rgba(0, 255, 136, 0.2); border-radius: 8px; }
-            }
         `;
         document.head.appendChild(toastStyle);
 
-        // ==================== MARKET HOURS ====================
-        function updateMarketHours() {
-            const now = new Date();
-            const utcHours = now.getUTCHours();
-            const utcMinutes = now.getUTCMinutes();
-            const utcDay = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
-            const isWeekend = utcDay === 0 || utcDay === 6;
-            
-            // Convert to different timezones
-            const cetOffset = 1; // CET (Winter), adjust for DST if needed
-            const estOffset = -5; // EST
-            const jstOffset = 9; // JST (Tokyo)
-            
-            const cetHours = (utcHours + cetOffset + 24) % 24;
-            const estHours = (utcHours + estOffset + 24) % 24;
-            const jstHours = (utcHours + jstOffset + 24) % 24;
-            
-            // XETRA/DAX: 9:00-17:30 CET, Mon-Fri
-            updateMarketIndicator('marketXetra', 
-                !isWeekend && cetHours >= 9 && (cetHours < 17 || (cetHours === 17 && utcMinutes <= 30)),
-                !isWeekend && cetHours >= 8 && cetHours < 9,
-                'XETRA'
-            );
-            
-            // US Markets (NYSE/NASDAQ): 9:30-16:00 EST, Mon-Fri
-            // Pre-market: 4:00-9:30 EST
-            updateMarketIndicator('marketUS',
-                !isWeekend && ((estHours === 9 && utcMinutes >= 30) || (estHours >= 10 && estHours < 16)),
-                !isWeekend && estHours >= 4 && (estHours < 9 || (estHours === 9 && utcMinutes < 30)),
-                'NYSE/NASDAQ'
-            );
-            
-            // Forex: 24/5 (Sunday 22:00 UTC - Friday 22:00 UTC)
-            const forexOpen = (utcDay > 0 && utcDay < 5) || 
-                              (utcDay === 0 && utcHours >= 22) || 
-                              (utcDay === 5 && utcHours < 22);
-            updateMarketIndicator('marketForex', forexOpen, false, 'Forex');
-            
-            // Crypto: 24/7
-            updateMarketIndicator('marketCrypto', true, false, 'Krypto');
-            
-            // Asia (Tokyo): 9:00-15:00 JST, Mon-Fri
-            // Lunch break: 11:30-12:30 JST
-            const asiaOpen = !isWeekend && jstHours >= 9 && jstHours < 15 && 
-                            !(jstHours === 11 && utcMinutes >= 30) && 
-                            !(jstHours === 12 && utcMinutes < 30);
-            const asiaLunch = !isWeekend && ((jstHours === 11 && utcMinutes >= 30) || (jstHours === 12 && utcMinutes < 30));
-            updateMarketIndicator('marketAsia', asiaOpen, !isWeekend && jstHours >= 8 && jstHours < 9, 'Asien', asiaLunch);
-        }
-        
-        function updateMarketIndicator(elementId, isOpen, isPreMarket, name, isLunch = false) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            
-            el.classList.remove('open', 'pre-market', 'closed');
-            
-            let statusText = '';
-            if (isOpen && !isLunch) {
-                el.classList.add('open');
-                statusText = 'Offen';
-            } else if (isLunch) {
-                el.classList.add('pre-market');
-                statusText = 'Pause';
-            } else if (isPreMarket) {
-                el.classList.add('pre-market');
-                statusText = 'Pre-Market';
-            } else {
-                el.classList.add('closed');
-                statusText = 'Geschlossen';
-            }
-            
-            el.querySelector('.market-status').textContent = statusText;
-        }
-
-        // ==================== COMING SOON COUNTDOWN ====================
-        function updateCountdown() {
-            const launchDate = new Date('2026-01-25T00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = launchDate - now;
-
-            if (distance > 0) {
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById('days').textContent = String(days).padStart(2, '0');
-                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-            } else {
-                // Launch ist vorbei - Banner automatisch ausblenden
-                document.getElementById('comingSoonBanner').classList.add('hidden');
-            }
-        }
-
-        // Banner schließen für Vorschau
-        function closeComingSoonBanner() {
-            document.getElementById('comingSoonBanner').classList.add('hidden');
-            sessionStorage.setItem('comingSoonDismissed', 'true');
-        }
-
-        // Countdown initialisieren
-        function initCountdown() {
-            // Prüfen ob Banner schon geschlossen wurde
-            if (sessionStorage.getItem('comingSoonDismissed') === 'true') {
-                document.getElementById('comingSoonBanner').classList.add('hidden');
-            } else {
-                updateCountdown();
-                setInterval(updateCountdown, 1000);
-            }
-        }
-
-        // ==================== MOBILE BURGER MENU ====================
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            const burger = document.getElementById('burgerMenu');
-            
-            menu.classList.toggle('active');
-            overlay.classList.toggle('active');
-            burger.classList.toggle('active');
-            
-            // Body scroll verhindern wenn Menü offen
-            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-            
-            // Update mobile success rate
-            const mobileRate = document.getElementById('mobileSuccessRate');
-            const headerRate = document.getElementById('headerSuccessValue');
-            if (mobileRate && headerRate) {
-                mobileRate.textContent = headerRate.textContent;
-            }
-        }
-
-        function closeMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            const burger = document.getElementById('burgerMenu');
-            
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
-            burger.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // Mobile Header Hide on Scroll
-        function initMobileHeaderScroll() {
-            const header = document.querySelector('.header');
-            let lastScrollY = window.scrollY;
-            let ticking = false;
-            
-            function updateHeader() {
-                const currentScrollY = window.scrollY;
-                const isMobile = window.innerWidth <= 768;
-                
-                if (isMobile) {
-                    // Scroll nach unten - Header verstecken (nur wenn mehr als 100px gescrollt)
-                    if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                        header.classList.add('header-hidden');
-                    } 
-                    // Scroll nach oben - Header zeigen
-                    else if (currentScrollY < lastScrollY) {
-                        header.classList.remove('header-hidden');
-                    }
-                } else {
-                    // Desktop - Header immer sichtbar
-                    header.classList.remove('header-hidden');
-                }
-                
-                lastScrollY = currentScrollY;
-                ticking = false;
-            }
-            
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(updateHeader);
-                    ticking = true;
-                }
-            });
-            
-            // Bei Resize prüfen
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    header.classList.remove('header-hidden');
-                }
-            });
-        }
-
         // Start
-        initMobileHeaderScroll(); // Mobile Header Scroll
-        initCountdown(); // Coming Soon Banner
         init();
     </script>
 
@@ -5039,7 +3995,7 @@
             window['ga-disable-G-F3BQLK365X'] = true;
         }
 
-        // Prfe Cookie-Consent beim Laden
+        // Prüfe Cookie-Consent beim Laden
         document.addEventListener('DOMContentLoaded', function() {
             checkCookieConsent();
             
