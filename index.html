@@ -568,6 +568,54 @@
             border-color: var(--accent-green);
         }
 
+        /* Filter Buttons Row */
+        .filter-buttons-row {
+            display: flex;
+            gap: 24px;
+            padding: 16px 40px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-right: 4px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
         /* Search Box */
         .search-box {
             position: relative;
@@ -2134,6 +2182,28 @@
                 flex: 1;
             }
 
+            .filter-buttons-row {
+                padding: 12px 16px;
+                gap: 12px;
+            }
+
+            .filter-group {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+
+            .filter-label {
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
+            .filter-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
             .search-input {
                 width: 100%;
             }
@@ -2261,31 +2331,35 @@
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchSymbol" placeholder="Symbol suchen... (z.B. Henkel, Apple, EURUSD)">
                 </div>
-                <select class="filter-select" id="filterMarket">
-                    <option value="">Alle Märkte</option>
-                    <option value="DAX">DAX</option>
-                    <option value="NASDAQ">NASDAQ</option>
-                    <option value="NYSE">NYSE</option>
-                    <option value="SP500">S&P 500</option>
-                    <option value="FOREX">Forex</option>
-                    <option value="CRYPTO">Krypto</option>
-                    <option value="OTHER">Andere</option>
-                </select>
-                <select class="filter-select" id="filterTimeframe">
-                    <option value="">Alle TF</option>
-                    <option value="M5">M5</option>
-                    <option value="M15">M15</option>
-                    <option value="H1">H1</option>
-                    <option value="H4">H4</option>
-                    <option value="D1">Daily</option>
-                    <option value="W1">Weekly</option>
-                </select>
                 <div class="zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">★</button>
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
                     <span class="zoom-indicator" id="zoomIndicator">4</span>
                     <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
                     <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
                 </div>
+            </div>
+        </div>
+        <!-- Market & Timeframe Filter Buttons -->
+        <div class="filter-buttons-row">
+            <div class="filter-group">
+                <span class="filter-label">Märkte:</span>
+                <button class="filter-btn active" data-market="">Alle</button>
+                <button class="filter-btn" data-market="DAX">DAX</button>
+                <button class="filter-btn" data-market="NASDAQ">NASDAQ</button>
+                <button class="filter-btn" data-market="NYSE">NYSE</button>
+                <button class="filter-btn" data-market="INDICES">Indizes</button>
+                <button class="filter-btn" data-market="FOREX">Forex</button>
+                <button class="filter-btn" data-market="CRYPTO">Krypto</button>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Zeit:</span>
+                <button class="filter-btn active" data-timeframe="">Alle</button>
+                <button class="filter-btn" data-timeframe="M5">M5</button>
+                <button class="filter-btn" data-timeframe="M15">M15</button>
+                <button class="filter-btn" data-timeframe="H1">H1</button>
+                <button class="filter-btn" data-timeframe="H4">H4</button>
+                <button class="filter-btn" data-timeframe="D1">D1</button>
+                <button class="filter-btn" data-timeframe="W1">W1</button>
             </div>
         </div>
     </section>
@@ -2573,6 +2647,8 @@
         let isSubscribed = false;
         let isAdmin = false;
         let currentTab = 'all';
+        let currentMarketFilter = '';
+        let currentTimeframeFilter = '';
 
         // Zoom-Steuerung
         let gridColumns = 4;
@@ -3187,8 +3263,8 @@
         }
 
         function getFilteredSignals() {
-            const market = document.getElementById('filterMarket').value;
-            const timeframe = document.getElementById('filterTimeframe').value;
+            const market = currentMarketFilter;
+            const timeframe = currentTimeframeFilter;
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             const now = new Date();
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
@@ -3204,7 +3280,7 @@
                 filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
-            // Dropdown filters
+            // Button filters
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
@@ -3220,8 +3296,8 @@
         }
 
         function getFilteredCompletedSignals() {
-            const market = document.getElementById('filterMarket').value;
-            const timeframe = document.getElementById('filterTimeframe').value;
+            const market = currentMarketFilter;
+            const timeframe = currentTimeframeFilter;
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             
             let filtered = [...completedSignals];
@@ -3430,9 +3506,25 @@
                 });
             });
             
-            // Filters
-            document.getElementById('filterMarket').addEventListener('change', renderSignals);
-            document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
+            // Market Filter Buttons
+            document.querySelectorAll('.filter-btn[data-market]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn[data-market]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMarketFilter = btn.dataset.market;
+                    renderSignals();
+                });
+            });
+            
+            // Timeframe Filter Buttons
+            document.querySelectorAll('.filter-btn[data-timeframe]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn[data-timeframe]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentTimeframeFilter = btn.dataset.timeframe;
+                    renderSignals();
+                });
+            });
             
             // Search with debounce
             let searchTimeout;
