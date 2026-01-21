@@ -300,7 +300,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
@@ -308,29 +308,35 @@
             font-size: 13px;
             color: var(--text-secondary);
             font-weight: 500;
+            margin-right: 8px;
         }
 
         .market-status {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+            gap: 8px;
+            padding: 8px 14px;
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: 8px;
             font-size: 12px;
+            min-width: 90px;
+            justify-content: center;
         }
 
         .market-status.open {
-            border-color: rgba(0, 255, 136, 0.4);
+            border-color: rgba(0, 255, 136, 0.5);
+            background: rgba(0, 255, 136, 0.08);
         }
 
         .market-status.closed {
-            border-color: rgba(255, 71, 87, 0.3);
+            border-color: rgba(255, 71, 87, 0.4);
+            background: rgba(255, 71, 87, 0.05);
         }
 
         .market-status.pre-market {
-            border-color: rgba(255, 215, 0, 0.4);
+            border-color: rgba(255, 215, 0, 0.5);
+            background: rgba(255, 215, 0, 0.08);
         }
 
         .market-dot {
@@ -338,10 +344,12 @@
             height: 8px;
             border-radius: 50%;
             background: var(--text-secondary);
+            flex-shrink: 0;
         }
 
         .market-status.open .market-dot {
             background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
             animation: pulse 2s infinite;
         }
 
@@ -351,38 +359,30 @@
 
         .market-status.pre-market .market-dot {
             background: var(--accent-gold);
+            box-shadow: 0 0 8px var(--accent-gold);
             animation: pulse 2s infinite;
         }
 
         .market-name {
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .market-state {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
             font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
         }
 
-        .market-state:empty {
-            display: none;
-        }
-
-        .market-status.open .market-state {
-            background: rgba(0, 255, 136, 0.2);
+        .market-status.open .market-name {
             color: var(--accent-green);
         }
 
-        .market-status.closed .market-state {
-            background: rgba(255, 71, 87, 0.2);
+        .market-status.closed .market-name {
             color: var(--accent-red);
         }
 
-        .market-status.pre-market .market-state {
-            background: rgba(255, 215, 0, 0.2);
+        .market-status.pre-market .market-name {
             color: var(--accent-gold);
+        }
+
+        .market-state {
+            display: none; /* Versteckt den Status-Text für cleanes Design */
         }
 
         /* Section Header */
@@ -418,7 +418,7 @@
 
         /* Stats */
         .stats-section {
-            padding: 0 40px 24px;
+            padding: 24px 40px;
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
@@ -2555,27 +2555,30 @@
             }
 
             .trading-hours-content {
-                gap: 8px;
+                gap: 6px;
             }
 
             .trading-hours-label {
                 width: 100%;
                 text-align: center;
                 margin-bottom: 4px;
+                margin-right: 0;
             }
 
             .market-status {
-                padding: 4px 8px;
-                font-size: 11px;
+                padding: 6px 10px;
+                font-size: 10px;
+                min-width: auto;
+                gap: 6px;
             }
 
             .market-name {
-                font-size: 11px;
+                font-size: 10px;
             }
 
-            .market-state {
-                font-size: 9px;
-                padding: 1px 4px;
+            .market-dot {
+                width: 6px;
+                height: 6px;
             }
 
             .hero h1 {
