@@ -109,7 +109,7 @@
             --text-secondary: #6b7280;
             --border-color: #1f1f1f;
             --grid-columns: 4;
-            --image-height: 240px;
+            --image-height: 360px;
         }
 
         body {
@@ -1183,7 +1183,7 @@
         /* Image Section */
         .signal-image-container {
             position: relative;
-            height: var(--image-height, 240px);
+            height: var(--image-height, 360px);
             overflow: hidden;
         }
 
@@ -2599,7 +2599,7 @@
             }
 
             .signal-image-container {
-                height: var(--image-height, 300px);
+                height: var(--image-height, 450px);
             }
 
             .paywall-card {
@@ -3213,14 +3213,14 @@
             
             // Bildhöhe basierend auf Spaltenanzahl anpassen
             const imageHeights = {
-                6: '180px',
-                5: '200px',
-                4: '240px',
-                3: '320px',
-                2: '420px',
-                1: '550px'
+                6: '270px',
+                5: '300px',
+                4: '360px',
+                3: '480px',
+                2: '600px',
+                1: '750px'
             };
-            const imageHeight = imageHeights[gridColumns] || '240px';
+            const imageHeight = imageHeights[gridColumns] || '360px';
             document.documentElement.style.setProperty('--image-height', imageHeight);
             
             document.getElementById('zoomIndicator').textContent = gridColumns;
@@ -3252,8 +3252,8 @@
             gridColumns = parseInt(savedZoom);
             document.documentElement.style.setProperty('--grid-columns', gridColumns);
             // Auch Bildhöhe setzen
-            const imageHeights = { 6: '180px', 5: '200px', 4: '240px', 3: '320px', 2: '420px', 1: '550px' };
-            document.documentElement.style.setProperty('--image-height', imageHeights[gridColumns] || '240px');
+            const imageHeights = { 6: '270px', 5: '300px', 4: '360px', 3: '480px', 2: '600px', 1: '750px' };
+            document.documentElement.style.setProperty('--image-height', imageHeights[gridColumns] || '360px');
         }
 
         const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
