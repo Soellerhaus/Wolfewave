@@ -541,6 +541,58 @@
             color: #000;
         }
 
+        /* Active Tab Special Styling */
+        .tab-active-status {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .tab-active-status:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .tab-active-status.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .tab-badge-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        .tab-active-status.active .tab-badge-active {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
+        /* Pending Tab Special Styling */
+        .tab-pending-status {
+            border-color: rgba(255, 165, 0, 0.3);
+        }
+
+        .tab-pending-status:hover {
+            border-color: #ffa500;
+            color: #ffa500;
+        }
+
+        .tab-pending-status.active {
+            background: #ffa500;
+            border-color: #ffa500;
+            color: #000;
+        }
+
+        .tab-badge-pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .tab-pending-status.active .tab-badge-pending {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
         .filters {
             display: flex;
             gap: 12px;
@@ -2319,6 +2371,14 @@
                     Neu
                     <span class="tab-badge" id="newCount">0</span>
                 </button>
+                <button class="tab tab-active-status" data-tab="active">
+                    🟢 ACTIVE
+                    <span class="tab-badge tab-badge-active" id="activeCount">0</span>
+                </button>
+                <button class="tab tab-pending-status" data-tab="pending">
+                    ⏳ PENDING
+                    <span class="tab-badge tab-badge-pending" id="pendingCount">0</span>
+                </button>
                 <button class="tab" data-tab="bullish">Bullish</button>
                 <button class="tab" data-tab="bearish">Bearish</button>
                 <button class="tab tab-success" data-tab="success">
@@ -3148,6 +3208,14 @@
             const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
             document.getElementById('newCount').textContent = newSignals.length;
             
+            // Active count for tab
+            const activeSignals = allSignals.filter(s => s.status === 'active');
+            document.getElementById('activeCount').textContent = activeSignals.length;
+            
+            // Pending count for tab
+            const pendingSignals = allSignals.filter(s => s.status === 'pending');
+            document.getElementById('pendingCount').textContent = pendingSignals.length;
+            
             // Success tab count
             document.getElementById('successTabCount').textContent = completedSignals.length;
             
@@ -3274,6 +3342,10 @@
             // Tab filter
             if (currentTab === 'new') {
                 filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            } else if (currentTab === 'active') {
+                filtered = filtered.filter(s => s.status === 'active');
+            } else if (currentTab === 'pending') {
+                filtered = filtered.filter(s => s.status === 'pending');
             } else if (currentTab === 'bullish') {
                 filtered = filtered.filter(s => s.direction === 'BULLISH');
             } else if (currentTab === 'bearish') {
