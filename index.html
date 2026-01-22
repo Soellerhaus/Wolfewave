@@ -537,7 +537,8 @@
             padding: 24px 40px;
             display: flex;
             gap: 16px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            justify-content: center;
         }
 
         .stat-card {
@@ -546,6 +547,8 @@
             border-radius: 12px;
             padding: 16px 24px;
             min-width: 120px;
+            flex: 1;
+            text-align: center;
         }
 
         .stat-number {
@@ -2687,52 +2690,199 @@
                 font-size: 18px;
             }
 
+            /* Hero kompakter */
             .hero {
-                padding: 40px 20px;
-            }
-
-            .trading-hours-bar {
-                padding: 10px 16px;
-            }
-
-            .trading-hours-content {
-                gap: 6px;
-            }
-
-            .trading-hours-label {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 4px;
-                margin-right: 0;
-            }
-
-            .market-status {
-                padding: 6px 10px;
-                font-size: 10px;
-                min-width: auto;
-                gap: 6px;
-            }
-
-            .market-name {
-                font-size: 10px;
-            }
-
-            .market-dot {
-                width: 6px;
-                height: 6px;
+                padding: 16px !important;
             }
 
             .hero h1 {
-                font-size: 32px;
+                font-size: 22px !important;
+                margin-bottom: 6px !important;
             }
 
+            .hero p {
+                font-size: 12px !important;
+            }
+
+            /* Trading Hours kompakter */
+            .trading-hours-bar {
+                padding: 6px 12px !important;
+            }
+
+            .trading-hours-content {
+                gap: 4px !important;
+            }
+
+            .trading-hours-label {
+                display: none !important;
+            }
+
+            .market-status {
+                padding: 4px 6px !important;
+                font-size: 8px !important;
+                min-width: auto !important;
+                gap: 3px !important;
+            }
+
+            .market-name {
+                font-size: 9px;
+            }
+
+            .market-dot {
+                width: 5px;
+                height: 5px;
+            }
+
+            /* Sections */
             .section-header, .stats-section, .main, .premium-header, .premium-grid-container, .tabs-section {
-                padding-left: 16px;
-                padding-right: 16px;
+                padding-left: 12px;
+                padding-right: 12px;
             }
 
+            /* Stats EINE ZEILE - WICHTIG */
+            .stats-section {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                flex-direction: row !important;
+                gap: 8px !important;
+                padding: 12px !important;
+                justify-content: space-between !important;
+            }
+
+            .stat-card {
+                flex: 1 1 0 !important;
+                padding: 10px 6px !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                text-align: center !important;
+            }
+
+            .stat-number {
+                font-size: 18px !important;
+            }
+
+            .stat-label {
+                font-size: 8px !important;
+                white-space: nowrap !important;
+            }
+
+            /* Tabs Section kompakt */
+            .tabs-section {
+                padding: 8px 12px !important;
+            }
+
+            .tabs-container {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+
+            /* Tabs horizontal scrollbar */
+            .tabs {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 4px !important;
+                padding-bottom: 6px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab {
+                flex-shrink: 0 !important;
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
+
+            .tab-badge {
+                font-size: 8px !important;
+                padding: 1px 4px !important;
+            }
+
+            /* Filters kompakt */
+            .filters {
+                width: 100% !important;
+                gap: 6px !important;
+            }
+
+            .search-box {
+                width: 100% !important;
+            }
+
+            .search-input {
+                width: 100% !important;
+                font-size: 11px !important;
+                padding: 8px 10px 8px 28px !important;
+            }
+
+            .search-icon {
+                font-size: 12px !important;
+                left: 8px !important;
+            }
+
+            /* Filter Buttons */
+            .filter-buttons-row {
+                padding: 8px 12px !important;
+                gap: 8px !important;
+                flex-direction: column !important;
+            }
+
+            .filter-group {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 6px !important;
+                width: 100% !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 4px;
+            }
+
+            .filter-group::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-btn {
+                flex-shrink: 0 !important;
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
+
+            .filter-label {
+                font-size: 10px !important;
+                min-width: 45px !important;
+                flex-shrink: 0 !important;
+            }
+
+            /* Section Header kompakt */
+            .section-header {
+                padding: 8px 12px !important;
+            }
+
+            .section-title {
+                font-size: 13px !important;
+            }
+
+            .section-badge {
+                font-size: 8px !important;
+                padding: 2px 6px !important;
+            }
+
+            .section-subtitle {
+                font-size: 10px !important;
+            }
+
+            /* Signal Cards */
             .signals-grid, .premium-grid {
                 grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .signal-card {
+                border-radius: 12px;
             }
 
             .zoom-controls {
@@ -2740,66 +2890,88 @@
             }
 
             .signal-image-container {
-                height: var(--image-height, 450px);
+                height: var(--image-height, 400px);
             }
 
+            .signal-info {
+                padding: 12px;
+            }
+
+            .signal-title {
+                font-size: 14px;
+            }
+
+            .price-grid {
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .price-label {
+                font-size: 7px;
+            }
+
+            .price-value {
+                font-size: 11px;
+            }
+
+            .rr-badge {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            /* Paywall */
             .paywall-card {
-                margin: 20px;
-                padding: 30px 24px;
+                margin: 16px;
+                padding: 24px 16px;
+            }
+
+            .paywall-title {
+                font-size: 22px;
+            }
+
+            .paywall-subtitle {
+                font-size: 13px;
             }
 
             .paywall-price-amount {
-                font-size: 36px;
+                font-size: 32px;
             }
 
-            .tabs {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 8px;
+            .paywall-btn {
+                padding: 12px 24px;
+                font-size: 14px;
             }
 
-            .filters {
-                width: 100%;
-            }
-
-            .filter-select {
-                flex: 1;
-            }
-
-            .filter-buttons-row {
-                padding: 12px 16px;
-                gap: 12px;
-            }
-
-            .filter-group {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 4px;
-            }
-
-            .filter-label {
-                font-size: 11px;
-                white-space: nowrap;
-            }
-
-            .filter-btn {
-                padding: 5px 10px;
-                font-size: 11px;
-                white-space: nowrap;
-            }
-
-            .search-input {
-                width: 100%;
-            }
-
-            .search-box {
-                width: 100%;
+            /* Success Stats Bar */
+            .success-stats-bar {
+                padding: 12px;
             }
 
             .success-stats-grid {
-                justify-content: flex-start;
+                gap: 8px;
+                flex-wrap: nowrap;
                 overflow-x: auto;
-                padding-bottom: 8px;
+            }
+
+            .success-stat-mini {
+                min-width: 70px;
+                padding: 10px;
+            }
+
+            .success-stat-mini .stat-value {
+                font-size: 20px;
+            }
+
+            .success-stat-mini .stat-label {
+                font-size: 8px;
+            }
+
+            .success-rate-display {
+                padding: 10px 16px;
+            }
+
+            .success-rate-display .rate-value {
+                font-size: 24px;
             }
         }
     </style>
@@ -2896,16 +3068,16 @@
     </section>
 
     <!-- Stats -->
-    <section class="stats-section">
-        <div class="stat-card">
+    <section class="stats-section" style="display:flex;flex-wrap:nowrap;gap:8px;">
+        <div class="stat-card" style="flex:1;min-width:0;text-align:center;">
             <div class="stat-number" id="totalSignals">—</div>
             <div class="stat-label">Aktive Signale</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="flex:1;min-width:0;text-align:center;">
             <div class="stat-number stat-gold" id="successCount">—</div>
-            <div class="stat-label">✓ Erfolgreiche Trades</div>
+            <div class="stat-label">✓ Erfolgreiche</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="flex:1;min-width:0;text-align:center;">
             <div class="stat-number" id="todayCount">—</div>
             <div class="stat-label">Neu heute</div>
         </div>
@@ -5630,4 +5802,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
