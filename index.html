@@ -5659,20 +5659,86 @@
             }
         }
 
-        function showCheckout() {
+        async function showCheckout() {
             if (!currentUser) {
                 showLogin();
                 return;
             }
-            window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
+            
+            try {
+                showToast('⏳ Checkout wird erstellt...', 'success');
+                
+                const response = await fetch(
+                    `${SUPABASE_URL}/functions/v1/create-checkout`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: currentUser.email
+                        })
+                    }
+                );
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Checkout fehlgeschlagen');
+                }
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Keine Checkout-URL erhalten');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showToast('❌ Fehler beim Checkout: ' + error.message, 'error');
+            }
         }
 
-        function manageSubscription() {
-            // Lemon Squeezy Customer Portal - bentigt aktivierten Store
-            // Alternativ: E-Mail an Support
-            const choice = confirm('Abo verwalten / kndigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.\n\nSobald der Shop aktiviert ist, kannst du dein Abo selbst verwalten.');
-            if (choice) {
-                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkndigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+        async function manageSubscription() {
+            if (!currentUser) {
+                showLogin();
+                return;
+            }
+            
+            try {
+                showToast('⏳ Portal wird geladen...', 'success');
+                
+                const response = await fetch(
+                    `${SUPABASE_URL}/functions/v1/customer-portal`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Portal konnte nicht geladen werden');
+                }
+                
+                if (data.url) {
+                    window.open(data.url, '_blank');
+                } else {
+                    throw new Error('Keine Portal-URL erhalten');
+                }
+            } catch (error) {
+                console.error('Portal error:', error);
+                showToast('❌ Fehler: ' + error.message, 'error');
+                
+                // Fallback: E-Mail an Support
+                const choice = confirm('Portal konnte nicht geladen werden.\n\nMöchtest du stattdessen eine E-Mail an den Support senden?');
+                if (choice) {
+                    window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+                }
             }
         }
 
