@@ -1546,6 +1546,27 @@
             color: var(--text-primary);
         }
 
+        /* Colored price values */
+        .price-value.price-entry {
+            color: #4dabf7; /* hellblau */
+        }
+
+        .price-value.price-sl {
+            color: var(--accent-red); /* rot */
+        }
+
+        .price-value.price-tp1 {
+            color: #69db7c; /* hellgrün */
+        }
+
+        .price-value.price-tp2 {
+            color: var(--accent-green); /* grün */
+        }
+
+        .price-value.price-tp3 {
+            color: var(--accent-gold); /* gold */
+        }
+
         .price-pct {
             font-size: 9px;
             margin-top: 1px;
@@ -4670,11 +4691,11 @@
                             </div>
                         </div>
                         <div class="price-grid">
-                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value price-entry">${formatPrice(signal.entry)}</div></div>
+                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value price-sl">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value price-tp1">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value price-tp2">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value price-tp3">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
