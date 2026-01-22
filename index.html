@@ -1567,6 +1567,13 @@
             color: var(--accent-gold); /* gold */
         }
 
+        /* Colored price labels */
+        .price-item.item-entry .price-label { color: #4dabf7; }
+        .price-item.item-sl .price-label { color: var(--accent-red); }
+        .price-item.item-tp1 .price-label { color: #69db7c; }
+        .price-item.item-tp2 .price-label { color: var(--accent-green); }
+        .price-item.item-tp3 .price-label { color: var(--accent-gold); }
+
         .price-pct {
             font-size: 9px;
             margin-top: 1px;
@@ -3304,7 +3311,7 @@
         </div>
         
         <!-- Social Proof -->
-        <div class="hero-social-proof animate-fade-in-up animate-delay-4">
+        <div class="hero-social-proof animate-fade-in-up animate-delay-4" id="heroSocialProof">
             <div class="social-proof-item">
                 <span class="social-proof-icon">📊</span>
                 <span>Live-Signale für DAX, NASDAQ, Forex & Krypto</span>
@@ -4268,14 +4275,14 @@
                     <div class="section-subtitle">— Du hast Zugriff auf alle Signale</div>
                 `;
                 
-                // Hide hero CTA for premium users
+                // Hide hero CTA and social proof for premium users
                 const heroCTA = document.getElementById('heroCTA');
                 if (heroCTA) {
-                    heroCTA.innerHTML = `
-                        <a href="#previewHeader" class="btn btn-primary btn-lg">
-                            📊 Zu den Signalen ↓
-                        </a>
-                    `;
+                    heroCTA.style.display = 'none';
+                }
+                const heroSocialProof = document.getElementById('heroSocialProof');
+                if (heroSocialProof) {
+                    heroSocialProof.style.display = 'none';
                 }
             }
             
@@ -4691,11 +4698,11 @@
                             </div>
                         </div>
                         <div class="price-grid">
-                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value price-entry">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value price-sl">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value price-tp1">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value price-tp2">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value price-tp3">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item item-entry"><div class="price-label">Entry</div><div class="price-value price-entry">${formatPrice(signal.entry)}</div></div>
+                            <div class="price-item item-sl"><div class="price-label">Stop</div><div class="price-value price-sl">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item item-tp1"><div class="price-label">TP1</div><div class="price-value price-tp1">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item item-tp2"><div class="price-label">TP2</div><div class="price-value price-tp2">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item item-tp3"><div class="price-label">TP3</div><div class="price-value price-tp3">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
