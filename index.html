@@ -3273,7 +3273,7 @@
         <p class="animate-fade-in-up animate-delay-2">Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
         
         <!-- Hero CTA Buttons -->
-        <div class="hero-cta animate-fade-in-up animate-delay-3">
+        <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
             <button class="btn btn-primary btn-lg" onclick="showCheckout()">
                 🚀 Jetzt Premium werden
             </button>
@@ -3556,7 +3556,7 @@
                 <h4 class="footer-heading">Rechtliches</h4>
                 <a href="impressum.html" class="footer-link">Impressum</a>
                 <a href="datenschutz.html" class="footer-link">Datenschutz</a>
-                <a href="mailto:support@wolfewavesignals.com" class="footer-link">Kontakt</a>
+                <a href="/cdn-cgi/l/email-protection#4a393f3a3a25383e0a3d25262c2f3d2b3c2f39232d242b263964292527" class="footer-link">Kontakt</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -3810,7 +3810,7 @@
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
@@ -4246,6 +4246,16 @@
                     </div>
                     <div class="section-subtitle">— Du hast Zugriff auf alle Signale</div>
                 `;
+                
+                // Hide hero CTA for premium users
+                const heroCTA = document.getElementById('heroCTA');
+                if (heroCTA) {
+                    heroCTA.innerHTML = `
+                        <a href="#previewHeader" class="btn btn-primary btn-lg">
+                            📊 Zu den Signalen ↓
+                        </a>
+                    `;
+                }
             }
             
             // Show admin badge
@@ -6106,10 +6116,4 @@
             checkCookieConsent();
             
             // Wenn abgelehnt, Analytics deaktivieren
-            if (localStorage.getItem('cookieConsent') === 'necessary') {
-                window['ga-disable-G-F3BQLK365X'] = true;
-            }
-        });
-    </script>
-</body>
-</html>
+            if (localStorage
