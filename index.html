@@ -4148,6 +4148,7 @@
                 console.log('=== ADMIN CHECK DEBUG ===');
                 console.log('Current User ID:', currentUser.id);
                 console.log('Current User Email:', currentUser.email);
+                console.log('Checking URL:', `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}`);
                 
                 // Check admins table by user_id (NOT email!)
                 const response = await fetch(
@@ -4160,6 +4161,9 @@
                     }
                 );
                 
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+                
                 if (response.ok) {
                     const admins = await response.json();
                     console.log('Admins found:', admins);
@@ -4168,17 +4172,37 @@
                         isAdmin = true;
                         console.log('✅ Admin status granted');
                     } else {
-                        console.log('❌ No admin access');
-                        console.log('💡 Tipp: Füge deinen User in Supabase zur admins-Tabelle hinzu:');
-                        console.log(`   INSERT INTO admins (user_id) VALUES ('${currentUser.id}');`);
+                        console.log('❌ No admin access - user not in admins table');
+                        console.log('💡 To add yourself as admin, run in Supabase SQL:');
+                        console.log(`   INSERT INTO admins (user_id, role) VALUES ('${currentUser.id}', 'super_admin');`);
                         isAdmin = false;
                     }
                 } else {
-                    console.error('Failed to check admin status:', response.status);
+                    // Response not OK - log the error details
+                    const errorText = await response.text();
+                    console.error('❌ Failed to check admin status:', response.status);
+                    console.error('Error body:', errorText);
+                    
+                    // Try to parse error as JSON
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        console.error('Error details:', errorJson);
+                        
+                        if (errorJson.message && errorJson.message.includes('permission denied')) {
+                            console.error('🔒 RLS PROBLEM: Row Level Security blocks access to admins table!');
+                            console.error('💡 Fix: Run in Supabase SQL:');
+                            console.error('   ALTER TABLE admins ENABLE ROW LEVEL SECURITY;');
+                            console.error('   CREATE POLICY "Allow authenticated users to read admins" ON admins FOR SELECT TO authenticated USING (true);');
+                        }
+                    } catch (e) {
+                        // Not JSON
+                    }
+                    
                     isAdmin = false;
                 }
             } catch (e) {
-                console.error('Admin check error:', e);
+                console.error('❌ Admin check error:', e);
+                console.error('Stack trace:', e.stack);
                 isAdmin = false;
             }
         }
