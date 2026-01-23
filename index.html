@@ -4490,16 +4490,26 @@
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
             try {
+                // ✅ FIX: Cache-Busting für Signal-Abfragen
+                const timestamp = new Date().getTime();
                 // Nur pending und active Signale laden (nicht inactive, expired, etc.)
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc&_t=${timestamp}`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache'
                     }
                 });
                 
                 if (!response.ok) throw new Error('Failed to fetch');
                 allSignals = await response.json();
+                
+                // ✅ FIX: Zusätzliche Sortierung in JavaScript zur Sicherheit
+                // Sortiere nach created_at absteigend (neueste zuerst)
+                allSignals.sort((a, b) => {
+                    return new Date(b.created_at) - new Date(a.created_at);
+                });
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -4508,15 +4518,25 @@
 
         async function fetchCompletedSignals() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/completed_signals?select=*&order=created_at.desc`, {
+                // ✅ FIX: Cache-Busting für abgeschlossene Signale
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/completed_signals?select=*&order=created_at.desc&_t=${timestamp}`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache'
                     }
                 });
                 
                 if (response.ok) {
                     completedSignals = await response.json();
+                    
+                    // ✅ FIX: Zusätzliche Sortierung zur Sicherheit
+                    // Sortiere nach created_at absteigend (neueste zuerst)
+                    completedSignals.sort((a, b) => {
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    });
                 }
             } catch (e) {
                 console.log('No completed_signals yet');
@@ -5372,6 +5392,10 @@
         async function openModal(imageUrl, wedgeId = null, signalData = null) {
             if (!imageUrl) return;
             
+            // ✅ FIX: Cache-Busting auch für das initiale Bild
+            const timestamp = new Date().getTime();
+            const imageUrlWithCache = imageUrl + (imageUrl.includes('?') ? '&' : '?') + 't=' + timestamp;
+            
             // Aktualisiere Signal-Liste
             currentSignalsList = getDisplayedSignals();
             
@@ -5384,7 +5408,7 @@
             }
             
             currentWedgeId = wedgeId;
-            sliderImages = [{ url: imageUrl, scanned_at: null }];
+            sliderImages = [{ url: imageUrlWithCache, scanned_at: null }];
             sliderCurrentIndex = 0;
             
             // Zeige erstmal das aktuelle Bild
@@ -5464,6 +5488,9 @@
             const signal = currentSignalsList[index];
             if (!signal) return;
             
+            // ✅ FIX: Cache-Busting für Bilder
+            const timestamp = new Date().getTime();
+            
             // Bestimme die Bild-URL
             let imageUrl;
             if (currentTab === 'success') {
@@ -5474,8 +5501,11 @@
                     : `${STORAGE_URL}/${signal.image_path}`;
             }
             
+            // Füge Cache-Busting hinzu
+            const imageUrlWithCache = imageUrl + (imageUrl.includes('?') ? '&' : '?') + 't=' + timestamp;
+            
             currentWedgeId = signal.wedge_id;
-            sliderImages = [{ url: imageUrl, scanned_at: null }];
+            sliderImages = [{ url: imageUrlWithCache, scanned_at: null }];
             sliderCurrentIndex = 0;
             
             updateSliderDisplay();
@@ -5489,12 +5519,16 @@
 
         async function loadImageHistory(wedgeId, currentImageUrl) {
             try {
+                // ✅ FIX: Cache-Busting für API-Anfrage
+                const timestamp = new Date().getTime();
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at&order=scanned_at.desc`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at&order=scanned_at.desc&_t=${timestamp}`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache'
                         }
                     }
                 );
@@ -5504,40 +5538,38 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format - schon sortiert (neueste zuerst)
+                    // ✅ FIX: Vertraue der Datenbank-Sortierung (neueste zuerst durch order=scanned_at.desc)
+                    // Füge Cache-Busting zu Bild-URLs hinzu
                     sliderImages = data.map(img => ({
-                        url: img.image_url,
+                        url: img.image_url + (img.image_url.includes('?') ? '&' : '?') + 't=' + timestamp,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // WICHTIG: Prüfe ob currentImageUrl das neueste ist
-                    const currentIsInList = sliderImages.some(img => img.url === currentImageUrl);
+                    // ✅ FIX ENTFERNT: Der Code, der Bilder verschoben hat, wurde entfernt!
+                    // Die Datenbank gibt uns bereits die richtige Reihenfolge (neueste zuerst)
+                    // Kein manuelles Verschieben mehr nötig!
                     
-                    if (!currentIsInList) {
-                        // Current Image ist nicht in der Historie → füge es als NEUESTES hinzu
-                        sliderImages.unshift({ 
-                            url: currentImageUrl, 
-                            scanned_at: new Date().toISOString() 
-                        });
-                    } else {
-                        // Current Image ist in der Liste → stelle sicher es ist an erster Stelle
-                        const currentIndex = sliderImages.findIndex(img => img.url === currentImageUrl);
-                        if (currentIndex > 0) {
-                            // Nicht an erster Stelle → verschiebe es
-                            const currentImg = sliderImages.splice(currentIndex, 1)[0];
-                            sliderImages.unshift(currentImg);
-                        }
-                    }
-                    
-                    // START IMMER BEIM NEUESTEN BILD (Index 0)
+                    // START IMMER BEIM NEUESTEN BILD (Index 0) - das ist bereits korrekt sortiert
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
                     renderThumbnails();
+                } else {
+                    // Fallback: Nur aktuelles Bild mit Cache-Busting
+                    sliderImages = [{ 
+                        url: currentImageUrl + (currentImageUrl.includes('?') ? '&' : '?') + 't=' + timestamp, 
+                        scanned_at: null 
+                    }];
+                    sliderCurrentIndex = 0;
+                    updateSliderDisplay();
                 }
             } catch (err) {
                 console.log('Keine Bild-Historie gefunden:', err.message);
-                // Fallback: Nur aktuelles Bild
-                sliderImages = [{ url: currentImageUrl, scanned_at: null }];
+                // Fallback: Nur aktuelles Bild mit Cache-Busting
+                const timestamp = new Date().getTime();
+                sliderImages = [{ 
+                    url: currentImageUrl + (currentImageUrl.includes('?') ? '&' : '?') + 't=' + timestamp, 
+                    scanned_at: null 
+                }];
                 sliderCurrentIndex = 0;
                 updateSliderDisplay();
             }
