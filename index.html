@@ -4068,7 +4068,7 @@
         async function checkSubscription() {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.id}&status=eq.active&select=*`,
+                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.email}&status=eq.active&select=*`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -4089,7 +4089,7 @@
         async function checkAdminStatus() {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=*`,
+                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.email}&select=*`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
