@@ -6,7 +6,7 @@
     
     <!-- SEO Meta Tags -->
     <title>WolfeWaveSignals - Professionelle Wolfe Wave Trading Signale | Echtzeit Alerts</title>
-    <meta name="description" content="Erhalte t&auml;glich professionelle Wolfe Wave Trading-Signale f&uuml;r DAX, NASDAQ, Forex & Krypto. Automatische Erkennung mit Entry, Stop-Loss und Take-Profit. Jetzt kostenlos testen!">
+    <meta name="description" content="Erhalte täglich professionelle Wolfe Wave Trading-Signale für DAX, NASDAQ, Forex & Krypto. Automatische Erkennung mit Entry, Stop-Loss und Take-Profit. Jetzt kostenlos testen!">
     <meta name="keywords" content="Wolfe Wave Signale, Trading Signale, Wolfe Wave Scanner, DAX Signale, NASDAQ Signale, Forex Signale, Krypto Signale, technische Analyse, Chartmuster, Trading Alerts">
     <meta name="author" content="WolfeWaveSignals">
     <meta name="robots" content="index, follow">
@@ -15,7 +15,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="WolfeWaveSignals - Professionelle Trading Signale">
-    <meta property="og:description" content="Erhalte t&auml;glich Wolfe Wave Signale f&uuml;r DAX, NASDAQ, Forex & Krypto. Mit Entry, SL und TP.">
+    <meta property="og:description" content="Erhalte täglich Wolfe Wave Signale für DAX, NASDAQ, Forex & Krypto. Mit Entry, SL und TP.">
     <meta property="og:url" content="https://wolfewavesignals.com/">
     <meta property="og:site_name" content="WolfeWaveSignals">
     <meta property="og:image" content="https://wolfewavesignals.com/images/og-image.jpg">
@@ -24,7 +24,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="WolfeWaveSignals - Trading Signale">
-    <meta name="twitter:description" content="Professionelle Wolfe Wave Signale f&uuml;r alle M&auml;rkte.">
+    <meta name="twitter:description" content="Professionelle Wolfe Wave Signale für alle Märkte.">
     <meta name="twitter:image" content="https://wolfewavesignals.com/images/twitter-card.jpg">
     
     <!-- Favicon -->
@@ -41,7 +41,7 @@
         "@type": "WebSite",
         "name": "WolfeWaveSignals",
         "url": "https://wolfewavesignals.com",
-        "description": "Professionelle Wolfe Wave Trading-Signale f&uuml;r DAX, NASDAQ, Forex und Krypto",
+        "description": "Professionelle Wolfe Wave Trading-Signale für DAX, NASDAQ, Forex und Krypto",
         "potentialAction": {
             "@type": "SearchAction",
             "target": "https://wolfewavesignals.com/?search={search_term_string}",
@@ -109,7 +109,7 @@
             --text-secondary: #6b7280;
             --border-color: #1f1f1f;
             --grid-columns: 4;
-            --image-height: 240px;
+            --image-height: 360px;
         }
 
         body {
@@ -119,6 +119,37 @@
             min-height: 100vh;
             line-height: 1.5;
         }
+
+        /* Fade-In Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
+        .animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
 
         /* Header */
         .header {
@@ -132,6 +163,122 @@
             background: rgba(12, 12, 12, 0.95);
             backdrop-filter: blur(10px);
             z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .header.header-hidden {
+            transform: translateY(-100%);
+        }
+
+        /* Burger Menu */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 101;
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu Dropdown */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 99;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu-item {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .mobile-menu-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .mobile-menu-item .success-value {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 8px 0;
+        }
+
+        .mobile-menu-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-btn:hover {
+            border-color: var(--accent-green);
+        }
+
+        .mobile-menu-btn.primary {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .mobile-menu-btn.primary:hover {
+            background: #00cc6a;
         }
 
         .logo {
@@ -289,6 +436,168 @@
             margin: 0 auto;
         }
 
+        /* Hero CTA Buttons */
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .btn-primary.btn-lg:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        /* Hero Social Proof */
+        .hero-social-proof {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .social-proof-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .social-proof-icon {
+            font-size: 16px;
+        }
+
+        .social-proof-divider {
+            color: var(--border-color);
+            font-size: 8px;
+        }
+
+        /* Section Dividers */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+            margin: 0 40px;
+        }
+
+        .section-divider-glow {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+            margin: 0 40px;
+        }
+
+        /* Trading Hours Bar */
+        .trading-hours-bar {
+            padding: 12px 40px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .trading-hours-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .trading-hours-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .market-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 12px;
+            min-width: 90px;
+            justify-content: center;
+        }
+
+        .market-status.open {
+            border-color: rgba(0, 255, 136, 0.5);
+            background: rgba(0, 255, 136, 0.08);
+        }
+
+        .market-status.closed {
+            border-color: rgba(255, 71, 87, 0.4);
+            background: rgba(255, 71, 87, 0.05);
+        }
+
+        .market-status.pre-market {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: rgba(255, 215, 0, 0.08);
+        }
+
+        .market-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .market-status.open .market-dot {
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        .market-status.closed .market-dot {
+            background: var(--accent-red);
+        }
+
+        .market-status.pre-market .market-dot {
+            background: var(--accent-gold);
+            box-shadow: 0 0 8px var(--accent-gold);
+            animation: pulse 2s infinite;
+        }
+
+        .market-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .market-status.open .market-name {
+            color: var(--accent-green);
+        }
+
+        .market-status.closed .market-name {
+            color: var(--accent-red);
+        }
+
+        .market-status.pre-market .market-name {
+            color: var(--accent-gold);
+        }
+
+        .market-state {
+            display: none; /* Versteckt den Status-Text für cleanes Design */
+        }
+
         /* Section Header */
         .section-header {
             padding: 24px 40px 16px;
@@ -322,10 +631,13 @@
 
         /* Stats */
         .stats-section {
-            padding: 0 40px 24px;
+            padding: 24px 40px;
             display: flex;
             gap: 16px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .stat-card {
@@ -334,6 +646,15 @@
             border-radius: 12px;
             padding: 16px 24px;
             min-width: 120px;
+            flex: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         .stat-number {
@@ -344,6 +665,20 @@
 
         .stat-gold {
             color: var(--accent-gold);
+        }
+
+        /* Pulse animation for "Neu heute" when active */
+        .stat-card.has-new .stat-number {
+            animation: statPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statPulse {
+            0%, 100% { 
+                text-shadow: 0 0 0 transparent;
+            }
+            50% { 
+                text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            }
         }
 
         .stat-label {
@@ -445,6 +780,58 @@
             color: #000;
         }
 
+        /* Active Tab Special Styling */
+        .tab-active-status {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .tab-active-status:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .tab-active-status.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .tab-badge-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        .tab-active-status.active .tab-badge-active {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
+        /* Pending Tab Special Styling */
+        .tab-pending-status {
+            border-color: rgba(255, 165, 0, 0.3);
+        }
+
+        .tab-pending-status:hover {
+            border-color: #ffa500;
+            color: #ffa500;
+        }
+
+        .tab-pending-status.active {
+            background: #ffa500;
+            border-color: #ffa500;
+            color: #000;
+        }
+
+        .tab-badge-pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .tab-pending-status.active .tab-badge-pending {
+            background: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+
         .filters {
             display: flex;
             gap: 12px;
@@ -470,6 +857,54 @@
         .filter-select:focus {
             outline: none;
             border-color: var(--accent-green);
+        }
+
+        /* Filter Buttons Row */
+        .filter-buttons-row {
+            display: flex;
+            gap: 24px;
+            padding: 16px 40px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-right: 4px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
         }
 
         /* Search Box */
@@ -574,6 +1009,16 @@
 
         .admin-btn-success:hover {
             background: var(--accent-green);
+            transform: scale(1.1);
+        }
+
+        .admin-btn-blacklist {
+            background: rgba(255, 165, 0, 0.9);
+            color: #000;
+        }
+
+        .admin-btn-blacklist:hover {
+            background: #ff8800;
             transform: scale(1.1);
         }
 
@@ -987,7 +1432,7 @@
         /* Image Section */
         .signal-image-container {
             position: relative;
-            height: var(--image-height, 240px);
+            height: var(--image-height, 360px);
             overflow: hidden;
         }
 
@@ -1110,6 +1555,34 @@
             font-weight: 600;
             color: var(--text-primary);
         }
+
+        /* Colored price values */
+        .price-value.price-entry {
+            color: #4dabf7; /* hellblau */
+        }
+
+        .price-value.price-sl {
+            color: var(--accent-red); /* rot */
+        }
+
+        .price-value.price-tp1 {
+            color: #69db7c; /* hellgrün */
+        }
+
+        .price-value.price-tp2 {
+            color: var(--accent-green); /* grün */
+        }
+
+        .price-value.price-tp3 {
+            color: var(--accent-gold); /* gold */
+        }
+
+        /* Colored price labels */
+        .price-item.item-entry .price-label { color: #4dabf7; }
+        .price-item.item-sl .price-label { color: var(--accent-red); }
+        .price-item.item-tp1 .price-label { color: #69db7c; }
+        .price-item.item-tp2 .price-label { color: var(--accent-green); }
+        .price-item.item-tp3 .price-label { color: var(--accent-gold); }
 
         .price-pct {
             font-size: 9px;
@@ -1321,15 +1794,89 @@
 
         /* Footer */
         .footer {
-            text-align: center;
-            padding: 30px;
+            padding: 48px 40px 24px;
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 13px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px;
+            max-width: 1200px;
+            margin: 0 auto 32px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .footer-logo-img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .footer-logo .text-green {
+            color: var(--accent-green);
+        }
+
+        .footer-description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-heading {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-green);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
             border-top: 1px solid var(--border-color);
         }
 
-        .footer a:hover {
-            color: var(--accent-green) !important;
+        .footer-bottom p {
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 11px;
+            color: #666;
         }
 
         /* Modal */
@@ -1419,6 +1966,163 @@
         .slider-prev { left: -80px; }
         .slider-next { right: -80px; }
 
+        /* Signal Navigation (up/down) */
+        .signal-nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 32px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: sans-serif;
+            line-height: 1;
+        }
+
+        .signal-nav:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .signal-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .signal-nav-prev { top: -70px; }
+        .signal-nav-next { bottom: -70px; }
+
+        /* Signal Info Header */
+        .signal-header-info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 15;
+        }
+
+        .signal-header-info .signal-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .signal-header-info .signal-meta {
+            display: flex;
+            gap: 8px;
+        }
+
+        .signal-header-info .signal-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .signal-header-info .signal-direction {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .signal-header-info .signal-direction.bullish {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        .signal-header-info .signal-direction.bearish {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+        }
+
+        .signal-counter {
+            font-size: 14px;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .signal-nav {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+                opacity: 0.8;
+            }
+            .signal-nav-prev { top: -50px; }
+            .signal-nav-next { bottom: -50px; }
+            .signal-header-info {
+                top: 10px;
+                padding: 8px 12px;
+                gap: 8px;
+                max-width: 90%;
+            }
+            .signal-header-info .signal-name {
+                font-size: 13px;
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .signal-header-info .signal-tag,
+            .signal-header-info .signal-direction {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            .signal-counter {
+                font-size: 12px;
+            }
+            /* Swipe Hint */
+            .swipe-hint {
+                display: block;
+            }
+        }
+
+        /* Swipe Hint (nur Mobile) */
+        .swipe-hint {
+            display: none;
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            z-index: 20;
+            pointer-events: none;
+            animation: fadeOutHint 3s forwards;
+        }
+
+        .swipe-hint span {
+            color: var(--accent-gold);
+        }
+
+        @keyframes fadeOutHint {
+            0%, 70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         .slider-info {
             display: flex;
             gap: 20px;
@@ -1435,6 +2139,32 @@
             font-weight: 600;
         }
 
+        .slider-delete-btn {
+            display: none;
+            margin-left: auto;
+            padding: 6px 14px;
+            background: var(--accent-red);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider-delete-btn:hover {
+            background: #ff6b7a;
+            transform: scale(1.05);
+        }
+
+        .slider-delete-btn.visible {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .slider-thumbnails {
             display: flex;
             gap: 8px;
@@ -1444,10 +2174,16 @@
             padding: 8px;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
+            min-height: 61px; /* Fixed height for consistent layout */
+            align-items: center;
+            justify-content: center;
         }
 
-        .slider-thumbnails:empty {
-            display: none;
+        .slider-thumbnails:empty::after {
+            content: "Nur 1 Bild verfügbar";
+            color: var(--text-secondary);
+            font-size: 12px;
+            opacity: 0.5;
         }
 
         .slider-thumb {
@@ -1468,6 +2204,15 @@
         .slider-thumb.active {
             opacity: 1;
             border-color: var(--accent-green);
+        }
+
+        /* Erstes Thumbnail (neuestes Bild) hervorheben */
+        .slider-thumb:first-child {
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .slider-thumb:first-child.active {
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
         }
 
         @media (max-width: 1200px) {
@@ -1711,12 +2456,384 @@
             background: var(--bg-hover);
         }
 
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        .dropdown-item-badge {
+            background: var(--accent-green);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+
+        /* ==================== ALERT SYSTEM ==================== */
+        
+        /* Glocken-Button auf Signal-Kachel */
+        .alert-bell {
+            position: absolute;
+            top: 16px;
+            left: 80px; /* Neben dem NEU/Vorschau Badge */
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 15;
+            transition: all 0.2s;
+            opacity: 0;
+        }
+
+        .signal-card:hover .alert-bell {
+            opacity: 1;
+        }
+
+        .alert-bell:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.2);
+        }
+
+        .alert-bell.active {
+            opacity: 1;
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .alert-bell.active:hover {
+            background: #00cc6a;
+        }
+
+        /* Alert Modal */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .alert-modal.active {
+            display: flex;
+        }
+
+        .alert-modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 440px;
+            width: 90%;
+            position: relative;
+        }
+
+        .alert-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .alert-modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .alert-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .alert-modal-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .alert-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .alert-modal-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .alert-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .alert-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .alert-option:hover {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .alert-option.selected {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .alert-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .alert-option.selected .alert-checkbox {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .alert-option-icon {
+            font-size: 20px;
+            width: 28px;
+            text-align: center;
+        }
+
+        .alert-option-text {
+            flex: 1;
+        }
+
+        .alert-option-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .alert-option-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .alert-modal-footer {
+            display: flex;
+            gap: 12px;
+        }
+
+        .alert-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .alert-btn-secondary {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .alert-btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .alert-btn-primary {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .alert-btn-primary:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+        }
+
+        .alert-btn-danger {
+            background: var(--accent-red);
+            color: #fff;
+            flex: 0 0 auto;
+            padding: 14px 20px;
+        }
+
+        .alert-btn-danger:hover {
+            background: #ff6b7a;
+        }
+
+        .alert-limit-info {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .alert-limit-info span {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* Meine Alarme Modal */
+        .my-alerts-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .my-alert-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .my-alert-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .my-alert-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-hover);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .my-alert-info {
+            flex: 1;
+        }
+
+        .my-alert-symbol {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .my-alert-badges {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .my-alert-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        .my-alert-badge.entry { background: rgba(77, 171, 247, 0.15); color: var(--accent-blue); }
+        .my-alert-badge.tp { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); }
+        .my-alert-badge.sl { background: rgba(255, 71, 87, 0.15); color: var(--accent-red); }
+
+        .my-alert-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .my-alert-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .my-alert-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .my-alert-btn.delete:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .no-alerts {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-alerts-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
         /* Mobile CTA - nur auf Mobile sichtbar */
         .mobile-cta {
             display: none;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
-            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 20px;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 255, 136, 0.3);
+            z-index: 98;
+        }
+
+        .mobile-cta.visible {
+            display: block;
         }
 
         .mobile-cta-content {
@@ -1770,24 +2887,21 @@
         /* Responsive */
         @media (max-width: 768px) {
             .mobile-cta {
-                display: block;
+                /* Visibility controlled by JS based on user status */
             }
 
             .header {
-                padding: 16px 20px;
-                flex-direction: column;
-                gap: 16px;
+                padding: 12px 16px;
+                flex-direction: row;
+                gap: 0;
             }
 
             .header-nav {
-                margin-left: 0;
-                width: 100%;
-                justify-content: center;
-                gap: 16px;
+                display: none;
             }
 
             .header-success-rate {
-                padding: 4px 10px;
+                display: none;
             }
 
             .success-label {
@@ -1795,25 +2909,248 @@
             }
 
             .header-right {
-                width: 100%;
-                justify-content: space-between;
+                display: none;
             }
 
+            /* Burger Menu Button */
+            .burger-menu {
+                display: flex !important;
+            }
+
+            /* Mobile Menu */
+            .mobile-menu {
+                display: flex;
+            }
+
+            .logo-icon img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            /* Hero kompakter */
             .hero {
-                padding: 40px 20px;
+                padding: 20px 16px !important;
             }
 
             .hero h1 {
-                font-size: 32px;
+                font-size: 22px !important;
+                margin-bottom: 6px !important;
             }
 
+            .hero p {
+                font-size: 12px !important;
+            }
+
+            .hero-cta {
+                margin-top: 20px !important;
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+
+            .hero-cta .btn-lg {
+                width: 100% !important;
+                padding: 12px 20px !important;
+                font-size: 14px !important;
+            }
+
+            .hero-social-proof {
+                flex-direction: column !important;
+                gap: 8px !important;
+                margin-top: 16px !important;
+                padding: 12px !important;
+            }
+
+            .social-proof-divider {
+                display: none !important;
+            }
+
+            .social-proof-item {
+                font-size: 11px !important;
+            }
+
+            /* Trading Hours kompakter */
+            .trading-hours-bar {
+                padding: 6px 12px !important;
+            }
+
+            .trading-hours-content {
+                gap: 4px !important;
+            }
+
+            .trading-hours-label {
+                display: none !important;
+            }
+
+            .market-status {
+                padding: 4px 6px !important;
+                font-size: 8px !important;
+                min-width: auto !important;
+                gap: 3px !important;
+            }
+
+            .market-name {
+                font-size: 9px;
+            }
+
+            .market-dot {
+                width: 5px;
+                height: 5px;
+            }
+
+            /* Sections */
             .section-header, .stats-section, .main, .premium-header, .premium-grid-container, .tabs-section {
-                padding-left: 16px;
-                padding-right: 16px;
+                padding-left: 12px;
+                padding-right: 12px;
             }
 
+            /* Stats EINE ZEILE - WICHTIG */
+            .stats-section {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                flex-direction: row !important;
+                gap: 8px !important;
+                padding: 12px !important;
+                justify-content: space-between !important;
+            }
+
+            .stat-card {
+                flex: 1 1 0 !important;
+                padding: 10px 6px !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                text-align: center !important;
+            }
+
+            .stat-number {
+                font-size: 18px !important;
+            }
+
+            .stat-label {
+                font-size: 8px !important;
+                white-space: nowrap !important;
+            }
+
+            /* Tabs Section kompakt */
+            .tabs-section {
+                padding: 8px 12px !important;
+            }
+
+            .tabs-container {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+
+            /* Tabs horizontal scrollbar */
+            .tabs {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 4px !important;
+                padding-bottom: 6px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab {
+                flex-shrink: 0 !important;
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
+
+            .tab-badge {
+                font-size: 8px !important;
+                padding: 1px 4px !important;
+            }
+
+            /* Filters kompakt */
+            .filters {
+                width: 100% !important;
+                gap: 6px !important;
+            }
+
+            .search-box {
+                width: 100% !important;
+            }
+
+            .search-input {
+                width: 100% !important;
+                font-size: 11px !important;
+                padding: 8px 10px 8px 28px !important;
+            }
+
+            .search-icon {
+                font-size: 12px !important;
+                left: 8px !important;
+            }
+
+            /* Filter Buttons */
+            .filter-buttons-row {
+                padding: 8px 12px !important;
+                gap: 8px !important;
+                flex-direction: column !important;
+            }
+
+            .filter-group {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 6px !important;
+                width: 100% !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 4px;
+            }
+
+            .filter-group::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-btn {
+                flex-shrink: 0 !important;
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
+
+            .filter-label {
+                font-size: 10px !important;
+                min-width: 45px !important;
+                flex-shrink: 0 !important;
+            }
+
+            /* Section Header kompakt */
+            .section-header {
+                padding: 8px 12px !important;
+            }
+
+            .section-title {
+                font-size: 13px !important;
+            }
+
+            .section-badge {
+                font-size: 8px !important;
+                padding: 2px 6px !important;
+            }
+
+            .section-subtitle {
+                font-size: 10px !important;
+            }
+
+            /* Signal Cards */
             .signals-grid, .premium-grid {
                 grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .signal-card {
+                border-radius: 12px;
             }
 
             .zoom-controls {
@@ -1821,83 +3158,122 @@
             }
 
             .signal-image-container {
-                height: var(--image-height, 300px);
+                height: var(--image-height, 400px);
             }
 
+            .signal-info {
+                padding: 12px;
+            }
+
+            .signal-title {
+                font-size: 14px;
+            }
+
+            .price-grid {
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .price-label {
+                font-size: 7px;
+            }
+
+            .price-value {
+                font-size: 11px;
+            }
+
+            .rr-badge {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            /* Paywall */
             .paywall-card {
-                margin: 20px;
-                padding: 30px 24px;
+                margin: 16px;
+                padding: 24px 16px;
+            }
+
+            .paywall-title {
+                font-size: 22px;
+            }
+
+            .paywall-subtitle {
+                font-size: 13px;
             }
 
             .paywall-price-amount {
-                font-size: 36px;
+                font-size: 32px;
             }
 
-            .tabs {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 8px;
+            .paywall-btn {
+                padding: 12px 24px;
+                font-size: 14px;
             }
 
-            .filters {
-                width: 100%;
-            }
-
-            .filter-select {
-                flex: 1;
-            }
-
-            .search-input {
-                width: 100%;
-            }
-
-            .search-box {
-                width: 100%;
+            /* Success Stats Bar */
+            .success-stats-bar {
+                padding: 12px;
             }
 
             .success-stats-grid {
-                justify-content: flex-start;
+                gap: 8px;
+                flex-wrap: nowrap;
                 overflow-x: auto;
-                padding-bottom: 8px;
+            }
+
+            .success-stat-mini {
+                min-width: 70px;
+                padding: 10px;
+            }
+
+            .success-stat-mini .stat-value {
+                font-size: 20px;
+            }
+
+            .success-stat-mini .stat-label {
+                font-size: 8px;
+            }
+
+            .success-rate-display {
+                padding: 10px 16px;
+            }
+
+            .success-rate-display .rate-value {
+                font-size: 24px;
+            }
+
+            /* Footer Mobile */
+            .footer {
+                padding: 32px 16px 20px !important;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                text-align: center;
+            }
+
+            .footer-brand {
+                align-items: center;
+            }
+
+            .footer-description {
+                max-width: 100% !important;
+            }
+
+            .footer-links {
+                align-items: center;
+            }
+
+            .footer-bottom {
+                padding-top: 16px;
+            }
+
+            .footer-disclaimer {
+                font-size: 10px !important;
             }
         }
     </style>
-
-    <script>
-    // NOTFALL: Fix kaputte Umlaute zur Laufzeit
-    document.addEventListener('DOMContentLoaded', function() {
-        const fixes = {
-            'Ã¤': 'ä', 'Ã¶': 'ö', 'Ã¼': 'ü',
-            'Ã„': 'Ä', 'Ã–': 'Ö', 'Ãœ': 'Ü',
-            'ÃŸ': 'ß', 'â‚¬': '€'
-        };
-        
-        function fixText(node) {
-            if (node.nodeType === 3) { // Text node
-                let text = node.textContent;
-                for (let [wrong, right] of Object.entries(fixes)) {
-                    text = text.replace(new RegExp(wrong, 'g'), right);
-                }
-                if (text !== node.textContent) {
-                    node.textContent = text;
-                    console.log('✅ Umlaute automatisch repariert!');
-                }
-            }
-        }
-        
-        function walkDOM(node) {
-            fixText(node);
-            node = node.firstChild;
-            while (node) {
-                walkDOM(node);
-                node = node.nextSibling;
-            }
-        }
-        
-        walkDOM(document.body);
-    });
-    </script>
-
 </head>
 <body>
     <header class="header">
@@ -1906,10 +3282,11 @@
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
-            <a href="wolfewaves.html" class="nav-link">ðŸ“– Tutorial</a>
+            <a href="wolfewaves.html" class="nav-link"><span style="font-size:16px;">📖</span> Tutorial</a>
+            <a href="maerkte.html" class="nav-link">🌍 Märkte</a>
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
-                <span class="success-value" id="headerSuccessValue">"”%</span>
+                <span class="success-value" id="headerSuccessValue">—%</span>
             </div>
         </nav>
         <div class="header-right">
@@ -1918,23 +3295,99 @@
                 <span>LIVE</span>
             </div>
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
-            <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90&euro;/Monat</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
         </div>
+        <!-- Burger Menu für Mobile -->
+        <button class="burger-menu" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
+    <!-- Mobile Menu Dropdown -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
+        <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
+        <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
+        <div class="mobile-menu-divider"></div>
+        <button class="mobile-menu-btn" onclick="showLogin(); toggleMobileMenu();">Login</button>
+        <button class="mobile-menu-btn primary" onclick="showCheckout(); toggleMobileMenu();">Premium 19,90€/Monat</button>
+    </div>
+
     <section class="hero">
-        <h1>Professionelle <span>Wolfe Wave</span> Signale</h1>
-        <p>Erhalte t&auml;glich hochwertige Trading-Signale mit pr&auml;zisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
+        <h1 class="animate-fade-in-up animate-delay-1">Professionelle <span>Wolfe Wave</span> Signale</h1>
+        <p class="animate-fade-in-up animate-delay-2">Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
+        
+        <!-- Hero CTA Buttons -->
+        <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
+            <button class="btn btn-primary btn-lg" onclick="showCheckout()">
+                🚀 Jetzt Premium werden
+            </button>
+            <a href="#previewHeader" class="btn btn-outline btn-lg">
+                Vorschau ansehen ↓
+            </a>
+        </div>
+        
+        <!-- Social Proof -->
+        <div class="hero-social-proof animate-fade-in-up animate-delay-4" id="heroSocialProof">
+            <div class="social-proof-item">
+                <span class="social-proof-icon">📊</span>
+                <span>Live-Signale für DAX, NASDAQ, Forex & Krypto</span>
+            </div>
+            <div class="social-proof-divider">•</div>
+            <div class="social-proof-item">
+                <span class="social-proof-icon">🔔</span>
+                <span>E-Mail Alerts bei neuen Signalen</span>
+            </div>
+            <div class="social-proof-divider">•</div>
+            <div class="social-proof-item">
+                <span class="social-proof-icon">✓</span>
+                <span>Jederzeit kündbar</span>
+            </div>
+        </div>
     </section>
 
-    <!-- Mobile CTA (nur auf Mobile sichtbar) -->
+    <!-- Trading Hours Bar -->
+    <section class="trading-hours-bar">
+        <div class="trading-hours-content">
+            <span class="trading-hours-label">🕐 Handelszeiten:</span>
+            <div class="market-status" id="xetraStatus">
+                <span class="market-dot"></span>
+                <span class="market-name">XETRA</span>
+                <span class="market-state">—</span>
+            </div>
+            <div class="market-status" id="nyseStatus">
+                <span class="market-dot"></span>
+                <span class="market-name">NYSE/NASDAQ</span>
+                <span class="market-state">—</span>
+            </div>
+            <div class="market-status" id="forexStatus">
+                <span class="market-dot"></span>
+                <span class="market-name">Forex</span>
+                <span class="market-state">—</span>
+            </div>
+            <div class="market-status" id="kryptoStatus">
+                <span class="market-dot"></span>
+                <span class="market-name">Krypto</span>
+                <span class="market-state">—</span>
+            </div>
+            <div class="market-status" id="asienStatus">
+                <span class="market-dot"></span>
+                <span class="market-name">Asien</span>
+                <span class="market-state">—</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile CTA (nur für nicht-eingeloggte User) -->
     <section class="mobile-cta" id="mobileCTA">
         <div class="mobile-cta-content">
             <div class="mobile-cta-text">
-                <span class="mobile-cta-icon">ðŸ”“</span>
+                <span class="mobile-cta-icon">🔓</span>
                 <div>
                     <strong>Alle Signale freischalten</strong>
-                    <span class="mobile-cta-price">19,90&euro;/Monat</span>
+                    <span class="mobile-cta-price">19,90€/Monat</span>
                 </div>
             </div>
             <button class="mobile-cta-btn" onclick="showCheckout()">Jetzt starten</button>
@@ -1942,22 +3395,22 @@
     </section>
 
     <!-- Stats -->
-    <section class="stats-section">
+    <section class="stats-section animate-fade-in-up animate-delay-3">
         <div class="stat-card">
-            <div class="stat-number" id="totalSignals">"”</div>
+            <div class="stat-number" id="totalSignals">—</div>
             <div class="stat-label">Aktive Signale</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number stat-gold" id="successCount">"”</div>
-            <div class="stat-label">âœ” Erfolgreiche Trades</div>
+            <div class="stat-number stat-gold" id="successCount">—</div>
+            <div class="stat-label">✓ Erfolgreiche</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-number" id="todayCount">"”</div>
+        <div class="stat-card" id="newTodayCard">
+            <div class="stat-number" id="todayCount">—</div>
             <div class="stat-label">Neu heute</div>
         </div>
     </section>
 
-    <!-- Tabs & Filters (nur f&uuml;r Premium) -->
+    <!-- Tabs & Filters (nur für Premium) -->
     <section class="tabs-section" id="tabsSection">
         <div class="tabs-container">
             <div class="tabs">
@@ -1966,43 +3419,55 @@
                     Neu
                     <span class="tab-badge" id="newCount">0</span>
                 </button>
+                <button class="tab tab-active-status" data-tab="active">
+                    🟢 ACTIVE
+                    <span class="tab-badge tab-badge-active" id="activeCount">0</span>
+                </button>
+                <button class="tab tab-pending-status" data-tab="pending">
+                    ⏳ PENDING
+                    <span class="tab-badge tab-badge-pending" id="pendingCount">0</span>
+                </button>
                 <button class="tab" data-tab="bullish">Bullish</button>
                 <button class="tab" data-tab="bearish">Bearish</button>
                 <button class="tab tab-success" data-tab="success">
-                    ðŸ† Success
+                    🏆 Success
                     <span class="tab-badge tab-badge-gold" id="successTabCount">0</span>
                 </button>
             </div>
             <div class="filters">
                 <div class="search-box">
-                    <span class="search-icon">ðŸ”</span>
+                    <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchSymbol" placeholder="Symbol suchen... (z.B. Henkel, Apple, EURUSD)">
                 </div>
-                <select class="filter-select" id="filterMarket">
-                    <option value="">Alle M&auml;rkte</option>
-                    <option value="DAX">DAX</option>
-                    <option value="NASDAQ">NASDAQ</option>
-                    <option value="NYSE">NYSE</option>
-                    <option value="SP500">S&P 500</option>
-                    <option value="FOREX">Forex</option>
-                    <option value="CRYPTO">Krypto</option>
-                    <option value="OTHER">Andere</option>
-                </select>
-                <select class="filter-select" id="filterTimeframe">
-                    <option value="">Alle TF</option>
-                    <option value="M5">M5</option>
-                    <option value="M15">M15</option>
-                    <option value="H1">H1</option>
-                    <option value="H4">H4</option>
-                    <option value="D1">Daily</option>
-                    <option value="W1">Weekly</option>
-                </select>
                 <div class="zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">âˆ’</button>
+                    <button class="zoom-btn" onclick="zoomOut()" title="Mehr Kacheln pro Zeile">−</button>
                     <span class="zoom-indicator" id="zoomIndicator">4</span>
                     <button class="zoom-btn" onclick="zoomIn()" title="Weniger Kacheln pro Zeile">+</button>
-                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">â¬œ</button>
+                    <button class="zoom-btn zoom-btn-full" onclick="zoomFull()" title="Vollbild (1 Kachel)">⬜</button>
                 </div>
+            </div>
+        </div>
+        <!-- Market & Timeframe Filter Buttons -->
+        <div class="filter-buttons-row">
+            <div class="filter-group">
+                <span class="filter-label">Märkte:</span>
+                <button class="filter-btn active" data-market="">Alle</button>
+                <button class="filter-btn" data-market="DAX">DAX</button>
+                <button class="filter-btn" data-market="NASDAQ">NASDAQ</button>
+                <button class="filter-btn" data-market="NYSE">NYSE</button>
+                <button class="filter-btn" data-market="INDICES">Indizes</button>
+                <button class="filter-btn" data-market="FOREX">Forex</button>
+                <button class="filter-btn" data-market="CRYPTO">Krypto</button>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Zeit:</span>
+                <button class="filter-btn active" data-timeframe="">Alle</button>
+                <button class="filter-btn" data-timeframe="M5">M5</button>
+                <button class="filter-btn" data-timeframe="M15">M15</button>
+                <button class="filter-btn" data-timeframe="H1">H1</button>
+                <button class="filter-btn" data-timeframe="H4">H4</button>
+                <button class="filter-btn" data-timeframe="D1">D1</button>
+                <button class="filter-btn" data-timeframe="W1">W1</button>
             </div>
         </div>
     </section>
@@ -2011,42 +3476,45 @@
     <section class="success-stats-bar" id="successStatsBar">
         <div class="success-stats-grid">
             <div class="success-rate-display">
-                <div class="rate-value" id="successRateValue">"”%</div>
+                <div class="rate-value" id="successRateValue">—%</div>
                 <div class="rate-label">Success Rate</div>
             </div>
             <div class="success-stat-mini gold">
-                <div class="stat-icon">ðŸ†</div>
+                <div class="stat-icon">🏆</div>
                 <div class="stat-value gold" id="tp3Count">0</div>
                 <div class="stat-label">TP3 erreicht</div>
             </div>
             <div class="success-stat-mini green">
-                <div class="stat-icon">âœ…</div>
+                <div class="stat-icon">✗</div>
                 <div class="stat-value green" id="tp2Count">0</div>
                 <div class="stat-label">TP2 erreicht</div>
             </div>
             <div class="success-stat-mini blue">
-                <div class="stat-icon">ðŸ“ˆ</div>
+                <div class="stat-icon">🔍</div>
                 <div class="stat-value blue" id="tp1Count">0</div>
                 <div class="stat-label">TP1 erreicht</div>
             </div>
             <div class="success-stat-mini red">
-                <div class="stat-icon">ðŸ›‘</div>
+                <div class="stat-icon">🛑</div>
                 <div class="stat-value red" id="slCount">0</div>
                 <div class="stat-label">Stop Loss</div>
             </div>
         </div>
     </section>
 
+    <!-- Section Divider -->
+    <div class="section-divider-glow"></div>
+
     <!-- Free Preview Section -->
-    <section class="section-header" id="previewHeader">
+    <section class="section-header animate-fade-in-up animate-delay-4" id="previewHeader">
         <div class="section-title">
-            ðŸŽ Kostenlose Vorschau
+            🎁 Kostenlose Vorschau
             <span class="section-badge">Gratis</span>
         </div>
-        <div class="section-subtitle">"” Sieh dir 3 echte Signale an</div>
+        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
     </section>
 
-    <main class="main">
+    <main class="main animate-fade-in-up animate-delay-5">
         <div class="signals-grid" id="previewGrid">
             <div class="loading">
                 <div class="spinner"></div>
@@ -2059,7 +3527,7 @@
     <section class="premium-section" id="premiumSection">
         <div class="premium-header">
             <div class="premium-title">
-                <span class="lock-icon">ðŸ”’</span>
+                <span class="lock-icon">🔒</span>
                 Premium Signale
             </div>
             <div class="premium-count" id="premiumCount">+42 weitere Signale</div>
@@ -2070,33 +3538,37 @@
 
             <div class="paywall-overlay">
                 <div class="paywall-card">
-                    <div class="paywall-icon">ðŸ”“</div>
+                    <div class="paywall-icon">🔍</div>
                     <div class="paywall-title">Alle <span>Signale</span> freischalten</div>
                     <div class="paywall-subtitle">
-                        Erhalte sofortigen Zugriff auf alle aktuellen und zuk&uuml;nftigen Trading-Signale
+                        Erhalte sofortigen Zugriff auf alle aktuellen und zukünftigen Trading-Signale
                     </div>
 
                     <div class="paywall-features">
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ”</span>
+                            <span class="paywall-feature-icon">📊</span>
                             <span>Alle Signale in Echtzeit (DAX, NASDAQ, Forex & mehr)</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ”</span>
+                            <span class="paywall-feature-icon">🔔</span>
+                            <span>E-Mail Alerts bei neuen Signalen</span>
+                        </div>
+                        <div class="paywall-feature">
+                            <span class="paywall-feature-icon">📈</span>
                             <span>Performance-Statistiken & Success-Tracking</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ”</span>
+                            <span class="paywall-feature-icon">🎯</span>
                             <span>Detaillierte Chart-Analysen mit Entry/SL/TP</span>
                         </div>
                         <div class="paywall-feature">
-                            <span class="paywall-feature-icon">âœ”</span>
-                            <span>Jederzeit k&uuml;ndbar "” keine Bindung</span>
+                            <span class="paywall-feature-icon">🔓</span>
+                            <span>Jederzeit kündbar — keine Bindung</span>
                         </div>
                     </div>
 
                     <div class="paywall-price">
-                        <span class="paywall-price-amount">19,90&euro;</span>
+                        <span class="paywall-price-amount">19,90€</span>
                         <span class="paywall-price-period">/ Monat</span>
                     </div>
 
@@ -2113,28 +3585,41 @@
     </section>
 
     <footer class="footer">
-        <div style="margin-bottom: 16px;">
-            <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Startseite</a>
-            <a href="wolfewaves.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Was sind Wolfe Waves?</a>
-            <a href="impressum.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Impressum</a>
-            <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: none; margin: 0 12px;">Datenschutz</a>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="/images/Wolf.png" alt="WolfeWaveSignals" class="footer-logo-img">
+                    <span>Wolfe<span class="text-green">Wave</span>Signals</span>
+                </div>
+                <p class="footer-description">Professionelle Trading-Signale basierend auf dem Wolfe Wave Pattern für DAX, NASDAQ, Forex und Krypto.</p>
+            </div>
+            <div class="footer-links">
+                <h4 class="footer-heading">Navigation</h4>
+                <a href="index.html" class="footer-link">Startseite</a>
+                <a href="wolfewaves.html" class="footer-link">Was sind Wolfe Waves?</a>
+                <a href="maerkte.html" class="footer-link">Märkte</a>
+            </div>
+            <div class="footer-links">
+                <h4 class="footer-heading">Rechtliches</h4>
+                <a href="impressum.html" class="footer-link">Impressum</a>
+                <a href="datenschutz.html" class="footer-link">Datenschutz</a>
+                <a href="/cdn-cgi/l/email-protection#4a393f3a3a25383e0a3d25262c2f3d2b3c2f39232d242b263964292527" class="footer-link">Kontakt</a>
+            </div>
         </div>
-        <div style="color: var(--text-secondary); font-size: 11px;">
-            Â© 2025 wolfewavesignals.com "” Trading-Signale f&uuml;r professionelle H&auml;ndler<br>
-            <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
-                âš  Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zuk&uuml;nftigen Gewinne.
-            </span>
+        <div class="footer-bottom">
+            <p>© 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler</p>
+            <p class="footer-disclaimer">⚠ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.</p>
         </div>
     </footer>
 
     <!-- Auth Modal -->
     <div class="modal" id="authModal">
         <div class="auth-card">
-            <span class="modal-close" onclick="closeAuthModal()">âœ•</span>
+            <span class="modal-close" onclick="closeAuthModal()">✕</span>
             <div id="loginForm" class="auth-form">
                 <div class="auth-header">
-                    <div class="auth-icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA1CAYAAADWKGxEAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAPhUlEQVR42u2baXRT1drH//ucpE2adEiHtE2HtKVjoBNQhjKUIvAWsIB4IyIqCF7xcgEV5F7BIZYl4qsIKl64oCgIMkUmQVFAaJihZahtQykdaJsmLWnTphmb4ez3A7J03XdY75f2Wuzva7LWPvu//8/z7GeffYB++vnjQEH6RehlVCowKpWK6VeCgjz13pB0pVLJPkyO7b2VJaA2h6dJoVDTX+0FBvifRaIUhAKYvWbIXxZtGDccKjCgIMr9vy4AvS8w+W8jPZQG/Fc3qf7PxSOgIIkF8J2xOtv0+q7H1Q9+WLA9O2Pe5qxFfzgHvv02yIPwVb6XEIgiUOWH6ekrPs/1/9f/5qnAgoDy4wIVWTlREp1JHzblvQG5lCpZm93J2pxOOQC8dCg3i9L7YgPAC1uG8FcczvWnFESpUvj0xrzY3hJQowHVarVUpQJj5Et8laM6XFVm/7+2mu3xE56O1z46JJmOK54HDTSkoQheAkCkQMaI7PSnW+ut8po795661O6yfb2w/FD+wvgbU1L13ToaMrW4OmHG1cymM0s+TvTdtKjSfaHcn+YPMnq1GiP3UAn4AOk4Bb+uyd+9Z73BK0kMGM/6MG9IpIIfNyy/1KQp0lBoQMe8GjN9QG5IjoeyM2PiAzKtRpe74sY9ATiSnj079gun3ene9Hdjd1CqT5A0LGTbhBfiiy2c032meoDLUBlAspSi0LLvjdaHT0AKMro6ljEYrmGocuDSjmbnq7Z2t9+Pjbff1pVvFFSzTW/EjgycaLdinSwpME8WF5Q7WfEIvV5dxbBCApvVZX5hSfJn7c2eQTH5TGZEpDRb12aacOd6Z3ZYhKg0dE5pjeWqQGAnzPKBU6Siyh+M1cr9Slar1tK+LiBRqcBITg1MqKq5h6io+B1R4SGvlJ1rFjJ+XOfuVZ/6+1kyP2ECHY/uVZ8ePTE3hzdn2iTxqAEjuItlt0g36SKxsWEkJMTPe7WkeXSz0bw4PW7EM89mrhzKZ/mCn85ejGTdvrESS6K9rt6mC44SDmMIqfj5WGtj5X4tior6dhEhAOjhm/IAXYP1CbeD/snL8WZGBUW6TI4OblJ+XkDjDdMruSMKY4KtCk+wONhj7Grh3tu4l1v/+S6yc/uPuPyDjhzbc5MmhiYFj0kd/QghPuH5sUpB4finQu1aPmYVPu52s93jWlu7lzv0bosiOdz7+MyhZQDIwq1DeD1ZUJheCVwVmLIjDWZ3Nw3n7D6b+YzXpUhK542eoiDZstH8D9//jItNiPbu3XaYXb3kTabLZSV3b7WQ73aVor6iBe0tJqqrbMOGD9T0yOFizztz1ng3rd3O+Yf4cTu+3EtGJo8i4DM2PsuGGGEPol4f9vyZ+scAULOFRKiLtK6+HcLFgFKrZLqF9xp1jebZY0aniFKTBoAR8YiljMU33xxm9u3bTbbv3AlTvZmseOlluPy6kBIzEPkjxyN70FAMUigQLQ/HzPzZzHc7zpHDR4+SLVs2ky1bttIkeSorTfVvrtNXrvWl4jWdNtu5IXE5j01aNPy7ksqOjmHjRDytxujtu/tAAqpWq73U4fXAz82GSmSEsiZamD2Onv7pPHhiFlarFQfVB3D8xCksnvUOMnmTEeCQoqmsFY3XDRDYApCfUoht63dj6+dfYu+ePQgLDQPH48j54stcjmJwPE/InyASChNqS2wvHjx8JvTShbPzNUUajwJhPbal4fW0dnM3ZAbxRT7Sz18oqW5otXL/MT0DkkgeKlqqSIA4E9U1NcQngMWJkyexft067N+/D2vWvovnn1tIHsQIn8+H2+mmAJAzYhh2fb0T0wqnY+Wq1yCQ8FB7t5ZwbT6cJDB0VqfeRe+Wm2TWeAFEsSEqlQpMETRc38uBv7Rqhna7vLbG9BKlZ3h2piNZgmDBqOQcqj50A1eu1hPKc0M2KBT79qhx6vRJBAYEIDEhERlZ6djw0Xp6t7aeNjfq6MmTJzBj5nQMTFMgTh6Hq9cuYceXOxGbEQGv0IWWOgsEriBvdmaqRxTB0hCpv/rw3ypPFEPugyL0PQGV2vvtlcXiDnQ76BNT/rYgKyo0YvLJylIfqxmeGN8o4nF4wXkojXtEQjuokSz56ys49O0RTJ4yGVcuX6Uvv/QK5PI4hIVJMWHCRBw6cBh/W7ECFy9dxPMLFsLQoceAqSHwuD0Q8gW4cLyWMRksGD0+mQQF+56euDJ1EBDnUal6bp49F8JKJaBWIzwkMDVGLgk9deD2xsg4SUbB5BE0IlzMdrh1YMVAVmom7vxYgamFk2luyjiMHDUCmZlZEPgK4Ha7wTAMCCHgOA6EEKSlpcLPT4S0FAV2H/sK109dRHxwIgJjxERbXocRGYm8sBShu6FF/6izgyu8HqUpBPIY9FAY91gV1qrv973Jk8ZW+lCeSd9kfc7Nuvjv/vklelz7AzG7gOHh+fj2wHHiYxeTxwpmYtmyZYiJiYUP3wcACMv++ngsy4JhGHg5DhKJBMkpySBuFpeOXoPB0IKxI0fDL4IFz98Dr51Fa70tJWdMbPy0tKTLX75w+o6KqhhNkYb2nRwIoKgIdHmu2rHl0+LtupqOKl1VF1m9ZSttvtdGH5Eq8eaytTBL9eAPtlM+T4AmXRN0Oh0AwOFwwOv1gmGY+8J5vXA6nWAZFhaLBXV1dfD3CwTi7BCNdmPFsjcxZ/xs2m6x4djBK0xcuNyVNyaTFxAiDAOAgdCSvlVE7h8x0dcPFgyIjgr7gBA2zWHkvF/vPsXEksFICU+kRlM7YjIiKOfjgb3LDj8/P8yaMwtLVv4Fn27eSN0eN0wmE1paW8GyLA4ePoCVq1/F5MJJ6HZ1g2VY2BxWSGOD4XZ7wfMK8PiQJ9Ftd6G9y0QuXq7B98dqRgGAWq3uYzmQ3H+fIfT3bwsNFR+1u9zzkzMiaGtnGwzGTnRUXCZOPzNSChT4YfUNpBamICQ4BFMKHkVl1wG0tZehaI0Zg9MzERgUiM+ulEBrPAc2og0x8QlIS01DoH8Q2C4hoocF4faZBuz7+iDJmpwEXiChQ4elMmamqTt5QPDpH+8nZQDqPiQgQIuRx2omqs3TXx+aOHlqJuQxUq72jolNkMuwbsNOJBVE4u6FNnCdDNG3NlMAeH3lSuz/Ro42cwsqbtRgUEY6UpJScO3aNQxPngihUIDHn38SANDSoofHxkF7VI/kPDkO7jiK6c98hMdm5KO6spHU32sk8fLgJgBQVKpp33LgLy0cANTcagm1dXVTfYMZsbEyRPhGEH2nAc6Tdgh4VtLebIaX86KxqQHaSi2e+NNTAAfineelvxQSsvK1VZTjAIYBqqqqUKmtRKQsAvqmFiK0+FJ3twlWhw0dejOEXBA9ov6eTUiNNLcJrV4A6KkDmR4tIhqNhgNAWAdz4nZpCzlzUsucL/kZVXfraHtLJyJFMnBWhgolfGjOFiMiIhJHvzuGxUsXw3DPQFmWRXe3E93dLmq12+H2dGP9xx/itddXIk2RhnNnz8FD3NTV4UWqPBVeG4fahgZqNFhJSITYERggnK/54nYpAKanNtM93QtzSiWYn8WNGnGgsFgWGcozGS0ei7MLs5SF+GDdm7A5rGTMMgXOV5xB8U/FCJIE4tSpkxAKBOTdtWuQmZVFcobnkLnPPg2GEJSWloJhCJoaG7F52z8wZnky7B4bFi9aQF9evhAup5sTR7PM2BmpN0uP1B7LmysXAH2wE3lAnWQIAzW8YWG+iyhHawVihm+nNvri0qdRXXcHhA9YalxUOlyEt4reQklpCaJkUXB2d9PBQ4aCA0d1zU1ISEgACBAsCaZNuka8seot2MJbAbMPKKGouFWB8VNG0fEFo3Dl2nWqbzDvoJQS3G3w9OkjfcM1AwcA0/KCLRaW97O+wTzCSZ1hOnM9Fx0WQ86fuYbaCwbCuHmksU6H1mYjYuTRKC//GWI/ETxeD7weD5k2bRq2bt2KdlM7uaWtQoW2EqIAP2iP6YjXy+GpZx4jN1vPk/NXL9M7NTo2JDjo2N3C1uvD7IBWiz5/pA+hMJ3E5Qm6OButralqKXQFmNi/v/g8yq83EUNbC+E6GQilLIiQQ31FE4mOkcHpdELo54ekxCR0dnSizdSG8rIK3NXXITIlFM032yAJC0RIRBBeXj6XHin+lrtSWslmDI1tNHeZVz8f1NGxaVPPederAjY0NHDSNLEgMTW4s+mOZaTT65L7h/G92fHZTHS8DKHiEJQ3VGLs0kGo+qmRhIVISW1tLTl+/Di5WlJCblXdIlKpFCWXSpGzcABcDjeCIcWiV56FLCYU4iiWbvvqEG/kmFRChK7XTm24dWLcOBCN5iEREACpvWx0RCsCxCEDfISZ6alj2uwt/PioODpu2Fgii5XC2NiFekMdJLIA0njtHjjGS433jMTtdCNIEgRjSxt4oRyE0SzYen+oil6lScmxJGt4ovcf3/6Ttbe5GyjHvdtm9dlsuGagGk3vvPDpTQgASggw54PcefYu9z8VGTImWTQYpXe0bGH6VFIwfR4iEoLJgKA0On58Pux2B9qM7UhKSUL5zXKUNJ3Fnes6bPtoAzp9jTAaW6m+00Bu3q4A4/I52sZ3PqlT6xwPxurpCfF6WUAKgFAKZterF7crCmXZrUbL0uLuarSZOzBk0CDP+x+tYJYv/U8iz3Bh+LAc2GxOEDAQB4jQ2HAXd3brMHteIRJzwqhygYoLChLzWAExifwEizra7RcXjNd3F/06Vo/T6zcTfuvG3JEJl1pabR1Wk9Mu9vUPqbhX5j990kQSFRHJ7dtxjOm0mJGRngGGJTirOYuPP9qIvMnD8dY7L3oXv7WSdbkoEyoL6BKIfDaV7q35xNRg6eqNsP3d8eWZuYL0wrjpw+emaCauUnQcufQJXbXuz57oMSKOEYIDCwqAm/rMWO/Fin3e2Wvzaep0mSn3ubQ96TPjxv4mPfzhLmISKME+yMUFc4YFDJsfP3/iG4pm9dW19FTZJvfY+SlccIaArtu51HO+eheduCybpiojzk9anDlDkRcm/vdP4HckZp4qjz1bdNaTv0RR6A6wffii8umkKHG4125zQRzoz67d+bFdX2f+TE7C3v/2ixv63xamfgF/IU8FXoapgG0N7hzISa0bJg0dO7atyYWjJT/cZsw+q2V82Un1xvPG3zw77Xfg/7LdeW7tIwmCKOf6pqb2Qb4uwbMHi8ou0vt6kX+3cL9/fnkVqVwzTLHkq7yC++7M4wH9n0r8/11IQbaUKgM/uDBFDgpCf4e39nm/YwEpCCChsOorRQ4Q0H7r9dNPP/30008//fTTz0PCfwEESerjRulscQAAAABJRU5ErkJggg==" alt="Wolf" style="width:48px;height:48px;"></div>
-                    <h2>Willkommen zurck</h2>
+                    <div class="auth-icon"><img src="/images/Wolf.png" alt="Wolf" style="width:64px;height:64px;"></div>
+                    <h2>Willkommen zurück</h2>
                     <p>Melde dich an, um alle Signale zu sehen</p>
                 </div>
                 <div class="auth-fields">
@@ -2144,7 +3629,7 @@
                     </div>
                     <div class="input-group">
                         <label>Passwort</label>
-                        <input type="password" id="loginPassword" placeholder=""¢"¢"¢"¢"¢"¢"¢"¢">
+                        <input type="password" id="loginPassword" placeholder="••••••••">
                     </div>
                 </div>
                 <div class="auth-error" id="loginError"></div>
@@ -2155,7 +3640,7 @@
             </div>
             <div id="registerForm" class="auth-form" style="display:none;">
                 <div class="auth-header">
-                    <div class="auth-icon">ðŸ†</div>
+                    <div class="auth-icon"><img src="/images/Wolf.png" alt="Wolf" style="width:64px;height:64px;"></div>
                     <h2>Account erstellen</h2>
                     <p>Starte mit deinem kostenlosen Account</p>
                 </div>
@@ -2180,11 +3665,27 @@
 
     <!-- Image Modal -->
     <div class="modal" id="imageModal">
-        <span class="modal-close" onclick="closeModal()">âœ•</span>
+        <span class="modal-close" onclick="closeModal()">✕</span>
+        
+        <!-- Signal Info Header -->
+        <div class="signal-header-info" id="signalHeaderInfo">
+            <span class="signal-counter" id="signalCounter">1 / 10</span>
+            <span class="signal-name" id="signalName">Loading...</span>
+            <div class="signal-meta">
+                <span class="signal-tag" id="signalMarket">-</span>
+                <span class="signal-tag" id="signalTimeframe">-</span>
+                <span class="signal-direction" id="signalDirection">-</span>
+            </div>
+        </div>
+        
         <div class="image-slider-container">
-            <!-- Navigation Buttons -->
-            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">"¹</button>
-            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">"º</button>
+            <!-- Signal Navigation (up/down for prev/next signal) -->
+            <button class="signal-nav signal-nav-prev" onclick="prevSignal()" id="signalPrev" title="Vorheriges Signal (↑)">▲</button>
+            <button class="signal-nav signal-nav-next" onclick="nextSignal()" id="signalNext" title="Nächstes Signal (↓)">▼</button>
+            
+            <!-- Image Navigation (left/right for image history) -->
+            <button class="slider-nav slider-prev" onclick="prevImage()" id="sliderPrev">‹</button>
+            <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
             
             <!-- Main Image -->
             <img src="" alt="Chart" id="modalImage">
@@ -2193,10 +3694,16 @@
             <div class="slider-info" id="sliderInfo">
                 <span id="sliderCounter">1 / 1</span>
                 <span id="sliderDate"></span>
+                <button class="slider-delete-btn" id="sliderDeleteBtn" onclick="deleteCurrentImage()" title="Bild löschen">🗑️ Löschen</button>
             </div>
             
             <!-- Thumbnail Strip (wenn mehrere Bilder) -->
             <div class="slider-thumbnails" id="sliderThumbnails"></div>
+            
+            <!-- Swipe Hint for Mobile -->
+            <div class="swipe-hint" id="swipeHint">
+                ↔ Wischen für Bilder | ↕ Wischen für <span>nächstes Signal</span>
+            </div>
         </div>
     </div>
 
@@ -2204,16 +3711,16 @@
     <div class="admin-modal" id="deleteModal">
         <div class="admin-modal-card">
             <div class="admin-modal-header">
-                <span style="font-size: 28px;">ðŸ—‘</span>
-                <h3>Signal lschen</h3>
+                <span style="font-size: 28px;">🗑</span>
+                <h3>Signal löschen</h3>
             </div>
             <div class="admin-modal-body">
-                <p>Bist du sicher, dass du dieses Signal lschen m&ouml;chtest?</p>
+                <p>Bist du sicher, dass du dieses Signal löschen möchtest?</p>
                 <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
                     <strong id="deleteSignalInfo"></strong>
                 </div>
                 <p style="color: var(--accent-red); margin-top: 12px; font-size: 13px;">
-                    âš  Diese Aktion kann nicht rckg&auml;ngig gemacht werden!
+                    ⚠ Diese Aktion kann nicht rückgängig gemacht werden!
                 </p>
             </div>
             <div class="admin-modal-footer">
@@ -2227,8 +3734,8 @@
     <div class="admin-modal" id="successModal">
         <div class="admin-modal-card">
             <div class="admin-modal-header">
-                <span style="font-size: 28px;">ðŸ†</span>
-                <h3>Zu Success hinzuf&uuml;gen</h3>
+                <span style="font-size: 28px;">🏆</span>
+                <h3>Zu Success hinzufügen</h3>
             </div>
             <div class="admin-modal-body">
                 <p>Markiere dieses Signal als abgeschlossen:</p>
@@ -2236,13 +3743,13 @@
                     <strong id="successSignalInfo"></strong>
                 </div>
                 <div class="admin-form-group">
-                    <label>Ergebnis ausw&auml;hlen:</label>
+                    <label>Ergebnis auswählen:</label>
                     <select id="successResult">
-                        <option value="TP3_HIT">ðŸ† TP3 erreicht (Volltreffer)</option>
-                        <option value="TP2_HIT">âœ… TP2 erreicht</option>
-                        <option value="TP1_HIT">ðŸ“ˆ TP1 erreicht</option>
-                        <option value="SL_HIT">ðŸ›‘ Stop Loss getroffen</option>
-                        <option value="EXPIRED">â° Abgelaufen (kein Ziel)</option>
+                        <option value="TP3_HIT">🏆 TP3 erreicht (Volltreffer)</option>
+                        <option value="TP2_HIT">✗ TP2 erreicht</option>
+                        <option value="TP1_HIT">📈 TP1 erreicht</option>
+                        <option value="SL_HIT">🛑 Stop Loss getroffen</option>
+                        <option value="EXPIRED">⏰ Abgelaufen (kein Ziel)</option>
                     </select>
                 </div>
             </div>
@@ -2253,12 +3760,142 @@
         </div>
     </div>
 
-    <!-- Admin Badge -->
-    <div class="admin-badge" id="adminBadge">
-        ðŸ›¡ Admin-Modus aktiv
+    <!-- Admin Blacklist Modal -->
+    <div class="admin-modal" id="blacklistModal">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <span style="font-size: 28px;">🚫</span>
+                <h3>Signal blacklisten</h3>
+            </div>
+            <div class="admin-modal-body">
+                <p>Dieses Pattern wird <strong>permanent blockiert</strong>:</p>
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <strong id="blacklistSignalInfo"></strong>
+                </div>
+                <div class="admin-form-group">
+                    <label>Grund für Blacklist:</label>
+                    <select id="blacklistReason">
+                        <option value="EPA zu steil">EPA zu steil (>65°)</option>
+                        <option value="Falsche Formation">Falsche Formation</option>
+                        <option value="Low Quality">Low Quality Pattern</option>
+                        <option value="Zu alte Daten">Zu alte Daten (P1 > 180 Tage)</option>
+                        <option value="Andere">Andere</option>
+                    </select>
+                </div>
+                <div class="admin-form-group">
+                    <label>Notizen (optional):</label>
+                    <textarea id="blacklistNotes" rows="3" style="width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; color: var(--text-primary); font-family: inherit; resize: vertical;" placeholder="Zusätzliche Notizen..."></textarea>
+                </div>
+                <p style="color: var(--accent-red); margin-top: 16px; font-size: 13px;">
+                    ⚠️ Scanner wird dieses Pattern in Zukunft ignorieren!<br>
+                    Das Signal wird aus der Datenbank gelöscht.
+                </p>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-modal-btn admin-modal-btn-cancel" onclick="closeBlacklistModal()">Abbrechen</button>
+                <button class="admin-modal-btn admin-modal-btn-danger" onclick="confirmBlacklist()">Blacklist</button>
+            </div>
+        </div>
     </div>
 
-    <script>
+    <!-- Admin Badge -->
+    <div class="admin-badge" id="adminBadge">
+        🛡 Admin-Modus aktiv
+    </div>
+
+    <!-- Alert Modal (Glocke klicken) -->
+    <div class="alert-modal" id="alertModal">
+        <div class="alert-modal-card">
+            <span class="alert-modal-close" onclick="closeAlertModal()">✕</span>
+            <div class="alert-modal-header">
+                <div class="alert-modal-icon">🔔</div>
+                <div>
+                    <div class="alert-modal-title" id="alertModalTitle">Alert einrichten</div>
+                    <div class="alert-modal-subtitle" id="alertModalSubtitle">Symbol</div>
+                </div>
+            </div>
+            
+            <div class="alert-options" id="alertOptions">
+                <div class="alert-option selected" data-alert="new_signal" onclick="toggleAlertOption(this)">
+                    <div class="alert-checkbox">✓</div>
+                    <div class="alert-option-icon">📢</div>
+                    <div class="alert-option-text">
+                        <div class="alert-option-title">Neues Signal</div>
+                        <div class="alert-option-desc">Wenn ein neues Signal erkannt wird</div>
+                    </div>
+                </div>
+                <div class="alert-option selected" data-alert="entry" onclick="toggleAlertOption(this)">
+                    <div class="alert-checkbox">✓</div>
+                    <div class="alert-option-icon">🎯</div>
+                    <div class="alert-option-text">
+                        <div class="alert-option-title">Entry erreicht</div>
+                        <div class="alert-option-desc">Wenn der Einstiegspunkt erreicht wird</div>
+                    </div>
+                </div>
+                <div class="alert-option selected" data-alert="tp1" onclick="toggleAlertOption(this)">
+                    <div class="alert-checkbox">✓</div>
+                    <div class="alert-option-icon">📈</div>
+                    <div class="alert-option-text">
+                        <div class="alert-option-title">TP1 erreicht</div>
+                        <div class="alert-option-desc">Take Profit 1 erreicht</div>
+                    </div>
+                </div>
+                <div class="alert-option selected" data-alert="tp2" onclick="toggleAlertOption(this)">
+                    <div class="alert-checkbox">✓</div>
+                    <div class="alert-option-icon">✅</div>
+                    <div class="alert-option-text">
+                        <div class="alert-option-title">TP2 erreicht</div>
+                        <div class="alert-option-desc">Take Profit 2 erreicht</div>
+                    </div>
+                </div>
+                <div class="alert-option selected" data-alert="tp3" onclick="toggleAlertOption(this)">
+                    <div class="alert-checkbox">✓</div>
+                    <div class="alert-option-icon">🏆</div>
+                    <div class="alert-option-text">
+                        <div class="alert-option-title">TP3 erreicht</div>
+                        <div class="alert-option-desc">Volltreffer - Take Profit 3</div>
+                    </div>
+                </div>
+                <div class="alert-option selected" data-alert="sl" onclick="toggleAlertOption(this)">
+                    <div class="alert-checkbox">✓</div>
+                    <div class="alert-option-icon">🛑</div>
+                    <div class="alert-option-text">
+                        <div class="alert-option-title">Stop Loss</div>
+                        <div class="alert-option-desc">Wenn Stop Loss ausgelöst wird</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-modal-footer" id="alertModalFooter">
+                <button class="alert-btn alert-btn-secondary" onclick="closeAlertModal()">Abbrechen</button>
+                <button class="alert-btn alert-btn-primary" onclick="saveAlert()">🔔 Alert speichern</button>
+            </div>
+            
+            <div class="alert-limit-info">
+                <span id="alertCount">0</span> / 15 Alerts verwendet
+            </div>
+        </div>
+    </div>
+
+    <!-- Meine Alarme Modal -->
+    <div class="alert-modal" id="myAlertsModal">
+        <div class="alert-modal-card" style="max-width: 520px;">
+            <span class="alert-modal-close" onclick="closeMyAlertsModal()">✕</span>
+            <div class="alert-modal-header">
+                <div class="alert-modal-icon">🔔</div>
+                <div>
+                    <div class="alert-modal-title">Meine Alarme</div>
+                    <div class="alert-modal-subtitle"><span id="myAlertsCount">0</span> von 15 Alerts aktiv</div>
+                </div>
+            </div>
+            
+            <div class="my-alerts-list" id="myAlertsList">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
@@ -2269,6 +3906,16 @@
         let isSubscribed = false;
         let isAdmin = false;
         let currentTab = 'all';
+        let currentMarketFilter = '';
+        let currentTimeframeFilter = '';
+
+        // Alert System
+        let userAlerts = [];
+        let currentAlertSymbol = null;
+        let currentAlertSymbolName = null;
+        let currentAlertMarket = null;
+        let currentAlertId = null;
+        const MAX_ALERTS = 15;
 
         // Zoom-Steuerung
         let gridColumns = 4;
@@ -2278,16 +3925,16 @@
         function updateGridZoom() {
             document.documentElement.style.setProperty('--grid-columns', gridColumns);
             
-            // Bildh&ouml;he basierend auf Spaltenanzahl anpassen
+            // Bildhöhe basierend auf Spaltenanzahl anpassen
             const imageHeights = {
-                6: '180px',
-                5: '200px',
-                4: '240px',
-                3: '320px',
-                2: '420px',
-                1: '550px'
+                6: '270px',
+                5: '300px',
+                4: '360px',
+                3: '480px',
+                2: '600px',
+                1: '750px'
             };
-            const imageHeight = imageHeights[gridColumns] || '240px';
+            const imageHeight = imageHeights[gridColumns] || '360px';
             document.documentElement.style.setProperty('--image-height', imageHeight);
             
             document.getElementById('zoomIndicator').textContent = gridColumns;
@@ -2318,19 +3965,129 @@
         if (savedZoom) {
             gridColumns = parseInt(savedZoom);
             document.documentElement.style.setProperty('--grid-columns', gridColumns);
-            // Auch Bildh&ouml;he setzen
-            const imageHeights = { 6: '180px', 5: '200px', 4: '240px', 3: '320px', 2: '420px', 1: '550px' };
-            document.documentElement.style.setProperty('--image-height', imageHeights[gridColumns] || '240px');
+            // Auch Bildhöhe setzen
+            const imageHeights = { 6: '270px', 5: '300px', 4: '360px', 3: '480px', 2: '600px', 1: '750px' };
+            document.documentElement.style.setProperty('--image-height', imageHeights[gridColumns] || '360px');
         }
 
         const PREVIEW_MARKETS = ['NASDAQ', 'FOREX', 'DAX'];
 
+        // ==================== TRADING HOURS ====================
+        function updateTradingHours() {
+            const now = new Date();
+            const utcHour = now.getUTCHours();
+            const utcMinute = now.getUTCMinutes();
+            const utcDay = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
+            const isWeekend = utcDay === 0 || utcDay === 6;
+            
+            // XETRA (Frankfurt): 08:00-17:30 CET/CEST = 07:00-16:30 UTC (winter) or 06:00-15:30 UTC (summer)
+            // Simplified: 07:00-16:30 UTC, Pre-market 06:00-07:00 UTC
+            const xetraPreStart = 6;
+            const xetraStart = 7;
+            const xetraEnd = 16.5; // 16:30
+            updateMarketStatus('xetraStatus', utcHour, utcMinute, xetraPreStart, xetraStart, xetraEnd, isWeekend);
+            
+            // NYSE/NASDAQ: 09:30-16:00 EST = 14:30-21:00 UTC (winter) or 13:30-20:00 UTC (summer)
+            // Pre-market: 04:00 EST = 09:00 UTC
+            // Simplified: 14:30-21:00 UTC, Pre-market 09:00-14:30 UTC
+            const nysePreStart = 9;
+            const nyseStart = 14.5; // 14:30
+            const nyseEnd = 21;
+            updateMarketStatus('nyseStatus', utcHour, utcMinute, nysePreStart, nyseStart, nyseEnd, isWeekend);
+            
+            // Forex: 22:00 Sunday UTC - 22:00 Friday UTC (24/5)
+            const forexEl = document.getElementById('forexStatus');
+            if (forexEl) {
+                // Forex is open from Sunday 22:00 UTC to Friday 22:00 UTC
+                const isForexOpen = !((utcDay === 6) || (utcDay === 0 && utcHour < 22) || (utcDay === 5 && utcHour >= 22));
+                forexEl.className = 'market-status ' + (isForexOpen ? 'open' : 'closed');
+                forexEl.querySelector('.market-state').textContent = '';
+            }
+            
+            // Krypto: 24/7
+            const kryptoEl = document.getElementById('kryptoStatus');
+            if (kryptoEl) {
+                kryptoEl.className = 'market-status open';
+                kryptoEl.querySelector('.market-state').textContent = '';
+            }
+            
+            // Asien (Tokyo, Shanghai, Hong Kong)
+            // Tokyo: 09:00-15:00 JST (UTC+9) = 00:00-06:00 UTC
+            // Shanghai: 09:30-15:00 CST (UTC+8) = 01:30-07:00 UTC  
+            // Hong Kong: 09:30-16:00 HKT (UTC+8) = 01:30-08:00 UTC
+            // Combined Asian session: ~00:00-08:00 UTC
+            // Pre-market starts at 23:00 UTC (which is Monday 8am in Tokyo)
+            const asienEl = document.getElementById('asienStatus');
+            if (asienEl) {
+                const utcTime = utcHour + utcMinute / 60;
+                let asienStatus = 'closed';
+                let asienText = '';
+                
+                // Samstag: komplett geschlossen
+                if (utcDay === 6) {
+                    asienStatus = 'closed';
+                    asienText = '';
+                }
+                // Sonntag: bis 22:59 geschlossen, ab 23:00 Pre-Market
+                else if (utcDay === 0) {
+                    if (utcTime >= 23) {
+                        asienStatus = 'pre-market';
+                        asienText = 'Pre-Market';
+                    }
+                }
+                // Montag - Freitag
+                else {
+                    // 00:00-08:00 UTC: Hauptsession (Asien offen)
+                    if (utcTime >= 0 && utcTime < 8) {
+                        asienStatus = 'open';
+                        asienText = '';
+                    }
+                    // 23:00-23:59 UTC: Pre-Market für nächsten Tag
+                    // (außer Freitag Abend, da ist Samstag in Asien)
+                    else if (utcTime >= 23 && utcDay !== 5) {
+                        asienStatus = 'pre-market';
+                        asienText = 'Pre-Market';
+                    }
+                }
+                
+                asienEl.className = 'market-status ' + asienStatus;
+                asienEl.querySelector('.market-state').textContent = asienText;
+            }
+        }
+        
+        function updateMarketStatus(elementId, utcHour, utcMinute, preStart, start, end, isWeekend) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            const utcTime = utcHour + utcMinute / 60;
+            let status = 'closed';
+            let text = '';
+            
+            if (!isWeekend) {
+                if (utcTime >= start && utcTime < end) {
+                    status = 'open';
+                    text = '';
+                } else if (utcTime >= preStart && utcTime < start) {
+                    status = 'pre-market';
+                    text = 'Pre-Market';
+                }
+            }
+            
+            el.className = 'market-status ' + status;
+            el.querySelector('.market-state').textContent = text;
+        }
+
         // ==================== INIT ====================
         async function init() {
             updateGridZoom(); // Zoom-Indikator setzen
+            updateTradingHours(); // Handelszeiten aktualisieren
+            setInterval(updateTradingHours, 60000); // Jede Minute aktualisieren
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
+            if (currentUser && (isSubscribed || isAdmin)) {
+                await fetchUserAlerts();
+            }
             updateStats();
             renderSignals();
             setupEventListeners();
@@ -2368,7 +4125,7 @@
         async function checkSubscription() {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.id}&status=eq.active&select=*`,
+                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.email}&status=eq.active&select=*`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -2388,13 +4145,8 @@
 
         async function checkAdminStatus() {
             try {
-                console.log('=== ADMIN CHECK DEBUG ===');
-                console.log('Current User ID:', currentUser.id);
-                console.log('Current User Email:', currentUser.email);
-                
-                // Check admins table by user_id only
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=*`,
+                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.email}&select=*`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -2405,23 +4157,9 @@
                 
                 if (response.ok) {
                     const admins = await response.json();
-                    console.log('Admins found:', admins);
-                    
-                    if (admins.length > 0) {
-                        isAdmin = true;
-                        console.log('✅ Admin status granted');
-                    } else {
-                        console.log('❌ No admin access');
-                        console.log('💡 Tipp: F&uuml;ge deinen User in Supabase zur admins-Tabelle hinzu:');
-                        console.log(`   INSERT INTO admins (user_id) VALUES ('${currentUser.id}');`);
-                        isAdmin = false;
-                    }
-                } else {
-                    console.error('Failed to check admin status:', response.status);
-                    isAdmin = false;
+                    isAdmin = admins.length > 0;
                 }
             } catch (e) {
-                console.error('Admin check error:', e);
                 isAdmin = false;
             }
         }
@@ -2492,7 +4230,7 @@
             errorEl.textContent = '';
             
             if (!email || !password) {
-                errorEl.textContent = 'Bitte alle Felder ausfllen';
+                errorEl.textContent = 'Bitte alle Felder ausfüllen';
                 return;
             }
             
@@ -2526,7 +4264,7 @@
                     renderSignals();
                 } else {
                     errorEl.style.color = 'var(--accent-green)';
-                    errorEl.textContent = 'âœ” Best&auml;tigungs-E-Mail gesendet!';
+                    errorEl.textContent = '✓ Bestätigungs-E-Mail gesendet!';
                 }
                 
             } catch (error) {
@@ -2550,8 +4288,13 @@
             const initial = currentUser.email ? currentUser.email.charAt(0).toUpperCase() : '?';
             
             let statusText = 'Free Account';
-            if (isAdmin) statusText = 'ðŸ›¡ Admin';
-            else if (isSubscribed) statusText = 'âœ” Premium';
+            if (isAdmin) statusText = '🛡 Admin';
+            else if (isSubscribed) statusText = '✓ Premium';
+            
+            // Alert count badge (nur für Premium)
+            const alertCountBadge = (isSubscribed || isAdmin) && userAlerts.length > 0 
+                ? `<span class="dropdown-item-badge">${userAlerts.length}</span>` 
+                : '';
             
             headerRight.innerHTML = `
                 <div class="live-indicator">
@@ -2567,8 +4310,10 @@
                         </div>
                     </div>
                     <div class="user-dropdown">
-                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">ðŸ’³ Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">â­ Premium werden</div>'}
-                        <div class="dropdown-item" onclick="handleLogout()">ðŸšª Ausloggen</div>
+                        ${(isSubscribed || isAdmin) ? `<div class="dropdown-item" onclick="showMyAlerts()">🔔 Meine Alarme ${alertCountBadge}</div>` : ''}
+                        ${(isSubscribed || isAdmin) ? '<div class="dropdown-divider"></div>' : ''}
+                        ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
+                        <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
                     </div>
                 </div>
             `;
@@ -2581,11 +4326,21 @@
                 // Update header
                 document.getElementById('previewHeader').innerHTML = `
                     <div class="section-title">
-                        ðŸ¦Š Alle Signale
+                        🦊 Alle Signale
                         <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
                     </div>
-                    <div class="section-subtitle">"” Du hast Zugriff auf alle Signale</div>
+                    <div class="section-subtitle">— Du hast Zugriff auf alle Signale</div>
                 `;
+                
+                // Hide hero CTA and social proof for premium users
+                const heroCTA = document.getElementById('heroCTA');
+                if (heroCTA) {
+                    heroCTA.style.display = 'none';
+                }
+                const heroSocialProof = document.getElementById('heroSocialProof');
+                if (heroSocialProof) {
+                    heroSocialProof.style.display = 'none';
+                }
             }
             
             // Show admin badge
@@ -2593,6 +4348,34 @@
                 document.getElementById('adminBadge').classList.add('visible');
             } else {
                 document.getElementById('adminBadge').classList.remove('visible');
+            }
+            
+            // Mobile CTA verstecken für eingeloggte User
+            const mobileCTA = document.getElementById('mobileCTA');
+            if (mobileCTA) {
+                mobileCTA.classList.remove('visible');
+            }
+            
+            // Mobile Menu für eingeloggte User aktualisieren
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.innerHTML = `
+                    <div class="mobile-menu-item" style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar" style="width:36px;height:36px;background:var(--accent-green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">${initial}</div>
+                        <div>
+                            <div style="font-weight:600;">${currentUser.email}</div>
+                            <div style="font-size:12px;color:var(--accent-green);">${statusText}</div>
+                        </div>
+                    </div>
+                    <div class="mobile-menu-divider"></div>
+                    <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
+                    <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
+                    <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
+                    ${(isSubscribed || isAdmin) ? '<div class="mobile-menu-item" onclick="showMyAlerts(); toggleMobileMenu();">&#128276; Meine Alarme</div>' : ''}
+                    <div class="mobile-menu-divider"></div>
+                    ${isSubscribed ? '<button class="mobile-menu-btn" onclick="manageSubscription(); toggleMobileMenu();">&#128179; Abo verwalten</button>' : '<button class="mobile-menu-btn primary" onclick="showCheckout(); toggleMobileMenu();">&#11088; Premium werden</button>'}
+                    <button class="mobile-menu-btn" onclick="handleLogout(); toggleMobileMenu();">&#128682; Ausloggen</button>
+                `;
             }
         }
 
@@ -2604,7 +4387,7 @@
                     <span>LIVE</span>
                 </div>
                 <button class="btn btn-outline" onclick="showLogin()">Login</button>
-                <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90&euro;/Monat</button>
+                <button class="btn btn-primary" onclick="showCheckout()">Abo 19,90€/Monat</button>
             `;
             
             document.getElementById('tabsSection').classList.remove('visible');
@@ -2612,18 +4395,54 @@
             document.getElementById('successStatsBar').classList.remove('visible');
             document.getElementById('adminBadge').classList.remove('visible');
             
+            // Mobile CTA anzeigen für Gäste (nur auf Mobile)
+            const mobileCTA = document.getElementById('mobileCTA');
+            if (mobileCTA && window.innerWidth <= 768) {
+                mobileCTA.classList.add('visible');
+            }
+            
+            // Mobile Menu für Gäste zurücksetzen
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.innerHTML = `
+                    <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
+                    <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
+                    <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
+                    <div class="mobile-menu-divider"></div>
+                    <button class="mobile-menu-btn" onclick="showLogin(); toggleMobileMenu();">Login</button>
+                    <button class="mobile-menu-btn primary" onclick="showCheckout(); toggleMobileMenu();">Premium 19,90€/Monat</button>
+                `;
+            }
+            
             document.getElementById('previewHeader').innerHTML = `
                 <div class="section-title">
-                    ðŸŽ Kostenlose Vorschau
+                    🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
-                <div class="section-subtitle">"” Sieh dir 3 echte Signale an</div>
+                <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
             `;
         }
 
         function toggleUserMenu() {
             document.querySelector('.user-menu-container').classList.toggle('open');
         }
+
+        function toggleMobileMenu() {
+            const burger = document.querySelector('.burger-menu');
+            const menu = document.getElementById('mobileMenu');
+            burger.classList.toggle('active');
+            menu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            if (menu && burger && !menu.contains(e.target) && !burger.contains(e.target)) {
+                menu.classList.remove('active');
+                burger.classList.remove('active');
+            }
+        });
 
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
@@ -2676,9 +4495,27 @@
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
             document.getElementById('todayCount').textContent = todaySignals.length;
             
+            // Add pulse animation if there are new signals today
+            const newTodayCard = document.getElementById('newTodayCard');
+            if (newTodayCard) {
+                if (todaySignals.length > 0) {
+                    newTodayCard.classList.add('has-new');
+                } else {
+                    newTodayCard.classList.remove('has-new');
+                }
+            }
+            
             // New count for tab
             const newSignals = allSignals.filter(s => new Date(s.created_at) >= twoHoursAgo);
             document.getElementById('newCount').textContent = newSignals.length;
+            
+            // Active count for tab
+            const activeSignals = allSignals.filter(s => s.status === 'active');
+            document.getElementById('activeCount').textContent = activeSignals.length;
+            
+            // Pending count for tab
+            const pendingSignals = allSignals.filter(s => s.status === 'pending');
+            document.getElementById('pendingCount').textContent = pendingSignals.length;
             
             // Success tab count
             document.getElementById('successTabCount').textContent = completedSignals.length;
@@ -2709,6 +4546,10 @@
             // NEU: Header Success Rate aktualisieren
             const headerValue = document.getElementById('headerSuccessValue');
             if(headerValue) headerValue.textContent = rate + '%';
+            
+            // Mobile Menu Success Rate aktualisieren
+            const mobileSuccessRate = document.querySelector('#mobileSuccessRate .success-value');
+            if(mobileSuccessRate) mobileSuccessRate.textContent = rate + '%';
         }
 
         // ==================== RENDERING ====================
@@ -2741,8 +4582,8 @@
                 grid.innerHTML = signals.length > 0 
                     ? signals.map(s => renderCompletedSignalCard(s)).join('')
                     : `<div class="no-results">
-                        <div class="no-results-icon">ðŸ”</div>
-                        <h3>${searchTerm ? `Keine Ergebnisse f&uuml;r "${searchTerm}"` : 'Keine abgeschlossenen Trades'}</h3>
+                        <div class="no-results-icon">🔍</div>
+                        <h3>${searchTerm ? `Keine Ergebnisse für "${searchTerm}"` : 'Keine abgeschlossenen Trades'}</h3>
                         <p>${searchTerm ? 'Versuche einen anderen Suchbegriff' : 'Noch keine Trades abgeschlossen'}</p>
                       </div>`;
             } else {
@@ -2751,9 +4592,9 @@
                 grid.innerHTML = signals.length > 0
                     ? signals.map(s => renderSignalCard(s, true, false)).join('')
                     : `<div class="no-results">
-                        <div class="no-results-icon">ðŸ”</div>
-                        <h3>${searchTerm ? `Keine Signale f&uuml;r "${searchTerm}"` : 'Keine Signale gefunden'}</h3>
-                        <p>${searchTerm ? 'Versuche einen anderen Suchbegriff oder &auml;ndere die Filter' : '&Auml;ndere die Filter um mehr Signale zu sehen'}</p>
+                        <div class="no-results-icon">🔍</div>
+                        <h3>${searchTerm ? `Keine Signale für "${searchTerm}"` : 'Keine Signale gefunden'}</h3>
+                        <p>${searchTerm ? 'Versuche einen anderen Suchbegriff oder ändere die Filter' : 'Ändere die Filter um mehr Signale zu sehen'}</p>
                       </div>`;
             }
             
@@ -2764,18 +4605,18 @@
             if (currentTab === 'success') {
                 header.innerHTML = `
                     <div class="section-title">
-                        ðŸ† Abgeschlossene Trades
+                        🏆 Abgeschlossene Trades
                         <span class="section-badge" style="background: var(--accent-gold);">Success</span>
                     </div>
-                    <div class="section-subtitle">"” ${signals.length} Trades${searchTerm ? ` f&uuml;r "${searchTerm}"` : ''}</div>
+                    <div class="section-subtitle">— ${signals.length} Trades${searchTerm ? ` für "${searchTerm}"` : ''}</div>
                 `;
             } else {
                 header.innerHTML = `
                     <div class="section-title">
-                        ðŸ¦Š ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
+                        🦊 ${currentTab === 'all' ? 'Alle' : currentTab === 'new' ? 'Neue' : currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Signale
                         <span class="section-badge" style="background: ${isAdmin ? 'var(--accent-gold)' : 'var(--accent-green)'};">${isAdmin ? 'Admin' : 'Premium'}</span>
                     </div>
-                    <div class="section-subtitle">"” ${signals.length} Signale${searchTerm ? ` f&uuml;r "${searchTerm}"` : ''}</div>
+                    <div class="section-subtitle">— ${signals.length} Signale${searchTerm ? ` für "${searchTerm}"` : ''}</div>
                 `;
             }
         }
@@ -2795,8 +4636,8 @@
         }
 
         function getFilteredSignals() {
-            const market = document.getElementById('filterMarket').value;
-            const timeframe = document.getElementById('filterTimeframe').value;
+            const market = currentMarketFilter;
+            const timeframe = currentTimeframeFilter;
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             const now = new Date();
             const twoHoursAgo = new Date(now - 2 * 60 * 60 * 1000);
@@ -2806,13 +4647,17 @@
             // Tab filter
             if (currentTab === 'new') {
                 filtered = filtered.filter(s => new Date(s.created_at) >= twoHoursAgo);
+            } else if (currentTab === 'active') {
+                filtered = filtered.filter(s => s.status === 'active');
+            } else if (currentTab === 'pending') {
+                filtered = filtered.filter(s => s.status === 'pending');
             } else if (currentTab === 'bullish') {
                 filtered = filtered.filter(s => s.direction === 'BULLISH');
             } else if (currentTab === 'bearish') {
                 filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
-            // Dropdown filters
+            // Button filters
             if (market) filtered = filtered.filter(s => s.market === market);
             if (timeframe) filtered = filtered.filter(s => s.timeframe === timeframe);
             
@@ -2828,8 +4673,8 @@
         }
 
         function getFilteredCompletedSignals() {
-            const market = document.getElementById('filterMarket').value;
-            const timeframe = document.getElementById('filterTimeframe').value;
+            const market = currentMarketFilter;
+            const timeframe = currentTimeframeFilter;
             const searchTerm = document.getElementById('searchSymbol').value.toLowerCase().trim();
             
             let filtered = [...completedSignals];
@@ -2867,18 +4712,30 @@
                 badge = '<div class="new-badge">NEU</div>';
             }
             
-            // Admin controls (nur f&uuml;r Admins sichtbar)
+            // Admin controls (nur für Admins sichtbar)
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
-                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzuf&uuml;gen">âœ”</button>
-                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal lschen">Ã—</button>
+                    <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✓</button>
+                    <button class="admin-btn admin-btn-blacklist" data-blacklist-signal="${signal.id}" data-wedge-id="${signal.wedge_id || ''}" title="Blacklist (nie wieder anzeigen)">🚫</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
+            ` : '';
+            
+            // Alert Bell (nur für Premium-User sichtbar)
+            const hasAlert = userAlerts.some(a => a.symbol === signal.symbol);
+            const alertBell = (isSubscribed || isAdmin) && isVisible ? `
+                <button class="alert-bell ${hasAlert ? 'active' : ''}" 
+                        onclick="event.stopPropagation(); openAlertModal('${signal.symbol}', '${(signal.symbol_name || signal.symbol).replace(/'/g, "\\'")}', '${signal.market}')"
+                        title="${hasAlert ? 'Alert bearbeiten' : 'Alert einrichten'}">
+                    🔔
+                </button>
             ` : '';
             
             return `
                 <div class="signal-card ${isNew ? 'is-new' : ''}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
                     ${badge}
                     ${adminControls}
+                    ${alertBell}
                     <div class="signal-image-container">
                         <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
@@ -2899,13 +4756,13 @@
                             </div>
                         </div>
                         <div class="price-grid">
-                            <div class="price-item"><div class="price-label">Entry</div><div class="price-value">${formatPrice(signal.entry)}</div></div>
-                            <div class="price-item"><div class="price-label">Stop</div><div class="price-value">${formatPrice(signal.sl)}</div></div>
-                            <div class="price-item"><div class="price-label">TP1</div><div class="price-value">${formatPrice(signal.tp1)}</div></div>
-                            <div class="price-item"><div class="price-label">TP2</div><div class="price-value">${formatPrice(signal.tp2)}</div></div>
-                            <div class="price-item"><div class="price-label">TP3</div><div class="price-value">${formatPrice(signal.tp3)}</div></div>
+                            <div class="price-item item-entry"><div class="price-label">Entry</div><div class="price-value price-entry">${formatPrice(signal.entry)}</div></div>
+                            <div class="price-item item-sl"><div class="price-label">Stop</div><div class="price-value price-sl">${formatPrice(signal.sl)}</div></div>
+                            <div class="price-item item-tp1"><div class="price-label">TP1</div><div class="price-value price-tp1">${formatPrice(signal.tp1)}</div></div>
+                            <div class="price-item item-tp2"><div class="price-label">TP2</div><div class="price-value price-tp2">${formatPrice(signal.tp2)}</div></div>
+                            <div class="price-item item-tp3"><div class="price-label">TP3</div><div class="price-value price-tp3">${formatPrice(signal.tp3)}</div></div>
                         </div>
-                        <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '"”'}</span></div>
+                        <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
                     </div>
                 </div>
             `;
@@ -2917,27 +4774,27 @@
             
             // Determine result styling
             let resultClass = 'sl';
-            let resultBadge = 'ðŸ›‘ SL';
+            let resultBadge = '🛑 SL';
             let cardClass = 'is-failed';
             
             if (signal.tp3_hit) {
                 resultClass = 'tp3';
-                resultBadge = 'ðŸ† TP3';
+                resultBadge = '🏆 TP3';
                 cardClass = 'is-success tp3';
             } else if (signal.tp2_hit) {
                 resultClass = 'tp2';
-                resultBadge = 'âœ… TP2';
+                resultBadge = '✗ TP2';
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
-                resultBadge = 'ðŸ“ˆ TP1';
+                resultBadge = '📈 TP1';
                 cardClass = 'is-success tp1';
             }
             
             // Admin delete button for completed signals
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">Ã—</button>
+                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
                 </div>
             ` : '';
             
@@ -2946,7 +4803,7 @@
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${adminControls}
                     <div class="signal-image-container">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">ðŸ“ˆ</div>'}
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -2968,25 +4825,25 @@
                             <div class="price-item">
                                 <div class="price-label">TP1</div>
                                 <div class="price-value" style="color: ${signal.tp1_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp1_hit ? 'âœ”' : '"”'}
+                                    ${signal.tp1_hit ? '✓' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
                                 <div class="price-label">TP2</div>
                                 <div class="price-value" style="color: ${signal.tp2_hit ? 'var(--accent-green)' : 'var(--text-secondary)'}">
-                                    ${signal.tp2_hit ? 'âœ”' : '"”'}
+                                    ${signal.tp2_hit ? '✓' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
                                 <div class="price-label">TP3</div>
                                 <div class="price-value" style="color: ${signal.tp3_hit ? 'var(--accent-gold)' : 'var(--text-secondary)'}">
-                                    ${signal.tp3_hit ? 'ðŸ†' : '"”'}
+                                    ${signal.tp3_hit ? '🏆' : '—'}
                                 </div>
                             </div>
                             <div class="price-item">
                                 <div class="price-label">SL</div>
                                 <div class="price-value" style="color: ${signal.sl_hit ? 'var(--accent-red)' : 'var(--text-secondary)'}">
-                                    ${signal.sl_hit ? 'âœ—' : '"”'}
+                                    ${signal.sl_hit ? '✔' : '—'}
                                 </div>
                             </div>
                         </div>
@@ -2996,6 +4853,324 @@
                     </div>
                 </div>
             `;
+        }
+
+        // ==================== ALERT SYSTEM ====================
+        
+        // Alerts vom Server laden
+        async function fetchUserAlerts() {
+            if (!currentUser) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/user_alerts?user_id=eq.${currentUser.id}&select=*`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    userAlerts = await response.json();
+                    console.log('Loaded alerts:', userAlerts.length);
+                }
+            } catch (e) {
+                console.error('Error loading alerts:', e);
+                userAlerts = [];
+            }
+        }
+        
+        // Alert Modal öffnen
+        function openAlertModal(symbol, symbolName, market) {
+            if (!currentUser || (!isSubscribed && !isAdmin)) {
+                showToast('⚠️ Alarme sind nur für Premium-User verfügbar', 'error');
+                return;
+            }
+            
+            currentAlertSymbol = symbol;
+            currentAlertSymbolName = symbolName;
+            currentAlertMarket = market;
+            
+            // Prüfen ob bereits ein Alert existiert
+            const existingAlert = userAlerts.find(a => a.symbol === symbol);
+            currentAlertId = existingAlert ? existingAlert.id : null;
+            
+            // Modal-Titel setzen
+            document.getElementById('alertModalTitle').textContent = existingAlert ? 'Alert bearbeiten' : 'Alert einrichten';
+            document.getElementById('alertModalSubtitle').textContent = symbolName;
+            
+            // Alert Count aktualisieren
+            document.getElementById('alertCount').textContent = userAlerts.length;
+            
+            // Checkboxen setzen
+            const options = document.querySelectorAll('.alert-option');
+            options.forEach(opt => {
+                const alertType = opt.dataset.alert;
+                let isSelected = true; // Default: alle an
+                
+                if (existingAlert) {
+                    // Bestehende Einstellungen laden
+                    switch(alertType) {
+                        case 'new_signal': isSelected = existingAlert.alert_new_signal; break;
+                        case 'entry': isSelected = existingAlert.alert_entry; break;
+                        case 'tp1': isSelected = existingAlert.alert_tp1; break;
+                        case 'tp2': isSelected = existingAlert.alert_tp2; break;
+                        case 'tp3': isSelected = existingAlert.alert_tp3; break;
+                        case 'sl': isSelected = existingAlert.alert_sl; break;
+                    }
+                }
+                
+                if (isSelected) {
+                    opt.classList.add('selected');
+                    opt.querySelector('.alert-checkbox').textContent = '✓';
+                } else {
+                    opt.classList.remove('selected');
+                    opt.querySelector('.alert-checkbox').textContent = '';
+                }
+            });
+            
+            // Footer-Buttons anpassen
+            const footer = document.getElementById('alertModalFooter');
+            if (existingAlert) {
+                footer.innerHTML = `
+                    <button class="alert-btn alert-btn-danger" onclick="deleteAlert()">🗑 Löschen</button>
+                    <button class="alert-btn alert-btn-secondary" onclick="closeAlertModal()">Abbrechen</button>
+                    <button class="alert-btn alert-btn-primary" onclick="saveAlert()">💾 Speichern</button>
+                `;
+            } else {
+                // Prüfen ob Limit erreicht
+                if (userAlerts.length >= MAX_ALERTS) {
+                    footer.innerHTML = `
+                        <button class="alert-btn alert-btn-secondary" onclick="closeAlertModal()">Schließen</button>
+                    `;
+                    showToast('⚠️ Maximum von 15 Alerts erreicht', 'error');
+                } else {
+                    footer.innerHTML = `
+                        <button class="alert-btn alert-btn-secondary" onclick="closeAlertModal()">Abbrechen</button>
+                        <button class="alert-btn alert-btn-primary" onclick="saveAlert()">🔔 Alert speichern</button>
+                    `;
+                }
+            }
+            
+            document.getElementById('alertModal').classList.add('active');
+        }
+        
+        function closeAlertModal() {
+            document.getElementById('alertModal').classList.remove('active');
+            currentAlertSymbol = null;
+            currentAlertSymbolName = null;
+            currentAlertMarket = null;
+            currentAlertId = null;
+        }
+        
+        function toggleAlertOption(element) {
+            element.classList.toggle('selected');
+            const checkbox = element.querySelector('.alert-checkbox');
+            checkbox.textContent = element.classList.contains('selected') ? '✓' : '';
+        }
+        
+        // Alert speichern
+        async function saveAlert() {
+            if (!currentAlertSymbol || !currentUser) return;
+            
+            // Mindestens eine Option muss ausgewählt sein
+            const selectedOptions = document.querySelectorAll('.alert-option.selected');
+            if (selectedOptions.length === 0) {
+                showToast('⚠️ Wähle mindestens eine Benachrichtigung aus', 'error');
+                return;
+            }
+            
+            // Optionen sammeln
+            const alertData = {
+                user_id: currentUser.id,
+                symbol: currentAlertSymbol,
+                symbol_name: currentAlertSymbolName,
+                market: currentAlertMarket,
+                alert_new_signal: false,
+                alert_entry: false,
+                alert_tp1: false,
+                alert_tp2: false,
+                alert_tp3: false,
+                alert_sl: false
+            };
+            
+            selectedOptions.forEach(opt => {
+                const type = opt.dataset.alert;
+                alertData[`alert_${type}`] = true;
+            });
+            
+            try {
+                let response;
+                
+                if (currentAlertId) {
+                    // Update
+                    response = await fetch(
+                        `${SUPABASE_URL}/rest/v1/user_alerts?id=eq.${currentAlertId}`,
+                        {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(alertData)
+                        }
+                    );
+                } else {
+                    // Insert
+                    response = await fetch(
+                        `${SUPABASE_URL}/rest/v1/user_alerts`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(alertData)
+                        }
+                    );
+                }
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    if (currentAlertId) {
+                        // Update in local array
+                        const idx = userAlerts.findIndex(a => a.id === currentAlertId);
+                        if (idx !== -1) userAlerts[idx] = result[0];
+                        showToast('✓ Alert aktualisiert', 'success');
+                    } else {
+                        // Add to local array
+                        userAlerts.push(result[0]);
+                        showToast('✓ Alert gespeichert', 'success');
+                    }
+                    
+                    closeAlertModal();
+                    renderSignals(); // Glocken-Status aktualisieren
+                    updateUIForUser(); // Badge im Dropdown aktualisieren
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Fehler beim Speichern');
+                }
+            } catch (error) {
+                console.error('Save alert error:', error);
+                showToast('❌ ' + error.message, 'error');
+            }
+        }
+        
+        // Alert löschen
+        async function deleteAlert() {
+            if (!currentAlertId) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/user_alerts?id=eq.${currentAlertId}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (response.ok || response.status === 204) {
+                    // Remove from local array
+                    userAlerts = userAlerts.filter(a => a.id !== currentAlertId);
+                    showToast('✓ Alert gelöscht', 'success');
+                    closeAlertModal();
+                    renderSignals();
+                    updateUIForUser();
+                } else {
+                    throw new Error('Fehler beim Löschen');
+                }
+            } catch (error) {
+                console.error('Delete alert error:', error);
+                showToast('❌ ' + error.message, 'error');
+            }
+        }
+        
+        // Meine Alarme anzeigen
+        function showMyAlerts() {
+            const list = document.getElementById('myAlertsList');
+            document.getElementById('myAlertsCount').textContent = userAlerts.length;
+            
+            if (userAlerts.length === 0) {
+                list.innerHTML = `
+                    <div class="no-alerts">
+                        <div class="no-alerts-icon">🔔</div>
+                        <h3>Keine Alarme eingerichtet</h3>
+                        <p>Klicke auf die Glocke bei einem Signal um benachrichtigt zu werden.</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = userAlerts.map(alert => {
+                    const badges = [];
+                    if (alert.alert_new_signal) badges.push('<span class="my-alert-badge">📢 Neu</span>');
+                    if (alert.alert_entry) badges.push('<span class="my-alert-badge entry">🎯 Entry</span>');
+                    if (alert.alert_tp1) badges.push('<span class="my-alert-badge tp">TP1</span>');
+                    if (alert.alert_tp2) badges.push('<span class="my-alert-badge tp">TP2</span>');
+                    if (alert.alert_tp3) badges.push('<span class="my-alert-badge tp">🏆 TP3</span>');
+                    if (alert.alert_sl) badges.push('<span class="my-alert-badge sl">🛑 SL</span>');
+                    
+                    return `
+                        <div class="my-alert-item">
+                            <div class="my-alert-icon">🔔</div>
+                            <div class="my-alert-info">
+                                <div class="my-alert-symbol">${alert.symbol_name || alert.symbol}</div>
+                                <div class="my-alert-badges">${badges.join('')}</div>
+                            </div>
+                            <div class="my-alert-actions">
+                                <button class="my-alert-btn" onclick="editAlertFromList('${alert.symbol}', '${(alert.symbol_name || alert.symbol).replace(/'/g, "\\'")}', '${alert.market}')" title="Bearbeiten">✏️</button>
+                                <button class="my-alert-btn delete" onclick="deleteAlertFromList('${alert.id}')" title="Löschen">🗑</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('myAlertsModal').classList.add('active');
+            // User dropdown schließen
+            document.querySelector('.user-menu-container')?.classList.remove('open');
+        }
+        
+        function closeMyAlertsModal() {
+            document.getElementById('myAlertsModal').classList.remove('active');
+        }
+        
+        function editAlertFromList(symbol, symbolName, market) {
+            closeMyAlertsModal();
+            openAlertModal(symbol, symbolName, market);
+        }
+        
+        async function deleteAlertFromList(alertId) {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/user_alerts?id=eq.${alertId}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (response.ok || response.status === 204) {
+                    userAlerts = userAlerts.filter(a => a.id !== alertId);
+                    showToast('✓ Alert gelöscht', 'success');
+                    showMyAlerts(); // Liste aktualisieren
+                    renderSignals();
+                    updateUIForUser();
+                }
+            } catch (error) {
+                showToast('❌ Fehler beim Löschen', 'error');
+            }
         }
 
         // ==================== HELPERS ====================
@@ -3019,7 +5194,7 @@
         }
 
         function formatPrice(price) {
-            return price ? parseFloat(price).toFixed(2) : '"”';
+            return price ? parseFloat(price).toFixed(2) : '—';
         }
 
         function formatDate(dateStr) {
@@ -3038,9 +5213,25 @@
                 });
             });
             
-            // Filters
-            document.getElementById('filterMarket').addEventListener('change', renderSignals);
-            document.getElementById('filterTimeframe').addEventListener('change', renderSignals);
+            // Market Filter Buttons
+            document.querySelectorAll('.filter-btn[data-market]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn[data-market]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMarketFilter = btn.dataset.market;
+                    renderSignals();
+                });
+            });
+            
+            // Timeframe Filter Buttons
+            document.querySelectorAll('.filter-btn[data-timeframe]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn[data-timeframe]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentTimeframeFilter = btn.dataset.timeframe;
+                    renderSignals();
+                });
+            });
             
             // Search with debounce
             let searchTimeout;
@@ -3085,6 +5276,14 @@
                     console.log('Success signal clicked:', signalId);
                     showSuccessModal(signalId);
                 }
+                
+                if (e.target.matches('[data-blacklist-signal]')) {
+                    e.stopPropagation();
+                    const signalId = e.target.getAttribute('data-blacklist-signal');
+                    const wedgeId = e.target.getAttribute('data-wedge-id');
+                    console.log('Blacklist signal clicked:', signalId, wedgeId);
+                    showBlacklistModal(signalId, wedgeId);
+                }
             });
         }
 
@@ -3107,9 +5306,39 @@
         let sliderImages = [];
         let sliderCurrentIndex = 0;
         let currentWedgeId = null;
+        
+        // Signal Navigation
+        let currentSignalsList = [];
+        let currentSignalIndex = 0;
 
-        async function openModal(imageUrl, wedgeId = null) {
+        function getDisplayedSignals() {
+            // Hole die aktuell angezeigte Signal-Liste basierend auf Tab und Filtern
+            const isPremium = currentUser && (isSubscribed || isAdmin);
+            
+            if (!isPremium) {
+                return getPreviewSignals();
+            }
+            
+            if (currentTab === 'success') {
+                return getFilteredCompletedSignals();
+            }
+            
+            return getFilteredSignals();
+        }
+
+        async function openModal(imageUrl, wedgeId = null, signalData = null) {
             if (!imageUrl) return;
+            
+            // Aktualisiere Signal-Liste
+            currentSignalsList = getDisplayedSignals();
+            
+            // Finde den Index des aktuellen Signals
+            if (wedgeId) {
+                currentSignalIndex = currentSignalsList.findIndex(s => s.wedge_id === wedgeId);
+                if (currentSignalIndex === -1) currentSignalIndex = 0;
+            } else {
+                currentSignalIndex = 0;
+            }
             
             currentWedgeId = wedgeId;
             sliderImages = [{ url: imageUrl, scanned_at: null }];
@@ -3117,7 +5346,18 @@
             
             // Zeige erstmal das aktuelle Bild
             updateSliderDisplay();
+            updateSignalNavDisplay();
             document.getElementById('imageModal').classList.add('active');
+            
+            // Zeige Swipe-Hint auf Mobile (nur beim ersten Mal)
+            if ('ontouchstart' in window && !localStorage.getItem('swipeHintShown')) {
+                const hint = document.getElementById('swipeHint');
+                if (hint) {
+                    hint.style.display = 'block';
+                    localStorage.setItem('swipeHintShown', 'true');
+                    setTimeout(() => { hint.style.display = 'none'; }, 4000);
+                }
+            }
             
             // Wenn wedge_id vorhanden, lade Bild-Historie
             if (wedgeId) {
@@ -3125,10 +5365,89 @@
             }
         }
 
+        function updateSignalNavDisplay() {
+            const signal = currentSignalsList[currentSignalIndex];
+            const total = currentSignalsList.length;
+            
+            // Counter
+            document.getElementById('signalCounter').textContent = `${currentSignalIndex + 1} / ${total}`;
+            
+            // Signal Info
+            if (signal) {
+                document.getElementById('signalName').textContent = signal.symbol_name || signal.symbol || 'Signal';
+                document.getElementById('signalMarket').textContent = signal.market || '-';
+                document.getElementById('signalTimeframe').textContent = signal.timeframe || '-';
+                
+                const directionEl = document.getElementById('signalDirection');
+                const direction = signal.direction || '';
+                directionEl.textContent = direction;
+                directionEl.className = 'signal-direction ' + (direction === 'BULLISH' ? 'bullish' : 'bearish');
+            }
+            
+            // Navigation Buttons
+            const prevBtn = document.getElementById('signalPrev');
+            const nextBtn = document.getElementById('signalNext');
+            
+            prevBtn.disabled = currentSignalIndex === 0;
+            nextBtn.disabled = currentSignalIndex >= total - 1;
+            
+            // Verstecke wenn nur 1 Signal
+            if (total <= 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                document.getElementById('signalHeaderInfo').style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+                document.getElementById('signalHeaderInfo').style.display = 'flex';
+            }
+        }
+
+        async function prevSignal() {
+            if (currentSignalIndex > 0) {
+                currentSignalIndex--;
+                await loadSignalAtIndex(currentSignalIndex);
+            }
+        }
+
+        async function nextSignal() {
+            if (currentSignalIndex < currentSignalsList.length - 1) {
+                currentSignalIndex++;
+                await loadSignalAtIndex(currentSignalIndex);
+            }
+        }
+
+        async function loadSignalAtIndex(index) {
+            const signal = currentSignalsList[index];
+            if (!signal) return;
+            
+            // Bestimme die Bild-URL
+            let imageUrl;
+            if (currentTab === 'success') {
+                imageUrl = signal.original_path || '';
+            } else {
+                imageUrl = signal.image_path?.startsWith('http') 
+                    ? signal.image_path 
+                    : `${STORAGE_URL}/${signal.image_path}`;
+            }
+            
+            currentWedgeId = signal.wedge_id;
+            sliderImages = [{ url: imageUrl, scanned_at: null }];
+            sliderCurrentIndex = 0;
+            
+            updateSliderDisplay();
+            updateSignalNavDisplay();
+            
+            // Lade Bild-Historie
+            if (signal.wedge_id) {
+                await loadImageHistory(signal.wedge_id, imageUrl);
+            }
+        }
+
         async function loadImageHistory(wedgeId, currentImageUrl) {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at,version&order=scanned_at.desc`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at&order=scanned_at.desc`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -3142,24 +5461,42 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format
+                    // Konvertiere zu unserem Format - schon sortiert (neueste zuerst)
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // Aktuelles Bild an den Anfang (neuestes)
-                    // Stelle sicher dass es nicht doppelt ist
-                    if (sliderImages[0].url !== currentImageUrl) {
-                        sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
+                    // WICHTIG: Prüfe ob currentImageUrl das neueste ist
+                    const currentIsInList = sliderImages.some(img => img.url === currentImageUrl);
+                    
+                    if (!currentIsInList) {
+                        // Current Image ist nicht in der Historie → füge es als NEUESTES hinzu
+                        sliderImages.unshift({ 
+                            url: currentImageUrl, 
+                            scanned_at: new Date().toISOString() 
+                        });
+                    } else {
+                        // Current Image ist in der Liste → stelle sicher es ist an erster Stelle
+                        const currentIndex = sliderImages.findIndex(img => img.url === currentImageUrl);
+                        if (currentIndex > 0) {
+                            // Nicht an erster Stelle → verschiebe es
+                            const currentImg = sliderImages.splice(currentIndex, 1)[0];
+                            sliderImages.unshift(currentImg);
+                        }
                     }
                     
+                    // START IMMER BEIM NEUESTEN BILD (Index 0)
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
                     renderThumbnails();
                 }
             } catch (err) {
                 console.log('Keine Bild-Historie gefunden:', err.message);
+                // Fallback: Nur aktuelles Bild
+                sliderImages = [{ url: currentImageUrl, scanned_at: null }];
+                sliderCurrentIndex = 0;
+                updateSliderDisplay();
             }
         }
 
@@ -3171,13 +5508,31 @@
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen
+            // Datum anzeigen (NEUESTES wird hervorgehoben)
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
-                dateEl.textContent = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                const timeStr = date.toLocaleDateString('de-DE') + ' ' + 
+                               date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                
+                // Markiere das neueste Bild
+                if (sliderCurrentIndex === 0) {
+                    dateEl.innerHTML = `<span style="color: var(--accent-green); font-weight: 700;">🆕 ${timeStr}</span>`;
+                } else {
+                    dateEl.textContent = timeStr;
+                }
             } else {
                 dateEl.textContent = 'Aktuell';
+            }
+            
+            // Admin Delete Button anzeigen
+            const deleteBtn = document.getElementById('sliderDeleteBtn');
+            if (deleteBtn) {
+                if (isAdmin) {
+                    deleteBtn.classList.add('visible');
+                } else {
+                    deleteBtn.classList.remove('visible');
+                }
             }
             
             // Navigation Buttons
@@ -3237,37 +5592,222 @@
             updateSliderDisplay();
         }
 
+        // ==================== ADMIN: DELETE IMAGE ====================
+        async function deleteCurrentImage() {
+            if (!isAdmin) {
+                showToast('✗ Keine Berechtigung', 'error');
+                return;
+            }
+            
+            const img = sliderImages[sliderCurrentIndex];
+            if (!img || !img.url) {
+                showToast('✗ Kein Bild ausgewählt', 'error');
+                return;
+            }
+            
+            // Confirm deletion
+            if (!confirm(`Bild wirklich löschen?\n\n${img.url.split('/').pop()}`)) {
+                return;
+            }
+            
+            try {
+                // 1. Delete from signal_images table
+                const deleteDbResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?image_url=eq.${encodeURIComponent(img.url)}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                
+                console.log('DB delete response:', deleteDbResponse.status);
+                
+                // 2. Extract storage path from URL and delete from storage
+                // URL format: https://xxx.supabase.co/storage/v1/object/public/signals/MARKET/TIMEFRAME/filename.png
+                const storagePathMatch = img.url.match(/\/signals\/(.+)$/);
+                if (storagePathMatch) {
+                    const storagePath = storagePathMatch[1];
+                    console.log('Deleting from storage:', storagePath);
+                    
+                    const deleteStorageResponse = await fetch(
+                        `${SUPABASE_URL}/storage/v1/object/signals/${storagePath}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                    console.log('Storage delete response:', deleteStorageResponse.status);
+                }
+                
+                // 3. Remove from local array
+                sliderImages.splice(sliderCurrentIndex, 1);
+                
+                // 4. Update display
+                if (sliderImages.length === 0) {
+                    closeModal();
+                    showToast('✓ Bild gelöscht', 'success');
+                    // Refresh signals to update the main view
+                    await fetchSignals();
+                    renderSignals();
+                } else {
+                    // Move to previous image if we deleted the last one
+                    if (sliderCurrentIndex >= sliderImages.length) {
+                        sliderCurrentIndex = sliderImages.length - 1;
+                    }
+                    updateSliderDisplay();
+                    renderThumbnails();
+                    showToast('✓ Bild gelöscht', 'success');
+                }
+                
+            } catch (error) {
+                console.error('Delete image error:', error);
+                showToast('✗ Fehler: ' + error.message, 'error');
+            }
+        }
+
         function closeModal() {
             document.getElementById('imageModal').classList.remove('active');
             sliderImages = [];
             sliderCurrentIndex = 0;
             currentWedgeId = null;
+            currentSignalsList = [];
+            currentSignalIndex = 0;
             document.getElementById('sliderThumbnails').innerHTML = '';
+            const hint = document.getElementById('swipeHint');
+            if (hint) hint.style.display = 'none';
         }
 
         // Keyboard Navigation
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('imageModal').classList.contains('active')) return;
             
+            // Image history navigation (left/right)
             if (e.key === 'ArrowLeft') prevImage();
             if (e.key === 'ArrowRight') nextImage();
+            
+            // Signal navigation (up/down)
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSignal();
+            }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                nextSignal();
+            }
+            
             if (e.key === 'Escape') closeModal();
         });
 
-        function showCheckout() {
+        // Touch/Swipe Navigation for Mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        const minSwipeDistance = 50;
+
+        document.getElementById('imageModal').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.getElementById('imageModal').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Bestimme ob horizontal oder vertikal gescrollt wurde
+            const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+            
+            if (isHorizontal && Math.abs(deltaX) > minSwipeDistance) {
+                // Horizontal swipe: Bild-Historie
+                if (deltaX > 0) {
+                    // Swipe rechts = vorheriges Bild (älteres)
+                    prevImage();
+                } else {
+                    // Swipe links = nächstes Bild (neueres)
+                    nextImage();
+                }
+            } else if (!isHorizontal && Math.abs(deltaY) > minSwipeDistance) {
+                // Vertical swipe: Signal wechseln
+                if (deltaY > 0) {
+                    // Swipe runter = vorheriges Signal
+                    prevSignal();
+                } else {
+                    // Swipe hoch = nächstes Signal
+                    nextSignal();
+                }
+            }
+        }
+
+        async function showCheckout() {
             if (!currentUser) {
                 showLogin();
                 return;
             }
-            window.open(`https://wolfewavesignals.lemonsqueezy.com/checkout/buy/c700c757-aa10-4752-a8ab-ad37d664fa4f?checkout[email]=${currentUser.email}`, '_blank');
+            
+            try {
+                showToast('⏳ Checkout wird erstellt...', 'success');
+                
+                const response = await fetch(
+                    `${SUPABASE_URL}/functions/v1/create-checkout`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: currentUser.email
+                        })
+                    }
+                );
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Checkout fehlgeschlagen');
+                }
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Keine Checkout-URL erhalten');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showToast('❌ Fehler beim Checkout: ' + error.message, 'error');
+            }
         }
 
         function manageSubscription() {
-            // Lemon Squeezy Customer Portal - bentigt aktivierten Store
-            // Alternativ: E-Mail an Support
-            const choice = confirm('Abo verwalten / kndigen?\n\nKlicke OK um eine E-Mail an den Support zu senden.\n\nSobald der Shop aktiviert ist, kannst du dein Abo selbst verwalten.');
+            if (!currentUser) {
+                showLogin();
+                return;
+            }
+            
+            // Temporary: Direct email support until Stripe Customer Portal is set up
+            const message = 'Abo verwalten / kündigen\n\n' +
+                          'Aktuell kannst du dein Abo per E-Mail verwalten.\n\n' +
+                          'Möchtest du eine E-Mail an den Support senden?';
+            
+            const choice = confirm(message);
             if (choice) {
-                window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20mchte%20mein%20Abo%20verwalten%2Fkndigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
+                const subject = 'Abo verwalten';
+                const body = `Hallo,\n\nich möchte mein Abo verwalten/kündigen.\n\nMeine E-Mail: ${currentUser.email}\n\nBitte helft mir mit:\n[ ] Abo kündigen\n[ ] Zahlungsmethode ändern\n[ ] Andere Anfrage: ____________\n\nVielen Dank!`;
+                
+                window.location.href = `mailto:support@wolfewavesignals.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             }
         }
 
@@ -3284,8 +5824,17 @@
         document.getElementById('successModal').addEventListener('click', e => {
             if (e.target.id === 'successModal') closeSuccessModal();
         });
+        document.getElementById('blacklistModal').addEventListener('click', e => {
+            if (e.target.id === 'blacklistModal') closeBlacklistModal();
+        });
+        document.getElementById('alertModal').addEventListener('click', e => {
+            if (e.target.id === 'alertModal') closeAlertModal();
+        });
+        document.getElementById('myAlertsModal').addEventListener('click', e => {
+            if (e.target.id === 'myAlertsModal') closeMyAlertsModal();
+        });
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); }
+            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); closeBlacklistModal(); closeAlertModal(); closeMyAlertsModal(); }
         });
         document.getElementById('loginPassword').addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
@@ -3332,7 +5881,7 @@
 
         async function confirmDelete() {
             if (!pendingDeleteId || !isAdmin) {
-                showToast('âœ— Keine Berechtigung', 'error');
+                showToast('✔ Keine Berechtigung', 'error');
                 return;
             }
             
@@ -3368,7 +5917,7 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('âœ” Signal gelscht', 'success');
+                    showToast('✓ Signal gelscht', 'success');
                 } else if (response.status === 404 || responseText === '[]') {
                     // Nicht gefunden - vielleicht schon gelscht
                     if (pendingDeleteType === 'completed') {
@@ -3379,13 +5928,113 @@
                     closeDeleteModal();
                     updateStats();
                     renderSignals();
-                    showToast('âœ” Signal entfernt', 'success');
+                    showToast('✓ Signal entfernt', 'success');
                 } else {
                     throw new Error(`Status ${response.status}: ${responseText}`);
                 }
             } catch (error) {
                 console.error('Delete error:', error);
-                showToast('âœ— ' + error.message, 'error');
+                showToast('✔ ' + error.message, 'error');
+            }
+        }
+
+        // ==================== BLACKLIST FUNCTIONS ====================
+        let pendingBlacklistId = null;
+        let pendingBlacklistWedgeId = null;
+
+        function showBlacklistModal(signalId, wedgeId) {
+            console.log('showBlacklistModal called with:', signalId, wedgeId);
+            const signal = allSignals.find(s => String(s.id) === String(signalId));
+            if (!signal) {
+                console.error('Signal not found for blacklist:', signalId);
+                return;
+            }
+            
+            if (!wedgeId || wedgeId === 'null' || wedgeId === '') {
+                showToast('✗ Fehler: Keine WedgeID verfügbar', 'error');
+                return;
+            }
+            
+            pendingBlacklistId = signalId;
+            pendingBlacklistWedgeId = wedgeId;
+            document.getElementById('blacklistSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
+            document.getElementById('blacklistReason').value = 'EPA zu steil';
+            document.getElementById('blacklistNotes').value = '';
+            document.getElementById('blacklistModal').classList.add('active');
+        }
+
+        function closeBlacklistModal() {
+            document.getElementById('blacklistModal').classList.remove('active');
+            pendingBlacklistId = null;
+            pendingBlacklistWedgeId = null;
+        }
+
+        async function confirmBlacklist() {
+            if (!pendingBlacklistId || !pendingBlacklistWedgeId || !isAdmin) {
+                showToast('✗ Keine Berechtigung oder fehlende Daten', 'error');
+                return;
+            }
+            
+            const signal = allSignals.find(s => String(s.id) === String(pendingBlacklistId));
+            if (!signal) {
+                showToast('✗ Signal nicht gefunden', 'error');
+                return;
+            }
+            
+            const reason = document.getElementById('blacklistReason').value;
+            const notes = document.getElementById('blacklistNotes').value.trim();
+            
+            const blacklistData = {
+                wedge_id: pendingBlacklistWedgeId,
+                symbol: signal.symbol,
+                timeframe: signal.timeframe,
+                direction: signal.direction,
+                reason: reason,
+                notes: notes || null,
+                blacklisted_by: currentUser.id
+            };
+            
+            try {
+                // 1. Zu Blacklist hinzufügen
+                const blacklistResponse = await fetch(`${SUPABASE_URL}/rest/v1/blacklisted_signals`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(blacklistData)
+                });
+                
+                if (!blacklistResponse.ok) {
+                    const error = await blacklistResponse.json();
+                    throw new Error(error.message || 'Blacklist fehlgeschlagen');
+                }
+                
+                // 2. Signal aus signals Tabelle löschen
+                const deleteResponse = await fetch(`${SUPABASE_URL}/rest/v1/signals?id=eq.${pendingBlacklistId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`
+                    }
+                });
+                
+                if (deleteResponse.ok || deleteResponse.status === 404) {
+                    // Success!
+                    allSignals = allSignals.filter(s => String(s.id) !== String(pendingBlacklistId));
+                    closeBlacklistModal();
+                    updateStats();
+                    renderSignals();
+                    showToast('✓ Pattern blacklisted! Scanner ignoriert es ab jetzt.', 'success');
+                } else {
+                    throw new Error('Signal konnte nicht gelöscht werden');
+                }
+                
+            } catch (error) {
+                console.error('Blacklist error:', error);
+                showToast('✗ Fehler: ' + error.message, 'error');
             }
         }
 
@@ -3410,13 +6059,13 @@
 
         async function confirmSuccess() {
             if (!pendingSuccessId || !isAdmin) {
-                showToast('âœ— Keine Berechtigung', 'error');
+                showToast('✔ Keine Berechtigung', 'error');
                 return;
             }
             
             const signal = allSignals.find(s => String(s.id) === String(pendingSuccessId));
             if (!signal) {
-                showToast('âœ— Signal nicht gefunden', 'error');
+                showToast('✔ Signal nicht gefunden', 'error');
                 return;
             }
             
@@ -3483,14 +6132,14 @@
                     closeSuccessModal();
                     updateStats();
                     renderSignals();
-                    showToast('âœ” Zu Success hinzugefgt', 'success');
+                    showToast('✓ Zu Success hinzugefgt', 'success');
                 } else {
                     const error = await response.json();
                     throw new Error(error.message || 'Failed');
                 }
             } catch (error) {
                 console.error('Success add error:', error);
-                showToast('âœ— Fehler: ' + error.message, 'error');
+                showToast('✔ Fehler: ' + error.message, 'error');
             }
         }
 
@@ -3534,14 +6183,52 @@
 
         // Start
         init();
+
+        // Header beim Scrollen verstecken (nur Mobile)
+        let lastScrollY = 0;
+        let ticking = false;
+        
+        function updateHeader() {
+            const header = document.querySelector('.header');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            const currentScrollY = window.scrollY;
+            
+            // Nur auf Mobile (unter 768px)
+            if (window.innerWidth <= 768) {
+                if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                    // Scrollt nach unten - Header verstecken
+                    header.classList.add('header-hidden');
+                    // Mobile Menu auch schließen
+                    if (mobileMenu) mobileMenu.classList.remove('active');
+                    if (burger) burger.classList.remove('active');
+                } else if (currentScrollY < lastScrollY) {
+                    // Scrollt nach oben - Header zeigen
+                    header.classList.remove('header-hidden');
+                }
+            } else {
+                // Desktop - Header immer zeigen
+                header.classList.remove('header-hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }, { passive: true });
     </script>
 
     <!-- Cookie Banner -->
     <div id="cookieBanner" class="cookie-banner">
         <div class="cookie-content">
             <div class="cookie-text">
-                <span class="cookie-icon">ðŸª</span>
-                <p>Wir verwenden Cookies, um deine Erfahrung zu verbessern und unseren Service zu analysieren. Mit der Nutzung stimmst du unserer <a href="datenschutz.html">Datenschutzerkl&auml;rung</a> zu.</p>
+                <span class="cookie-icon">🍪</span>
+                <p>Wir verwenden Cookies, um deine Erfahrung zu verbessern und unseren Service zu analysieren. Mit der Nutzung stimmst du unserer <a href="datenschutz.html">Datenschutzerklärung</a> zu.</p>
             </div>
             <div class="cookie-buttons">
                 <button class="cookie-btn cookie-btn-reject" onclick="rejectCookies()">Nur notwendige</button>
@@ -3690,15 +6377,9 @@
             window['ga-disable-G-F3BQLK365X'] = true;
         }
 
-        // Prfe Cookie-Consent beim Laden
+        // Prüfe Cookie-Consent beim Laden
         document.addEventListener('DOMContentLoaded', function() {
             checkCookieConsent();
             
             // Wenn abgelehnt, Analytics deaktivieren
-            if (localStorage.getItem('cookieConsent') === 'necessary') {
-                window['ga-disable-G-F3BQLK365X'] = true;
-            }
-        });
-    </script>
-</body>
-</html>
+            if (localStorage
