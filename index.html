@@ -2196,6 +2196,15 @@
             border-color: var(--accent-green);
         }
 
+        /* Erstes Thumbnail (neuestes Bild) hervorheben */
+        .slider-thumb:first-child {
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .slider-thumb:first-child.active {
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+        }
+
         @media (max-width: 1200px) {
             .slider-prev { left: 10px; }
             .slider-next { right: 10px; }
@@ -5381,7 +5390,7 @@
         async function loadImageHistory(wedgeId, currentImageUrl) {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at,version&order=scanned_at.desc`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at&order=scanned_at.desc`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -5395,24 +5404,42 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format
+                    // Konvertiere zu unserem Format - schon sortiert (neueste zuerst)
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // Aktuelles Bild an den Anfang (neuestes)
-                    // Stelle sicher dass es nicht doppelt ist
-                    if (sliderImages[0].url !== currentImageUrl) {
-                        sliderImages.unshift({ url: currentImageUrl, scanned_at: new Date().toISOString() });
+                    // WICHTIG: Prüfe ob currentImageUrl das neueste ist
+                    const currentIsInList = sliderImages.some(img => img.url === currentImageUrl);
+                    
+                    if (!currentIsInList) {
+                        // Current Image ist nicht in der Historie → füge es als NEUESTES hinzu
+                        sliderImages.unshift({ 
+                            url: currentImageUrl, 
+                            scanned_at: new Date().toISOString() 
+                        });
+                    } else {
+                        // Current Image ist in der Liste → stelle sicher es ist an erster Stelle
+                        const currentIndex = sliderImages.findIndex(img => img.url === currentImageUrl);
+                        if (currentIndex > 0) {
+                            // Nicht an erster Stelle → verschiebe es
+                            const currentImg = sliderImages.splice(currentIndex, 1)[0];
+                            sliderImages.unshift(currentImg);
+                        }
                     }
                     
+                    // START IMMER BEIM NEUESTEN BILD (Index 0)
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
                     renderThumbnails();
                 }
             } catch (err) {
                 console.log('Keine Bild-Historie gefunden:', err.message);
+                // Fallback: Nur aktuelles Bild
+                sliderImages = [{ url: currentImageUrl, scanned_at: null }];
+                sliderCurrentIndex = 0;
+                updateSliderDisplay();
             }
         }
 
@@ -5424,11 +5451,19 @@
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen
+            // Datum anzeigen (NEUESTES wird hervorgehoben)
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
-                dateEl.textContent = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                const timeStr = date.toLocaleDateString('de-DE') + ' ' + 
+                               date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                
+                // Markiere das neueste Bild
+                if (sliderCurrentIndex === 0) {
+                    dateEl.innerHTML = `<span style="color: var(--accent-green); font-weight: 700;">🆕 ${timeStr}</span>`;
+                } else {
+                    dateEl.textContent = timeStr;
+                }
             } else {
                 dateEl.textContent = 'Aktuell';
             }
