@@ -4125,7 +4125,7 @@
         async function checkSubscription() {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.email}&status=eq.active&select=*`,
+                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${currentUser.id}&status=eq.active&select=*`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -4145,8 +4145,13 @@
 
         async function checkAdminStatus() {
             try {
+                console.log('=== ADMIN CHECK DEBUG ===');
+                console.log('Current User ID:', currentUser.id);
+                console.log('Current User Email:', currentUser.email);
+                
+                // Check admins table by user_id (NOT email!)
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.email}&select=*`,
+                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${currentUser.id}&select=*`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -4157,9 +4162,23 @@
                 
                 if (response.ok) {
                     const admins = await response.json();
-                    isAdmin = admins.length > 0;
+                    console.log('Admins found:', admins);
+                    
+                    if (admins.length > 0) {
+                        isAdmin = true;
+                        console.log('✅ Admin status granted');
+                    } else {
+                        console.log('❌ No admin access');
+                        console.log('💡 Tipp: Füge deinen User in Supabase zur admins-Tabelle hinzu:');
+                        console.log(`   INSERT INTO admins (user_id) VALUES ('${currentUser.id}');`);
+                        isAdmin = false;
+                    }
+                } else {
+                    console.error('Failed to check admin status:', response.status);
+                    isAdmin = false;
                 }
             } catch (e) {
+                console.error('Admin check error:', e);
                 isAdmin = false;
             }
         }
