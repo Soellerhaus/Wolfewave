@@ -1012,6 +1012,16 @@
             transform: scale(1.1);
         }
 
+        .admin-btn-blacklist {
+            background: rgba(255, 165, 0, 0.9);
+            color: #000;
+        }
+
+        .admin-btn-blacklist:hover {
+            background: #ff8800;
+            transform: scale(1.1);
+        }
+
         .admin-btn-delete {
             background: rgba(255, 71, 87, 0.9);
             color: #fff;
@@ -3750,6 +3760,44 @@
         </div>
     </div>
 
+    <!-- Admin Blacklist Modal -->
+    <div class="admin-modal" id="blacklistModal">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <span style="font-size: 28px;">🚫</span>
+                <h3>Signal blacklisten</h3>
+            </div>
+            <div class="admin-modal-body">
+                <p>Dieses Pattern wird <strong>permanent blockiert</strong>:</p>
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <strong id="blacklistSignalInfo"></strong>
+                </div>
+                <div class="admin-form-group">
+                    <label>Grund für Blacklist:</label>
+                    <select id="blacklistReason">
+                        <option value="EPA zu steil">EPA zu steil (>65°)</option>
+                        <option value="Falsche Formation">Falsche Formation</option>
+                        <option value="Low Quality">Low Quality Pattern</option>
+                        <option value="Zu alte Daten">Zu alte Daten (P1 > 180 Tage)</option>
+                        <option value="Andere">Andere</option>
+                    </select>
+                </div>
+                <div class="admin-form-group">
+                    <label>Notizen (optional):</label>
+                    <textarea id="blacklistNotes" rows="3" style="width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; color: var(--text-primary); font-family: inherit; resize: vertical;" placeholder="Zusätzliche Notizen..."></textarea>
+                </div>
+                <p style="color: var(--accent-red); margin-top: 16px; font-size: 13px;">
+                    ⚠️ Scanner wird dieses Pattern in Zukunft ignorieren!<br>
+                    Das Signal wird aus der Datenbank gelöscht.
+                </p>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-modal-btn admin-modal-btn-cancel" onclick="closeBlacklistModal()">Abbrechen</button>
+                <button class="admin-modal-btn admin-modal-btn-danger" onclick="confirmBlacklist()">Blacklist</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Admin Badge -->
     <div class="admin-badge" id="adminBadge">
         🛡 Admin-Modus aktiv
@@ -4668,6 +4716,7 @@
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
                     <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✓</button>
+                    <button class="admin-btn admin-btn-blacklist" data-blacklist-signal="${signal.id}" data-wedge-id="${signal.wedge_id || ''}" title="Blacklist (nie wieder anzeigen)">🚫</button>
                     <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
                 </div>
             ` : '';
@@ -5227,6 +5276,14 @@
                     console.log('Success signal clicked:', signalId);
                     showSuccessModal(signalId);
                 }
+                
+                if (e.target.matches('[data-blacklist-signal]')) {
+                    e.stopPropagation();
+                    const signalId = e.target.getAttribute('data-blacklist-signal');
+                    const wedgeId = e.target.getAttribute('data-wedge-id');
+                    console.log('Blacklist signal clicked:', signalId, wedgeId);
+                    showBlacklistModal(signalId, wedgeId);
+                }
             });
         }
 
@@ -5734,47 +5791,23 @@
             }
         }
 
-        async function manageSubscription() {
+        function manageSubscription() {
             if (!currentUser) {
                 showLogin();
                 return;
             }
             
-            try {
-                showToast('⏳ Portal wird geladen...', 'success');
+            // Temporary: Direct email support until Stripe Customer Portal is set up
+            const message = 'Abo verwalten / kündigen\n\n' +
+                          'Aktuell kannst du dein Abo per E-Mail verwalten.\n\n' +
+                          'Möchtest du eine E-Mail an den Support senden?';
+            
+            const choice = confirm(message);
+            if (choice) {
+                const subject = 'Abo verwalten';
+                const body = `Hallo,\n\nich möchte mein Abo verwalten/kündigen.\n\nMeine E-Mail: ${currentUser.email}\n\nBitte helft mir mit:\n[ ] Abo kündigen\n[ ] Zahlungsmethode ändern\n[ ] Andere Anfrage: ____________\n\nVielen Dank!`;
                 
-                const response = await fetch(
-                    `${SUPABASE_URL}/functions/v1/customer-portal`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${getAccessToken()}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({})
-                    }
-                );
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Portal konnte nicht geladen werden');
-                }
-                
-                if (data.url) {
-                    window.open(data.url, '_blank');
-                } else {
-                    throw new Error('Keine Portal-URL erhalten');
-                }
-            } catch (error) {
-                console.error('Portal error:', error);
-                showToast('❌ Fehler: ' + error.message, 'error');
-                
-                // Fallback: E-Mail an Support
-                const choice = confirm('Portal konnte nicht geladen werden.\n\nMöchtest du stattdessen eine E-Mail an den Support senden?');
-                if (choice) {
-                    window.location.href = 'mailto:support@wolfewavesignals.com?subject=Abo%20verwalten&body=Hallo,%0A%0Aich%20möchte%20mein%20Abo%20verwalten%2Fkündigen.%0A%0AMeine%20E-Mail:%20' + encodeURIComponent(currentUser.email);
-                }
+                window.location.href = `mailto:support@wolfewavesignals.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             }
         }
 
@@ -5791,6 +5824,9 @@
         document.getElementById('successModal').addEventListener('click', e => {
             if (e.target.id === 'successModal') closeSuccessModal();
         });
+        document.getElementById('blacklistModal').addEventListener('click', e => {
+            if (e.target.id === 'blacklistModal') closeBlacklistModal();
+        });
         document.getElementById('alertModal').addEventListener('click', e => {
             if (e.target.id === 'alertModal') closeAlertModal();
         });
@@ -5798,7 +5834,7 @@
             if (e.target.id === 'myAlertsModal') closeMyAlertsModal();
         });
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); closeAlertModal(); closeMyAlertsModal(); }
+            if (e.key === 'Escape') { closeModal(); closeAuthModal(); closeDeleteModal(); closeSuccessModal(); closeBlacklistModal(); closeAlertModal(); closeMyAlertsModal(); }
         });
         document.getElementById('loginPassword').addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
@@ -5899,6 +5935,106 @@
             } catch (error) {
                 console.error('Delete error:', error);
                 showToast('✔ ' + error.message, 'error');
+            }
+        }
+
+        // ==================== BLACKLIST FUNCTIONS ====================
+        let pendingBlacklistId = null;
+        let pendingBlacklistWedgeId = null;
+
+        function showBlacklistModal(signalId, wedgeId) {
+            console.log('showBlacklistModal called with:', signalId, wedgeId);
+            const signal = allSignals.find(s => String(s.id) === String(signalId));
+            if (!signal) {
+                console.error('Signal not found for blacklist:', signalId);
+                return;
+            }
+            
+            if (!wedgeId || wedgeId === 'null' || wedgeId === '') {
+                showToast('✗ Fehler: Keine WedgeID verfügbar', 'error');
+                return;
+            }
+            
+            pendingBlacklistId = signalId;
+            pendingBlacklistWedgeId = wedgeId;
+            document.getElementById('blacklistSignalInfo').textContent = `${signal.symbol} - ${signal.market} ${signal.timeframe} (${signal.direction})`;
+            document.getElementById('blacklistReason').value = 'EPA zu steil';
+            document.getElementById('blacklistNotes').value = '';
+            document.getElementById('blacklistModal').classList.add('active');
+        }
+
+        function closeBlacklistModal() {
+            document.getElementById('blacklistModal').classList.remove('active');
+            pendingBlacklistId = null;
+            pendingBlacklistWedgeId = null;
+        }
+
+        async function confirmBlacklist() {
+            if (!pendingBlacklistId || !pendingBlacklistWedgeId || !isAdmin) {
+                showToast('✗ Keine Berechtigung oder fehlende Daten', 'error');
+                return;
+            }
+            
+            const signal = allSignals.find(s => String(s.id) === String(pendingBlacklistId));
+            if (!signal) {
+                showToast('✗ Signal nicht gefunden', 'error');
+                return;
+            }
+            
+            const reason = document.getElementById('blacklistReason').value;
+            const notes = document.getElementById('blacklistNotes').value.trim();
+            
+            const blacklistData = {
+                wedge_id: pendingBlacklistWedgeId,
+                symbol: signal.symbol,
+                timeframe: signal.timeframe,
+                direction: signal.direction,
+                reason: reason,
+                notes: notes || null,
+                blacklisted_by: currentUser.id
+            };
+            
+            try {
+                // 1. Zu Blacklist hinzufügen
+                const blacklistResponse = await fetch(`${SUPABASE_URL}/rest/v1/blacklisted_signals`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(blacklistData)
+                });
+                
+                if (!blacklistResponse.ok) {
+                    const error = await blacklistResponse.json();
+                    throw new Error(error.message || 'Blacklist fehlgeschlagen');
+                }
+                
+                // 2. Signal aus signals Tabelle löschen
+                const deleteResponse = await fetch(`${SUPABASE_URL}/rest/v1/signals?id=eq.${pendingBlacklistId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`
+                    }
+                });
+                
+                if (deleteResponse.ok || deleteResponse.status === 404) {
+                    // Success!
+                    allSignals = allSignals.filter(s => String(s.id) !== String(pendingBlacklistId));
+                    closeBlacklistModal();
+                    updateStats();
+                    renderSignals();
+                    showToast('✓ Pattern blacklisted! Scanner ignoriert es ab jetzt.', 'success');
+                } else {
+                    throw new Error('Signal konnte nicht gelöscht werden');
+                }
+                
+            } catch (error) {
+                console.error('Blacklist error:', error);
+                showToast('✗ Fehler: ' + error.message, 'error');
             }
         }
 
