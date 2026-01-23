@@ -5504,30 +5504,15 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format - schon sortiert (neueste zuerst)
+                    // ✅ MINIMAL FIX: Vertraue der Datenbank-Sortierung (neueste zuerst)
+                    // Die Datenbank sortiert bereits mit order=scanned_at.desc
                     sliderImages = data.map(img => ({
                         url: img.image_url,
                         scanned_at: img.scanned_at
                     }));
                     
-                    // WICHTIG: Prüfe ob currentImageUrl das neueste ist
-                    const currentIsInList = sliderImages.some(img => img.url === currentImageUrl);
-                    
-                    if (!currentIsInList) {
-                        // Current Image ist nicht in der Historie → füge es als NEUESTES hinzu
-                        sliderImages.unshift({ 
-                            url: currentImageUrl, 
-                            scanned_at: new Date().toISOString() 
-                        });
-                    } else {
-                        // Current Image ist in der Liste → stelle sicher es ist an erster Stelle
-                        const currentIndex = sliderImages.findIndex(img => img.url === currentImageUrl);
-                        if (currentIndex > 0) {
-                            // Nicht an erster Stelle → verschiebe es
-                            const currentImg = sliderImages.splice(currentIndex, 1)[0];
-                            sliderImages.unshift(currentImg);
-                        }
-                    }
+                    // ✅ ENTFERNT: Der Code, der Bilder manuell verschoben hat
+                    // Keine manuelle Umsortierung mehr - die DB gibt bereits die richtige Reihenfolge
                     
                     // START IMMER BEIM NEUESTEN BILD (Index 0)
                     sliderCurrentIndex = 0;
