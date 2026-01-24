@@ -3573,6 +3573,13 @@
                         <span class="paywall-price-amount">9,99€</span>
                         <span class="paywall-price-period">/ Monat</span>
                         <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; text-decoration: line-through;">Statt 19,90€</div>
+                        
+                        <!-- Countdown Timer -->
+                        <div id="offerCountdown" style="margin-top: 15px; padding: 12px; background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.3); border-radius: 10px;">
+                            <div style="font-size: 11px; color: #ff6b6b; font-weight: 600; margin-bottom: 6px;">⏰ ANGEBOT ENDET IN:</div>
+                            <div id="countdownTimer" style="font-size: 18px; font-weight: 700; color: #fff; font-family: monospace; letter-spacing: 2px;">00T 00:00:00</div>
+                            <div style="font-size: 10px; color: var(--text-secondary); margin-top: 6px;">Ab 1. März: 19,90€/Monat</div>
+                        </div>
                     </div>
 
                     <button class="paywall-btn" onclick="showCheckout()">
@@ -3903,6 +3910,51 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4NDM4MTksImV4cCI6MjA1MjQxOTgxOX0.xB5JmB_Ekg89J5dKb-r4qT3Rq2a2ptVkIafB3J2FpTM'
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
+
+        // ==================== COUNTDOWN TIMER ====================
+        // Einführungsangebot endet am 1. März 2026 um 23:59:59
+        const OFFER_END_DATE = new Date('2026-03-01T23:59:59');
+        
+        function updateCountdown() {
+            const now = new Date();
+            const diff = OFFER_END_DATE - now;
+            
+            const countdownEl = document.getElementById('countdownTimer');
+            const containerEl = document.getElementById('offerCountdown');
+            
+            if (!countdownEl) return;
+            
+            if (diff <= 0) {
+                // Angebot abgelaufen
+                if (containerEl) {
+                    containerEl.innerHTML = `
+                        <div style="font-size: 12px; color: #ff6b6b; font-weight: 600;">
+                            ⚠️ Einführungsangebot beendet
+                        </div>
+                        <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">
+                            Regulärer Preis: 19,90€/Monat
+                        </div>
+                    `;
+                }
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            countdownEl.textContent = `${days}T ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Farbe ändern wenn weniger als 7 Tage
+            if (days < 7) {
+                countdownEl.style.color = '#ff6b6b';
+            }
+        }
+        
+        // Countdown starten
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
         let allSignals = [];
         let completedSignals = [];
@@ -5840,23 +5892,55 @@
             }
         }
 
-        function manageSubscription() {
+        // ==================== ABO VERWALTEN (Stripe Customer Portal) ====================
+        async function manageSubscription() {
             if (!currentUser) {
                 showLogin();
                 return;
             }
             
-            // Temporary: Direct email support until Stripe Customer Portal is set up
-            const message = 'Abo verwalten / kündigen\n\n' +
-                          'Aktuell kannst du dein Abo per E-Mail verwalten.\n\n' +
-                          'Möchtest du eine E-Mail an den Support senden?';
-            
-            const choice = confirm(message);
-            if (choice) {
-                const subject = 'Abo verwalten';
-                const body = `Hallo,\n\nich möchte mein Abo verwalten/kündigen.\n\nMeine E-Mail: ${currentUser.email}\n\nBitte helft mir mit:\n[ ] Abo kündigen\n[ ] Zahlungsmethode ändern\n[ ] Andere Anfrage: ____________\n\nVielen Dank!`;
+            try {
+                showToast('⏳ Lade Abo-Verwaltung...', 'success');
                 
-                window.location.href = `mailto:support@wolfewavesignals.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                // Stripe Customer Portal Session erstellen
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/create-portal-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({
+                        email: currentUser.email
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || 'Portal konnte nicht geöffnet werden');
+                }
+                
+                // Redirect zum Stripe Customer Portal
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Keine Portal-URL erhalten');
+                }
+                
+            } catch (error) {
+                console.error('Portal error:', error);
+                
+                // Fallback: E-Mail Support
+                const useEmail = confirm(
+                    'Abo-Portal konnte nicht geladen werden.\n\n' +
+                    'Möchten Sie stattdessen eine E-Mail an den Support senden?'
+                );
+                
+                if (useEmail) {
+                    const subject = 'Abo verwalten';
+                    const body = `Hallo,\n\nich möchte mein Abo verwalten/kündigen.\n\nMeine E-Mail: ${currentUser.email}\n\nVielen Dank!`;
+                    window.location.href = `mailto:support@wolfewavesignals.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                }
             }
         }
 
