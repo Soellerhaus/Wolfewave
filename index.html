@@ -5813,7 +5813,7 @@
             try {
                 showToast('⏳ Checkout wird erstellt...', 'success');
                 
-                const response = await fetch(`${SUPABASE_URL}/functions/v1/super-processor`, {
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/checkout-final`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
