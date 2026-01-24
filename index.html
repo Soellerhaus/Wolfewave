@@ -5812,9 +5812,7 @@
             try {
                 showToast('⏳ Checkout wird erstellt...', 'success');
                 
-                const response = await fetch(
-                    `${SUPABASE_URL}/functions/v1/checkout-v2`,
-                    {
+const response = await fetch(`${SUPABASE_URL}/functions/v1/super-processor`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${getAccessToken()}`,
