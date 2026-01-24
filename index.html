@@ -5799,7 +5799,7 @@
 
         // ==================== CHECKOUT ====================
         // WICHTIG: Stripe Live Mode aktivieren
-        // Der Testmodus wird im BACKEND gesteuert (Supabase Edge Function: create-checkout)
+        // Der Testmodus wird im BACKEND gesteuert (Supabase Edge Function: checkout-v2)
         // Ändern Sie dort den STRIPE_SECRET_KEY von Test-Key zu Live-Key:
         // - Test: sk_test_...
         // - Live: sk_live_...
@@ -5813,7 +5813,7 @@
                 showToast('⏳ Checkout wird erstellt...', 'success');
                 
                 const response = await fetch(
-                    `${SUPABASE_URL}/functions/v1/create-checkout`,
+                    `${SUPABASE_URL}/functions/v1/checkout-v2`,
                     {
                         method: 'POST',
                         headers: {
