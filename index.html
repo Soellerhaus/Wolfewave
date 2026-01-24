@@ -3346,13 +3346,13 @@
     </header>
 
     <!-- Mobile Menu Dropdown -->
-    <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu" id="mobileMenu" onclick="event.stopPropagation();">
         <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
         <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
         <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
         <div class="mobile-menu-divider"></div>
-        <button class="mobile-menu-btn" onclick="showLogin(); toggleMobileMenu();">Login</button>
-        <button class="mobile-menu-btn primary" onclick="showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
+        <button class="mobile-menu-btn" onclick="event.stopPropagation(); showLogin(); toggleMobileMenu();">Login</button>
+        <button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
     </div>
 
     <section class="hero">
@@ -4498,6 +4498,7 @@
             // Mobile Menu für eingeloggte User aktualisieren
             const mobileMenu = document.getElementById('mobileMenu');
             if (mobileMenu) {
+                mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
                     <div class="mobile-menu-item" style="display: flex; align-items: center; gap: 12px;">
                         <div class="user-avatar" style="width:36px;height:36px;background:var(--accent-green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">${initial}</div>
@@ -4510,10 +4511,10 @@
                     <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
                     <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
                     <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
-                    ${(isSubscribed || isAdmin) ? '<div class="mobile-menu-item" onclick="showMyAlerts(); toggleMobileMenu();">&#128276; Meine Alarme</div>' : ''}
+                    ${(isSubscribed || isAdmin) ? '<div class="mobile-menu-item" onclick="event.stopPropagation(); showMyAlerts(); toggleMobileMenu();">&#128276; Meine Alarme</div>' : ''}
                     <div class="mobile-menu-divider"></div>
-                    ${isSubscribed ? '<button class="mobile-menu-btn" onclick="manageSubscription(); toggleMobileMenu();">&#128179; Abo verwalten</button>' : '<button class="mobile-menu-btn primary" onclick="showCheckout(); toggleMobileMenu();">&#11088; Premium werden</button>'}
-                    <button class="mobile-menu-btn" onclick="handleLogout(); toggleMobileMenu();">&#128682; Ausloggen</button>
+                    ${isSubscribed ? '<button class="mobile-menu-btn" onclick="event.stopPropagation(); manageSubscription(); toggleMobileMenu();">&#128179; Abo verwalten</button>' : '<button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">&#11088; Premium werden</button>'}
+                    <button class="mobile-menu-btn" onclick="event.stopPropagation(); handleLogout(); toggleMobileMenu();">&#128682; Ausloggen</button>
                 `;
             }
         }
@@ -4543,13 +4544,14 @@
             // Mobile Menu für Gäste zurücksetzen
             const mobileMenu = document.getElementById('mobileMenu');
             if (mobileMenu) {
+                mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
                     <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
                     <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
                     <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
                     <div class="mobile-menu-divider"></div>
-                    <button class="mobile-menu-btn" onclick="showLogin(); toggleMobileMenu();">Login</button>
-                    <button class="mobile-menu-btn primary" onclick="showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
+                    <button class="mobile-menu-btn" onclick="event.stopPropagation(); showLogin(); toggleMobileMenu();">Login</button>
+                    <button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
                 `;
             }
             
@@ -4569,17 +4571,24 @@
         function toggleMobileMenu() {
             const burger = document.querySelector('.burger-menu');
             const menu = document.getElementById('mobileMenu');
-            burger.classList.toggle('active');
-            menu.classList.toggle('active');
+            if (burger && menu) {
+                burger.classList.toggle('active');
+                menu.classList.toggle('active');
+            }
         }
 
-        // Close mobile menu when clicking outside
+        // Close mobile menu when clicking outside - FIXED
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');
-            if (menu && burger && !menu.contains(e.target) && !burger.contains(e.target)) {
-                menu.classList.remove('active');
-                burger.classList.remove('active');
+            
+            // Nur schließen wenn Menü offen ist UND Klick außerhalb
+            if (menu && burger && menu.classList.contains('active')) {
+                // Prüfe ob Klick innerhalb des Menüs oder Burgers
+                if (!menu.contains(e.target) && !burger.contains(e.target)) {
+                    menu.classList.remove('active');
+                    burger.classList.remove('active');
+                }
             }
         });
 
