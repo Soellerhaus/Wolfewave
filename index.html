@@ -5813,7 +5813,7 @@
             try {
                 showToast('⏳ Checkout wird erstellt...', 'success');
                 
-const { data: { session } } = await supabase.auth.getSession();
+const { data: { session } } = await supabaseClient.auth.getSession();
 
 if (!session) {
     alert('Bitte loggen Sie sich ein.');
