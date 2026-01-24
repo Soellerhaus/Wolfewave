@@ -5878,66 +5878,90 @@
                     const storagePath = storagePathMatch[1];
                     console.log('Storage path extracted:', storagePath);
                     
-                    // WICHTIG: Supabase Storage Delete API verwendet ein Array von Pfaden!
-                    console.log('Deleting via Supabase Storage API...');
-                    const deleteStorageResponse = await fetch(
-                        `${SUPABASE_URL}/storage/v1/object/signals`,
+                    // Methode 1: Einzelne Datei löschen (korrekte API!)
+                    console.log('Attempting single file delete...');
+                    const singleDeleteResponse = await fetch(
+                        `${SUPABASE_URL}/storage/v1/object/signals/${storagePath}`,
                         {
                             method: 'DELETE',
                             headers: {
                                 'apikey': SUPABASE_KEY,
-                                'Authorization': `Bearer ${getAccessToken()}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                prefixes: [storagePath]
-                            })
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
                         }
                     );
                     
-                    console.log('Storage delete response status:', deleteStorageResponse.status);
-                    const storageResult = await deleteStorageResponse.text();
-                    console.log('Storage delete result:', storageResult);
+                    console.log('Single file delete status:', singleDeleteResponse.status);
+                    const singleResult = await singleDeleteResponse.text();
+                    console.log('Single file delete result:', singleResult);
                     
-                    if (deleteStorageResponse.ok) {
-                        // Prüfe ob wirklich gelöscht wurde
-                        try {
-                            const resultJson = JSON.parse(storageResult);
-                            console.log('Parsed result:', resultJson);
-                            // Bei prefixes delete kommt ein Array zurück
-                            if (Array.isArray(resultJson) && resultJson.length > 0) {
-                                storageDeleteSuccess = true;
-                                console.log('✓ Storage file deleted successfully');
-                            } else if (resultJson.message) {
-                                console.warn('Storage message:', resultJson.message);
-                            }
-                        } catch (e) {
-                            // Falls JSON parsing fehlschlägt aber Status OK ist
-                            storageDeleteSuccess = true;
-                        }
+                    // Status 200 bedeutet Erfolg, auch wenn das Result leer ist!
+                    if (singleDeleteResponse.status === 200) {
+                        storageDeleteSuccess = true;
+                        console.log('✓ Storage file deleted successfully (status 200)');
+                    } else if (singleDeleteResponse.ok) {
+                        storageDeleteSuccess = true;
+                        console.log('✓ Storage file deleted successfully');
                     } else {
-                        console.error('Storage delete failed:', storageResult);
+                        console.error('Single file delete failed, trying batch method...');
                         
-                        // Fallback: Versuche einzelne Datei zu löschen
-                        console.log('Trying single file delete...');
-                        const singleDeleteResponse = await fetch(
-                            `${SUPABASE_URL}/storage/v1/object/signals/${storagePath}`,
+                        // Methode 2: Batch delete mit Array (alternative API)
+                        const batchDeleteResponse = await fetch(
+                            `${SUPABASE_URL}/storage/v1/object/signals`,
                             {
                                 method: 'DELETE',
                                 headers: {
                                     'apikey': SUPABASE_KEY,
-                                    'Authorization': `Bearer ${getAccessToken()}`
-                                }
+                                    'Authorization': `Bearer ${getAccessToken()}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    prefixes: [storagePath]
+                                })
                             }
                         );
                         
-                        console.log('Single file delete status:', singleDeleteResponse.status);
-                        if (singleDeleteResponse.ok) {
-                            storageDeleteSuccess = true;
-                            console.log('✓ Storage file deleted via single delete');
-                        } else {
-                            const singleError = await singleDeleteResponse.text();
-                            console.error('Single delete error:', singleError);
+                        console.log('Batch delete status:', batchDeleteResponse.status);
+                        const batchResult = await batchDeleteResponse.text();
+                        console.log('Batch delete result:', batchResult);
+                        
+                        if (batchDeleteResponse.ok) {
+                            try {
+                                const resultJson = JSON.parse(batchResult);
+                                if (Array.isArray(resultJson) && resultJson.length > 0) {
+                                    storageDeleteSuccess = true;
+                                    console.log('✓ Storage file deleted via batch');
+                                }
+                            } catch (e) {
+                                // Ignore parse error
+                            }
+                        }
+                        
+                        // Methode 3: Wenn immer noch fehlgeschlagen, versuche mit vollem Pfad-Array
+                        if (!storageDeleteSuccess) {
+                            console.log('Trying with full path array...');
+                            const arrayDeleteResponse = await fetch(
+                                `${SUPABASE_URL}/storage/v1/object/signals`,
+                                {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'apikey': SUPABASE_KEY,
+                                        'Authorization': `Bearer ${getAccessToken()}`,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify([storagePath])
+                                }
+                            );
+                            
+                            console.log('Array delete status:', arrayDeleteResponse.status);
+                            if (arrayDeleteResponse.ok) {
+                                const arrayResult = await arrayDeleteResponse.json();
+                                console.log('Array delete result:', arrayResult);
+                                if (Array.isArray(arrayResult) && arrayResult.length > 0) {
+                                    storageDeleteSuccess = true;
+                                    console.log('✓ Storage file deleted via array method');
+                                }
+                            }
                         }
                     }
                 } else {
