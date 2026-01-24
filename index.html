@@ -224,7 +224,7 @@
 
         /* Mobile Menu Dropdown - MODERNISIERT */
         .mobile-menu {
-            display: none;
+            display: flex;
             position: fixed;
             top: 75px;
             left: 12px;
@@ -239,6 +239,8 @@
             z-index: 99;
             transform: translateY(-20px);
             opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
             transition: all 0.3s ease;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 255, 136, 0.1);
         }
@@ -246,6 +248,8 @@
         .mobile-menu.active {
             transform: translateY(0);
             opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .mobile-menu-item {
@@ -3070,24 +3074,27 @@
             /* Tabs Section kompakt */
             .tabs-section {
                 padding: 8px 0 !important;
-                overflow: hidden !important;
+                overflow: visible !important;
             }
 
             .tabs-container {
                 flex-direction: column !important;
                 gap: 8px !important;
                 padding: 0 12px !important;
+                overflow: visible !important;
             }
 
             /* Tabs horizontal scrollbar - FIXED OVERFLOW */
             .tabs {
                 display: flex !important;
                 flex-wrap: nowrap !important;
-                overflow-x: auto !important;
+                overflow-x: scroll !important;
                 overflow-y: hidden !important;
                 gap: 6px !important;
-                padding: 4px 0 8px 0 !important;
-                margin: 0 !important;
+                padding: 4px 4px 12px 4px !important;
+                margin: 0 -12px !important;
+                padding-left: 12px !important;
+                padding-right: 12px !important;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
                 scroll-behavior: smooth;
@@ -3099,15 +3106,16 @@
 
             .tab {
                 flex-shrink: 0 !important;
-                padding: 8px 12px !important;
-                font-size: 11px !important;
+                padding: 10px 14px !important;
+                font-size: 12px !important;
                 white-space: nowrap !important;
                 border-radius: 8px !important;
+                min-width: max-content !important;
             }
 
             .tab-badge {
                 font-size: 9px !important;
-                padding: 2px 5px !important;
+                padding: 2px 6px !important;
             }
 
             /* Filters kompakt */
@@ -3685,7 +3693,28 @@
                 <div class="auth-error" id="loginError"></div>
                 <button class="auth-btn" onclick="handleLogin()">Einloggen</button>
                 <div class="auth-footer">
+                    <a href="#" onclick="toggleAuthForm('forgot'); return false;">Passwort vergessen?</a>
+                    <br><br>
                     <a href="#" onclick="toggleAuthForm('register'); return false;">Neu hier? Registrieren</a>
+                </div>
+            </div>
+            <div id="forgotForm" class="auth-form" style="display:none;">
+                <div class="auth-header">
+                    <div class="auth-icon">🔑</div>
+                    <h2>Passwort zurücksetzen</h2>
+                    <p>Wir senden dir einen Link zum Zurücksetzen</p>
+                </div>
+                <div class="auth-fields">
+                    <div class="input-group">
+                        <label>E-Mail</label>
+                        <input type="email" id="forgotEmail" placeholder="deine@email.de">
+                    </div>
+                </div>
+                <div class="auth-error" id="forgotError"></div>
+                <div class="auth-success" id="forgotSuccess" style="color: var(--accent-green); font-size: 13px; text-align: center; margin-bottom: 16px;"></div>
+                <button class="auth-btn" onclick="handleForgotPassword()">Link senden</button>
+                <div class="auth-footer">
+                    <a href="#" onclick="toggleAuthForm('login'); return false;">← Zurück zum Login</a>
                 </div>
             </div>
             <div id="registerForm" class="auth-form" style="display:none;">
@@ -5444,6 +5473,54 @@
         function toggleAuthForm(form) {
             document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
             document.getElementById('registerForm').style.display = form === 'register' ? 'block' : 'none';
+            document.getElementById('forgotForm').style.display = form === 'forgot' ? 'block' : 'none';
+            
+            // Clear errors and success messages
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('registerError').textContent = '';
+            document.getElementById('forgotError').textContent = '';
+            document.getElementById('forgotSuccess').textContent = '';
+        }
+
+        // Passwort vergessen Funktion
+        async function handleForgotPassword() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            const errorEl = document.getElementById('forgotError');
+            const successEl = document.getElementById('forgotSuccess');
+            
+            errorEl.textContent = '';
+            successEl.textContent = '';
+            
+            if (!email) {
+                errorEl.textContent = 'Bitte gib deine E-Mail-Adresse ein';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email: email,
+                        redirectTo: window.location.origin + '/reset-password.html'
+                    })
+                });
+                
+                if (response.ok) {
+                    successEl.textContent = '✓ E-Mail gesendet! Prüfe dein Postfach (auch Spam).';
+                    document.getElementById('forgotEmail').value = '';
+                } else {
+                    const data = await response.json();
+                    throw new Error(data.error_description || 'Fehler beim Senden');
+                }
+            } catch (error) {
+                // Zeige immer Erfolg an (Sicherheit - verhindert E-Mail-Enumeration)
+                successEl.textContent = '✓ Falls ein Account existiert, erhältst du eine E-Mail.';
+                document.getElementById('forgotEmail').value = '';
+            }
         }
 
         function closeAuthModal() {
