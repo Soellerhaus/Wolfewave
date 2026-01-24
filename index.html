@@ -5831,12 +5831,19 @@
             }
             
             // Confirm deletion
-            if (!confirm(`Bild wirklich löschen?\n\n${img.url.split('/').pop()}`)) {
+            if (!confirm(`Bild wirklich löschen?\n\n${img.url.split('/').pop()}\n\n⚠️ Das Bild wird auch aus dem Supabase Storage gelöscht!`)) {
                 return;
             }
             
             try {
+                console.log('=== DELETE IMAGE DEBUG ===');
+                console.log('Image URL:', img.url);
+                
+                let dbDeleteSuccess = false;
+                let storageDeleteSuccess = false;
+                
                 // 1. Delete from signal_images table
+                console.log('Step 1: Deleting from signal_images table...');
                 const deleteDbResponse = await fetch(
                     `${SUPABASE_URL}/rest/v1/signal_images?image_url=eq.${encodeURIComponent(img.url)}`,
                     {
@@ -5844,20 +5851,32 @@
                         headers: {
                             'apikey': SUPABASE_KEY,
                             'Authorization': `Bearer ${getAccessToken()}`,
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
                         }
                     }
                 );
                 
-                console.log('DB delete response:', deleteDbResponse.status);
+                console.log('DB delete response status:', deleteDbResponse.status);
+                if (deleteDbResponse.ok) {
+                    const deletedRows = await deleteDbResponse.json();
+                    console.log('Deleted rows from DB:', deletedRows);
+                    dbDeleteSuccess = true;
+                } else {
+                    const errorText = await deleteDbResponse.text();
+                    console.error('DB delete error:', errorText);
+                }
                 
                 // 2. Extract storage path from URL and delete from storage
                 // URL format: https://xxx.supabase.co/storage/v1/object/public/signals/MARKET/TIMEFRAME/filename.png
+                console.log('Step 2: Extracting storage path...');
                 const storagePathMatch = img.url.match(/\/signals\/(.+)$/);
+                
                 if (storagePathMatch) {
                     const storagePath = storagePathMatch[1];
-                    console.log('Deleting from storage:', storagePath);
+                    console.log('Storage path extracted:', storagePath);
                     
+                    // Supabase Storage Delete API - korrekter Endpoint
                     const deleteStorageResponse = await fetch(
                         `${SUPABASE_URL}/storage/v1/object/signals/${storagePath}`,
                         {
@@ -5868,16 +5887,57 @@
                             }
                         }
                     );
-                    console.log('Storage delete response:', deleteStorageResponse.status);
+                    
+                    console.log('Storage delete response status:', deleteStorageResponse.status);
+                    
+                    if (deleteStorageResponse.ok) {
+                        storageDeleteSuccess = true;
+                        console.log('✓ Storage file deleted successfully');
+                    } else {
+                        const storageError = await deleteStorageResponse.text();
+                        console.error('Storage delete error:', storageError);
+                        
+                        // Versuche alternativen Endpoint (für batch delete)
+                        console.log('Trying alternative delete method...');
+                        const altResponse = await fetch(
+                            `${SUPABASE_URL}/storage/v1/object/signals`,
+                            {
+                                method: 'DELETE',
+                                headers: {
+                                    'apikey': SUPABASE_KEY,
+                                    'Authorization': `Bearer ${getAccessToken()}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    prefixes: [storagePath]
+                                })
+                            }
+                        );
+                        
+                        console.log('Alternative delete response:', altResponse.status);
+                        if (altResponse.ok) {
+                            storageDeleteSuccess = true;
+                            console.log('✓ Storage file deleted via alternative method');
+                        } else {
+                            const altError = await altResponse.text();
+                            console.error('Alternative delete error:', altError);
+                        }
+                    }
+                } else {
+                    console.warn('Could not extract storage path from URL');
                 }
                 
                 // 3. Remove from local array
                 sliderImages.splice(sliderCurrentIndex, 1);
                 
-                // 4. Update display
+                // 4. Update display and show result
+                const resultMsg = [];
+                if (dbDeleteSuccess) resultMsg.push('DB ✓');
+                if (storageDeleteSuccess) resultMsg.push('Storage ✓');
+                
                 if (sliderImages.length === 0) {
                     closeModal();
-                    showToast('✓ Bild gelöscht', 'success');
+                    showToast(`✓ Bild gelöscht (${resultMsg.join(', ')})`, 'success');
                     // Refresh signals to update the main view
                     await fetchSignals();
                     renderSignals();
@@ -5888,8 +5948,11 @@
                     }
                     updateSliderDisplay();
                     renderThumbnails();
-                    showToast('✓ Bild gelöscht', 'success');
+                    showToast(`✓ Bild gelöscht (${resultMsg.join(', ')})`, 'success');
                 }
+                
+                console.log('=== DELETE COMPLETE ===');
+                console.log('DB deleted:', dbDeleteSuccess, '| Storage deleted:', storageDeleteSuccess);
                 
             } catch (error) {
                 console.error('Delete image error:', error);
