@@ -5813,6 +5813,12 @@
                 showToast('⏳ Checkout wird erstellt...', 'success');
                 
 const response = await fetch(`${SUPABASE_URL}/functions/v1/super-processor`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+    },
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${getAccessToken()}`,
