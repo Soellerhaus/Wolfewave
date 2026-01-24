@@ -5804,52 +5804,43 @@
         // Ändern Sie dort den STRIPE_SECRET_KEY von Test-Key zu Live-Key:
         // - Test: sk_test_...
         // - Live: sk_live_...
-async function showCheckout() {
-    if (!currentUser) {
-        showLogin();
-        return;
-    }
-    
-    try {
-        showToast('⏳ Checkout wird erstellt...', 'success');
-        
-        // Hole die Session für den Access Token
-        const { data: { session } } = await supabaseClient.auth.getSession();
-
-        if (!session) {
-            alert('Bitte loggen Sie sich erneut ein.');
-            return;
+        async function showCheckout() {
+            if (!currentUser) {
+                showLogin();
+                return;
+            }
+            
+            try {
+                showToast('⏳ Checkout wird erstellt...', 'success');
+                
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/super-processor`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`
+                    },
+                    body: JSON.stringify({
+                        email: currentUser.email
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Checkout fehlgeschlagen');
+                }
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Keine Checkout-URL erhalten');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showToast('❌ Fehler beim Checkout: ' + error.message, 'error');
+            }
         }
-
-        // Rufe super-processor auf
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/super-processor`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${session.access_token}`
-            },
-            body: JSON.stringify({
-                email: currentUser.email
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(data.error || 'Checkout fehlgeschlagen');
-        }
-        
-        if (data.url) {
-            window.location.href = data.url;
-        } else {
-            throw new Error('Keine Checkout-URL erhalten');
-        }
-    } catch (error) {
-        console.error('Checkout error:', error);
-        showToast('❌ Fehler beim Checkout: ' + error.message, 'error');
-    }
-}
 
         function manageSubscription() {
             if (!currentUser) {
