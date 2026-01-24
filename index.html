@@ -5870,61 +5870,79 @@
                 // 2. Extract storage path from URL and delete from storage
                 // URL format: https://xxx.supabase.co/storage/v1/object/public/signals/MARKET/TIMEFRAME/filename.png
                 console.log('Step 2: Extracting storage path...');
-                const storagePathMatch = img.url.match(/\/signals\/(.+)$/);
+                
+                // Extrahiere den Pfad NACH /signals/ (ohne /public/)
+                const storagePathMatch = img.url.match(/\/storage\/v1\/object\/public\/signals\/(.+)$/);
                 
                 if (storagePathMatch) {
                     const storagePath = storagePathMatch[1];
                     console.log('Storage path extracted:', storagePath);
                     
-                    // Supabase Storage Delete API - korrekter Endpoint
+                    // WICHTIG: Supabase Storage Delete API verwendet ein Array von Pfaden!
+                    console.log('Deleting via Supabase Storage API...');
                     const deleteStorageResponse = await fetch(
-                        `${SUPABASE_URL}/storage/v1/object/signals/${storagePath}`,
+                        `${SUPABASE_URL}/storage/v1/object/signals`,
                         {
                             method: 'DELETE',
                             headers: {
                                 'apikey': SUPABASE_KEY,
-                                'Authorization': `Bearer ${getAccessToken()}`
-                            }
+                                'Authorization': `Bearer ${getAccessToken()}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                prefixes: [storagePath]
+                            })
                         }
                     );
                     
                     console.log('Storage delete response status:', deleteStorageResponse.status);
+                    const storageResult = await deleteStorageResponse.text();
+                    console.log('Storage delete result:', storageResult);
                     
                     if (deleteStorageResponse.ok) {
-                        storageDeleteSuccess = true;
-                        console.log('✓ Storage file deleted successfully');
+                        // Prüfe ob wirklich gelöscht wurde
+                        try {
+                            const resultJson = JSON.parse(storageResult);
+                            console.log('Parsed result:', resultJson);
+                            // Bei prefixes delete kommt ein Array zurück
+                            if (Array.isArray(resultJson) && resultJson.length > 0) {
+                                storageDeleteSuccess = true;
+                                console.log('✓ Storage file deleted successfully');
+                            } else if (resultJson.message) {
+                                console.warn('Storage message:', resultJson.message);
+                            }
+                        } catch (e) {
+                            // Falls JSON parsing fehlschlägt aber Status OK ist
+                            storageDeleteSuccess = true;
+                        }
                     } else {
-                        const storageError = await deleteStorageResponse.text();
-                        console.error('Storage delete error:', storageError);
+                        console.error('Storage delete failed:', storageResult);
                         
-                        // Versuche alternativen Endpoint (für batch delete)
-                        console.log('Trying alternative delete method...');
-                        const altResponse = await fetch(
-                            `${SUPABASE_URL}/storage/v1/object/signals`,
+                        // Fallback: Versuche einzelne Datei zu löschen
+                        console.log('Trying single file delete...');
+                        const singleDeleteResponse = await fetch(
+                            `${SUPABASE_URL}/storage/v1/object/signals/${storagePath}`,
                             {
                                 method: 'DELETE',
                                 headers: {
                                     'apikey': SUPABASE_KEY,
-                                    'Authorization': `Bearer ${getAccessToken()}`,
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    prefixes: [storagePath]
-                                })
+                                    'Authorization': `Bearer ${getAccessToken()}`
+                                }
                             }
                         );
                         
-                        console.log('Alternative delete response:', altResponse.status);
-                        if (altResponse.ok) {
+                        console.log('Single file delete status:', singleDeleteResponse.status);
+                        if (singleDeleteResponse.ok) {
                             storageDeleteSuccess = true;
-                            console.log('✓ Storage file deleted via alternative method');
+                            console.log('✓ Storage file deleted via single delete');
                         } else {
-                            const altError = await altResponse.text();
-                            console.error('Alternative delete error:', altError);
+                            const singleError = await singleDeleteResponse.text();
+                            console.error('Single delete error:', singleError);
                         }
                     }
                 } else {
                     console.warn('Could not extract storage path from URL');
+                    console.log('URL pattern expected: /storage/v1/object/public/signals/...');
                 }
                 
                 // 3. Remove from local array
@@ -5934,10 +5952,11 @@
                 const resultMsg = [];
                 if (dbDeleteSuccess) resultMsg.push('DB ✓');
                 if (storageDeleteSuccess) resultMsg.push('Storage ✓');
+                if (!storageDeleteSuccess) resultMsg.push('Storage ✗');
                 
                 if (sliderImages.length === 0) {
                     closeModal();
-                    showToast(`✓ Bild gelöscht (${resultMsg.join(', ')})`, 'success');
+                    showToast(`Bild gelöscht (${resultMsg.join(', ')})`, storageDeleteSuccess ? 'success' : 'error');
                     // Refresh signals to update the main view
                     await fetchSignals();
                     renderSignals();
@@ -5948,11 +5967,26 @@
                     }
                     updateSliderDisplay();
                     renderThumbnails();
-                    showToast(`✓ Bild gelöscht (${resultMsg.join(', ')})`, 'success');
+                    showToast(`Bild gelöscht (${resultMsg.join(', ')})`, storageDeleteSuccess ? 'success' : 'error');
                 }
                 
                 console.log('=== DELETE COMPLETE ===');
                 console.log('DB deleted:', dbDeleteSuccess, '| Storage deleted:', storageDeleteSuccess);
+                
+                if (!storageDeleteSuccess) {
+                    console.warn('⚠️ STORAGE DELETE FEHLGESCHLAGEN!');
+                    console.warn('Mögliche Ursachen:');
+                    console.warn('1. Storage RLS Policy fehlt - führe dieses SQL aus:');
+                    console.warn(`
+CREATE POLICY "Allow admin delete" ON storage.objects
+FOR DELETE TO authenticated
+USING (
+    bucket_id = 'signals' AND
+    EXISTS (SELECT 1 FROM admins WHERE user_id = auth.uid())
+);
+                    `);
+                    console.warn('2. Oder lösche manuell in Supabase Dashboard → Storage → signals');
+                }
                 
             } catch (error) {
                 console.error('Delete image error:', error);
