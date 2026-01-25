@@ -6492,20 +6492,10 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // SUCCESS FEATURE: Check if admin has selected a display photo
-                    const displayPhoto = data.find(img => img.is_display_photo === true);
-                    
-                    if (isAdmin) {
-                        // Admin sees ALL photos, sorted by date (newest first)
-                        sliderImages = data.map(img => ({
-                            url: img.image_url,
-                            scanned_at: img.scanned_at,
-                            is_display: img.is_display_photo
-                        }));
-                    } else {
-                        // Non-admin sees either:
-                        // 1. Admin-selected display photo (if set)
-                        // 2. Latest photo (if no display photo set)
+                    // SUCCESS TAB: Only 1 image (latest or display photo)
+                    if (currentTab === 'success') {
+                        const displayPhoto = data.find(img => img.is_display_photo === true);
+                        
                         if (displayPhoto) {
                             sliderImages = [{
                                 url: displayPhoto.image_url,
@@ -6513,11 +6503,31 @@
                                 is_display: true
                             }];
                         } else {
+                            // Just show the newest image
                             sliderImages = [{
                                 url: data[0].image_url,
                                 scanned_at: data[0].scanned_at,
                                 is_display: false
                             }];
+                        }
+                    } 
+                    // ALL SIGNALS TAB: Show up to 5 images
+                    else {
+                        if (isAdmin) {
+                            // Admin sees ALL photos, sorted by date (newest first)
+                            sliderImages = data.map(img => ({
+                                url: img.image_url,
+                                scanned_at: img.scanned_at,
+                                is_display: img.is_display_photo
+                            }));
+                        } else {
+                            // Regular users: Show up to 5 images (newest first)
+                            const imagesToShow = data.slice(0, 5);
+                            sliderImages = imagesToShow.map(img => ({
+                                url: img.image_url,
+                                scanned_at: img.scanned_at,
+                                is_display: img.is_display_photo
+                            }));
                         }
                     }
                     
