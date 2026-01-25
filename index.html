@@ -3510,8 +3510,8 @@
         </div>
     </section>
 
-    <!-- SEO Content Block (Static, Crawlable) -->
-    <section class="seo-content" style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px; color: var(--text-primary);">
+    <!-- SEO Content Block (Static, Crawlable) - Only shown to non-logged-in visitors -->
+    <section class="seo-content" id="seoContent" style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px; color: var(--text-primary); display: none;">
         <article>
             <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 20px; text-align: center; background: linear-gradient(135deg, var(--accent-green), var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                 Professionelle Wolfe Wave Trading Signale
@@ -4608,6 +4608,12 @@
                 document.getElementById('tabsSection').classList.add('visible');
                 document.getElementById('premiumSection').style.display = 'none';
                 
+                // Hide SEO content block for logged-in users
+                const seoContent = document.getElementById('seoContent');
+                if (seoContent) {
+                    seoContent.style.display = 'none';
+                }
+                
                 // Show trading hours for premium users
                 const tradingHoursBar = document.getElementById('tradingHoursBar');
                 if (tradingHoursBar) {
@@ -4688,6 +4694,12 @@
             document.getElementById('premiumSection').style.display = 'block';
             document.getElementById('successStatsBar').classList.remove('visible');
             document.getElementById('adminBadge').classList.remove('visible');
+            
+            // Show SEO content block for guests (landing page)
+            const seoContent = document.getElementById('seoContent');
+            if (seoContent) {
+                seoContent.style.display = 'block';
+            }
             
             // Hide trading hours for guests
             const tradingHoursBar = document.getElementById('tradingHoursBar');
