@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- SEO Meta Tags -->
     <title>WolfeWaveSignals - Professionelle Wolfe Wave Trading Signale | Echtzeit Alerts</title>
@@ -97,6 +97,12 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+
         :root {
             --bg-primary: #0c0c0c;
             --bg-card: #141414;
@@ -164,6 +170,8 @@
             backdrop-filter: blur(10px);
             z-index: 100;
             transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 100vw;
         }
 
         .header.header-hidden {
@@ -222,34 +230,48 @@
             transform: rotate(-45deg) translate(6px, -6px);
         }
 
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 98;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         /* Mobile Menu Dropdown - MODERNISIERT */
         .mobile-menu {
             display: flex;
             position: fixed;
-            top: 75px;
-            left: 12px;
-            right: 12px;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            max-width: 80vw;
+            height: 100vh;
             background: linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(12, 12, 12, 0.98) 100%);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 16px;
-            padding: 20px;
+            border-left: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 80px 20px 20px;
             flex-direction: column;
             gap: 8px;
             z-index: 99;
-            transform: translateY(-20px);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 255, 136, 0.1);
+            transition: right 0.3s ease;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
         }
 
         .mobile-menu.active {
-            transform: translateY(0);
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
+            right: 0;
         }
 
         .mobile-menu-item {
@@ -2923,6 +2945,14 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            /* Prevent horizontal overflow */
+            .header, .main, .section-header, .stats-section, 
+            .premium-header, .premium-grid-container, .tabs-section,
+            .hero, .trading-hours-bar, .signal-grid, .tab-content {
+                max-width: 100vw;
+                overflow-x: hidden;
+            }
+
             .mobile-cta {
                 /* Visibility controlled by JS based on user status */
             }
@@ -3324,6 +3354,9 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="toggleMobileMenu()"></div>
+
     <header class="header">
         <div class="logo">
             <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
@@ -3365,7 +3398,6 @@
 
     <section class="hero">
         <h1 class="animate-fade-in-up animate-delay-1">Professionelle <span>Wolfe Wave</span> Signale</h1>
-        <p class="animate-fade-in-up animate-delay-2">Erhalte täglich hochwertige Trading-Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels</p>
         
         <!-- Hero CTA Buttons -->
         <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
@@ -3376,28 +3408,10 @@
                 Vorschau ansehen ↓
             </a>
         </div>
-        
-        <!-- Social Proof -->
-        <div class="hero-social-proof animate-fade-in-up animate-delay-4" id="heroSocialProof">
-            <div class="social-proof-item">
-                <span class="social-proof-icon">📊</span>
-                <span>Live-Signale für DAX, NASDAQ, Forex & Krypto</span>
-            </div>
-            <div class="social-proof-divider">•</div>
-            <div class="social-proof-item">
-                <span class="social-proof-icon">🔔</span>
-                <span>E-Mail Alerts bei neuen Signalen</span>
-            </div>
-            <div class="social-proof-divider">•</div>
-            <div class="social-proof-item">
-                <span class="social-proof-icon">✓</span>
-                <span>Jederzeit kündbar</span>
-            </div>
-        </div>
     </section>
 
     <!-- Trading Hours Bar -->
-    <section class="trading-hours-bar">
+    <section class="trading-hours-bar" id="tradingHoursBar" style="display: none;">
         <div class="trading-hours-content">
             <span class="trading-hours-label">🕐 Handelszeiten:</span>
             <div class="market-status" id="xetraStatus">
@@ -3623,10 +3637,13 @@
                         <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; text-decoration: line-through;">Statt 19,90€</div>
                         
                         <!-- Countdown Timer -->
-                        <div id="offerCountdown" style="margin-top: 15px; padding: 12px; background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.3); border-radius: 10px;">
-                            <div style="font-size: 11px; color: #ff6b6b; font-weight: 600; margin-bottom: 6px;">⏰ ANGEBOT ENDET IN:</div>
-                            <div id="countdownTimer" style="font-size: 18px; font-weight: 700; color: #fff; font-family: monospace; letter-spacing: 2px;">00T 00:00:00</div>
-                            <div style="font-size: 10px; color: var(--text-secondary); margin-top: 6px;">Ab 1. März: 19,90€/Monat</div>
+                        <div id="offerCountdown" style="margin-top: 15px; padding: 16px; background: linear-gradient(135deg, rgba(255,107,107,0.2) 0%, rgba(255,71,87,0.15) 100%); border: 1px solid rgba(255,107,107,0.4); border-radius: 12px; box-shadow: 0 4px 12px rgba(255,107,107,0.15);">
+                            <div style="font-size: 11px; color: #ff8888; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <span style="font-size: 14px;">⏰</span>
+                                <span>Angebot endet in</span>
+                            </div>
+                            <div id="countdownTimer" style="font-size: 28px; font-weight: 800; color: #fff; font-family: 'Space Grotesk', monospace; letter-spacing: 3px; text-align: center; text-shadow: 0 2px 8px rgba(255,107,107,0.5);">00T 00:00:00</div>
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 10px; text-align: center;">Danach: 19,90€/Monat</div>
                         </div>
                     </div>
 
@@ -4491,6 +4508,12 @@
                 document.getElementById('tabsSection').classList.add('visible');
                 document.getElementById('premiumSection').style.display = 'none';
                 
+                // Show trading hours for premium users
+                const tradingHoursBar = document.getElementById('tradingHoursBar');
+                if (tradingHoursBar) {
+                    tradingHoursBar.style.display = 'block';
+                }
+                
                 // Update header
                 document.getElementById('previewHeader').innerHTML = `
                     <div class="section-title">
@@ -4564,6 +4587,12 @@
             document.getElementById('successStatsBar').classList.remove('visible');
             document.getElementById('adminBadge').classList.remove('visible');
             
+            // Hide trading hours for guests
+            const tradingHoursBar = document.getElementById('tradingHoursBar');
+            if (tradingHoursBar) {
+                tradingHoursBar.style.display = 'none';
+            }
+            
             // Mobile CTA anzeigen für Gäste (nur auf Mobile)
             const mobileCTA = document.getElementById('mobileCTA');
             if (mobileCTA && window.innerWidth <= 768) {
@@ -4600,9 +4629,11 @@
         function toggleMobileMenu() {
             const burger = document.querySelector('.burger-menu');
             const menu = document.getElementById('mobileMenu');
-            if (burger && menu) {
+            const overlay = document.getElementById('mobileMenuOverlay');
+            if (burger && menu && overlay) {
                 burger.classList.toggle('active');
                 menu.classList.toggle('active');
+                overlay.classList.toggle('active');
             }
         }
 
@@ -4610,6 +4641,7 @@
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');
+            const overlay = document.getElementById('mobileMenuOverlay');
             
             // Nur schließen wenn Menü offen ist UND Klick außerhalb
             if (menu && burger && menu.classList.contains('active')) {
@@ -4617,6 +4649,7 @@
                 if (!menu.contains(e.target) && !burger.contains(e.target)) {
                     menu.classList.remove('active');
                     burger.classList.remove('active');
+                    if (overlay) overlay.classList.remove('active');
                 }
             }
         });
