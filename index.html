@@ -3404,6 +3404,26 @@
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
+                
+                <!-- Trading Hours - Compact -->
+                <div id="tradingHoursBar" style="display: none; margin-top: 4px; font-size: 10px; opacity: 0.7;">
+                    <span style="margin-right: 8px;">
+                        <span id="xetraStatusDot" style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #666; margin-right: 3px;"></span>
+                        <span id="xetraStatusText">XETRA</span>
+                    </span>
+                    <span style="margin-right: 8px;">
+                        <span id="nyseStatusDot" style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #666; margin-right: 3px;"></span>
+                        <span id="nyseStatusText">NYSE</span>
+                    </span>
+                    <span style="margin-right: 8px;">
+                        <span id="forexStatusDot" style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #666; margin-right: 3px;"></span>
+                        <span id="forexStatusText">FX</span>
+                    </span>
+                    <span>
+                        <span id="kryptoStatusDot" style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #00ff88; margin-right: 3px;"></span>
+                        <span id="kryptoStatusText">24/7</span>
+                    </span>
+                </div>
             </div>
         </nav>
         <div class="header-right">
@@ -3445,39 +3465,6 @@
             <a href="#previewHeader" class="btn btn-outline btn-lg">
                 Vorschau ansehen ↓
             </a>
-        </div>
-    </section>
-
-    <!-- Trading Hours Bar -->
-    <section class="trading-hours-bar" id="tradingHoursBar" style="display: none;">
-        <div class="trading-hours-content">
-            <span class="trading-hours-label">🕐 Handelszeiten:</span>
-            <div class="market-status" id="xetraStatus">
-                <span class="market-dot"></span>
-                <span class="market-name">XETRA</span>
-                <span class="market-state">—</span>
-            </div>
-            <div class="market-status" id="nyseStatus">
-                <span class="market-dot"></span>
-                <span class="market-name">NYSE/NASDAQ</span>
-                <span class="market-state">—</span>
-            </div>
-            <div class="market-status" id="forexStatus">
-                <span class="market-dot"></span>
-                <span class="market-name">Forex</span>
-                <span class="market-state">—</span>
-            </div>
-            <div class="market-status" id="kryptoStatus">
-                <span class="market-dot"></span>
-                <span class="market-name">Krypto</span>
-                <span class="market-state">—</span>
-            </div>
-            <div class="market-status" id="asienStatus">
-                <span class="market-dot"></span>
-                <span class="market-name">Asien</span>
-                <span class="market-state">—</span>
-            </div>
-        </div>
     </section>
 
     <!-- Mobile CTA (nur für nicht-eingeloggte User) -->
@@ -4221,79 +4208,29 @@
             const utcMinute = now.getUTCMinutes();
             const utcDay = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
             const isWeekend = utcDay === 0 || utcDay === 6;
+            const utcTime = utcHour + utcMinute / 60;
             
-            // XETRA (Frankfurt): 08:00-17:30 CET/CEST = 07:00-16:30 UTC (winter) or 06:00-15:30 UTC (summer)
-            // Simplified: 07:00-16:30 UTC, Pre-market 06:00-07:00 UTC
-            const xetraPreStart = 6;
-            const xetraStart = 7;
-            const xetraEnd = 16.5; // 16:30
-            updateMarketStatus('xetraStatus', utcHour, utcMinute, xetraPreStart, xetraStart, xetraEnd, isWeekend);
+            // XETRA (Frankfurt): 07:00-16:30 UTC
+            const xetraOpen = !isWeekend && utcTime >= 7 && utcTime < 16.5;
+            updateCompactMarket('xetraStatusDot', 'xetraStatusText', xetraOpen);
             
-            // NYSE/NASDAQ: 09:30-16:00 EST = 14:30-21:00 UTC (winter) or 13:30-20:00 UTC (summer)
-            // Pre-market: 04:00 EST = 09:00 UTC
-            // Simplified: 14:30-21:00 UTC, Pre-market 09:00-14:30 UTC
-            const nysePreStart = 9;
-            const nyseStart = 14.5; // 14:30
-            const nyseEnd = 21;
-            updateMarketStatus('nyseStatus', utcHour, utcMinute, nysePreStart, nyseStart, nyseEnd, isWeekend);
+            // NYSE/NASDAQ: 14:30-21:00 UTC
+            const nyseOpen = !isWeekend && utcTime >= 14.5 && utcTime < 21;
+            updateCompactMarket('nyseStatusDot', 'nyseStatusText', nyseOpen);
             
-            // Forex: 22:00 Sunday UTC - 22:00 Friday UTC (24/5)
-            const forexEl = document.getElementById('forexStatus');
-            if (forexEl) {
-                // Forex is open from Sunday 22:00 UTC to Friday 22:00 UTC
-                const isForexOpen = !((utcDay === 6) || (utcDay === 0 && utcHour < 22) || (utcDay === 5 && utcHour >= 22));
-                forexEl.className = 'market-status ' + (isForexOpen ? 'open' : 'closed');
-                forexEl.querySelector('.market-state').textContent = '';
-            }
+            // Forex: 24/5 (closed Saturday and Sunday before 22:00 UTC)
+            const forexOpen = !((utcDay === 6) || (utcDay === 0 && utcHour < 22) || (utcDay === 5 && utcHour >= 22));
+            updateCompactMarket('forexStatusDot', 'forexStatusText', forexOpen);
             
-            // Krypto: 24/7
-            const kryptoEl = document.getElementById('kryptoStatus');
-            if (kryptoEl) {
-                kryptoEl.className = 'market-status open';
-                kryptoEl.querySelector('.market-state').textContent = '';
-            }
-            
-            // Asien (Tokyo, Shanghai, Hong Kong)
-            // Tokyo: 09:00-15:00 JST (UTC+9) = 00:00-06:00 UTC
-            // Shanghai: 09:30-15:00 CST (UTC+8) = 01:30-07:00 UTC  
-            // Hong Kong: 09:30-16:00 HKT (UTC+8) = 01:30-08:00 UTC
-            // Combined Asian session: ~00:00-08:00 UTC
-            // Pre-market starts at 23:00 UTC (which is Monday 8am in Tokyo)
-            const asienEl = document.getElementById('asienStatus');
-            if (asienEl) {
-                const utcTime = utcHour + utcMinute / 60;
-                let asienStatus = 'closed';
-                let asienText = '';
-                
-                // Samstag: komplett geschlossen
-                if (utcDay === 6) {
-                    asienStatus = 'closed';
-                    asienText = '';
-                }
-                // Sonntag: bis 22:59 geschlossen, ab 23:00 Pre-Market
-                else if (utcDay === 0) {
-                    if (utcTime >= 23) {
-                        asienStatus = 'pre-market';
-                        asienText = 'Pre-Market';
-                    }
-                }
-                // Montag - Freitag
-                else {
-                    // 00:00-08:00 UTC: Hauptsession (Asien offen)
-                    if (utcTime >= 0 && utcTime < 8) {
-                        asienStatus = 'open';
-                        asienText = '';
-                    }
-                    // 23:00-23:59 UTC: Pre-Market für nächsten Tag
-                    // (außer Freitag Abend, da ist Samstag in Asien)
-                    else if (utcTime >= 23 && utcDay !== 5) {
-                        asienStatus = 'pre-market';
-                        asienText = 'Pre-Market';
-                    }
-                }
-                
-                asienEl.className = 'market-status ' + asienStatus;
-                asienEl.querySelector('.market-state').textContent = asienText;
+            // Krypto: Always open
+            updateCompactMarket('kryptoStatusDot', 'kryptoStatusText', true);
+        }
+        
+        function updateCompactMarket(dotId, textId, isOpen) {
+            const dot = document.getElementById(dotId);
+            const text = document.getElementById(textId);
+            if (dot) {
+                dot.style.background = isOpen ? '#00ff88' : '#666';
             }
         }
         
@@ -4316,7 +4253,8 @@
             }
             
             el.className = 'market-status ' + status;
-            el.querySelector('.market-state').textContent = text;
+            const stateEl = el.querySelector('.market-state');
+            if (stateEl) stateEl.textContent = text;
         }
 
         // ==================== INIT ====================
