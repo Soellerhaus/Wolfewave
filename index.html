@@ -6424,34 +6424,79 @@ USING (
             if (!confirm('Signal aus Success entfernen?')) return;
             
             try {
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`,
-                    {
-                        method: 'PATCH',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${getAccessToken()}`,
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=minimal'
-                        },
-                        body: JSON.stringify({ 
-                            status: 'inactive',
-                            result_folder: null
-                        })
-                    }
-                );
+                console.log('=== DELETING SIGNAL FROM SUCCESS ===');
+                console.log('Signal ID (raw):', signalId, 'Type:', typeof signalId);
                 
-                if (response.ok) {
-                    showToast('✓ Signal entfernt', 'success');
-                    await fetchCompletedSignals();
-                    renderSignals();
-                } else {
-                    throw new Error('Failed to delete signal');
+                // Parse ID - handle both integer and string IDs
+                const parsedId = typeof signalId === 'string' && !isNaN(signalId) ? parseInt(signalId) : signalId;
+                console.log('Signal ID (parsed):', parsedId, 'Type:', typeof parsedId);
+                
+                // Step 1: DELETE from completed_signals table
+                console.log('Step 1: Deleting from completed_signals...');
+                const deleteUrl = `${SUPABASE_URL}/rest/v1/completed_signals?id=eq.${parsedId}`;
+                console.log('DELETE URL:', deleteUrl);
+                
+                const deleteResponse = await fetch(deleteUrl, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`
+                    }
+                });
+                
+                console.log('Delete response status:', deleteResponse.status);
+                
+                if (!deleteResponse.ok) {
+                    const errorText = await deleteResponse.text();
+                    console.error('Delete error:', errorText);
+                    throw new Error(`Failed to delete from completed_signals: ${errorText}`);
                 }
                 
+                // Step 2: Update signals table to mark as inactive
+                console.log('Step 2: Updating signals table...');
+                const updateUrl = `${SUPABASE_URL}/rest/v1/signals?id=eq.${parsedId}`;
+                console.log('UPDATE URL:', updateUrl);
+                
+                const signalsResponse = await fetch(updateUrl, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${getAccessToken()}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({ 
+                        status: 'inactive',
+                        result_folder: null,
+                        tp1_hit: false,
+                        tp2_hit: false,
+                        tp3_hit: false,
+                        sl_hit: false
+                    })
+                });
+                
+                console.log('Update response status:', signalsResponse.status);
+                
+                if (!signalsResponse.ok) {
+                    const errorText = await signalsResponse.text();
+                    console.error('Update error:', errorText);
+                    // Continue anyway - main deletion from completed_signals succeeded
+                    console.warn('Signals update failed but continuing...');
+                }
+                
+                console.log('✓ Successfully removed from Success');
+                showToast('✓ Signal aus Success entfernt', 'success');
+                
+                // Step 3: Refresh display
+                console.log('Step 3: Refreshing display...');
+                await fetchCompletedSignals();
+                renderSignals();
+                console.log('=== DELETE COMPLETE ===');
+                
             } catch (error) {
-                console.error('Error deleting signal:', error);
-                showToast('❌ Fehler beim Entfernen', 'error');
+                console.error('=== DELETE FAILED ===');
+                console.error('Error:', error);
+                showToast('❌ Fehler beim Entfernen: ' + error.message, 'error');
             }
         }
         
