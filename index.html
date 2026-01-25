@@ -96,7 +96,7 @@
             "bestRating": "5",
             "worstRating": "1"
         },
-        "featureList": "Echtzeit Trading Signale, Entry & Exit Points, Stop-Loss & Take-Profit, Multi-Timeframe Analyse, Email & Telegram Alerts",
+        "featureList": "Echtzeit Trading Signale, Entry & Exit Points, Stop-Loss & Take-Profit, Multi-Timeframe Analyse, Email Alerts",
         "screenshot": "https://www.wolfewavesignals.com/images/screenshot.jpg"
     }
     </script>
@@ -397,6 +397,55 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+        
+        /* Google Translate Widget Styling */
+        #google_translate_element {
+            font-family: inherit;
+        }
+        
+        #google_translate_element select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        #google_translate_element select:hover {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        /* Hide Google Translate branding */
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame {
+            display: none !important;
+        }
+        
+        .goog-logo-link {
+            display: none !important;
+        }
+        
+        .goog-te-gadget {
+            color: transparent !important;
+            font-size: 0 !important;
+        }
+        
+        .goog-te-gadget span {
+            display: none !important;
+        }
+        
+        .goog-te-combo {
+            display: inline-block !important;
+        }
+        
+        body {
+            top: 0 !important;
+            position: static !important;
         }
 
         .header-nav {
@@ -3272,18 +3321,6 @@
                 padding: 2px 6px !important;
                 margin-left: 4px !important;
             }
-            
-            /* Make scrolling more obvious */
-            .tabs::after {
-                content: '→';
-                position: sticky;
-                right: 0;
-                background: linear-gradient(90deg, transparent, var(--bg-primary));
-                padding: 10px 8px;
-                color: var(--accent-green);
-                font-size: 14px;
-                pointer-events: none;
-            }
 
             /* Filters kompakt */
             .filters {
@@ -3489,6 +3526,70 @@
             }
         }
     </style>
+    
+    <!-- Google Translate Widget -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            // Desktop version
+            new google.translate.TranslateElement({
+                pageLanguage: 'de',
+                includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+                multilanguagePage: true
+            }, 'google_translate_element');
+            
+            // Mobile version
+            new google.translate.TranslateElement({
+                pageLanguage: 'de',
+                includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+                multilanguagePage: true
+            }, 'google_translate_element_mobile');
+            
+            // AUTO-DETECT and translate on first visit
+            setTimeout(function() {
+                autoTranslateToUserLanguage();
+            }, 1000);
+        }
+        
+        function autoTranslateToUserLanguage() {
+            // Check if already translated (cookie exists)
+            if (document.cookie.indexOf('googtrans') !== -1) {
+                return; // Already translated, don't auto-translate again
+            }
+            
+            // Get browser language
+            var userLang = navigator.language || navigator.userLanguage;
+            userLang = userLang.split('-')[0]; // Get base language (e.g., 'en' from 'en-US')
+            
+            // If user is already on German, don't translate
+            if (userLang === 'de') {
+                return;
+            }
+            
+            // Map of supported languages
+            var supportedLangs = ['en','es','fr','it','pt','ru','zh','ja','ko','ar','tr','pl','nl','sv','da','no','fi','cs','hu','ro','el','he','id','th','vi','uk','bg','hr','sk','sl'];
+            
+            // Check if user's language is supported
+            if (supportedLangs.indexOf(userLang) !== -1) {
+                // Special case for Chinese
+                if (userLang === 'zh') {
+                    userLang = 'zh-CN';
+                }
+                
+                // Set the Google Translate cookie to auto-translate
+                var googleTransCookie = '/de/' + userLang;
+                document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+                document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+                
+                // Reload to apply translation
+                window.location.reload();
+            }
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
     <!-- Mobile Menu Overlay -->
@@ -3529,6 +3630,9 @@
             </div>
         </nav>
         <div class="header-right">
+            <!-- Google Translate Widget -->
+            <div id="google_translate_element" style="display: inline-block; margin-right: 12px;"></div>
+            
             <div class="live-indicator">
                 <div class="live-dot"></div>
                 <span>LIVE</span>
@@ -3548,6 +3652,11 @@
     <div class="mobile-menu" id="mobileMenu" onclick="event.stopPropagation();">
         <!-- Close Button at top -->
         <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
+        
+        <!-- Language Selector - Mobile -->
+        <div style="margin: 0 16px 12px 16px; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+            <div id="google_translate_element_mobile"></div>
+        </div>
         
         <!-- Search Field - NO WRAPPER, ABSOLUTE FULL WIDTH -->
         <input 
@@ -3682,7 +3791,7 @@
             <div style="text-align: center; margin: 40px 0;">
                 <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Starte jetzt mit 9,99€/Monat</h2>
                 <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 25px;">
-                    ✓ Unbegrenzte Signale &nbsp; ✓ Alle Märkte & Timeframes &nbsp; ✓ Email & Telegram Alerts &nbsp; ✓ Jederzeit kündbar
+                    ✓ Unbegrenzte Signale &nbsp; ✓ Alle Märkte & Timeframes &nbsp; ✓ Email Alerts &nbsp; ✓ Jederzeit kündbar
                 </p>
             </div>
         </article>
@@ -4727,6 +4836,10 @@
                 mobileMenu.innerHTML = `
                     <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
                     
+                    <div style="margin: 0 16px 12px 16px; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <div id="google_translate_element_mobile"></div>
+                    </div>
+                    
                     <input 
                         type="text" 
                         id="mobileSearchInput" 
@@ -4767,6 +4880,17 @@
                     ${isSubscribed ? '<button class="mobile-menu-btn" onclick="event.stopPropagation(); manageSubscription(); toggleMobileMenu();">💳 Abo verwalten</button>' : '<button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">⭐ Premium werden</button>'}
                     <button class="mobile-menu-btn" onclick="event.stopPropagation(); handleLogout(); toggleMobileMenu();">🚪 Ausloggen</button>
                 `;
+                
+                // Re-initialize Google Translate for mobile after menu update
+                if (typeof google !== 'undefined' && google.translate) {
+                    setTimeout(() => {
+                        new google.translate.TranslateElement({
+                            pageLanguage: 'de',
+                            includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
+                            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                        }, 'google_translate_element_mobile');
+                    }, 100);
+                }
             }
         }
 
@@ -4811,6 +4935,10 @@
                 mobileMenu.innerHTML = `
                     <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
                     
+                    <div style="margin: 0 16px 12px 16px; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <div id="google_translate_element_mobile"></div>
+                    </div>
+                    
                     <input 
                         type="text" 
                         id="mobileSearchInput" 
@@ -4842,6 +4970,17 @@
                     <button class="mobile-menu-btn" onclick="event.stopPropagation(); showLogin(); toggleMobileMenu();">Login</button>
                     <button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
                 `;
+                
+                // Re-initialize Google Translate for mobile after menu update
+                if (typeof google !== 'undefined' && google.translate) {
+                    setTimeout(() => {
+                        new google.translate.TranslateElement({
+                            pageLanguage: 'de',
+                            includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
+                            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                        }, 'google_translate_element_mobile');
+                    }, 100);
+                }
             }
             
             document.getElementById('previewHeader').innerHTML = `
