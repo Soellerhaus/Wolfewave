@@ -5013,13 +5013,21 @@
             // Display indicator if result is fixed
             const fixedBadge = signal.result_fixed ? '<span style="position:absolute;top:12px;right:12px;background:var(--accent-gold);color:#000;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;z-index:10;">🔒 FIXIERT</span>' : '';
             
+            // Watermark for fixed results (admin only)
+            const fixedWatermark = (signal.result_fixed && isAdmin) ? `
+                <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,215,0,0.15);pointer-events:none;z-index:5;">
+                    <div style="font-size:48px;font-weight:900;color:rgba(255,215,0,0.4);transform:rotate(-15deg);text-shadow:2px 2px 4px rgba(0,0,0,0.5);">🔒 FIXIERT</div>
+                </div>
+            ` : '';
+            
             return `
                 <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', ${JSON.stringify(signal).replace(/"/g, '&quot;')})">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${fixedBadge}
                     ${adminControls}
-                    <div class="signal-image-container">
+                    <div class="signal-image-container" style="position:relative;">
                         ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
+                        ${fixedWatermark}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -5479,12 +5487,7 @@
                     showDeleteModal(signalId);
                 }
                 
-                if (e.target.matches('[data-delete-completed]')) {
-                    e.stopPropagation();
-                    const signalId = e.target.getAttribute('data-delete-completed');
-                    console.log('Delete completed clicked:', signalId);
-                    showDeleteCompletedModal(signalId);
-                }
+                // OLD COMPLETED DELETE LISTENER REMOVED - NOW USING DIRECT ONCLICK
                 
                 if (e.target.matches('[data-success-signal]')) {
                     e.stopPropagation();
@@ -6236,11 +6239,7 @@ USING (
             if (!confirm('Dieses Foto wirklich löschen? (wird auch aus Supabase Storage gelöscht)')) return;
             
             try {
-                const urlParts = imageUrl.split('/');
-                const bucket = urlParts[urlParts.length - 2];
-                const fileName = urlParts[urlParts.length - 1];
-                const filePath = `${bucket}/${fileName}`;
-                
+                // 1. Delete from database
                 const dbResponse = await fetch(
                     `${SUPABASE_URL}/rest/v1/signal_images?id=eq.${photoId}`,
                     {
@@ -6252,23 +6251,69 @@ USING (
                     }
                 );
                 
-                await fetch(
-                    `${SUPABASE_URL}/storage/v1/object/${filePath}`,
+                if (!dbResponse.ok) {
+                    throw new Error('Failed to delete from database');
+                }
+                
+                // 2. Delete from storage
+                try {
+                    const urlParts = imageUrl.split('/');
+                    const storagePath = urlParts.slice(urlParts.indexOf('signal-images')).join('/');
+                    
+                    await fetch(
+                        `${SUPABASE_URL}/storage/v1/object/${storagePath}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                } catch (storageError) {
+                    console.warn('Storage deletion failed (might not exist):', storageError);
+                }
+                
+                // 3. Update completed_signals to use new latest photo
+                const { data: remainingPhotos } = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,is_display_photo&order=scanned_at.desc&limit=1`,
                     {
-                        method: 'DELETE',
                         headers: {
                             'apikey': SUPABASE_KEY,
                             'Authorization': `Bearer ${getAccessToken()}`
                         }
                     }
-                );
+                ).then(r => r.json());
                 
-                if (dbResponse.ok) {
-                    showToast('✓ Foto gelöscht', 'success');
-                    closePhotoManager();
-                    openPhotoManager(wedgeId);
-                } else {
-                    throw new Error('Failed to delete photo');
+                // 4. If there are remaining photos, update completed_signals
+                if (remainingPhotos && remainingPhotos.length > 0) {
+                    const newPhotoUrl = remainingPhotos[0].image_url;
+                    
+                    await fetch(
+                        `${SUPABASE_URL}/rest/v1/completed_signals?wedge_id=eq.${wedgeId}`,
+                        {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=minimal'
+                            },
+                            body: JSON.stringify({ original_path: newPhotoUrl })
+                        }
+                    );
+                }
+                
+                showToast('✓ Foto gelöscht', 'success');
+                
+                // 5. Refresh everything
+                await fetchCompletedSignals();
+                renderSignals();
+                closePhotoManager();
+                
+                // Reopen photo manager if there are still photos
+                if (remainingPhotos && remainingPhotos.length > 0) {
+                    setTimeout(() => openPhotoManager(wedgeId), 300);
                 }
                 
             } catch (error) {
