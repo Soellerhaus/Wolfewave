@@ -283,7 +283,7 @@
             background: linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(12, 12, 12, 0.98) 100%);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(0, 255, 136, 0.2);
-            padding: 80px 20px 20px;
+            padding: 70px 20px 20px;
             flex-direction: column;
             gap: 8px;
             z-index: 99;
@@ -3027,6 +3027,7 @@
             @media (max-width: 360px) {
                 .mobile-menu {
                     width: 200px;
+                    padding: 60px 16px 16px !important;
                 }
                 
                 .mobile-menu-item {
@@ -3046,6 +3047,50 @@
                 .mobile-menu-btn {
                     font-size: 12px;
                     padding: 10px 12px;
+                }
+                
+                /* TABS ICON-ONLY MODE */
+                .tabs {
+                    overflow-x: auto !important;
+                    -webkit-overflow-scrolling: touch;
+                }
+                
+                .tab {
+                    padding: 8px 10px !important;
+                    font-size: 16px !important;
+                    min-width: 40px !important;
+                }
+                
+                /* Hide tab text, show only icons/badges */
+                .tab[data-tab="all"]::before { content: "📊"; }
+                .tab[data-tab="all"] { font-size: 0 !important; }
+                .tab[data-tab="all"]::before { font-size: 16px !important; }
+                
+                .tab[data-tab="new"]::before { content: "🆕"; }
+                .tab[data-tab="new"] { font-size: 0 !important; }
+                .tab[data-tab="new"]::before { font-size: 16px !important; }
+                
+                .tab[data-tab="active"] { font-size: 0 !important; }
+                .tab[data-tab="active"]::before { content: "🟢"; font-size: 16px !important; }
+                
+                .tab[data-tab="pending"] { font-size: 0 !important; }
+                .tab[data-tab="pending"]::before { content: "⏳"; font-size: 16px !important; }
+                
+                .tab[data-tab="bullish"]::before { content: "📈"; }
+                .tab[data-tab="bullish"] { font-size: 0 !important; }
+                .tab[data-tab="bullish"]::before { font-size: 16px !important; }
+                
+                .tab[data-tab="bearish"]::before { content: "📉"; }
+                .tab[data-tab="bearish"] { font-size: 0 !important; }
+                .tab[data-tab="bearish"]::before { font-size: 16px !important; }
+                
+                .tab[data-tab="success"] { font-size: 0 !important; }
+                .tab[data-tab="success"]::before { content: "🏆"; font-size: 16px !important; }
+                
+                /* Keep badges visible */
+                .tab-badge {
+                    font-size: 9px !important;
+                    display: inline-block !important;
                 }
             }
 
