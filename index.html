@@ -3226,31 +3226,35 @@
                 flex-direction: column !important;
                 gap: 8px !important;
                 padding: 0 !important;
-                overflow-x: visible !important;
-                overflow-y: visible !important;
+                margin: 0 !important;
+                border-bottom: none !important;
             }
 
-            /* Tabs horizontal scrollbar - MUST SCROLL */
+            /* Tabs horizontal scrollbar - EDGE TO EDGE */
             .tabs {
                 display: flex !important;
                 flex-wrap: nowrap !important;
                 overflow-x: auto !important;
                 overflow-y: hidden !important;
-                gap: 4px !important;
-                padding: 8px 12px 12px 12px !important;
+                gap: 6px !important;
+                padding: 8px 0 12px 0 !important;
                 margin: 0 !important;
+                width: 100vw !important;
+                margin-left: calc(-50vw + 50%) !important;
+                padding-left: 12px !important;
+                padding-right: 12px !important;
                 -webkit-overflow-scrolling: touch !important;
                 scrollbar-width: thin;
                 scroll-behavior: smooth;
-                scroll-snap-type: x mandatory;
             }
 
             .tabs::-webkit-scrollbar {
                 height: 4px;
+                background: rgba(0,0,0,0.1);
             }
             
             .tabs::-webkit-scrollbar-thumb {
-                background: rgba(0, 255, 136, 0.3);
+                background: rgba(0, 255, 136, 0.5);
                 border-radius: 2px;
             }
 
@@ -3545,16 +3549,14 @@
         <!-- Close Button at top -->
         <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
         
-        <!-- Search Field - FULL WIDTH (no padding) -->
-        <div style="margin: 0 0 16px 0; padding: 0;">
-            <input 
-                type="text" 
-                id="mobileSearchInput" 
-                placeholder="🔍 Symbol suchen..." 
-                style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0; box-sizing: border-box;"
-                oninput="handleMobileSearch(this.value)"
-            >
-        </div>
+        <!-- Search Field - NO WRAPPER, ABSOLUTE FULL WIDTH -->
+        <input 
+            type="text" 
+            id="mobileSearchInput" 
+            placeholder="🔍 Symbol suchen..." 
+            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-left: none; border-right: none; border-top: none; border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0 0 16px 0; box-sizing: border-box; display: block;"
+            oninput="handleMobileSearch(this.value)"
+        >
         
         <a href="wolfewaves.html" class="mobile-menu-item">
             <span class="menu-icon">📖</span>
@@ -4725,15 +4727,13 @@
                 mobileMenu.innerHTML = `
                     <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
                     
-                    <div style="margin: 0 0 16px 0; padding: 0;">
-                        <input 
-                            type="text" 
-                            id="mobileSearchInput" 
-                            placeholder="🔍 Symbol suchen..." 
-                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0; box-sizing: border-box;"
-                            oninput="handleMobileSearch(this.value)"
-                        >
-                    </div>
+                    <input 
+                        type="text" 
+                        id="mobileSearchInput" 
+                        placeholder="🔍 Symbol suchen..." 
+                        style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-left: none; border-right: none; border-top: none; border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0 0 16px 0; box-sizing: border-box; display: block;"
+                        oninput="handleMobileSearch(this.value)"
+                    >
                     <div class="mobile-menu-item" style="display: flex; align-items: center; gap: 12px;">
                         <div class="user-avatar" style="width:36px;height:36px;background:var(--accent-green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">${initial}</div>
                         <div>
@@ -4811,15 +4811,13 @@
                 mobileMenu.innerHTML = `
                     <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
                     
-                    <div style="margin: 0 0 16px 0; padding: 0;">
-                        <input 
-                            type="text" 
-                            id="mobileSearchInput" 
-                            placeholder="🔍 Symbol suchen..." 
-                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0; box-sizing: border-box;"
-                            oninput="handleMobileSearch(this.value)"
-                        >
-                    </div>
+                    <input 
+                        type="text" 
+                        id="mobileSearchInput" 
+                        placeholder="🔍 Symbol suchen..." 
+                        style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-left: none; border-right: none; border-top: none; border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0 0 16px 0; box-sizing: border-box; display: block;"
+                        oninput="handleMobileSearch(this.value)"
+                    >
                     <a href="wolfewaves.html" class="mobile-menu-item">
                         <span class="menu-icon">📖</span>
                         <span class="menu-text">Tutorial</span>
