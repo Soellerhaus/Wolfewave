@@ -283,9 +283,9 @@
             background: linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(12, 12, 12, 0.98) 100%);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(0, 255, 136, 0.2);
-            padding: 16px;
+            padding: 0;
             flex-direction: column;
-            gap: 8px;
+            gap: 0;
             z-index: 99;
             transition: right 0.3s ease;
             box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
@@ -300,6 +300,7 @@
             color: var(--text-primary);
             text-decoration: none;
             padding: 14px 18px;
+            margin: 0 16px;
             border-radius: 12px;
             font-size: 15px;
             font-weight: 500;
@@ -325,11 +326,12 @@
         .mobile-menu-divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-            margin: 8px 0;
+            margin: 8px 16px;
         }
 
         .mobile-menu-btn {
-            width: 100%;
+            width: calc(100% - 32px);
+            margin: 0 16px;
             padding: 16px;
             border-radius: 12px;
             font-family: inherit;
@@ -3216,34 +3218,40 @@
             /* Tabs Section kompakt */
             .tabs-section {
                 padding: 8px 0 !important;
-                overflow: visible !important;
+                overflow-x: visible !important;
+                overflow-y: visible !important;
             }
 
             .tabs-container {
                 flex-direction: column !important;
                 gap: 8px !important;
-                padding: 0 12px !important;
-                overflow: visible !important;
+                padding: 0 !important;
+                overflow-x: visible !important;
+                overflow-y: visible !important;
             }
 
-            /* Tabs horizontal scrollbar - FIXED OVERFLOW */
+            /* Tabs horizontal scrollbar - MUST SCROLL */
             .tabs {
                 display: flex !important;
                 flex-wrap: nowrap !important;
-                overflow-x: scroll !important;
+                overflow-x: auto !important;
                 overflow-y: hidden !important;
-                gap: 6px !important;
-                padding: 4px 4px 12px 4px !important;
-                margin: 0 -12px !important;
-                padding-left: 12px !important;
-                padding-right: 12px !important;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
+                gap: 4px !important;
+                padding: 8px 12px 12px 12px !important;
+                margin: 0 !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: thin;
                 scroll-behavior: smooth;
+                scroll-snap-type: x mandatory;
             }
 
             .tabs::-webkit-scrollbar {
-                display: none;
+                height: 4px;
+            }
+            
+            .tabs::-webkit-scrollbar-thumb {
+                background: rgba(0, 255, 136, 0.3);
+                border-radius: 2px;
             }
 
             .tab {
@@ -3535,15 +3543,15 @@
     <!-- Mobile Menu Dropdown -->
     <div class="mobile-menu" id="mobileMenu" onclick="event.stopPropagation();">
         <!-- Close Button at top -->
-        <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100;">✕</button>
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
         
-        <!-- Search Field at very top -->
-        <div style="margin-bottom: 16px; margin-top: 8px;">
+        <!-- Search Field - FULL WIDTH (no padding) -->
+        <div style="margin: 0 0 16px 0; padding: 0;">
             <input 
                 type="text" 
                 id="mobileSearchInput" 
                 placeholder="🔍 Symbol suchen..." 
-                style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 13px;"
+                style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0; box-sizing: border-box;"
                 oninput="handleMobileSearch(this.value)"
             >
         </div>
@@ -4715,14 +4723,14 @@
             if (mobileMenu) {
                 mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
-                    <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100;">✕</button>
+                    <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
                     
-                    <div style="margin-bottom: 16px; margin-top: 8px;">
+                    <div style="margin: 0 0 16px 0; padding: 0;">
                         <input 
                             type="text" 
                             id="mobileSearchInput" 
                             placeholder="🔍 Symbol suchen..." 
-                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 13px;"
+                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0; box-sizing: border-box;"
                             oninput="handleMobileSearch(this.value)"
                         >
                     </div>
@@ -4801,14 +4809,14 @@
             if (mobileMenu) {
                 mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
-                    <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100;">✕</button>
+                    <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100; padding: 0; line-height: 1;">✕</button>
                     
-                    <div style="margin-bottom: 16px; margin-top: 8px;">
+                    <div style="margin: 0 0 16px 0; padding: 0;">
                         <input 
                             type="text" 
                             id="mobileSearchInput" 
                             placeholder="🔍 Symbol suchen..." 
-                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 13px;"
+                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0; color: var(--text-primary); font-size: 13px; margin: 0; box-sizing: border-box;"
                             oninput="handleMobileSearch(this.value)"
                         >
                     </div>
