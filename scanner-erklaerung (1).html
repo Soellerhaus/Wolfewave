@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>So funktioniert unser Scanner | WolfeWaveSignals</title>
+    <meta name="description" content="Erfahre, wie unser Wolfe Wave Scanner arbeitet. Einfach erklärt für Einsteiger und Profis.">
+    <style>
+        /* ========================================
+           CSS RESET & BASE STYLES
+           ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --bg-card-hover: #1a1a1a;
+            --accent-green: #00ff88;
+            --accent-green-dim: rgba(0, 255, 136, 0.1);
+            --accent-green-medium: rgba(0, 255, 136, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --border-color: #1f1f1f;
+            --border-accent: #2a2a2a;
+            --warning-bg: rgba(255, 193, 7, 0.1);
+            --warning-border: rgba(255, 193, 7, 0.3);
+            --warning-text: #ffc107;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* ========================================
+           HEADER & NAVIGATION
+           ======================================== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 24px;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-weight: 600;
+        }
+
+        .logo-text .green {
+            color: var(--accent-green);
+        }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav a.active {
+            color: var(--accent-green);
+            background: var(--accent-green-dim);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: var(--accent-green-dim);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--accent-green);
+            border-radius: 2px;
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
+        .hero {
+            padding: 80px 24px 60px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03) 0%, transparent 100%);
+        }
+
+        .hero-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-green-dim);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-points {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px 32px;
+            margin-bottom: 40px;
+        }
+
+        .hero-point {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .hero-point-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-green-dim);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            font-size: 0.8rem;
+        }
+
+        /* ========================================
+           BUTTONS
+           ======================================== */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-accent);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        /* ========================================
+           SECTIONS
+           ======================================== */
+        .section {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========================================
+           OVERVIEW CARDS
+           ======================================== */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .overview-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-green-dim);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .overview-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .overview-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           STEPS SECTION
+           ======================================== */
+        .steps-container {
+            position: relative;
+        }
+
+        .steps-line {
+            position: absolute;
+            left: 28px;
+            top: 56px;
+            bottom: 56px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-green) 0%, var(--border-color) 100%);
+        }
+
+        .step {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 8px;
+        }
+
+        .step-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ========================================
+           PATTERN SECTION
+           ======================================== */
+        .pattern-section {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-primary) 100%);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pattern-highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+
+        .pattern-highlight-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .pattern-badge {
+            background: var(--accent-green);
+            color: #000;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pattern-highlight h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .pattern-highlight p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .pattern-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pattern-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-green-dim);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .pattern-feature svg {
+            color: var(--accent-green);
+        }
+
+        /* ========================================
+           EXPECTATION SECTION
+           ======================================== */
+        .expectation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .expectation-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .expectation-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .expectation-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-green-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .expectation-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ========================================
+           DISCLAIMER SECTION
+           ======================================== */
+        .disclaimer-box {
+            background: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .disclaimer-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .disclaimer-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 193, 7, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .disclaimer-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--warning-text);
+        }
+
+        .disclaimer-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .disclaimer-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .disclaimer-content strong {
+            color: var(--text-primary);
+        }
+
+        .disclaimer-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .disclaimer-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .disclaimer-list li::before {
+            content: "⚠";
+            color: var(--warning-text);
+        }
+
+        /* ========================================
+           FAQ SECTION
+           ======================================== */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-green-dim);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            font-size: 1.2rem;
+            font-weight: 400;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-inner {
+            padding: 0 24px 24px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 24px;
+            margin-top: 80px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-brand span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* ========================================
+           RESPONSIVE STYLES
+           ======================================== */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: column;
+                padding: 16px;
+            }
+
+            .nav.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .hero {
+                padding: 60px 20px 40px;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-points {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .steps-line {
+                left: 20px;
+            }
+
+            .step {
+                gap: 16px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
+            .pattern-highlight {
+                padding: 24px;
+            }
+
+            .pattern-features {
+                flex-direction: column;
+            }
+
+            .disclaimer-box {
+                padding: 24px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-inner {
+                height: 64px;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .expectation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========================================
+         HEADER
+         ======================================== -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#0c0c0c" stroke="#00ff88" stroke-width="2"/>
+                        <path d="M25 65 L35 35 L50 55 L65 35 L75 65" stroke="#00ff88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <circle cx="35" cy="35" r="4" fill="#00ff88"/>
+                        <circle cx="65" cy="35" r="4" fill="#00ff88"/>
+                        <path d="M42 70 Q50 78 58 70" stroke="#00ff88" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+                <span class="logo-text"><span class="green">Wolfe</span>WaveSignals</span>
+            </a>
+            <nav class="nav" id="mainNav">
+                <a href="index.html">Start</a>
+                <a href="scanner.html" class="active">Scanner</a>
+                <a href="#faq">FAQ</a>
+                <a href="#disclaimer">Disclaimer</a>
+            </nav>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menü öffnen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ========================================
+         HERO SECTION
+         ======================================== -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                Scanner-Übersicht
+            </div>
+            <h1>So funktioniert unser Scanner</h1>
+            <p class="hero-subtitle">
+                Unser Scanner durchsucht automatisch die Märkte nach bewährten Chartmustern. 
+                Du bekommst klare Signal-Ideen – den Rest entscheidest du selbst.
+            </p>
+            <div class="hero-points">
+                <div class="hero-point">
+                    <div class="hero-point-icon">✓</div>
+                    Automatische Erkennung
+                </div>
+                <div class="hero-point">
+                    <div class="hero-point-icon">✓</div>
+                    Qualitäts-Filter aktiv
+                </div>
+                <div class="hero-point">
+                    <div class="hero-point-icon">✓</div>
+                    Klare Setup-Ideen
+                </div>
+            </div>
+            <div class="btn-group">
+                <a href="#ablauf" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    Ablauf verstehen
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         OVERVIEW SECTION
+         ======================================== -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-label">Grundprinzip</span>
+            <h2 class="section-title">Was macht der Scanner eigentlich?</h2>
+            <p class="section-subtitle">
+                Einfach erklärt: Der Scanner arbeitet für dich rund um die Uhr.
+            </p>
+        </div>
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="card-icon">📊</div>
+                <h3>Märkte im Blick</h3>
+                <p>
+                    Der Scanner beobachtet verschiedene Märkte gleichzeitig. 
+                    Forex, Aktienindizes, Krypto – alles wird automatisch durchsucht.
+                </p>
+            </div>
+            <div class="overview-card">
+                <div class="card-icon">🔍</div>
+                <h3>Muster erkennen</h3>
+                <p>
+                    Bestimmte Preisbewegungen bilden wiederkehrende Muster. 
+                    Der Scanner findet diese Strukturen in den Charts.
+                </p>
+            </div>
+            <div class="overview-card">
+                <div class="card-icon">⚙️</div>
+                <h3>Qualität prüfen</h3>
+                <p>
+                    Nicht jedes Muster ist gleich gut. Unsere Filter sortieren 
+                    schwache Kandidaten aus – so bleibt nur Brauchbares übrig.
+                </p>
+            </div>
+            <div class="overview-card">
+                <div class="card-icon">🎯</div>
+                <h3>Signal liefern</h3>
+                <p>
+                    Gute Muster werden als Signal mit Entry, Stop-Loss und 
+                    Take-Profit angezeigt. Du entscheidest, ob du handelst.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         STEPS SECTION
+         ======================================== -->
+    <section class="section" id="ablauf">
+        <div class="section-header">
+            <span class="section-label">Schritt für Schritt</span>
+            <h2 class="section-title">Vom Scan bis zum Signal</h2>
+            <p class="section-subtitle">
+                So läuft der Prozess ab – von der Erkennung bis zu deiner Entscheidung.
+            </p>
+        </div>
+        <div class="steps-container">
+            <div class="steps-line"></div>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Markt wird gescannt</h3>
+                    <p>
+                        Der Scanner läuft automatisch und analysiert laufend verschiedene 
+                        Währungspaare, Indizes und Krypto-Charts in mehreren Zeiteinheiten.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Muster-Kandidaten werden erkannt</h3>
+                    <p>
+                        Wenn sich bestimmte Preispunkte in einer typischen Formation anordnen, 
+                        erkennt der Scanner einen möglichen Kandidaten.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Filter prüfen die Qualität</h3>
+                    <p>
+                        Mehrere Filter überprüfen das gefundene Muster. Ist es sauber genug? 
+                        Stimmen die Proportionen? Nur gute Muster kommen durch.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Signal erscheint als Setup-Idee</h3>
+                    <p>
+                        Das bestätigte Muster wird als Signal veröffentlicht. Du siehst 
+                        Entry-Bereich, Stop-Loss und mögliche Zielzonen (Take-Profits).
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Du bewertest im eigenen Setup</h3>
+                    <p>
+                        Passt das Signal zu deinem Trading-Stil? Prüfe es mit deiner eigenen 
+                        Analyse. Der Scanner gibt Ideen – die Entscheidung liegt bei dir.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h3>Beobachten oder testen</h3>
+                    <p>
+                        Du kannst Signale erstmal nur beobachten oder im Demokonto testen. 
+                        So lernst du den Scanner kennen, ohne echtes Geld zu riskieren.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         PATTERN SECTION
+         ======================================== -->
+    <section class="section pattern-section" id="pattern">
+        <div class="section-header">
+            <span class="section-label">Muster & Methodik</span>
+            <h2 class="section-title">Welche Muster erkennt der Scanner?</h2>
+            <p class="section-subtitle">
+                Der Fokus liegt auf einem besonders spannenden Ansatz.
+            </p>
+        </div>
+
+        <div class="pattern-highlight">
+            <div class="pattern-highlight-header">
+                <span class="pattern-badge">Hauptfokus</span>
+                <h3>Wolfe Wave</h3>
+            </div>
+            <p>
+                Die Wolfe Wave ist ein faszinierendes Chartmuster mit langer Geschichte. 
+                Sie basiert auf natürlichen Marktrhythmen und der Idee, dass Märkte zu einem 
+                Gleichgewichtspunkt zurückkehren. Ähnlich wie die bekannte Elliott Wave Theorie 
+                nutzt sie wiederkehrende Strukturen – aber mit einem klaren, definierten Zielbereich.
+            </p>
+            <p>
+                Unser Scanner hat sich auf dieses Pattern spezialisiert. Die Wolfe Wave bietet 
+                konkrete Entry-Punkte und messbare Ziele. Das macht sie besonders praktisch 
+                für strukturiertes Trading.
+            </p>
+            <div class="pattern-features">
+                <div class="pattern-feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Klare Struktur mit 5 Punkten
+                </div>
+                <div class="pattern-feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Definierter Zielbereich
+                </div>
+                <div class="pattern-feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Bullish & Bearish Varianten
+                </div>
+                <div class="pattern-feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Funktioniert in allen Märkten
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         EXPECTATIONS SECTION
+         ======================================== -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-label">Erwartungen</span>
+            <h2 class="section-title">Was du wissen solltest</h2>
+            <p class="section-subtitle">
+                Der Scanner ist ein Hilfsmittel – kein Autopilot.
+            </p>
+        </div>
+        <div class="expectation-grid">
+            <div class="expectation-card">
+                <h3>
+                    <div class="expectation-icon">🛠️</div>
+                    Ein Werkzeug
+                </h3>
+                <p>
+                    Der Scanner ist ein Hilfswerkzeug für dein Trading. Er ersetzt nicht 
+                    deine eigene Analyse und dein Urteilsvermögen.
+                </p>
+            </div>
+            <div class="expectation-card">
+                <h3>
+                    <div class="expectation-icon">❌</div>
+                    Keine Garantie
+                </h3>
+                <p>
+                    Kein System der Welt kann Gewinne garantieren. Märkte sind unberechenbar. 
+                    Signale können fehlschlagen – das gehört dazu.
+                </p>
+            </div>
+            <div class="expectation-card">
+                <h3>
+                    <div class="expectation-icon">🔄</div>
+                    Nicht jede Marktphase
+                </h3>
+                <p>
+                    In manchen Marktphasen entstehen mehr gute Muster, in anderen weniger. 
+                    Das ist normal und kein Fehler des Scanners.
+                </p>
+            </div>
+            <div class="expectation-card">
+                <h3>
+                    <div class="expectation-icon">🎚️</div>
+                    Filter sind streng
+                </h3>
+                <p>
+                    Unsere Filter sind bewusst streng eingestellt. Das bedeutet: Weniger 
+                    Signale, aber dafür höhere Qualität. Nicht jedes Muster wird erkannt.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         DISCLAIMER SECTION
+         ======================================== -->
+    <section class="section" id="disclaimer">
+        <div class="disclaimer-box">
+            <div class="disclaimer-header">
+                <div class="disclaimer-icon">⚠️</div>
+                <h2>Wichtiger Hinweis</h2>
+            </div>
+            <div class="disclaimer-content">
+                <p>
+                    <strong>Keine Anlageberatung:</strong> Die auf dieser Website bereitgestellten 
+                    Informationen und Signale stellen keine Anlageberatung, keine Empfehlung und 
+                    keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten dar.
+                </p>
+                <ul class="disclaimer-list">
+                    <li>Trading mit Hebelprodukten ist hochriskant. Du kannst mehr verlieren als du einsetzt.</li>
+                    <li>Vergangene Ergebnisse sind kein Indikator für zukünftige Performance.</li>
+                    <li>Du bist für deine Trading-Entscheidungen selbst verantwortlich.</li>
+                    <li>Investiere nur Geld, dessen Verlust du dir leisten kannst.</li>
+                </ul>
+                <p>
+                    <strong>Unsere Empfehlung:</strong> Teste neue Strategien und Signale immer zuerst 
+                    in einem Demokonto. Beobachte die Signale eine Zeit lang, bevor du echtes Geld 
+                    einsetzt. Integriere sie in dein eigenes Setup und Risikomanagement.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         FAQ SECTION
+         ======================================== -->
+    <section class="section" id="faq">
+        <div class="section-header">
+            <span class="section-label">Fragen & Antworten</span>
+            <h2 class="section-title">Häufige Fragen zum Scanner</h2>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Warum finde ich nicht jedes Muster?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Unsere Filter sind absichtlich streng eingestellt. Wir wollen lieber weniger, 
+                        aber dafür qualitativ bessere Signale liefern. Schwache oder unsaubere Muster 
+                        werden aussortiert. Das ist gewollt und keine Fehlfunktion.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Kann ich die Signale 1:1 traden?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Die Signale sind Setup-Ideen und Orientierungshilfen. Wir empfehlen, sie 
+                        immer mit deiner eigenen Analyse zu kombinieren. Prüfe, ob das Signal zu 
+                        deinem Trading-Stil, Timeframe und Risikomanagement passt.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Für welche Märkte funktioniert das?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Der Scanner analysiert Forex-Paare, wichtige Aktienindizes (wie DAX und NASDAQ) 
+                        und Kryptowährungen. Die Wolfe Wave funktioniert prinzipiell in allen Märkten, 
+                        da sie auf universellen Preisstrukturen basiert.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Wie oft kommen neue Signale?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Das hängt von der Marktlage ab. Manchmal gibt es mehrere Signale am Tag, 
+                        manchmal weniger. Der Scanner läuft rund um die Uhr, aber er liefert nur, 
+                        wenn die Qualitätskriterien erfüllt sind – nicht künstlich auf Masse.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Was ist, wenn ein Signal fehlschlägt?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Das gehört zum Trading dazu. Kein System hat eine 100% Trefferquote. 
+                        Deswegen sind Stop-Loss Marken so wichtig. Sie begrenzen mögliche Verluste. 
+                        Entscheidend ist nicht das einzelne Signal, sondern die langfristige Balance.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Ist das für Anfänger geeignet?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Der Scanner kann auch für Einsteiger interessant sein – aber ersetze damit 
+                        nicht das Lernen der Grundlagen. Verstehe zuerst, was Trading bedeutet, 
+                        wie Risikomanagement funktioniert und übe im Demokonto. Die Signale helfen 
+                        dann als Orientierung.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Kann ich die Filter anpassen?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Die Filter-Einstellungen werden von uns optimiert und sind nicht individuell 
+                        anpassbar. Das stellt sicher, dass alle Nutzer die gleiche, geprüfte 
+                        Signalqualität erhalten. Wir arbeiten ständig an Verbesserungen.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         FOOTER
+         ======================================== -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-brand-icon">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                        <circle cx="50" cy="50" r="48" fill="#0c0c0c" stroke="#00ff88" stroke-width="2"/>
+                        <path d="M25 65 L35 35 L50 55 L65 35 L75 65" stroke="#00ff88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <circle cx="35" cy="35" r="4" fill="#00ff88"/>
+                        <circle cx="65" cy="35" r="4" fill="#00ff88"/>
+                        <path d="M42 70 Q50 78 58 70" stroke="#00ff88" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+                <span>© 2025 WolfeWaveSignals. Alle Rechte vorbehalten.</span>
+            </div>
+            <div class="footer-links">
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+                <a href="agb.html">AGB</a>
+                <a href="kontakt.html">Kontakt</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================
+         MINIMAL JAVASCRIPT FOR FAQ
+         ======================================== -->
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const wasOpen = faqItem.classList.contains('open');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('open');
+            });
+            
+            // Open clicked item if it wasn't already open
+            if (!wasOpen) {
+                faqItem.classList.add('open');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mainNav');
+            nav.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
