@@ -3022,6 +3022,32 @@
             .mobile-menu {
                 display: flex;
             }
+            
+            /* Icon-only mode for very small screens */
+            @media (max-width: 360px) {
+                .mobile-menu {
+                    width: 200px;
+                }
+                
+                .mobile-menu-item {
+                    padding: 12px 14px;
+                    font-size: 14px;
+                    justify-content: center;
+                }
+                
+                .mobile-menu-item .menu-text {
+                    display: none;
+                }
+                
+                .mobile-menu-item .menu-icon {
+                    font-size: 20px;
+                }
+                
+                .mobile-menu-btn {
+                    font-size: 12px;
+                    padding: 10px 12px;
+                }
+            }
 
             .logo-icon img {
                 width: 50px;
@@ -3443,11 +3469,37 @@
 
     <!-- Mobile Menu Dropdown -->
     <div class="mobile-menu" id="mobileMenu" onclick="event.stopPropagation();">
-        <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
-        <a href="scanner-erklaerung.html" class="mobile-menu-item">&#128269; Scanner</a>
-        <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
-        <a href="faq.html" class="mobile-menu-item">&#10067; FAQ</a>
-        <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
+        <!-- Search Field in Mobile Menu -->
+        <div style="margin-bottom: 12px;">
+            <input 
+                type="text" 
+                id="mobileSearchInput" 
+                placeholder="🔍 Symbol suchen..." 
+                style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px;"
+                oninput="handleMobileSearch(this.value)"
+            >
+        </div>
+        
+        <a href="wolfewaves.html" class="mobile-menu-item">
+            <span class="menu-icon">📖</span>
+            <span class="menu-text">Tutorial</span>
+        </a>
+        <a href="scanner-erklaerung.html" class="mobile-menu-item">
+            <span class="menu-icon">🔍</span>
+            <span class="menu-text">Scanner</span>
+        </a>
+        <a href="maerkte.html" class="mobile-menu-item">
+            <span class="menu-icon">🌍</span>
+            <span class="menu-text">Märkte</span>
+        </a>
+        <a href="faq.html" class="mobile-menu-item">
+            <span class="menu-icon">❓</span>
+            <span class="menu-text">FAQ</span>
+        </a>
+        <div class="mobile-menu-item" id="mobileSuccessRate">
+            <span class="menu-icon">📊</span>
+            <span class="menu-text">Success Rate: <span class="success-value">—%</span></span>
+        </div>
         <div class="mobile-menu-divider"></div>
         <button class="mobile-menu-btn" onclick="event.stopPropagation(); showLogin(); toggleMobileMenu();">Login</button>
         <button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
@@ -4595,6 +4647,15 @@
             if (mobileMenu) {
                 mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
+                    <div style="margin-bottom: 12px;">
+                        <input 
+                            type="text" 
+                            id="mobileSearchInput" 
+                            placeholder="🔍 Symbol suchen..." 
+                            style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px;"
+                            oninput="handleMobileSearch(this.value)"
+                        >
+                    </div>
                     <div class="mobile-menu-item" style="display: flex; align-items: center; gap: 12px;">
                         <div class="user-avatar" style="width:36px;height:36px;background:var(--accent-green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">${initial}</div>
                         <div>
@@ -4603,15 +4664,30 @@
                         </div>
                     </div>
                     <div class="mobile-menu-divider"></div>
-                    <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
-                    <a href="scanner-erklaerung.html" class="mobile-menu-item">&#128269; Scanner</a>
-                    <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
-                    <a href="faq.html" class="mobile-menu-item">&#10067; FAQ</a>
-                    <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
-                    ${(isSubscribed || isAdmin) ? '<div class="mobile-menu-item" onclick="event.stopPropagation(); showMyAlerts(); toggleMobileMenu();">&#128276; Meine Alarme</div>' : ''}
+                    <a href="wolfewaves.html" class="mobile-menu-item">
+                        <span class="menu-icon">📖</span>
+                        <span class="menu-text">Tutorial</span>
+                    </a>
+                    <a href="scanner-erklaerung.html" class="mobile-menu-item">
+                        <span class="menu-icon">🔍</span>
+                        <span class="menu-text">Scanner</span>
+                    </a>
+                    <a href="maerkte.html" class="mobile-menu-item">
+                        <span class="menu-icon">🌍</span>
+                        <span class="menu-text">Märkte</span>
+                    </a>
+                    <a href="faq.html" class="mobile-menu-item">
+                        <span class="menu-icon">❓</span>
+                        <span class="menu-text">FAQ</span>
+                    </a>
+                    <div class="mobile-menu-item" id="mobileSuccessRate">
+                        <span class="menu-icon">📊</span>
+                        <span class="menu-text">Success Rate: <span class="success-value">—%</span></span>
+                    </div>
+                    ${(isSubscribed || isAdmin) ? '<div class="mobile-menu-item" onclick="event.stopPropagation(); showMyAlerts(); toggleMobileMenu();"><span class="menu-icon">🔔</span><span class="menu-text">Meine Alarme</span></div>' : ''}
                     <div class="mobile-menu-divider"></div>
-                    ${isSubscribed ? '<button class="mobile-menu-btn" onclick="event.stopPropagation(); manageSubscription(); toggleMobileMenu();">&#128179; Abo verwalten</button>' : '<button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">&#11088; Premium werden</button>'}
-                    <button class="mobile-menu-btn" onclick="event.stopPropagation(); handleLogout(); toggleMobileMenu();">&#128682; Ausloggen</button>
+                    ${isSubscribed ? '<button class="mobile-menu-btn" onclick="event.stopPropagation(); manageSubscription(); toggleMobileMenu();">💳 Abo verwalten</button>' : '<button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">⭐ Premium werden</button>'}
+                    <button class="mobile-menu-btn" onclick="event.stopPropagation(); handleLogout(); toggleMobileMenu();">🚪 Ausloggen</button>
                 `;
             }
         }
@@ -4655,11 +4731,35 @@
             if (mobileMenu) {
                 mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
-                    <a href="wolfewaves.html" class="mobile-menu-item">&#128214; Tutorial</a>
-                    <a href="scanner-erklaerung.html" class="mobile-menu-item">&#128269; Scanner</a>
-                    <a href="maerkte.html" class="mobile-menu-item">&#127758; Märkte</a>
-                    <a href="faq.html" class="mobile-menu-item">&#10067; FAQ</a>
-                    <div class="mobile-menu-item" id="mobileSuccessRate">Success Rate: <span class="success-value">—%</span></div>
+                    <div style="margin-bottom: 12px;">
+                        <input 
+                            type="text" 
+                            id="mobileSearchInput" 
+                            placeholder="🔍 Symbol suchen..." 
+                            style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px;"
+                            oninput="handleMobileSearch(this.value)"
+                        >
+                    </div>
+                    <a href="wolfewaves.html" class="mobile-menu-item">
+                        <span class="menu-icon">📖</span>
+                        <span class="menu-text">Tutorial</span>
+                    </a>
+                    <a href="scanner-erklaerung.html" class="mobile-menu-item">
+                        <span class="menu-icon">🔍</span>
+                        <span class="menu-text">Scanner</span>
+                    </a>
+                    <a href="maerkte.html" class="mobile-menu-item">
+                        <span class="menu-icon">🌍</span>
+                        <span class="menu-text">Märkte</span>
+                    </a>
+                    <a href="faq.html" class="mobile-menu-item">
+                        <span class="menu-icon">❓</span>
+                        <span class="menu-text">FAQ</span>
+                    </a>
+                    <div class="mobile-menu-item" id="mobileSuccessRate">
+                        <span class="menu-icon">📊</span>
+                        <span class="menu-text">Success Rate: <span class="success-value">—%</span></span>
+                    </div>
                     <div class="mobile-menu-divider"></div>
                     <button class="mobile-menu-btn" onclick="event.stopPropagation(); showLogin(); toggleMobileMenu();">Login</button>
                     <button class="mobile-menu-btn primary" onclick="event.stopPropagation(); showCheckout(); toggleMobileMenu();">🎉 Premium 9,99€/Monat</button>
@@ -4683,10 +4783,23 @@
             const burger = document.querySelector('.burger-menu');
             const menu = document.getElementById('mobileMenu');
             const overlay = document.getElementById('mobileMenuOverlay');
+            const tabsSection = document.getElementById('tabsSection');
+            const signalGrid = document.querySelector('.signal-grid');
+            
             if (burger && menu && overlay) {
+                const isOpening = !menu.classList.contains('active');
+                
                 burger.classList.toggle('active');
                 menu.classList.toggle('active');
                 overlay.classList.toggle('active');
+                
+                // Hide signal content when menu opens
+                if (tabsSection) {
+                    tabsSection.style.display = isOpening ? 'none' : '';
+                }
+                if (signalGrid) {
+                    signalGrid.style.display = isOpening ? 'none' : '';
+                }
             }
         }
 
@@ -4813,6 +4926,16 @@
             // Mobile Menu Success Rate aktualisieren
             const mobileSuccessRate = document.querySelector('#mobileSuccessRate .success-value');
             if(mobileSuccessRate) mobileSuccessRate.textContent = rate + '%';
+        }
+        
+        // Mobile Search Handler
+        function handleMobileSearch(value) {
+            const desktopSearch = document.getElementById('searchSymbol');
+            if (desktopSearch) {
+                desktopSearch.value = value;
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(renderSignals, 300);
+            }
         }
 
         // ==================== RENDERING ====================
