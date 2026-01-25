@@ -96,7 +96,7 @@
             "bestRating": "5",
             "worstRating": "1"
         },
-        "featureList": "Echtzeit Trading Signale, Entry & Exit Points, Stop-Loss & Take-Profit, Multi-Timeframe Analyse, Email & Telegram Alerts",
+        "featureList": "Echtzeit Trading Signale, Entry & Exit Points, Stop-Loss & Take-Profit, Multi-Timeframe Analyse, Email Alerts",
         "screenshot": "https://www.wolfewavesignals.com/images/screenshot.jpg"
     }
     </script>
@@ -427,8 +427,8 @@
         
         .language-dropdown {
             position: absolute;
-            top: 60px;
-            right: 280px;
+            top: 45px;
+            left: 0;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -527,6 +527,38 @@
 
         .nav-link:hover {
             color: var(--accent-green);
+        }
+        
+        /* Language Selector in Navigation */
+        .nav-language-container {
+            position: relative;
+        }
+        
+        .nav-language-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: inherit;
+        }
+        
+        .nav-language-btn:hover {
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        .language-text {
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .header-success-rate {
@@ -3666,6 +3698,30 @@
             <a href="scanner-erklaerung.html" class="nav-link"><span style="font-size:16px;">🔍</span> Scanner</a>
             <a href="maerkte.html" class="nav-link">🌍 Märkte</a>
             <a href="faq.html" class="nav-link"><span style="font-size:16px;">❓</span> FAQ</a>
+            
+            <!-- Language Selector in Navigation -->
+            <div class="nav-language-container">
+                <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
+                    🌐 <span class="language-text">DE</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
+                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
+                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+                    <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
+                    <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
+                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+                    <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
+                    <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
+                    <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
+                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+                    <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
+                    <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
+                    <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
+                </div>
+            </div>
+            
             <div class="header-success-rate" id="headerSuccessRate">
                 <span class="success-label">Success Rate:</span>
                 <span class="success-value" id="headerSuccessValue">—%</span>
@@ -3691,27 +3747,6 @@
             </div>
         </nav>
         <div class="header-right">
-            <!-- Language Selector Button -->
-            <button class="language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
-                🌐 <span class="language-text">DE</span>
-            </button>
-            <div class="language-dropdown" id="languageDropdown">
-                <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-                <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
-                <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
-                <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-                <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
-                <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-                <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-                <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
-                <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-                <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
-                <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-                <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
-                <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
-                <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
-            </div>
-            
             <!-- Hidden Google Translate (for backend) -->
             <div id="google_translate_element" style="display: none;"></div>
             
@@ -3869,7 +3904,7 @@
                 <div style="background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
                     <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #4DABF7;">⚡ Echtzeit-Alerts</h2>
                     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary);">
-                        Sofortige Benachrichtigungen per Email und Telegram bei neuen Trading-Signalen. 
+                        Sofortige Benachrichtigungen per Email bei neuen Trading-Signalen. 
                         Verpasse keine profitable Gelegenheit mehr – der Scanner arbeitet rund um die Uhr.
                     </p>
                 </div>
@@ -3892,7 +3927,7 @@
             <div style="text-align: center; margin: 40px 0;">
                 <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Starte jetzt mit 9,99€/Monat</h2>
                 <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 25px;">
-                    ✓ Unbegrenzte Signale &nbsp; ✓ Alle Märkte & Timeframes &nbsp; ✓ Email & Telegram Alerts &nbsp; ✓ Jederzeit kündbar
+                    ✓ Unbegrenzte Signale &nbsp; ✓ Alle Märkte & Timeframes &nbsp; ✓ Email Alerts &nbsp; ✓ Jederzeit kündbar
                 </p>
             </div>
         </article>
