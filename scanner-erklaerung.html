@@ -826,7 +826,184 @@
                 grid-template-columns: 1fr;
             }
         }
+    
+        /* Language Selector in Navigation */
+        .nav-language-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .nav-language-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: inherit;
+        }
+        
+        .nav-language-btn:hover {
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        .language-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 45px;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 180px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-option:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame {
+            display: none !important;
+        }
+        
+        .goog-logo-link {
+            display: none !important;
+        }
+        
+        .goog-te-gadget {
+            color: transparent !important;
+            font-size: 0 !important;
+        }
+        
+        .goog-te-gadget span {
+            display: none !important;
+        }
+        
+        body {
+            top: 0 !important;
+            position: static !important;
+        }
     </style>
+
+    <!-- Google Translate Widget -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'de',
+                includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+                multilanguagePage: true
+            }, 'google_translate_element');
+            
+            // AUTO-DETECT and translate on first visit
+            setTimeout(function() {
+                autoTranslateToUserLanguage();
+            }, 1000);
+        }
+        
+        function autoTranslateToUserLanguage() {
+            if (document.cookie.indexOf('googtrans') !== -1) {
+                return;
+            }
+            
+            var userLang = navigator.language || navigator.userLanguage;
+            userLang = userLang.split('-')[0];
+            
+            if (userLang === 'de') {
+                return;
+            }
+            
+            var supportedLangs = ['en','es','fr','it','pt','ru','zh','ja','ko','ar','tr','pl','nl','sv','da','no','fi','cs','hu','ro','el','he','id','th','vi','uk','bg','hr','sk','sl'];
+            
+            if (supportedLangs.indexOf(userLang) !== -1) {
+                if (userLang === 'zh') {
+                    userLang = 'zh-CN';
+                }
+                
+                var googleTransCookie = '/de/' + userLang;
+                document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+                document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+                
+                window.location.reload();
+            }
+        }
+        
+        function toggleLanguageMenu() {
+            const dropdown = document.getElementById('languageDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+        }
+        
+        function changeLanguage(langCode) {
+            const dropdown = document.getElementById('languageDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('active');
+            }
+            
+            var googleTransCookie = '/de/' + langCode;
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+            
+            const langMap = {
+                'de': 'DE', 'en': 'EN', 'es': 'ES', 'fr': 'FR', 'it': 'IT', 
+                'pt': 'PT', 'ru': 'RU', 'zh-CN': 'CN', 'ja': 'JP', 'ko': 'KR',
+                'ar': 'AR', 'tr': 'TR', 'pl': 'PL', 'nl': 'NL'
+            };
+            
+            const langBtn = document.querySelector('.language-text');
+            if (langBtn && langMap[langCode]) {
+                langBtn.textContent = langMap[langCode];
+            }
+            
+            window.location.reload();
+        }
+        
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('languageDropdown');
+            const langBtn = document.querySelector('.nav-language-btn');
+            
+            if (dropdown && langBtn && !dropdown.contains(e.target) && !langBtn.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
     <!-- ========================================
@@ -840,6 +1017,28 @@
                 </div>
                 <span class="logo-text"><span class="green">Wolfe</span>Wave<span class="green">Signals</span></span>
             </a>
+            <div class="nav-language-container">
+                <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
+                    🌐 <span class="language-text">DE</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
+                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
+                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+                    <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
+                    <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
+                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+                    <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
+                    <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
+                    <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
+                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+                    <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
+                    <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
+                    <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
+                </div>
+            </div>
+            <div id="google_translate_element" style="display: none;"></div>
             <nav class="nav" id="mainNav">
                 <a href="https://www.wolfewavesignals.com/wolfewaves.html">📖 Tutorial</a>
                 <a href="index.html">Start</a>
