@@ -4993,7 +4993,7 @@
                 cardClass = 'is-success tp3';
             } else if (signal.tp2_hit) {
                 resultClass = 'tp2';
-                resultBadge = '✗ TP2';
+                resultBadge = '✅ TP2';
                 cardClass = 'is-success tp2';
             } else if (signal.tp1_hit) {
                 resultClass = 'tp1';
@@ -5001,16 +5001,22 @@
                 cardClass = 'is-success tp1';
             }
             
-            // Admin delete button for completed signals
+            // Admin controls for completed signals - ENHANCED
             const adminControls = isAdmin ? `
-                <div class="admin-controls" style="right: auto; left: 12px; top: 48px;">
-                    <button class="admin-btn admin-btn-delete" data-delete-completed="${signal.id}" title="Aus Success entfernen">×</button>
+                <div class="admin-controls" style="right: auto; left: 12px; top: 48px; flex-direction: column; gap: 4px;">
+                    <button class="admin-btn admin-btn-success" onclick="event.stopPropagation(); openPhotoManager('${signal.wedge_id}')" title="Fotos verwalten">📸</button>
+                    <button class="admin-btn admin-btn-blacklist" onclick="event.stopPropagation(); fixResultStatus('${signal.id}')" title="Ergebnis fixieren">🔒</button>
+                    <button class="admin-btn admin-btn-delete" onclick="event.stopPropagation(); deleteCompletedSignal('${signal.id}')" title="Aus Success entfernen">×</button>
                 </div>
             ` : '';
             
+            // Display indicator if result is fixed
+            const fixedBadge = signal.result_fixed ? '<span style="position:absolute;top:12px;right:12px;background:var(--accent-gold);color:#000;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;z-index:10;">🔒 FIXIERT</span>' : '';
+            
             return `
-                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}')">
+                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', ${JSON.stringify(signal).replace(/"/g, '&quot;')})">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
+                    ${fixedBadge}
                     ${adminControls}
                     <div class="signal-image-container">
                         ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
@@ -5053,7 +5059,7 @@
                             <div class="price-item">
                                 <div class="price-label">SL</div>
                                 <div class="price-value" style="color: ${signal.sl_hit ? 'var(--accent-red)' : 'var(--text-secondary)'}">
-                                    ${signal.sl_hit ? '✔' : '—'}
+                                    ${signal.sl_hit ? '✗' : '—'}
                                 </div>
                             </div>
                         </div>
@@ -5602,9 +5608,21 @@
             sliderImages = [{ url: imageUrl, scanned_at: null }];
             sliderCurrentIndex = 0;
             
+            // Store signal data for achievement display (SUCCESS FEATURE)
+            window.currentModalSignalData = signalData;
+            
             // Zeige erstmal das aktuelle Bild
             updateSliderDisplay();
             updateSignalNavDisplay();
+            
+            // Display achievements if we're in success tab (SUCCESS FEATURE)
+            if (signalData && currentTab === 'success') {
+                displayAchievements(signalData);
+            } else {
+                const achievementsEl = document.getElementById('signalAchievements');
+                if (achievementsEl) achievementsEl.remove();
+            }
+            
             document.getElementById('imageModal').classList.add('active');
             
             // Zeige Swipe-Hint auf Mobile (nur beim ersten Mal)
@@ -5621,6 +5639,36 @@
             if (wedgeId) {
                 await loadImageHistory(wedgeId, imageUrl);
             }
+        }
+        
+        // Display achievements in modal (SUCCESS FEATURE - NEW FUNCTION)
+        function displayAchievements(signal) {
+            let achievementsHtml = '<div id="signalAchievements" style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 25; flex-wrap: wrap; justify-content: center; max-width: 90%;">';
+            
+            if (signal.tp1_hit) {
+                achievementsHtml += '<div style="background: rgba(0,255,136,0.9); color: #000; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(0,255,136,0.3);">✓ TP1 erreicht</div>';
+            }
+            if (signal.tp2_hit) {
+                achievementsHtml += '<div style="background: rgba(0,255,136,0.9); color: #000; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(0,255,136,0.3);">✓ TP2 erreicht</div>';
+            }
+            if (signal.tp3_hit) {
+                achievementsHtml += '<div style="background: linear-gradient(135deg, var(--accent-gold), #ffa500); color: #000; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(255,215,0,0.4);">🏆 TP3 erreicht!</div>';
+            }
+            if (signal.sl_hit) {
+                achievementsHtml += '<div style="background: rgba(255,71,87,0.9); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(255,71,87,0.3);">✗ SL erreicht</div>';
+            }
+            if (signal.result_fixed) {
+                achievementsHtml += '<div style="background: rgba(255,215,0,0.9); color: #000; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(255,215,0,0.3);">🔒 Fixiert</div>';
+            }
+            
+            achievementsHtml += '</div>';
+            
+            const modal = document.getElementById('imageModal');
+            let existingAchievements = document.getElementById('signalAchievements');
+            if (existingAchievements) {
+                existingAchievements.remove();
+            }
+            modal.insertAdjacentHTML('afterbegin', achievementsHtml);
         }
 
         function updateSignalNavDisplay() {
@@ -5705,7 +5753,7 @@
         async function loadImageHistory(wedgeId, currentImageUrl) {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=image_url,scanned_at&order=scanned_at.desc`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=*&order=scanned_at.desc`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -5719,39 +5767,41 @@
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
-                    // Konvertiere zu unserem Format - schon sortiert (neueste zuerst)
-                    sliderImages = data.map(img => ({
-                        url: img.image_url,
-                        scanned_at: img.scanned_at
-                    }));
+                    // SUCCESS FEATURE: Check if admin has selected a display photo
+                    const displayPhoto = data.find(img => img.is_display_photo === true);
                     
-                    // WICHTIG: Prüfe ob currentImageUrl das neueste ist
-                    const currentIsInList = sliderImages.some(img => img.url === currentImageUrl);
-                    
-                    if (!currentIsInList) {
-                        // Current Image ist nicht in der Historie → füge es als NEUESTES hinzu
-                        sliderImages.unshift({ 
-                            url: currentImageUrl, 
-                            scanned_at: new Date().toISOString() 
-                        });
+                    if (isAdmin) {
+                        // Admin sees ALL photos, sorted by date (newest first)
+                        sliderImages = data.map(img => ({
+                            url: img.image_url,
+                            scanned_at: img.scanned_at,
+                            is_display: img.is_display_photo
+                        }));
                     } else {
-                        // Current Image ist in der Liste → stelle sicher es ist an erster Stelle
-                        const currentIndex = sliderImages.findIndex(img => img.url === currentImageUrl);
-                        if (currentIndex > 0) {
-                            // Nicht an erster Stelle → verschiebe es
-                            const currentImg = sliderImages.splice(currentIndex, 1)[0];
-                            sliderImages.unshift(currentImg);
+                        // Non-admin sees either:
+                        // 1. Admin-selected display photo (if set)
+                        // 2. Latest photo (if no display photo set)
+                        if (displayPhoto) {
+                            sliderImages = [{
+                                url: displayPhoto.image_url,
+                                scanned_at: displayPhoto.scanned_at,
+                                is_display: true
+                            }];
+                        } else {
+                            sliderImages = [{
+                                url: data[0].image_url,
+                                scanned_at: data[0].scanned_at,
+                                is_display: false
+                            }];
                         }
                     }
                     
-                    // START IMMER BEIM NEUESTEN BILD (Index 0)
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
                     renderThumbnails();
                 }
             } catch (err) {
                 console.log('Keine Bild-Historie gefunden:', err.message);
-                // Fallback: Nur aktuelles Bild
                 sliderImages = [{ url: currentImageUrl, scanned_at: null }];
                 sliderCurrentIndex = 0;
                 updateSliderDisplay();
@@ -5766,15 +5816,19 @@
             const counter = document.getElementById('sliderCounter');
             counter.textContent = `${sliderCurrentIndex + 1} / ${sliderImages.length}`;
             
-            // Datum anzeigen (NEUESTES wird hervorgehoben)
+            // Datum anzeigen (SUCCESS FEATURE: Admin-selected and newest marked)
             const dateEl = document.getElementById('sliderDate');
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
                 const timeStr = date.toLocaleDateString('de-DE') + ' ' + 
                                date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 
+                // Markiere Admin-selected display photo
+                if (img.is_display && isAdmin) {
+                    dateEl.innerHTML = `<span style="color: var(--accent-gold); font-weight: 700;">✓ ANGEZEIGT: ${timeStr}</span>`;
+                }
                 // Markiere das neueste Bild
-                if (sliderCurrentIndex === 0) {
+                else if (sliderCurrentIndex === 0) {
                     dateEl.innerHTML = `<span style="color: var(--accent-green); font-weight: 700;">🆕 ${timeStr}</span>`;
                 } else {
                     dateEl.textContent = timeStr;
@@ -6061,7 +6115,238 @@ USING (
             document.getElementById('sliderThumbnails').innerHTML = '';
             const hint = document.getElementById('swipeHint');
             if (hint) hint.style.display = 'none';
+            
+            // Remove achievements display (SUCCESS FEATURE)
+            const achievements = document.getElementById('signalAchievements');
+            if (achievements) achievements.remove();
         }
+        
+        // ==================== SUCCESS ADMIN FEATURES ====================
+        
+        // Open Photo Manager Modal
+        async function openPhotoManager(wedgeId) {
+            if (!isAdmin) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=*&order=scanned_at.desc`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (!response.ok) throw new Error('Failed to fetch photos');
+                
+                const photos = await response.json();
+                
+                const modalHtml = `
+                    <div class="admin-modal active" id="photoManagerModal" onclick="closePhotoManager()">
+                        <div class="admin-modal-card" style="max-width: 800px; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation();">
+                            <div class="modal-header">
+                                <h3>📸 Foto-Manager</h3>
+                                <button class="modal-close" onclick="closePhotoManager()">×</button>
+                            </div>
+                            <div class="modal-content">
+                                <p style="color: var(--text-secondary); margin-bottom: 20px;">Wedge ID: ${wedgeId}</p>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                                    ${photos.map(photo => `
+                                        <div style="position: relative; border: 2px solid ${photo.is_display_photo ? 'var(--accent-green)' : 'var(--border-color)'}; border-radius: 12px; overflow: hidden; background: var(--bg-hover);">
+                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;">
+                                            <div style="padding: 8px; font-size: 11px; color: var(--text-secondary);">
+                                                ${new Date(photo.scanned_at).toLocaleString('de-DE')}
+                                            </div>
+                                            ${photo.is_display_photo ? '<div style="position: absolute; top: 8px; left: 8px; background: var(--accent-green); color: #000; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700;">✓ ANGEZEIGT</div>' : ''}
+                                            <div style="padding: 8px; display: flex; gap: 8px;">
+                                                ${!photo.is_display_photo ? `<button onclick="setDisplayPhoto('${photo.id}', '${wedgeId}')" style="flex: 1; padding: 6px; background: var(--accent-green); color: #000; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Als Anzeige wählen</button>` : '<div style="flex: 1; text-align: center; color: var(--accent-green); font-size: 12px; font-weight: 600;">Aktuell angezeigt</div>'}
+                                                <button onclick="deletePhoto('${photo.id}', '${photo.image_url}', '${wedgeId}')" style="padding: 6px 12px; background: var(--accent-red); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">×</button>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                
+            } catch (error) {
+                console.error('Error opening photo manager:', error);
+                showToast('❌ Fehler beim Laden der Fotos', 'error');
+            }
+        }
+        
+        function closePhotoManager() {
+            const modal = document.getElementById('photoManagerModal');
+            if (modal) modal.remove();
+        }
+        
+        async function setDisplayPhoto(photoId, wedgeId) {
+            if (!isAdmin) return;
+            
+            try {
+                await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ is_display_photo: false })
+                    }
+                );
+                
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?id=eq.${photoId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ is_display_photo: true })
+                    }
+                );
+                
+                if (response.ok) {
+                    showToast('✓ Anzeigefoto aktualisiert', 'success');
+                    closePhotoManager();
+                    await fetchCompletedSignals();
+                    renderSignals();
+                } else {
+                    throw new Error('Failed to update display photo');
+                }
+                
+            } catch (error) {
+                console.error('Error setting display photo:', error);
+                showToast('❌ Fehler beim Aktualisieren', 'error');
+            }
+        }
+        
+        async function deletePhoto(photoId, imageUrl, wedgeId) {
+            if (!isAdmin) return;
+            if (!confirm('Dieses Foto wirklich löschen? (wird auch aus Supabase Storage gelöscht)')) return;
+            
+            try {
+                const urlParts = imageUrl.split('/');
+                const bucket = urlParts[urlParts.length - 2];
+                const fileName = urlParts[urlParts.length - 1];
+                const filePath = `${bucket}/${fileName}`;
+                
+                const dbResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?id=eq.${photoId}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                await fetch(
+                    `${SUPABASE_URL}/storage/v1/object/${filePath}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (dbResponse.ok) {
+                    showToast('✓ Foto gelöscht', 'success');
+                    closePhotoManager();
+                    openPhotoManager(wedgeId);
+                } else {
+                    throw new Error('Failed to delete photo');
+                }
+                
+            } catch (error) {
+                console.error('Error deleting photo:', error);
+                showToast('❌ Fehler beim Löschen', 'error');
+            }
+        }
+        
+        async function fixResultStatus(signalId) {
+            if (!isAdmin) return;
+            if (!confirm('Ergebnis fixieren? TP/SL Status wird nicht mehr automatisch geändert.')) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ result_fixed: true })
+                    }
+                );
+                
+                if (response.ok) {
+                    showToast('✓ Ergebnis fixiert', 'success');
+                    await fetchCompletedSignals();
+                    renderSignals();
+                } else {
+                    throw new Error('Failed to fix result');
+                }
+                
+            } catch (error) {
+                console.error('Error fixing result:', error);
+                showToast('❌ Fehler beim Fixieren', 'error');
+            }
+        }
+        
+        async function deleteCompletedSignal(signalId) {
+            if (!isAdmin) return;
+            if (!confirm('Signal aus Success entfernen?')) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ 
+                            status: 'inactive',
+                            result_folder: null
+                        })
+                    }
+                );
+                
+                if (response.ok) {
+                    showToast('✓ Signal entfernt', 'success');
+                    await fetchCompletedSignals();
+                    renderSignals();
+                } else {
+                    throw new Error('Failed to delete signal');
+                }
+                
+            } catch (error) {
+                console.error('Error deleting signal:', error);
+                showToast('❌ Fehler beim Entfernen', 'error');
+            }
+        }
+        
+        // ==================== END SUCCESS ADMIN FEATURES ====================
 
         // Keyboard Navigation
         document.addEventListener('keydown', (e) => {
