@@ -283,7 +283,7 @@
             background: linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(12, 12, 12, 0.98) 100%);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(0, 255, 136, 0.2);
-            padding: 70px 20px 20px;
+            padding: 16px;
             flex-direction: column;
             gap: 8px;
             z-index: 99;
@@ -3026,12 +3026,12 @@
             /* Icon-only mode for very small screens */
             @media (max-width: 360px) {
                 .mobile-menu {
-                    width: 200px;
-                    padding: 60px 16px 16px !important;
+                    width: 180px;
+                    padding: 16px 12px 16px !important;
                 }
                 
                 .mobile-menu-item {
-                    padding: 12px 14px;
+                    padding: 10px 12px;
                     font-size: 14px;
                     justify-content: center;
                 }
@@ -3045,52 +3045,59 @@
                 }
                 
                 .mobile-menu-btn {
-                    font-size: 12px;
-                    padding: 10px 12px;
+                    font-size: 11px;
+                    padding: 10px 8px;
                 }
                 
                 /* TABS ICON-ONLY MODE */
                 .tabs {
                     overflow-x: auto !important;
                     -webkit-overflow-scrolling: touch;
+                    gap: 4px !important;
                 }
                 
                 .tab {
-                    padding: 8px 10px !important;
-                    font-size: 16px !important;
-                    min-width: 40px !important;
+                    padding: 8px 8px !important;
+                    font-size: 14px !important;
+                    min-width: 36px !important;
                 }
                 
                 /* Hide tab text, show only icons/badges */
                 .tab[data-tab="all"]::before { content: "📊"; }
                 .tab[data-tab="all"] { font-size: 0 !important; }
-                .tab[data-tab="all"]::before { font-size: 16px !important; }
+                .tab[data-tab="all"]::before { font-size: 14px !important; }
                 
                 .tab[data-tab="new"]::before { content: "🆕"; }
                 .tab[data-tab="new"] { font-size: 0 !important; }
-                .tab[data-tab="new"]::before { font-size: 16px !important; }
+                .tab[data-tab="new"]::before { font-size: 14px !important; }
                 
                 .tab[data-tab="active"] { font-size: 0 !important; }
-                .tab[data-tab="active"]::before { content: "🟢"; font-size: 16px !important; }
+                .tab[data-tab="active"]::before { content: "🟢"; font-size: 14px !important; }
                 
                 .tab[data-tab="pending"] { font-size: 0 !important; }
-                .tab[data-tab="pending"]::before { content: "⏳"; font-size: 16px !important; }
+                .tab[data-tab="pending"]::before { content: "⏳"; font-size: 14px !important; }
                 
                 .tab[data-tab="bullish"]::before { content: "📈"; }
                 .tab[data-tab="bullish"] { font-size: 0 !important; }
-                .tab[data-tab="bullish"]::before { font-size: 16px !important; }
+                .tab[data-tab="bullish"]::before { font-size: 14px !important; }
                 
                 .tab[data-tab="bearish"]::before { content: "📉"; }
                 .tab[data-tab="bearish"] { font-size: 0 !important; }
-                .tab[data-tab="bearish"]::before { font-size: 16px !important; }
+                .tab[data-tab="bearish"]::before { font-size: 14px !important; }
                 
                 .tab[data-tab="success"] { font-size: 0 !important; }
-                .tab[data-tab="success"]::before { content: "🏆"; font-size: 16px !important; }
+                .tab[data-tab="success"]::before { content: "🏆"; font-size: 14px !important; }
                 
                 /* Keep badges visible */
                 .tab-badge {
-                    font-size: 9px !important;
+                    font-size: 8px !important;
                     display: inline-block !important;
+                    margin-left: 2px !important;
+                }
+                
+                /* Hide scroll indicator arrow */
+                .tabs::after {
+                    display: none;
                 }
             }
 
@@ -3241,16 +3248,29 @@
 
             .tab {
                 flex-shrink: 0 !important;
-                padding: 10px 14px !important;
-                font-size: 12px !important;
+                padding: 10px 12px !important;
+                font-size: 11px !important;
                 white-space: nowrap !important;
                 border-radius: 8px !important;
-                min-width: max-content !important;
+                min-width: auto !important;
             }
 
             .tab-badge {
                 font-size: 9px !important;
                 padding: 2px 6px !important;
+                margin-left: 4px !important;
+            }
+            
+            /* Make scrolling more obvious */
+            .tabs::after {
+                content: '→';
+                position: sticky;
+                right: 0;
+                background: linear-gradient(90deg, transparent, var(--bg-primary));
+                padding: 10px 8px;
+                color: var(--accent-green);
+                font-size: 14px;
+                pointer-events: none;
             }
 
             /* Filters kompakt */
@@ -3514,13 +3534,16 @@
 
     <!-- Mobile Menu Dropdown -->
     <div class="mobile-menu" id="mobileMenu" onclick="event.stopPropagation();">
-        <!-- Search Field in Mobile Menu -->
-        <div style="margin-bottom: 12px;">
+        <!-- Close Button at top -->
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100;">✕</button>
+        
+        <!-- Search Field at very top -->
+        <div style="margin-bottom: 16px; margin-top: 8px;">
             <input 
                 type="text" 
                 id="mobileSearchInput" 
                 placeholder="🔍 Symbol suchen..." 
-                style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px;"
+                style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 13px;"
                 oninput="handleMobileSearch(this.value)"
             >
         </div>
@@ -4692,12 +4715,14 @@
             if (mobileMenu) {
                 mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
-                    <div style="margin-bottom: 12px;">
+                    <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100;">✕</button>
+                    
+                    <div style="margin-bottom: 16px; margin-top: 8px;">
                         <input 
                             type="text" 
                             id="mobileSearchInput" 
                             placeholder="🔍 Symbol suchen..." 
-                            style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px;"
+                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 13px;"
                             oninput="handleMobileSearch(this.value)"
                         >
                     </div>
@@ -4776,12 +4801,14 @@
             if (mobileMenu) {
                 mobileMenu.setAttribute('onclick', 'event.stopPropagation();');
                 mobileMenu.innerHTML = `
-                    <div style="margin-bottom: 12px;">
+                    <button class="mobile-menu-close" onclick="toggleMobileMenu()" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--accent-green); font-size: 28px; cursor: pointer; z-index: 100;">✕</button>
+                    
+                    <div style="margin-bottom: 16px; margin-top: 8px;">
                         <input 
                             type="text" 
                             id="mobileSearchInput" 
                             placeholder="🔍 Symbol suchen..." 
-                            style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px;"
+                            style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 13px;"
                             oninput="handleMobileSearch(this.value)"
                         >
                     </div>
@@ -4828,6 +4855,7 @@
             const burger = document.querySelector('.burger-menu');
             const menu = document.getElementById('mobileMenu');
             const overlay = document.getElementById('mobileMenuOverlay');
+            const header = document.querySelector('.header');
             const tabsSection = document.getElementById('tabsSection');
             const signalGrid = document.querySelector('.signal-grid');
             
@@ -4837,6 +4865,11 @@
                 burger.classList.toggle('active');
                 menu.classList.toggle('active');
                 overlay.classList.toggle('active');
+                
+                // CRITICAL: Hide header completely when menu opens
+                if (header) {
+                    header.style.display = isOpening ? 'none' : '';
+                }
                 
                 // Hide signal content when menu opens
                 if (tabsSection) {
@@ -4853,6 +4886,7 @@
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');
             const overlay = document.getElementById('mobileMenuOverlay');
+            const header = document.querySelector('.header');
             
             // Nur schließen wenn Menü offen ist UND Klick außerhalb
             if (menu && burger && menu.classList.contains('active')) {
@@ -4861,6 +4895,7 @@
                     menu.classList.remove('active');
                     burger.classList.remove('active');
                     if (overlay) overlay.classList.remove('active');
+                    if (header) header.style.display = ''; // Show header again
                 }
             }
         });
