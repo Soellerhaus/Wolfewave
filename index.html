@@ -96,7 +96,7 @@
             "bestRating": "5",
             "worstRating": "1"
         },
-        "featureList": "Echtzeit Trading Signale, Entry & Exit Points, Stop-Loss & Take-Profit, Multi-Timeframe Analyse, Email Alerts",
+        "featureList": "Echtzeit Trading Signale, Entry & Exit Points, Stop-Loss & Take-Profit, Multi-Timeframe Analyse, Email & Telegram Alerts",
         "screenshot": "https://www.wolfewavesignals.com/images/screenshot.jpg"
     }
     </script>
@@ -397,6 +397,67 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+        
+        /* Language Selector Button */
+        .language-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+        
+        .language-btn:hover {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .language-text {
+            font-size: 13px;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 280px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 180px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-option:hover {
+            background: rgba(0, 255, 136, 0.1);
         }
         
         /* Google Translate Widget Styling */
@@ -3630,8 +3691,29 @@
             </div>
         </nav>
         <div class="header-right">
-            <!-- Google Translate Widget -->
-            <div id="google_translate_element" style="display: inline-block; margin-right: 12px;"></div>
+            <!-- Language Selector Button -->
+            <button class="language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
+                🌐 <span class="language-text">DE</span>
+            </button>
+            <div class="language-dropdown" id="languageDropdown">
+                <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
+                <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+                <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
+                <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+                <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
+                <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
+                <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+                <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
+                <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
+                <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
+                <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+                <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
+                <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
+                <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
+            </div>
+            
+            <!-- Hidden Google Translate (for backend) -->
+            <div id="google_translate_element" style="display: none;"></div>
             
             <div class="live-indicator">
                 <div class="live-dot"></div>
@@ -3655,8 +3737,27 @@
         
         <!-- Language Selector - Mobile -->
         <div style="margin: 0 16px 12px 16px; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
-            <div id="google_translate_element_mobile"></div>
+            <div style="color: var(--text-secondary); font-size: 12px; margin-bottom: 6px;">🌐 Sprache / Language</div>
+            <select id="mobileLangSelector" onchange="changeLanguageMobile(this.value)" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 13px; cursor: pointer;">
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh-CN">🇨🇳 中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+            </select>
         </div>
+        
+        <!-- Hidden Google Translate (for backend) -->
+        <div id="google_translate_element_mobile" style="display: none;"></div>
         
         <!-- Search Field - NO WRAPPER, ABSOLUTE FULL WIDTH -->
         <input 
@@ -3768,7 +3869,7 @@
                 <div style="background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
                     <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #4DABF7;">⚡ Echtzeit-Alerts</h2>
                     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary);">
-                        Sofortige Benachrichtigungen per Email bei neuen Trading-Signalen. 
+                        Sofortige Benachrichtigungen per Email und Telegram bei neuen Trading-Signalen. 
                         Verpasse keine profitable Gelegenheit mehr – der Scanner arbeitet rund um die Uhr.
                     </p>
                 </div>
@@ -3791,7 +3892,7 @@
             <div style="text-align: center; margin: 40px 0;">
                 <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Starte jetzt mit 9,99€/Monat</h2>
                 <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 25px;">
-                    ✓ Unbegrenzte Signale &nbsp; ✓ Alle Märkte & Timeframes &nbsp; ✓ Email Alerts &nbsp; ✓ Jederzeit kündbar
+                    ✓ Unbegrenzte Signale &nbsp; ✓ Alle Märkte & Timeframes &nbsp; ✓ Email & Telegram Alerts &nbsp; ✓ Jederzeit kündbar
                 </p>
             </div>
         </article>
@@ -4995,6 +5096,61 @@
         function toggleUserMenu() {
             document.querySelector('.user-menu-container').classList.toggle('open');
         }
+        
+        function toggleLanguageMenu() {
+            const dropdown = document.getElementById('languageDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+        }
+        
+        function changeLanguage(langCode) {
+            // Close dropdown
+            const dropdown = document.getElementById('languageDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('active');
+            }
+            
+            // Set Google Translate cookie
+            var googleTransCookie = '/de/' + langCode;
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+            
+            // Update button text
+            const langMap = {
+                'de': 'DE', 'en': 'EN', 'es': 'ES', 'fr': 'FR', 'it': 'IT', 
+                'pt': 'PT', 'ru': 'RU', 'zh-CN': 'CN', 'ja': 'JP', 'ko': 'KR',
+                'ar': 'AR', 'tr': 'TR', 'pl': 'PL', 'nl': 'NL'
+            };
+            
+            const langBtn = document.querySelector('.language-text');
+            if (langBtn && langMap[langCode]) {
+                langBtn.textContent = langMap[langCode];
+            }
+            
+            // Reload to apply translation
+            window.location.reload();
+        }
+        
+        function changeLanguageMobile(langCode) {
+            // Set Google Translate cookie
+            var googleTransCookie = '/de/' + langCode;
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+            
+            // Reload to apply translation
+            window.location.reload();
+        }
+        
+        // Close language dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('languageDropdown');
+            const langBtn = document.querySelector('.language-btn');
+            
+            if (dropdown && langBtn && !dropdown.contains(e.target) && !langBtn.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
 
         function toggleMobileMenu() {
             const burger = document.querySelector('.burger-menu');
