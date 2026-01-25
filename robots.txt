@@ -1,10 +1,13 @@
-# robots.txt for wolfewavesignals.com
+# robots.txt für WolfeWaveSignals.com
 
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
 
-# Sitemap location
-Sitemap: https://wolfewavesignals.com/sitemap.xml
+# Sitemaps
+Sitemap: https://www.wolfewavesignals.com/sitemap.xml
 
-# Crawl-delay (optional, be nice to servers)
+# Crawl-delay für freundliches Crawling
 Crawl-delay: 1
