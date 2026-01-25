@@ -84,9 +84,10 @@
             justify-content: center;
         }
 
-        .logo-icon svg {
+        .logo-icon img {
             width: 40px;
             height: 40px;
+            object-fit: contain;
         }
 
         .logo-text {
@@ -689,6 +690,12 @@
             justify-content: center;
         }
 
+        .footer-brand-icon img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
         .footer-brand span {
             color: var(--text-secondary);
             font-size: 0.9rem;
@@ -829,17 +836,12 @@
         <div class="header-inner">
             <a href="index.html" class="logo">
                 <div class="logo-icon">
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="50" r="48" fill="#0c0c0c" stroke="#00ff88" stroke-width="2"/>
-                        <path d="M25 65 L35 35 L50 55 L65 35 L75 65" stroke="#00ff88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                        <circle cx="35" cy="35" r="4" fill="#00ff88"/>
-                        <circle cx="65" cy="35" r="4" fill="#00ff88"/>
-                        <path d="M42 70 Q50 78 58 70" stroke="#00ff88" stroke-width="3" stroke-linecap="round" fill="none"/>
-                    </svg>
+                    <img src="wolf.png" alt="WolfeWaveSignals Logo" width="40" height="40">
                 </div>
-                <span class="logo-text"><span class="green">Wolfe</span>WaveSignals</span>
+                <span class="logo-text"><span class="green">Wolfe</span>Wave<span class="green">Signals</span></span>
             </a>
             <nav class="nav" id="mainNav">
+                <a href="https://www.wolfewavesignals.com/wolfewaves.html">📖 Tutorial</a>
                 <a href="index.html">Start</a>
                 <a href="scanner.html" class="active">Scanner</a>
                 <a href="#faq">FAQ</a>
@@ -1275,13 +1277,7 @@
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-brand-icon">
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
-                        <circle cx="50" cy="50" r="48" fill="#0c0c0c" stroke="#00ff88" stroke-width="2"/>
-                        <path d="M25 65 L35 35 L50 55 L65 35 L75 65" stroke="#00ff88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                        <circle cx="35" cy="35" r="4" fill="#00ff88"/>
-                        <circle cx="65" cy="35" r="4" fill="#00ff88"/>
-                        <path d="M42 70 Q50 78 58 70" stroke="#00ff88" stroke-width="3" stroke-linecap="round" fill="none"/>
-                    </svg>
+                    <img src="wolf.png" alt="WolfeWaveSignals" width="32" height="32">
                 </div>
                 <span>© 2025 WolfeWaveSignals. Alle Rechte vorbehalten.</span>
             </div>
