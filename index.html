@@ -4189,13 +4189,13 @@
                         <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; text-decoration: line-through;">Statt 19,90€</div>
                         
                         <!-- Countdown Timer -->
-                        <div id="offerCountdown" style="margin-top: 15px; padding: 16px; background: linear-gradient(135deg, rgba(255,107,107,0.2) 0%, rgba(255,71,87,0.15) 100%); border: 1px solid rgba(255,107,107,0.4); border-radius: 12px; box-shadow: 0 4px 12px rgba(255,107,107,0.15);">
-                            <div style="font-size: 11px; color: #ff8888; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <div id="offerCountdown" style="margin-top: 15px; padding: 16px; background: linear-gradient(135deg, rgba(0,255,136,0.15) 0%, rgba(0,255,136,0.08) 100%); border: 1px solid rgba(0,255,136,0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,255,136,0.1);">
+                            <div style="font-size: 11px; color: var(--accent-green); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                 <span style="font-size: 14px;">⏰</span>
                                 <span>Angebot endet in</span>
                             </div>
-                            <div id="countdownTimer" style="font-size: 28px; font-weight: 800; color: #fff; font-family: 'Space Grotesk', monospace; letter-spacing: 3px; text-align: center; text-shadow: 0 2px 8px rgba(255,107,107,0.5);">00T 00:00:00</div>
-                            <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 10px; text-align: center;">Danach: 19,90€/Monat</div>
+                            <div id="countdownTimer" style="font-size: 32px; font-weight: 800; color: var(--accent-green); font-family: 'Space Grotesk', monospace; letter-spacing: 4px; text-align: center; text-shadow: 0 2px 12px rgba(0,255,136,0.4), 0 0 30px rgba(0,255,136,0.2);">00T 00:00:00</div>
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 10px; text-align: center;">Danach: 19,90€/Monat</div>
                         </div>
                     </div>
 
@@ -4566,8 +4566,8 @@
                 // Angebot abgelaufen
                 if (containerEl) {
                     containerEl.innerHTML = `
-                        <div style="font-size: 12px; color: #ff6b6b; font-weight: 600;">
-                            ⚠️ Einführungsangebot beendet
+                        <div style="font-size: 12px; color: var(--accent-green); font-weight: 600;">
+                            ⏰ Einführungsangebot beendet
                         </div>
                         <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">
                             Regulärer Preis: 19,90€/Monat
@@ -4584,10 +4584,7 @@
             
             countdownEl.textContent = `${days}T ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             
-            // Farbe ändern wenn weniger als 7 Tage
-            if (days < 7) {
-                countdownEl.style.color = '#ff6b6b';
-            }
+            // Immer grün bleiben (kein Farbwechsel mehr)
         }
         
         // Countdown starten
