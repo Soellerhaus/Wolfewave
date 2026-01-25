@@ -1424,6 +1424,18 @@
         .signal-card.is-failed {
             border-color: rgba(255, 71, 87, 0.4);
         }
+        
+        /* Fixed Signal Styling (Admin Only) */
+        .signal-card-fixed {
+            border: 3px solid var(--accent-gold) !important;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+        
+        .signal-card-fixed:hover {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-4px);
+        }
 
         .new-badge {
             position: absolute;
@@ -4982,6 +4994,11 @@
             const imageUrl = signal.original_path || '';
             const isBullish = signal.direction === 'BULLISH';
             
+            // DEBUG: Log result_fixed status
+            if (isAdmin && signal.result_fixed) {
+                console.log('🔒 Rendering FIXED signal:', signal.symbol, signal.id, 'result_fixed:', signal.result_fixed);
+            }
+            
             // Determine result styling
             let resultClass = 'sl';
             let resultBadge = '🛑 SL';
@@ -5004,14 +5021,15 @@
             // Admin controls for completed signals - ENHANCED
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px; flex-direction: column; gap: 4px;">
+                    <button class="admin-btn admin-btn-primary" onclick="event.stopPropagation(); openEditSignalModal('${signal.id}')" title="TP/SL manuell bearbeiten">✏️</button>
                     <button class="admin-btn admin-btn-success" onclick="event.stopPropagation(); openPhotoManager('${signal.wedge_id}')" title="Fotos verwalten">📸</button>
                     <button class="admin-btn admin-btn-blacklist" onclick="event.stopPropagation(); fixResultStatus('${signal.id}')" title="Ergebnis fixieren">🔒</button>
                     <button class="admin-btn admin-btn-delete" onclick="event.stopPropagation(); deleteCompletedSignal('${signal.id}')" title="Aus Success entfernen">×</button>
                 </div>
             ` : '';
             
-            // Display indicator if result is fixed
-            const fixedBadge = signal.result_fixed ? '<span style="position:absolute;top:12px;right:12px;background:var(--accent-gold);color:#000;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;z-index:10;">🔒 FIXIERT</span>' : '';
+            // Display indicator if result is fixed (ADMIN ONLY)
+            const fixedBadge = (signal.result_fixed && isAdmin) ? '<span style="position:absolute;top:12px;right:12px;background:var(--accent-gold);color:#000;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;z-index:10;">🔒 FIXIERT</span>' : '';
             
             // Watermark for fixed results (admin only)
             const fixedWatermark = (signal.result_fixed && isAdmin) ? `
@@ -5020,8 +5038,11 @@
                 </div>
             ` : '';
             
+            // Add golden border for fixed signals (admin only)
+            const fixedBorderClass = (signal.result_fixed && isAdmin) ? ' signal-card-fixed' : '';
+            
             return `
-                <div class="signal-card ${cardClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', ${JSON.stringify(signal).replace(/"/g, '&quot;')})">
+                <div class="signal-card ${cardClass}${fixedBorderClass}" onclick="openModal('${imageUrl}', '${signal.wedge_id || ''}', ${JSON.stringify(signal).replace(/"/g, '&quot;')})">
                     <div class="result-badge ${resultClass}">${resultBadge}</div>
                     ${fixedBadge}
                     ${adminControls}
@@ -5660,16 +5681,32 @@
             if (signal.sl_hit) {
                 achievementsHtml += '<div style="background: rgba(255,71,87,0.9); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(255,71,87,0.3);">✗ SL erreicht</div>';
             }
-            if (signal.result_fixed) {
+            // Fixiert badge only for admin
+            if (signal.result_fixed && isAdmin) {
                 achievementsHtml += '<div style="background: rgba(255,215,0,0.9); color: #000; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(255,215,0,0.3);">🔒 Fixiert</div>';
             }
             
             achievementsHtml += '</div>';
             
+            // BIG WATERMARK for fixed signals (admin only)
+            if (signal.result_fixed && isAdmin) {
+                achievementsHtml += `
+                    <div id="fixedWatermark" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); z-index: 20; pointer-events: none;">
+                        <div style="font-size: 120px; font-weight: 900; color: rgba(255, 215, 0, 0.25); text-shadow: 0 0 40px rgba(255, 215, 0, 0.5), 0 0 80px rgba(0, 0, 0, 0.8); letter-spacing: 10px; white-space: nowrap;">
+                            🔒 FIXIERT
+                        </div>
+                    </div>
+                `;
+            }
+            
             const modal = document.getElementById('imageModal');
             let existingAchievements = document.getElementById('signalAchievements');
             if (existingAchievements) {
                 existingAchievements.remove();
+            }
+            let existingWatermark = document.getElementById('fixedWatermark');
+            if (existingWatermark) {
+                existingWatermark.remove();
             }
             modal.insertAdjacentHTML('afterbegin', achievementsHtml);
         }
@@ -6122,6 +6159,10 @@ USING (
             // Remove achievements display (SUCCESS FEATURE)
             const achievements = document.getElementById('signalAchievements');
             if (achievements) achievements.remove();
+            
+            // Remove watermark (SUCCESS FEATURE)
+            const watermark = document.getElementById('fixedWatermark');
+            if (watermark) watermark.remove();
         }
         
         // ==================== SUCCESS ADMIN FEATURES ====================
@@ -6327,7 +6368,10 @@ USING (
             if (!confirm('Ergebnis fixieren? TP/SL Status wird nicht mehr automatisch geändert.')) return;
             
             try {
-                const response = await fetch(
+                console.log('Fixing result for signal ID:', signalId);
+                
+                // Update signals table
+                const signalsResponse = await fetch(
                     `${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`,
                     {
                         method: 'PATCH',
@@ -6341,17 +6385,37 @@ USING (
                     }
                 );
                 
-                if (response.ok) {
-                    showToast('✓ Ergebnis fixiert', 'success');
-                    await fetchCompletedSignals();
-                    renderSignals();
-                } else {
-                    throw new Error('Failed to fix result');
+                if (!signalsResponse.ok) {
+                    throw new Error('Failed to update signals table');
                 }
+                
+                // IMPORTANT: Also update completed_signals table
+                const completedResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/completed_signals?id=eq.${signalId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ result_fixed: true })
+                    }
+                );
+                
+                console.log('Signals updated:', signalsResponse.ok);
+                console.log('Completed signals updated:', completedResponse.ok);
+                
+                showToast('✓ Ergebnis fixiert', 'success');
+                
+                // Reload data and re-render
+                await fetchCompletedSignals();
+                renderSignals();
                 
             } catch (error) {
                 console.error('Error fixing result:', error);
-                showToast('❌ Fehler beim Fixieren', 'error');
+                showToast('❌ Fehler beim Fixieren: ' + error.message, 'error');
             }
         }
         
@@ -6388,6 +6452,160 @@ USING (
             } catch (error) {
                 console.error('Error deleting signal:', error);
                 showToast('❌ Fehler beim Entfernen', 'error');
+            }
+        }
+        
+        // ==================== EDIT SIGNAL MODAL ====================
+        
+        async function openEditSignalModal(signalId) {
+            if (!isAdmin) return;
+            
+            try {
+                // Fetch current signal data
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/completed_signals?id=eq.${signalId}&select=*`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (!response.ok) throw new Error('Failed to fetch signal');
+                
+                const signals = await response.json();
+                const signal = signals[0];
+                
+                if (!signal) throw new Error('Signal not found');
+                
+                const modalHtml = `
+                    <div class="admin-modal active" id="editSignalModal" onclick="closeEditSignalModal()">
+                        <div class="admin-modal-card" style="max-width: 500px;" onclick="event.stopPropagation();">
+                            <div class="modal-header">
+                                <h3>✏️ Signal bearbeiten</h3>
+                                <button class="modal-close" onclick="closeEditSignalModal()">×</button>
+                            </div>
+                            <div class="modal-content">
+                                <div style="margin-bottom: 20px;">
+                                    <div style="font-weight: 700; font-size: 18px; margin-bottom: 8px;">${signal.symbol}</div>
+                                    <div style="color: var(--text-secondary); font-size: 14px;">${signal.wedge_id}</div>
+                                </div>
+                                
+                                <div style="background: var(--bg-hover); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                                    <div style="font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">Erreichte Ziele:</div>
+                                    
+                                    <label style="display: flex; align-items: center; padding: 10px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="edit_tp1" ${signal.tp1_hit ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                                        <span style="font-weight: 600; color: var(--accent-green);">✓ TP1 erreicht</span>
+                                    </label>
+                                    
+                                    <label style="display: flex; align-items: center; padding: 10px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="edit_tp2" ${signal.tp2_hit ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                                        <span style="font-weight: 600; color: var(--accent-green);">✓ TP2 erreicht</span>
+                                    </label>
+                                    
+                                    <label style="display: flex; align-items: center; padding: 10px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="edit_tp3" ${signal.tp3_hit ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                                        <span style="font-weight: 600; color: var(--accent-gold);">🏆 TP3 erreicht</span>
+                                    </label>
+                                    
+                                    <label style="display: flex; align-items: center; padding: 10px; background: var(--bg-primary); border-radius: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="edit_sl" ${signal.sl_hit ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                                        <span style="font-weight: 600; color: var(--accent-red);">✗ SL erreicht</span>
+                                    </label>
+                                </div>
+                                
+                                <div style="background: rgba(255,152,0,0.1); border: 1px solid rgba(255,152,0,0.3); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                                    <div style="font-size: 12px; color: rgba(255,152,0,0.9);">
+                                        ⚠️ Diese Änderungen werden sofort gespeichert und in der Success-Ansicht aktualisiert.
+                                    </div>
+                                </div>
+                                
+                                <button onclick="saveSignalEdit('${signalId}')" style="width: 100%; padding: 14px; background: var(--accent-green); color: #000; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer;">
+                                    💾 Änderungen speichern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                
+            } catch (error) {
+                console.error('Error opening edit modal:', error);
+                showToast('❌ Fehler beim Laden', 'error');
+            }
+        }
+        
+        function closeEditSignalModal() {
+            const modal = document.getElementById('editSignalModal');
+            if (modal) modal.remove();
+        }
+        
+        async function saveSignalEdit(signalId) {
+            if (!isAdmin) return;
+            
+            try {
+                const tp1 = document.getElementById('edit_tp1').checked;
+                const tp2 = document.getElementById('edit_tp2').checked;
+                const tp3 = document.getElementById('edit_tp3').checked;
+                const sl = document.getElementById('edit_sl').checked;
+                
+                console.log('Saving edits:', { signalId, tp1, tp2, tp3, sl });
+                
+                // Update signals table
+                const signalsResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signals?id=eq.${signalId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({
+                            tp1_hit: tp1,
+                            tp2_hit: tp2,
+                            tp3_hit: tp3,
+                            sl_hit: sl
+                        })
+                    }
+                );
+                
+                // Update completed_signals table
+                const completedResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/completed_signals?id=eq.${signalId}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({
+                            tp1_hit: tp1,
+                            tp2_hit: tp2,
+                            tp3_hit: tp3,
+                            sl_hit: sl
+                        })
+                    }
+                );
+                
+                if (signalsResponse.ok) {
+                    showToast('✓ Signal aktualisiert', 'success');
+                    closeEditSignalModal();
+                    await fetchCompletedSignals();
+                    renderSignals();
+                } else {
+                    throw new Error('Failed to update signal');
+                }
+                
+            } catch (error) {
+                console.error('Error saving signal edit:', error);
+                showToast('❌ Fehler beim Speichern', 'error');
             }
         }
         
