@@ -133,6 +133,40 @@
             margin: 0 auto;
         }
         
+        /* Video Section */
+        .video-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px 40px;
+        }
+        
+        .video-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+        
         /* Content */
         .content {
             max-width: 1000px;
@@ -523,6 +557,9 @@
             .diagram-container { padding: 15px; }
             .status-flow { flex-direction: column; }
             .status-arrow { transform: rotate(90deg); }
+            
+            .video-section { padding: 40px 20px 20px; }
+            .video-container { padding: 24px; }
         }
     
         /* Language Selector in Navigation */
@@ -593,9 +630,13 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
+        /* Hide Google Translate branding - AGGRESSIVE */
         .goog-te-banner-frame,
         .goog-te-balloon-frame {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
         }
         
         .goog-logo-link {
@@ -611,8 +652,20 @@
             display: none !important;
         }
         
+        body > .skiptranslate {
+            display: none !important;
+        }
+        
+        iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        
         body {
-            top: 0 !important;
+            top: 0px !important;
             position: static !important;
         }
     </style>
@@ -627,6 +680,32 @@
                 autoDisplay: false,
                 multilanguagePage: true
             }, 'google_translate_element');
+            
+            // AGGRESSIVE: Remove Google Translate banner frame immediately
+            setTimeout(function() {
+                var bannerFrame = document.querySelector('.goog-te-banner-frame');
+                if (bannerFrame) {
+                    bannerFrame.style.display = 'none';
+                    bannerFrame.style.visibility = 'hidden';
+                }
+                
+                var skipTranslate = document.querySelector('body > .skiptranslate');
+                if (skipTranslate) {
+                    skipTranslate.style.display = 'none';
+                }
+                
+                document.body.style.top = '0';
+                document.body.style.position = 'static';
+            }, 100);
+            
+            // Keep checking and removing banner
+            setInterval(function() {
+                var bannerFrame = document.querySelector('.goog-te-banner-frame');
+                if (bannerFrame) {
+                    bannerFrame.style.display = 'none';
+                }
+                document.body.style.top = '0';
+            }, 500);
             
             // AUTO-DETECT and translate on first visit
             setTimeout(function() {
@@ -738,6 +817,29 @@
     <section class="hero">
         <h1>Was sind <span>Wolfe Waves</span>?</h1>
         <p>Lerne die mächtige Trading-Strategie und verstehe genau, wie unser Scanner funktioniert – von der Erkennung bis zum Trade-Abschluss.</p>
+    </section>
+
+    <!-- YouTube Video Section -->
+    <section class="video-section">
+        <div class="video-container">
+            <h2 style="text-align: center; margin-bottom: 24px;">
+                <span style="color: var(--accent-green);">📺 Video-Tutorial</span>
+            </h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px;">
+                Lerne Wolfe Waves visuell – komplette Erklärung mit praktischen Beispielen
+            </p>
+            <div class="video-wrapper">
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://www.youtube.com/embed/wWi1ypuRjPI?start=437" 
+                    title="Wolfe Wave Trading Strategy" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
     </section>
 
     <main class="content">
