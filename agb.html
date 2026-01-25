@@ -481,10 +481,13 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        /* Hide Google Translate branding */
+        /* Hide Google Translate branding - AGGRESSIVE */
         .goog-te-banner-frame,
         .goog-te-balloon-frame {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
         }
         
         .goog-logo-link {
@@ -504,9 +507,26 @@
             display: inline-block !important;
         }
         
+        /* CRITICAL: Hide Google Translate top bar completely */
         body {
             top: 0 !important;
             position: static !important;
+        }
+        
+        body > .skiptranslate {
+            display: none !important;
+        }
+        
+        iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        
+        body {
+            top: 0px !important;
         }
 
         .header-nav {
@@ -1479,6 +1499,38 @@
         .success-rate-display .rate-label {
             font-size: 12px;
             color: var(--text-secondary);
+        }
+        
+        /* Success Rate Disclaimer */
+        .success-disclaimer {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 40px 24px;
+            background: rgba(255, 215, 0, 0.03);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .success-disclaimer.visible {
+            display: block;
+        }
+        
+        .success-disclaimer p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.7;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .success-disclaimer a {
+            color: var(--accent-green);
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+        
+        .success-disclaimer a:hover {
+            opacity: 0.8;
         }
 
         /* Main Grid */
@@ -3641,6 +3693,35 @@
                 multilanguagePage: true
             }, 'google_translate_element_mobile');
             
+            // AGGRESSIVE: Remove Google Translate banner frame immediately
+            setTimeout(function() {
+                // Remove top banner frame
+                var bannerFrame = document.querySelector('.goog-te-banner-frame');
+                if (bannerFrame) {
+                    bannerFrame.style.display = 'none';
+                    bannerFrame.style.visibility = 'hidden';
+                }
+                
+                // Remove skiptranslate wrapper
+                var skipTranslate = document.querySelector('body > .skiptranslate');
+                if (skipTranslate) {
+                    skipTranslate.style.display = 'none';
+                }
+                
+                // Force body position
+                document.body.style.top = '0';
+                document.body.style.position = 'static';
+            }, 100);
+            
+            // Keep checking and removing banner
+            setInterval(function() {
+                var bannerFrame = document.querySelector('.goog-te-banner-frame');
+                if (bannerFrame) {
+                    bannerFrame.style.display = 'none';
+                }
+                document.body.style.top = '0';
+            }, 500);
+            
             // AUTO-DETECT and translate on first visit
             setTimeout(function() {
                 autoTranslateToUserLanguage();
@@ -4024,6 +4105,16 @@
             </div>
         </div>
     </section>
+
+    <!-- Success Rate Disclaimer -->
+    <div class="success-disclaimer">
+        <p>
+            ℹ️ Die Success Rate basiert ausschließlich auf den aktuell vom Scanner erkannten Wolfe-Wave-Signalen. 
+            Externe Backtests mit mehreren tausend Wolfe-Wave-Setups zeigen je nach Markt, Zeitrahmen und Zieldefinition 
+            stark variierende Trefferquoten und dienen nur zur Einordnung, nicht als feste Erfolgszusage – siehe z. B. die 
+            Analyse auf <a href="https://thetradinganalyst.com/wolfe-wave/?utm_source=chatgpt.com" target="_blank" rel="noopener">Interpreting the Wolfe Wave Pattern (Trader's Guide)</a> zur Einordnung.
+        </p>
+    </div>
 
     <!-- Section Divider -->
     <div class="section-divider-glow"></div>
@@ -5046,6 +5137,12 @@
             document.getElementById('successStatsBar').classList.remove('visible');
             document.getElementById('adminBadge').classList.remove('visible');
             
+            // Hide success disclaimer for guests
+            const disclaimer = document.querySelector('.success-disclaimer');
+            if (disclaimer) {
+                disclaimer.classList.remove('visible');
+            }
+            
             // Show SEO content block for guests (landing page)
             const seoContent = document.getElementById('seoContent');
             if (seoContent) {
@@ -5361,10 +5458,18 @@
             
             // Handle success stats bar visibility
             const statsBar = document.getElementById('successStatsBar');
+            const disclaimer = document.querySelector('.success-disclaimer');
+            
             if (currentTab === 'success' && isPremium) {
                 statsBar.classList.add('visible');
+                if (disclaimer) {
+                    disclaimer.classList.add('visible');
+                }
             } else {
                 statsBar.classList.remove('visible');
+                if (disclaimer) {
+                    disclaimer.classList.remove('visible');
+                }
             }
             
             if (!isPremium) {
