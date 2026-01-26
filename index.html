@@ -532,57 +532,41 @@
         .header-nav {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 24px;
             margin-left: 40px;
         }
 
         .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            transition: color 0.2s;
             white-space: nowrap;
         }
 
         .nav-link:hover {
-            background: rgba(0, 255, 136, 0.1);
             color: var(--accent-green);
-        }
-        
-        .nav-link .nav-icon {
-            font-size: 16px;
-            line-height: 1;
-        }
-        
-        .nav-link .nav-text {
-            font-size: 14px;
         }
         
         /* Language Selector in Navigation */
         .nav-language-container {
             position: relative;
-            margin-left: 8px;
         }
         
         .nav-language-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            background: var(--bg-card);
+            background: transparent;
             border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
             border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
             font-family: inherit;
         }
         
@@ -593,29 +577,27 @@
         }
         
         .language-text {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
         }
 
         .header-success-rate {
             display: flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 8px;
-            padding: 8px 14px;
-            margin-left: 8px;
+            gap: 8px;
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 20px;
+            padding: 6px 14px;
         }
 
         .success-label {
             font-size: 12px;
             color: var(--text-secondary);
-            font-weight: 500;
         }
 
         .success-value {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--accent-green);
         }
@@ -3852,38 +3834,16 @@
             <div>Wolfe<span>Wave</span>Signals</div>
         </div>
         <nav class="header-nav">
-            <a href="wolfewaves.html" class="nav-link">
-                <span class="nav-icon">📖</span>
-                <span class="nav-text">Tutorial</span>
-            </a>
-            <a href="scanner-erklaerung.html" class="nav-link">
-                <span class="nav-icon">🔍</span>
-                <span class="nav-text">Scanner</span>
-            </a>
-            <a href="maerkte.html" class="nav-link">
-                <span class="nav-icon">🌍</span>
-                <span class="nav-text">Märkte</span>
-            </a>
-            <a href="performance.html" class="nav-link">
-                <span class="nav-icon">📊</span>
-                <span class="nav-text">Performance</span>
-            </a>
-            <a href="faq.html" class="nav-link">
-                <span class="nav-icon">❓</span>
-                <span class="nav-text">FAQ</span>
-            </a>
-            
-            <!-- Success Rate Badge -->
-            <div class="header-success-rate" id="headerSuccessRate">
-                <span class="success-label">Win-Rate:</span>
-                <span class="success-value" id="headerSuccessValue">—%</span>
-            </div>
+            <a href="wolfewaves.html" class="nav-link"><span style="font-size:16px;">📖</span> Tutorial</a>
+            <a href="scanner-erklaerung.html" class="nav-link"><span style="font-size:16px;">🔍</span> Scanner</a>
+            <a href="maerkte.html" class="nav-link">🌍 Märkte</a>
+              <a href="performance.html">📊 Performance</a>
+            <a href="faq.html" class="nav-link"><span style="font-size:16px;">❓</span> FAQ</a>
             
             <!-- Language Selector in Navigation -->
             <div class="nav-language-container">
                 <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
-                    <span class="nav-icon">🌐</span>
-                    <span class="language-text">DE</span>
+                    🌐 <span class="language-text">DE</span>
                 </button>
                 <div class="language-dropdown" id="languageDropdown">
                     <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
@@ -3902,7 +3862,11 @@
                     <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
                 </div>
             </div>
-        </nav>
+            
+            <div class="header-success-rate" id="headerSuccessRate">
+                <span class="success-label">Success Rate:</span>
+                <span class="success-value" id="headerSuccessValue">—%</span>
+            </div>
             <!-- Trading Hours - Compact (below success rate) -->
             <div id="tradingHoursBar" style="display: none; font-size: 10px; opacity: 0.7; white-space: nowrap;">
                 <span style="margin-right: 8px;">
