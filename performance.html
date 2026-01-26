@@ -644,6 +644,63 @@
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         
+        // Symbol name mapping
+        const SYMBOL_NAMES = {
+            // Stocks
+            'TRN.OQ': 'Trinity Industries',
+            'SYY.OQ': 'Sysco Corporation',
+            'QS.OQ': 'QuantumScape',
+            'IEX.OQ': 'IDEX Corporation',
+            'DYN.OQ': 'Dyne Therapeutics',
+            'LI.OQ': 'Li Auto',
+            'DIS.N': 'Walt Disney',
+            'UAL.N': 'United Airlines',
+            'DLR.OQ': 'Digital Realty',
+            'LUV.N': 'Southwest Airlines',
+            'ZTS.OQ': 'Zoetis',
+            'SCCO.OQ': 'Southern Copper',
+            'RIOT.OQ': 'Riot Platforms',
+            'DQ.OQ': 'Daqo New Energy',
+            'HBAN.OQ': 'Huntington Bancshares',
+            'FREG.DE': 'Fresenius Medical Care',
+            'TOTF.PA': 'TotalEnergies',
+            'TXN.O': 'Texas Instruments',
+            '2388.HK': 'BOC Hong Kong',
+            '2318.HK': 'Ping An Insurance',
+            'UA.OQ': 'Under Armour',
+            'SEDG.OQ': 'SolarEdge',
+            'RSG.OQ': 'Republic Services',
+            'PRU.OQ': 'Prudential Financial',
+            'PNR.OQ': 'Pentair',
+            'ODFL.OQ': 'Old Dominion Freight',
+            'NCLH.OQ': 'Norwegian Cruise',
+            'ISRG.OQ': 'Intuitive Surgical',
+            'DEO.OQ': 'Diageo',
+            'CTRA.OQ': 'Coterra Energy',
+            'AIZ.OQ': 'Assurant',
+            'ACN.OQ': 'Accenture',
+            'CNC.N': 'Centene',
+            'ATHM.N': 'Autohome',
+            'TSM.N': 'Taiwan Semiconductor',
+            'MO.N': 'Altria Group',
+            'NKE.N': 'Nike',
+            'AKAM.OQ': 'Akamai',
+            'LYFT.OQ': 'Lyft',
+            'F.N': 'Ford Motor',
+            'PUMG.DE': 'Puma',
+            // Crypto
+            'SNXUSD': 'Synthetix',
+            'ATOUSD': 'Cosmos',
+            'TRPUSD': 'Tron',
+            // Forex
+            'EURCZK': 'Euro / Czech Koruna',
+            'NZDUSD': 'New Zealand Dollar / US Dollar'
+        };
+        
+        function getSymbolName(symbol) {
+            return SYMBOL_NAMES[symbol] || symbol;
+        }
+        
         // Native fetch instead of Supabase SDK
         async function fetchFromSupabase(table, filters = {}) {
             let url = `${SUPABASE_URL}/rest/v1/${table}?`;
@@ -770,7 +827,7 @@
                 if (!symbolMap[symbol]) {
                     symbolMap[symbol] = {
                         symbol: symbol,
-                        symbolName: symbol,  // No symbol_name column in completed_signals
+                        symbolName: getSymbolName(symbol),  // Use mapping function
                         signals: [],
                         market: signal.market
                     };
@@ -793,25 +850,32 @@
 
                 const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
 
-                // Average result
+                // Average result - use highest TP level reached
                 let avgResultScore = 0;
                 let avgResultLabel = 'N/A';
                 
                 if (total > 0) {
+                    // Count how many reached each TP level (any TP hit)
                     const tp3Count = signals.filter(s => s.tp3_hit === true).length;
-                    const tp2Count = signals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
-                    const tp1Count = signals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
+                    const tp2Count = signals.filter(s => s.tp2_hit === true).length; 
+                    const tp1Count = signals.filter(s => s.tp1_hit === true).length;
                     
-                    if (tp3Count > tp2Count && tp3Count > tp1Count) {
-                        avgResultLabel = 'TP3';
-                        avgResultScore = 3;
-                    } else if (tp2Count > tp1Count) {
-                        avgResultLabel = 'TP2';
-                        avgResultScore = 2;
-                    } else if (tp1Count > 0) {
-                        avgResultLabel = 'TP1';
-                        avgResultScore = 1;
-                    } else if (losses > wins) {
+                    // Calculate weighted average
+                    const totalTP = tp3Count + tp2Count + tp1Count;
+                    if (totalTP > 0) {
+                        const weightedAvg = (tp3Count * 3 + tp2Count * 2 + tp1Count * 1) / totalTP;
+                        
+                        if (weightedAvg >= 2.5) {
+                            avgResultLabel = 'TP3';
+                            avgResultScore = 3;
+                        } else if (weightedAvg >= 1.5) {
+                            avgResultLabel = 'TP2';
+                            avgResultScore = 2;
+                        } else {
+                            avgResultLabel = 'TP1';
+                            avgResultScore = 1;
+                        }
+                    } else if (losses > 0) {
                         avgResultLabel = 'SL';
                         avgResultScore = 0;
                     }
@@ -851,8 +915,18 @@
                 };
             });
 
-            // Sort by win rate
-            performanceData.sort((a, b) => b.winRate - a.winRate);
+            // Sort by win rate, but prioritize symbols with more signals
+            performanceData.sort((a, b) => {
+                // If both have 2+ signals, sort by win rate
+                if (a.total >= 2 && b.total >= 2) {
+                    return b.winRate - a.winRate;
+                }
+                // If only one has 2+ signals, it goes first
+                if (a.total >= 2) return -1;
+                if (b.total >= 2) return 1;
+                // If both have <2 signals, sort by win rate
+                return b.winRate - a.winRate;
+            });
         }
 
         function renderTable() {
@@ -934,8 +1008,9 @@
             if (!item) return;
 
             document.getElementById('overviewContainer').style.display = 'none';
+            document.getElementById('loadingDetail').style.display = 'none'; // Hide loading
             document.getElementById('detailView').classList.add('active');
-            document.getElementById('detailTitle').textContent = `${symbol} - Letzte ${item.total} Signale`;
+            document.getElementById('detailTitle').textContent = `${getSymbolName(symbol)} (${symbol})`;
             document.getElementById('detailWinRate').textContent = item.winRate + '%';
             document.getElementById('detailSignals').textContent = item.total;
 
