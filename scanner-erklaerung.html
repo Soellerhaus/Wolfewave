@@ -98,6 +98,56 @@
             color: var(--accent-green);
         }
 
+        /* Modern Navigation */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            margin: 0 20px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-green);
+        }
+        
+        .nav-link.active {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        
+        .nav-link .nav-icon {
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        .nav-link .nav-text {
+            font-size: 14px;
+        }
+        
+        @media (max-width: 968px) {
+            .header-nav {
+                display: none;
+            }
+        }
+
         .nav {
             display: flex;
             gap: 8px;
@@ -1059,6 +1109,34 @@
                 </div>
                 <span class="logo-text"><span class="green">Wolfe</span>Wave<span class="green">Signals</span></span>
             </a>
+            
+            <nav class="header-nav">
+                <a href="index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Home</span>
+                </a>
+                <a href="wolfewaves.html" class="nav-link">
+                    <span class="nav-icon">📖</span>
+                    <span class="nav-text">Tutorial</span>
+                </a>
+                <a href="scanner-erklaerung.html" class="nav-link active">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-text">Scanner</span>
+                </a>
+                <a href="maerkte.html" class="nav-link">
+                    <span class="nav-icon">🌍</span>
+                    <span class="nav-text">Märkte</span>
+                </a>
+                <a href="performance.html" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Performance</span>
+                </a>
+                <a href="faq.html" class="nav-link">
+                    <span class="nav-icon">❓</span>
+                    <span class="nav-text">FAQ</span>
+                </a>
+            </nav>
+            
             <div class="nav-language-container">
                 <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
                     🌐 <span class="language-text">DE</span>
