@@ -639,14 +639,40 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ==================== SUPABASE CONFIG ====================
         const SUPABASE_URL = 'https://hqunexjgwpxmexcuolte.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdW5leGpnd3B4bWV4Y3VvbHRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY2MTk5MjksImV4cCI6MjA1MjE5NTkyOX0.TKEGGnZ0VRglxmyFmEe6YQkJqy5W0TXs92MZNYJLAtU';
         
-        const { createClient } = supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Native fetch instead of Supabase SDK
+        async function fetchFromSupabase(table, filters = {}) {
+            let url = `${SUPABASE_URL}/rest/v1/${table}?`;
+            
+            // Add filters
+            if (filters.gte) {
+                url += `created_at=gte.${filters.gte}&`;
+            }
+            if (filters.eq) {
+                url += `${filters.eqField}=eq.${filters.eq}&`;
+            }
+            if (filters.in) {
+                url += `${filters.inField}=in.(${filters.in.join(',')})&`;
+            }
+            
+            const response = await fetch(url, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            return await response.json();
+        }
 
         // ==================== STATE ====================
         let currentPeriod = 30;
@@ -688,28 +714,26 @@
             document.getElementById('performanceTable').style.display = 'none';
 
             try {
-                // Calculate date range
-                let query = supabaseClient
-                    .from('completed_signals')
-                    .select('*');
-
+                // Build filters
+                const filters = {};
+                
                 if (currentPeriod !== 'all') {
                     const daysAgo = new Date();
                     daysAgo.setDate(daysAgo.getDate() - parseInt(currentPeriod));
-                    query = query.gte('created_at', daysAgo.toISOString());
+                    filters.gte = daysAgo.toISOString();
                 }
 
                 if (currentMarket !== 'all') {
                     if (currentMarket === 'stocks') {
-                        query = query.in('market', ['DAX', 'NASDAQ', 'NYSE']);
+                        filters.in = ['DAX', 'NASDAQ', 'NYSE'];
+                        filters.inField = 'market';
                     } else {
-                        query = query.eq('market', currentMarket);
+                        filters.eq = currentMarket;
+                        filters.eqField = 'market';
                     }
                 }
 
-                const { data, error } = await query;
-
-                if (error) throw error;
+                const data = await fetchFromSupabase('completed_signals', filters);
 
                 allSignals = data || [];
                 processPerformanceData();
