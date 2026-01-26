@@ -690,7 +690,7 @@
             try {
                 // Calculate date range
                 let query = supabaseClient
-                    .from('signals')
+                    .from('completed_signals')
                     .select('*');
 
                 if (currentPeriod !== 'all') {
@@ -734,7 +734,7 @@
                 if (!symbolMap[symbol]) {
                     symbolMap[symbol] = {
                         symbol: symbol,
-                        symbolName: signal.symbol_name || symbol,
+                        symbolName: symbol,  // No symbol_name column in completed_signals
                         signals: [],
                         market: signal.market
                     };
@@ -748,11 +748,11 @@
                 const total = signals.length;
                 
                 const wins = signals.filter(s => 
-                    s.status && s.status.includes('success')
+                    s.result === 'TP1_HIT'
                 ).length;
                 
                 const losses = signals.filter(s => 
-                    s.status === 'stopped'
+                    s.result === 'SL_HIT'
                 ).length;
 
                 const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
@@ -762,9 +762,9 @@
                 let avgResultLabel = 'N/A';
                 
                 if (total > 0) {
-                    const tp3Count = signals.filter(s => s.status === 'success_tp3').length;
-                    const tp2Count = signals.filter(s => s.status === 'success_tp2').length;
-                    const tp1Count = signals.filter(s => s.status === 'success_tp1').length;
+                    const tp3Count = signals.filter(s => s.tp3_hit === true).length;
+                    const tp2Count = signals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
+                    const tp1Count = signals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
                     
                     if (tp3Count > tp2Count && tp3Count > tp1Count) {
                         avgResultLabel = 'TP3';
@@ -787,7 +787,7 @@
                     const tf = s.timeframe;
                     if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
                     tfMap[tf].total++;
-                    if (s.status && s.status.includes('success')) tfMap[tf].wins++;
+                    if (s.result === 'TP1_HIT') tfMap[tf].wins++;
                 });
 
                 let bestTF = 'N/A';
@@ -852,16 +852,16 @@
 
         function renderOverviewStats() {
             const total = allSignals.length;
-            const wins = allSignals.filter(s => s.status && s.status.includes('success')).length;
+            const wins = allSignals.filter(s => s.result === 'TP1_HIT').length;
             const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
 
             document.getElementById('totalSignals').textContent = total;
             document.getElementById('overallWinRate').textContent = winRate + '%';
 
             // Average result
-            const tp3 = allSignals.filter(s => s.status === 'success_tp3').length;
-            const tp2 = allSignals.filter(s => s.status === 'success_tp2').length;
-            const tp1 = allSignals.filter(s => s.status === 'success_tp1').length;
+            const tp3 = allSignals.filter(s => s.tp3_hit === true).length;
+            const tp2 = allSignals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
+            const tp1 = allSignals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
             
             let avgResult = 'N/A';
             if (tp3 > tp2 && tp3 > tp1) avgResult = 'TP3';
@@ -876,7 +876,7 @@
                 const tf = s.timeframe;
                 if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
                 tfMap[tf].total++;
-                if (s.status && s.status.includes('success')) tfMap[tf].wins++;
+                if (s.result === 'TP1_HIT') tfMap[tf].wins++;
             });
 
             let bestTF = 'N/A';
@@ -921,26 +921,26 @@
             const sorted = signals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
             sorted.forEach(signal => {
-                const isWin = signal.status && signal.status.includes('success');
-                const isLoss = signal.status === 'stopped';
+                const isWin = signal.result === 'TP1_HIT';
+                const isLoss = signal.result === 'SL_HIT';
 
                 let resultBadge = '';
                 let resultClass = '';
                 let pnl = '';
                 
-                if (signal.status === 'success_tp3') {
+                if (signal.tp3_hit === true) {
                     resultBadge = '🏆 TP3';
                     resultClass = 'tp3';
                     pnl = calculatePnL(signal, 3);
-                } else if (signal.status === 'success_tp2') {
+                } else if (signal.tp2_hit === true) {
                     resultBadge = '✅ TP2';
                     resultClass = 'tp2';
                     pnl = calculatePnL(signal, 2);
-                } else if (signal.status === 'success_tp1') {
+                } else if (signal.tp1_hit === true) {
                     resultBadge = '✅ TP1';
                     resultClass = 'tp1';
                     pnl = calculatePnL(signal, 1);
-                } else if (signal.status === 'stopped') {
+                } else if (signal.sl_hit === true) {
                     resultBadge = '❌ SL';
                     resultClass = 'sl';
                     pnl = calculatePnL(signal, 0);
@@ -952,7 +952,7 @@
                 const card = document.createElement('div');
                 card.className = `signal-card ${isWin ? 'win' : isLoss ? 'loss' : ''}`;
                 card.innerHTML = `
-                    <img class="signal-image" src="${signal.image_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
+                    <img class="signal-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
                     <div class="signal-info">
                         <div class="signal-result">
                             <span class="result-badge ${resultClass}">${resultBadge}</span>
