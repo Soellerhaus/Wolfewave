@@ -2760,6 +2760,65 @@
             border-radius: 10px;
             margin-left: auto;
         }
+        
+        /* Email Notification Toggle */
+        .notification-toggle-item {
+            justify-content: space-between;
+            padding: 12px 16px;
+        }
+        
+        .notification-toggle-item:hover {
+            background: var(--bg-hover);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            margin: 0;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            transition: .3s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-secondary);
+            transition: .3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+            background-color: #000;
+        }
 
         /* ==================== ALERT SYSTEM ==================== */
         
@@ -4061,6 +4120,7 @@
                 <button class="filter-btn" data-market="NYSE">NYSE</button>
                 <button class="filter-btn" data-market="INDICES">Indizes</button>
                 <button class="filter-btn" data-market="FOREX">Forex</button>
+                <button class="filter-btn" data-market="COMMODITIES">Rohstoffe</button>
                 <button class="filter-btn" data-market="CRYPTO">Krypto</button>
             </div>
             <div class="filter-group">
@@ -4996,6 +5056,15 @@
                     </div>
                     <div class="user-dropdown">
                         ${(isSubscribed || isAdmin) ? `<div class="dropdown-item" onclick="showMyAlerts()">🔔 Meine Alarme ${alertCountBadge}</div>` : ''}
+                        ${(isSubscribed || isAdmin) ? `
+                            <div class="dropdown-item notification-toggle-item" onclick="event.stopPropagation();">
+                                <span>📧 Email bei ACTIVE</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="emailNotificationToggle" onchange="toggleEmailNotifications(this.checked)">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        ` : ''}
                         ${(isSubscribed || isAdmin) ? '<div class="dropdown-divider"></div>' : ''}
                         ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
                         <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
@@ -5224,6 +5293,74 @@
 
         function toggleUserMenu() {
             document.querySelector('.user-menu-container').classList.toggle('open');
+            
+            // Load notification preference when menu opens
+            loadEmailNotificationPreference();
+        }
+        
+        // ==================== EMAIL NOTIFICATIONS FOR PENDING → ACTIVE ====================
+        
+        async function loadEmailNotificationPreference() {
+            if (!currentUser) return;
+            
+            const toggle = document.getElementById('emailNotificationToggle');
+            if (!toggle) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_preferences')
+                    .select('email_on_active')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (error && error.code !== 'PGRST116') { // PGRST116 = no rows
+                    console.error('Error loading email preference:', error);
+                    return;
+                }
+                
+                toggle.checked = data?.email_on_active || false;
+            } catch (err) {
+                console.error('Error loading email preference:', err);
+            }
+        }
+        
+        async function toggleEmailNotifications(enabled) {
+            if (!currentUser) return;
+            
+            try {
+                showToast(enabled ? '⏳ Aktiviere Email-Benachrichtigungen...' : '⏳ Deaktiviere Email-Benachrichtigungen...', 'success');
+                
+                // Upsert preference
+                const { error } = await supabase
+                    .from('user_preferences')
+                    .upsert({
+                        user_id: currentUser.id,
+                        email: currentUser.email,
+                        email_on_active: enabled,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                showToast(
+                    enabled 
+                        ? '✅ Email-Benachrichtigungen aktiviert! Du erhältst jetzt eine Email, wenn ein PENDING-Signal ACTIVE wird.' 
+                        : '✅ Email-Benachrichtigungen deaktiviert.',
+                    'success'
+                );
+                
+            } catch (err) {
+                console.error('Error toggling email notifications:', err);
+                showToast('❌ Fehler: ' + err.message, 'error');
+                
+                // Reset toggle on error
+                const toggle = document.getElementById('emailNotificationToggle');
+                if (toggle) toggle.checked = !enabled;
+            }
         }
         
         function toggleLanguageMenu() {
