@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Statistiken - WolfeWaveSignals</title>
+    <meta name="description" content="Detaillierte Performance-Statistiken und Win-Rates für alle Wolfe Wave Trading-Signale nach Symbol, Markt und Zeitrahmen.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --bg-hover: rgba(255, 255, 255, 0.05);
+            --accent-green: #00ff88;
+            --accent-red: #ff4757;
+            --accent-gold: #ffd700;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --border-color: #1f1f1f;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .logo-icon img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 60px 40px 40px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 span {
+            color: var(--accent-green);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Filters */
+        .filters {
+            max-width: 1400px;
+            margin: 0 auto 40px;
+            padding: 0 40px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            max-width: 1400px;
+            margin: 0 auto 40px;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-value.green {
+            color: var(--accent-green);
+        }
+
+        .stat-value.gold {
+            color: var(--accent-gold);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Table Container */
+        .table-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Performance Table */
+        .performance-table {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .performance-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .performance-table thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .performance-table th {
+            padding: 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .performance-table td {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .performance-table tbody tr {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .performance-table tbody tr:hover {
+            background: var(--bg-hover);
+        }
+
+        .symbol-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .rank-badge {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 16px;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, var(--accent-gold), #ffa500); }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #808080); }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #8b4513); }
+
+        .win-rate {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .win-rate.high { color: var(--accent-green); }
+        .win-rate.medium { color: #ffa500; }
+        .win-rate.low { color: var(--accent-red); }
+
+        .avg-result {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .avg-result.tp3 {
+            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
+            color: #000;
+        }
+
+        .avg-result.tp2 {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .avg-result.tp1 {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .avg-result.sl {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        /* Detail View */
+        .detail-view {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .detail-view.active {
+            display: block;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .detail-title {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .detail-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .detail-stat {
+            text-align: center;
+        }
+
+        .detail-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .detail-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Signal Grid */
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .signal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .signal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .signal-card.win {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .signal-card.loss {
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .signal-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #000;
+        }
+
+        .signal-info {
+            padding: 16px;
+        }
+
+        .signal-result {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .result-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .result-badge.tp3 {
+            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
+            color: #000;
+        }
+
+        .result-badge.tp2 {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .result-badge.tp1 {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        .result-badge.sl {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+        }
+
+        .result-pnl {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .result-pnl.positive { color: var(--accent-green); }
+        .result-pnl.negative { color: var(--accent-red); }
+
+        .signal-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .signal-direction {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .signal-direction.bullish {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-green);
+        }
+
+        .signal-direction.bearish {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--accent-red);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .hero {
+                padding: 40px 20px 20px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .filters,
+            .stats-overview,
+            .table-container,
+            .detail-view {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .performance-table {
+                overflow-x: auto;
+            }
+
+            .performance-table table {
+                min-width: 600px;
+            }
+
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .signal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
+            <div>Wolfe<span>Wave</span>Signals</div>
+        </a>
+        <a href="index.html" class="back-btn">← Zurück zu Signalen</a>
+    </header>
+
+    <section class="hero">
+        <h1>Performance <span>Statistiken</span></h1>
+        <p>Detaillierte Win-Rates und Ergebnisse für alle Trading-Signale nach Symbol, Markt und Zeitrahmen</p>
+    </section>
+
+    <!-- Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <span class="filter-label">Zeitraum:</span>
+            <button class="filter-btn" data-period="7">7 Tage</button>
+            <button class="filter-btn active" data-period="30">30 Tage</button>
+            <button class="filter-btn" data-period="90">90 Tage</button>
+            <button class="filter-btn" data-period="all">Alle</button>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">Markt:</span>
+            <button class="filter-btn active" data-market="all">Alle</button>
+            <button class="filter-btn" data-market="FOREX">Forex</button>
+            <button class="filter-btn" data-market="CRYPTO">Crypto</button>
+            <button class="filter-btn" data-market="COMMODITIES">Rohstoffe</button>
+            <button class="filter-btn" data-market="stocks">Stocks</button>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview" id="statsOverview">
+        <div class="stat-card">
+            <div class="stat-value green" id="totalSignals">—</div>
+            <div class="stat-label">Gesamt Signale</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value green" id="overallWinRate">—%</div>
+            <div class="stat-label">Gesamt Win-Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value gold" id="avgResult">—</div>
+            <div class="stat-label">Ø Ergebnis</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="bestTimeframe">—</div>
+            <div class="stat-label">Bester Zeitrahmen</div>
+        </div>
+    </div>
+
+    <!-- Overview Table -->
+    <div class="table-container" id="overviewContainer">
+        <h2 class="section-title">📊 Performance nach Symbol</h2>
+        
+        <div id="loadingOverview" class="loading">
+            <div class="spinner"></div>
+            <p>Lade Performance-Daten...</p>
+        </div>
+
+        <div class="performance-table" id="performanceTable" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Symbol</th>
+                        <th>Signale</th>
+                        <th>Win-Rate</th>
+                        <th>Ø Ergebnis</th>
+                        <th>Bester TF</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Detail View -->
+    <div class="detail-view" id="detailView">
+        <div class="detail-header">
+            <div>
+                <button class="back-btn" onclick="showOverview()">← Zurück zur Übersicht</button>
+                <h2 class="detail-title" id="detailTitle">—</h2>
+            </div>
+            <div class="detail-stats">
+                <div class="detail-stat">
+                    <div class="detail-stat-value" id="detailWinRate">—%</div>
+                    <div class="detail-stat-label">Win-Rate</div>
+                </div>
+                <div class="detail-stat">
+                    <div class="detail-stat-value" id="detailSignals">—</div>
+                    <div class="detail-stat-label">Signale</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingDetail" class="loading">
+            <div class="spinner"></div>
+            <p>Lade Signal-Details...</p>
+        </div>
+
+        <div class="signal-grid" id="signalGrid">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ==================== SUPABASE CONFIG ====================
+        const SUPABASE_URL = 'https://hqunexjgwpxmexcuolte.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdW5leGpnd3B4bWV4Y3VvbHRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY2MTk5MjksImV4cCI6MjA1MjE5NTkyOX0.TKEGGnZ0VRglxmyFmEe6YQkJqy5W0TXs92MZNYJLAtU';
+        
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== STATE ====================
+        let currentPeriod = 30;
+        let currentMarket = 'all';
+        let allSignals = [];
+        let performanceData = [];
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFilters();
+            loadPerformanceData();
+        });
+
+        function setupFilters() {
+            // Period filters
+            document.querySelectorAll('[data-period]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-period]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentPeriod = this.dataset.period;
+                    loadPerformanceData();
+                });
+            });
+
+            // Market filters
+            document.querySelectorAll('[data-market]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-market]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMarket = this.dataset.market;
+                    loadPerformanceData();
+                });
+            });
+        }
+
+        // ==================== LOAD DATA ====================
+        async function loadPerformanceData() {
+            document.getElementById('loadingOverview').style.display = 'block';
+            document.getElementById('performanceTable').style.display = 'none';
+
+            try {
+                // Calculate date range
+                let query = supabaseClient
+                    .from('signals')
+                    .select('*');
+
+                if (currentPeriod !== 'all') {
+                    const daysAgo = new Date();
+                    daysAgo.setDate(daysAgo.getDate() - parseInt(currentPeriod));
+                    query = query.gte('created_at', daysAgo.toISOString());
+                }
+
+                if (currentMarket !== 'all') {
+                    if (currentMarket === 'stocks') {
+                        query = query.in('market', ['DAX', 'NASDAQ', 'NYSE']);
+                    } else {
+                        query = query.eq('market', currentMarket);
+                    }
+                }
+
+                const { data, error } = await query;
+
+                if (error) throw error;
+
+                allSignals = data || [];
+                processPerformanceData();
+                renderTable();
+                renderOverviewStats();
+
+            } catch (err) {
+                console.error('Error loading data:', err);
+                alert('Fehler beim Laden der Daten: ' + err.message);
+            } finally {
+                document.getElementById('loadingOverview').style.display = 'none';
+                document.getElementById('performanceTable').style.display = 'block';
+            }
+        }
+
+        function processPerformanceData() {
+            const symbolMap = {};
+
+            allSignals.forEach(signal => {
+                const symbol = signal.symbol;
+                
+                if (!symbolMap[symbol]) {
+                    symbolMap[symbol] = {
+                        symbol: symbol,
+                        symbolName: signal.symbol_name || symbol,
+                        signals: [],
+                        market: signal.market
+                    };
+                }
+
+                symbolMap[symbol].signals.push(signal);
+            });
+
+            performanceData = Object.values(symbolMap).map(item => {
+                const signals = item.signals;
+                const total = signals.length;
+                
+                const wins = signals.filter(s => 
+                    s.status && s.status.includes('success')
+                ).length;
+                
+                const losses = signals.filter(s => 
+                    s.status === 'stopped'
+                ).length;
+
+                const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
+
+                // Average result
+                let avgResultScore = 0;
+                let avgResultLabel = 'N/A';
+                
+                if (total > 0) {
+                    const tp3Count = signals.filter(s => s.status === 'success_tp3').length;
+                    const tp2Count = signals.filter(s => s.status === 'success_tp2').length;
+                    const tp1Count = signals.filter(s => s.status === 'success_tp1').length;
+                    
+                    if (tp3Count > tp2Count && tp3Count > tp1Count) {
+                        avgResultLabel = 'TP3';
+                        avgResultScore = 3;
+                    } else if (tp2Count > tp1Count) {
+                        avgResultLabel = 'TP2';
+                        avgResultScore = 2;
+                    } else if (tp1Count > 0) {
+                        avgResultLabel = 'TP1';
+                        avgResultScore = 1;
+                    } else if (losses > wins) {
+                        avgResultLabel = 'SL';
+                        avgResultScore = 0;
+                    }
+                }
+
+                // Best timeframe
+                const tfMap = {};
+                signals.forEach(s => {
+                    const tf = s.timeframe;
+                    if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
+                    tfMap[tf].total++;
+                    if (s.status && s.status.includes('success')) tfMap[tf].wins++;
+                });
+
+                let bestTF = 'N/A';
+                let bestTFRate = 0;
+                Object.entries(tfMap).forEach(([tf, stats]) => {
+                    const rate = stats.total > 0 ? stats.wins / stats.total : 0;
+                    if (rate > bestTFRate) {
+                        bestTFRate = rate;
+                        bestTF = tf;
+                    }
+                });
+
+                return {
+                    symbol: item.symbol,
+                    symbolName: item.symbolName,
+                    market: item.market,
+                    total: total,
+                    wins: wins,
+                    losses: losses,
+                    winRate: parseFloat(winRate),
+                    avgResult: avgResultLabel,
+                    avgResultScore: avgResultScore,
+                    bestTF: bestTF,
+                    signals: signals
+                };
+            });
+
+            // Sort by win rate
+            performanceData.sort((a, b) => b.winRate - a.winRate);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            performanceData.forEach((item, index) => {
+                const rank = index + 1;
+                const rankBadge = rank <= 3 ? `<div class="rank-badge rank-${rank}">${rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉'}</div>` : `<div class="rank-badge">${rank}</div>`;
+                
+                const winRateClass = item.winRate >= 70 ? 'high' : item.winRate >= 50 ? 'medium' : 'low';
+                
+                const avgResultClass = item.avgResult.toLowerCase();
+
+                const row = document.createElement('tr');
+                row.onclick = () => showDetail(item.symbol);
+                row.innerHTML = `
+                    <td>${rankBadge}</td>
+                    <td>
+                        <div class="symbol-cell">
+                            <strong>${item.symbol}</strong>
+                            <span style="color: var(--text-secondary); font-size: 12px;">${item.symbolName}</span>
+                        </div>
+                    </td>
+                    <td>${item.total}</td>
+                    <td><span class="win-rate ${winRateClass}">${item.winRate}%</span></td>
+                    <td><span class="avg-result ${avgResultClass}">${item.avgResult}</span></td>
+                    <td>${item.bestTF}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderOverviewStats() {
+            const total = allSignals.length;
+            const wins = allSignals.filter(s => s.status && s.status.includes('success')).length;
+            const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
+
+            document.getElementById('totalSignals').textContent = total;
+            document.getElementById('overallWinRate').textContent = winRate + '%';
+
+            // Average result
+            const tp3 = allSignals.filter(s => s.status === 'success_tp3').length;
+            const tp2 = allSignals.filter(s => s.status === 'success_tp2').length;
+            const tp1 = allSignals.filter(s => s.status === 'success_tp1').length;
+            
+            let avgResult = 'N/A';
+            if (tp3 > tp2 && tp3 > tp1) avgResult = 'TP3';
+            else if (tp2 > tp1) avgResult = 'TP2';
+            else if (tp1 > 0) avgResult = 'TP1';
+            
+            document.getElementById('avgResult').textContent = avgResult;
+
+            // Best timeframe
+            const tfMap = {};
+            allSignals.forEach(s => {
+                const tf = s.timeframe;
+                if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
+                tfMap[tf].total++;
+                if (s.status && s.status.includes('success')) tfMap[tf].wins++;
+            });
+
+            let bestTF = 'N/A';
+            let bestTFRate = 0;
+            Object.entries(tfMap).forEach(([tf, stats]) => {
+                const rate = stats.total > 0 ? stats.wins / stats.total : 0;
+                if (rate > bestTFRate) {
+                    bestTFRate = rate;
+                    bestTF = tf;
+                }
+            });
+
+            document.getElementById('bestTimeframe').textContent = bestTF;
+        }
+
+        // ==================== DETAIL VIEW ====================
+        function showDetail(symbol) {
+            const item = performanceData.find(p => p.symbol === symbol);
+            if (!item) return;
+
+            document.getElementById('overviewContainer').style.display = 'none';
+            document.getElementById('detailView').classList.add('active');
+            document.getElementById('detailTitle').textContent = `${symbol} - Letzte ${item.total} Signale`;
+            document.getElementById('detailWinRate').textContent = item.winRate + '%';
+            document.getElementById('detailSignals').textContent = item.total;
+
+            renderSignalGrid(item.signals);
+            window.scrollTo(0, 0);
+        }
+
+        function showOverview() {
+            document.getElementById('overviewContainer').style.display = 'block';
+            document.getElementById('detailView').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        function renderSignalGrid(signals) {
+            const grid = document.getElementById('signalGrid');
+            grid.innerHTML = '';
+
+            // Sort by date (newest first)
+            const sorted = signals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            sorted.forEach(signal => {
+                const isWin = signal.status && signal.status.includes('success');
+                const isLoss = signal.status === 'stopped';
+
+                let resultBadge = '';
+                let resultClass = '';
+                let pnl = '';
+                
+                if (signal.status === 'success_tp3') {
+                    resultBadge = '🏆 TP3';
+                    resultClass = 'tp3';
+                    pnl = calculatePnL(signal, 3);
+                } else if (signal.status === 'success_tp2') {
+                    resultBadge = '✅ TP2';
+                    resultClass = 'tp2';
+                    pnl = calculatePnL(signal, 2);
+                } else if (signal.status === 'success_tp1') {
+                    resultBadge = '✅ TP1';
+                    resultClass = 'tp1';
+                    pnl = calculatePnL(signal, 1);
+                } else if (signal.status === 'stopped') {
+                    resultBadge = '❌ SL';
+                    resultClass = 'sl';
+                    pnl = calculatePnL(signal, 0);
+                } else {
+                    resultBadge = '⏳ Offen';
+                    resultClass = '';
+                }
+
+                const card = document.createElement('div');
+                card.className = `signal-card ${isWin ? 'win' : isLoss ? 'loss' : ''}`;
+                card.innerHTML = `
+                    <img class="signal-image" src="${signal.image_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
+                    <div class="signal-info">
+                        <div class="signal-result">
+                            <span class="result-badge ${resultClass}">${resultBadge}</span>
+                            ${pnl ? `<span class="result-pnl ${pnl.startsWith('+') ? 'positive' : 'negative'}">${pnl}</span>` : ''}
+                        </div>
+                        <div class="signal-meta">
+                            <span>${signal.timeframe} <span class="signal-direction ${signal.direction.toLowerCase()}">${signal.direction}</span></span>
+                            <span>${formatDate(signal.created_at)}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function calculatePnL(signal, tpLevel) {
+            if (!signal.entry) return '';
+
+            let target = 0;
+            if (tpLevel === 3) target = signal.tp3;
+            else if (tpLevel === 2) target = signal.tp2;
+            else if (tpLevel === 1) target = signal.tp1;
+            else target = signal.sl;
+
+            if (!target) return '';
+
+            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
+            const pct = (diff / signal.entry * 100).toFixed(1);
+            
+            return (pct >= 0 ? '+' : '') + pct + '%';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+    </script>
+</body>
+</html>
