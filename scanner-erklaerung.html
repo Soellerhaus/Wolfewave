@@ -9,190 +9,158 @@
         /* ========================================
            CSS RESET & BASE STYLES
            ======================================== */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+       .header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: rgba(12, 12, 12, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
 
-        :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --bg-card-hover: #1a1a1a;
-            --accent-green: #00ff88;
-            --accent-green-dim: rgba(0, 255, 136, 0.1);
-            --accent-green-medium: rgba(0, 255, 136, 0.2);
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --border-color: #1f1f1f;
-            --border-accent: #2a2a2a;
-            --warning-bg: rgba(255, 193, 7, 0.1);
-            --warning-border: rgba(255, 193, 7, 0.3);
-            --warning-text: #ffc107;
-        }
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text-primary);
+}
 
-        html {
-            scroll-behavior: smooth;
-        }
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.7;
-            min-height: 100vh;
-        }
+.logo-icon img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
 
-        /* ========================================
-           HEADER & NAVIGATION
-           ======================================== */
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(12, 12, 12, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 24px;
-        }
+.logo span { 
+    color: var(--accent-green); 
+}
 
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 72px;
-        }
+/* ZENTRIERTE NAVIGATION */
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 1.25rem;
-        }
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.nav-link:hover {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--accent-green);
+}
 
-        .logo-icon img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
+.nav-link.active {
+    background: rgba(0, 255, 136, 0.15);
+    color: var(--accent-green);
+    font-weight: 600;
+}
 
-        .logo-text {
-            font-weight: 600;
-        }
+.nav-link .nav-icon {
+    font-size: 16px;
+    line-height: 1;
+}
 
-        .logo-text .green {
-            color: var(--accent-green);
-        }
+.nav-link .nav-text {
+    font-size: 14px;
+}
 
-        /* Modern Navigation */
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            justify-content: center;
-            margin: 0 20px;
-        }
-        
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        
-        .nav-link:hover {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--accent-green);
-        }
-        
-        .nav-link.active {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
-            font-weight: 600;
-        }
-        
-        .nav-link .nav-icon {
-            font-size: 16px;
-            line-height: 1;
-        }
-        
-        .nav-link .nav-text {
-            font-size: 14px;
-        }
-        
-        @media (max-width: 968px) {
-            .header-nav {
-                display: none;
-            }
-        }
+/* Language Selector */
+.nav-language-container {
+    position: relative;
+}
 
-        .nav {
-            display: flex;
-            gap: 8px;
-        }
+.nav-language-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
 
-        .nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
+.nav-language-btn:hover {
+    border-color: var(--accent-green);
+    background: rgba(0, 255, 136, 0.05);
+}
 
-        .nav a:hover {
-            color: var(--text-primary);
-            background: var(--bg-card);
-        }
+.language-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    min-width: 180px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    padding: 8px;
+}
 
-        .nav a.active {
-            color: var(--accent-green);
-            background: var(--accent-green-dim);
-        }
+.language-dropdown.active {
+    display: block;
+}
 
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            display: none;
-            background: var(--accent-green-dim);
-            border: 2px solid var(--accent-green);
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            flex-direction: column;
-            gap: 5px;
-        }
+.language-option {
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
 
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--accent-green);
-            border-radius: 2px;
-        }
+.language-option:hover {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--accent-green);
+}
 
+/* Mobile */
+@media (max-width: 968px) {
+    .header-nav {
+        display: none;
+    }
+}
         /* ========================================
            HERO SECTION
            ======================================== */
@@ -1101,79 +1069,62 @@
     <!-- ========================================
          HEADER
          ======================================== -->
-    <header class="header">
-        <div class="header-inner">
-            <a href="index.html" class="logo">
-                <div class="logo-icon">
-                    <img src="wolf.png" alt="WolfeWaveSignals Logo" width="40" height="40">
-                </div>
-                <span class="logo-text"><span class="green">Wolfe</span>Wave<span class="green">Signals</span></span>
-            </a>
-            
-            <nav class="header-nav">
-                <a href="index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span>
-                    <span class="nav-text">Home</span>
-                </a>
-                <a href="wolfewaves.html" class="nav-link">
-                    <span class="nav-icon">📖</span>
-                    <span class="nav-text">Tutorial</span>
-                </a>
-                <a href="scanner-erklaerung.html" class="nav-link active">
-                    <span class="nav-icon">🔍</span>
-                    <span class="nav-text">Scanner</span>
-                </a>
-                <a href="maerkte.html" class="nav-link">
-                    <span class="nav-icon">🌍</span>
-                    <span class="nav-text">Märkte</span>
-                </a>
-                <a href="performance.html" class="nav-link">
-                    <span class="nav-icon">📊</span>
-                    <span class="nav-text">Performance</span>
-                </a>
-                <a href="faq.html" class="nav-link">
-                    <span class="nav-icon">❓</span>
-                    <span class="nav-text">FAQ</span>
-                </a>
-            </nav>
-            
-            <div class="nav-language-container">
-                <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
-                    🌐 <span class="language-text">DE</span>
-                </button>
-                <div class="language-dropdown" id="languageDropdown">
-                    <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
-                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
-                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-                    <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
-                    <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-                    <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
-                    <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-                    <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
-                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-                    <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
-                    <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
-                    <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
-                </div>
-            </div>
-            <div id="google_translate_element" style="display: none;"></div>
-            <nav class="nav" id="mainNav">
-                <a href="https://www.wolfewavesignals.com/wolfewaves.html">📖 Tutorial</a>
-                <a href="index.html">Start</a>
-                <a href="scanner.html" class="active">Scanner</a>
-                <a href="#faq">FAQ</a>
-                <a href="#disclaimer">Disclaimer</a>
-            </nav>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menü öffnen">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+<header class="header">
+    <a href="index.html" class="logo">
+        <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
+        <div>Wolfe<span>Wave</span>Signals</div>
+    </a>
+    
+    <nav class="header-nav">
+        <a href="index.html" class="nav-link">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Home</span>
+        </a>
+        <a href="wolfewaves.html" class="nav-link">
+            <span class="nav-icon">📖</span>
+            <span class="nav-text">Tutorial</span>
+        </a>
+        <a href="scanner-erklaerung.html" class="nav-link">
+            <span class="nav-icon">🔍</span>
+            <span class="nav-text">Scanner</span>
+        </a>
+        <a href="maerkte.html" class="nav-link">
+            <span class="nav-icon">🌍</span>
+            <span class="nav-text">Märkte</span>
+        </a>
+        <a href="performance.html" class="nav-link">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Performance</span>
+        </a>
+        <a href="faq.html" class="nav-link">
+            <span class="nav-icon">❓</span>
+            <span class="nav-text">FAQ</span>
+        </a>
+    </nav>
+    
+    <div class="nav-language-container">
+        <button class="nav-language-btn" onclick="toggleLanguageMenu()">
+            <span class="nav-icon">🌐</span>
+            <span class="language-text">DE</span>
+        </button>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
+            <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+            <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
+            <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+            <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
+            <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
+            <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+            <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
+            <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
+            <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
+            <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+            <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
+            <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
+            <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
         </div>
-    </header>
-
+    </div>
+</header>
     <!-- ========================================
          HERO SECTION
          ======================================== -->
