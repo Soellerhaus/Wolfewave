@@ -897,7 +897,73 @@
             }
         }
 
+        // ==================== HELPER FUNCTIONS ====================
+        function calculatePnLValue(signal, tpLevel) {
+            if (!signal.entry) return 0;
+
+            let target = 0;
+            if (tpLevel === 3) target = signal.tp3;
+            else if (tpLevel === 2) target = signal.tp2;
+            else if (tpLevel === 1) target = signal.tp1;
+            else target = signal.sl;
+
+            if (!target) return 0;
+
+            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
+            return (diff / signal.entry * 100);
+        }
+
+        function calculatePnL(signal, tpLevel) {
+            if (!signal.entry) return '';
+
+            let target = 0;
+            if (tpLevel === 3) target = signal.tp3;
+            else if (tpLevel === 2) target = signal.tp2;
+            else if (tpLevel === 1) target = signal.tp1;
+            else target = signal.sl;
+
+            if (!target) return '';
+
+            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
+            const pct = (diff / signal.entry * 100).toFixed(1);
+            
+            return (pct >= 0 ? '+' : '') + pct + '%';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
         // ==================== HIGHLIGHTS ====================
+        function createHighlightCard(signal, tpLevel) {
+            const card = document.createElement('div');
+            card.className = `highlight-card tp${tpLevel}`;
+            card.onclick = () => showDetail(signal.symbol);
+
+            const badge = tpLevel === 3 ? '🏆 TP3' : tpLevel === 2 ? '✅ TP2' : '✅ TP1';
+            const badgeClass = `tp${tpLevel}`;
+            const pnl = calculatePnL(signal, tpLevel);
+
+            card.innerHTML = `
+                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
+                <div class="highlight-info">
+                    <div class="highlight-header">
+                        <span class="highlight-badge ${badgeClass}">${badge}</span>
+                        <span class="highlight-pnl">${pnl}</span>
+                    </div>
+                    <div class="highlight-symbol">${signal.symbolName}</div>
+                    <div class="highlight-meta">
+                        <span>${signal.timeframe}</span>
+                        <span>${signal.direction}</span>
+                        <span>${formatDate(signal.created_at)}</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
         function renderHighlights() {
             const grid = document.getElementById('highlightsGrid');
             grid.innerHTML = '';
@@ -951,72 +1017,6 @@
                 grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center;">Keine Top Performer für diesen Filter verfügbar</p>';
             }
         }
-
-        function createHighlightCard(signal, tpLevel) {
-            const card = document.createElement('div');
-            card.className = `highlight-card tp${tpLevel}`;
-            card.onclick = () => showDetail(signal.symbol);
-
-            const badge = tpLevel === 3 ? '🏆 TP3' : tpLevel === 2 ? '✅ TP2' : '✅ TP1';
-            const badgeClass = `tp${tpLevel}`;
-            const pnl = calculatePnL(signal, tpLevel);
-
-            card.innerHTML = `
-                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
-                <div class="highlight-info">
-                    <div class="highlight-header">
-                        <span class="highlight-badge ${badgeClass}">${badge}</span>
-                        <span class="highlight-pnl">${pnl}</span>
-                    </div>
-                    <div class="highlight-symbol">${signal.symbolName}</div>
-                    <div class="highlight-meta">
-                        <span>${signal.timeframe}</span>
-                        <span>${signal.direction}</span>
-                        <span>${formatDate(signal.created_at)}</span>
-                    </div>
-                </div>
-            `;
-
-            return card;
-        }
-
-        function calculatePnLValue(signal, tpLevel) {
-            if (!signal.entry) return 0;
-
-            let target = 0;
-            if (tpLevel === 3) target = signal.tp3;
-            else if (tpLevel === 2) target = signal.tp2;
-            else if (tpLevel === 1) target = signal.tp1;
-            else target = signal.sl;
-
-            if (!target) return 0;
-
-            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
-            return (diff / signal.entry * 100);
-        }
-
-        // ==================== FILTER HANDLING ====================
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const type = this.dataset.type;
-                const value = this.dataset.value;
-
-                // Update active state
-                document.querySelectorAll(`.filter-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                // Update filter
-                if (type === 'market') {
-                    currentMarketFilter = value;
-                }
-
-                // Re-process and render
-                processPerformanceData();
-                renderOverviewStats();
-                renderHighlights();
-                renderTable();
-            });
-        });
 
         function processPerformanceData() {
             // Filter signals by market
@@ -1275,27 +1275,28 @@
             });
         }
 
-        function calculatePnL(signal, tpLevel) {
-            if (!signal.entry) return '';
+        // ==================== FILTER HANDLING ====================
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.dataset.type;
+                const value = this.dataset.value;
 
-            let target = 0;
-            if (tpLevel === 3) target = signal.tp3;
-            else if (tpLevel === 2) target = signal.tp2;
-            else if (tpLevel === 1) target = signal.tp1;
-            else target = signal.sl;
+                // Update active state
+                document.querySelectorAll(`.filter-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
 
-            if (!target) return '';
+                // Update filter
+                if (type === 'market') {
+                    currentMarketFilter = value;
+                }
 
-            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
-            const pct = (diff / signal.entry * 100).toFixed(1);
-            
-            return (pct >= 0 ? '+' : '') + pct + '%';
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
+                // Re-process and render
+                processPerformanceData();
+                renderOverviewStats();
+                renderHighlights();
+                renderTable();
+            });
+        });
 
         // Initialize
         loadPerformanceData();
