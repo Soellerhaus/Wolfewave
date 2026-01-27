@@ -712,21 +712,50 @@
 
     <!-- Performance Disclaimer -->
     <div style="max-width: 1400px; margin: 32px auto 20px; padding: 0 40px;">
-        <div style="background: rgba(255, 152, 0, 0.1); border-left: 4px solid rgba(255, 152, 0, 0.8); padding: 20px 24px; border-radius: 8px;">
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <span style="font-size: 20px; margin-top: 2px;">ℹ️</span>
-                <div style="flex: 1;">
-                    <h3 style="font-size: 14px; font-weight: 700; color: rgba(255, 152, 0, 0.95); margin: 0 0 8px 0;">Hinweis zur Performance-Statistik</h3>
-                    <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0;">
-                        Die dargestellten Statistiken basieren ausschließlich auf Wolfe Wave-Signalen, die vom Scanner erkannt und verarbeitet wurden. 
-                        Die Win-Rate spiegelt die Erfolgsquote dieser spezifischen Signale wider. 
-                        Externe Backtests mit mehreren tausend Wolfe Wave-Setups zeigen je nach Markt, Zeitraum und Zieldefinition stark variierende Trefferquoten. 
-                        Diese Statistiken dienen zur Einordnung der Scanner-Performance und sind nicht als feste Erfolgsaussage für zukünftige Trades zu verstehen.
+        <div style="background: rgba(255, 152, 0, 0.1); border-left: 4px solid rgba(255, 152, 0, 0.8); border-radius: 8px; overflow: hidden;">
+            <div onclick="toggleDisclaimer()" style="padding: 16px 24px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 20px;">ℹ️</span>
+                    <h3 style="font-size: 14px; font-weight: 700; color: rgba(255, 152, 0, 0.95); margin: 0;">Hinweis zur Performance-Statistik</h3>
+                </div>
+                <span id="disclaimerIcon" style="font-size: 18px; color: rgba(255, 152, 0, 0.8); transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="disclaimerContent" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                <div style="padding: 0 24px 20px 24px; border-top: 1px solid rgba(255, 152, 0, 0.2);">
+                    <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 16px 0 12px 0;">
+                        Die dargestellten Statistiken basieren ausschließlich auf Wolfe Wave-Signalen, 
+                        die vom Scanner erkannt und verarbeitet wurden. Die Win-Rate spiegelt die 
+                        Erfolgsquote dieser spezifischen Signale wider. Externe Backtests mit mehreren 
+                        tausend Wolfe Wave-Setups zeigen je nach Markt, Zeitraum und Zieldefinition 
+                        stark variierende Trefferquoten. Diese Statistiken dienen zur Einordnung der 
+                        Scanner-Performance und sind nicht als feste Erfolgsaussage für zukünftige 
+                        Trades zu verstehen.
                     </p>
+                    <a href="https://www.forex-central.net/trading-wolfe-waves.php" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255, 152, 0, 0.95); text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(255, 152, 0, 0.3); padding-bottom: 2px; transition: all 0.2s;" onmouseover="this.style.borderBottomColor='rgba(255, 152, 0, 0.95)'" onmouseout="this.style.borderBottomColor='rgba(255, 152, 0, 0.3)'">
+                        📚 Mehr über Wolfe Wave Trading
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity: 0.8;">
+                            <path d="M10.5 1.5L1.5 10.5M10.5 1.5H3.5M10.5 1.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleDisclaimer() {
+            const content = document.getElementById('disclaimerContent');
+            const icon = document.getElementById('disclaimerIcon');
+            
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
 
     <!-- Highlights Section -->
     <div class="highlights-section" style="max-width: 1400px; margin: 40px auto; padding: 0 40px;">
