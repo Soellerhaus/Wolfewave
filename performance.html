@@ -862,20 +862,71 @@
         async function checkPremiumStatus() {
             try {
                 const { data: { session } } = await supabaseClient.auth.getSession();
+                console.log('Session check:', session ? 'User logged in' : 'No session');
+                
                 if (session) {
-                    const { data: profile } = await supabaseClient
+                    console.log('User ID:', session.user.id);
+                    
+                    const { data: profile, error } = await supabaseClient
                         .from('profiles')
                         .select('subscription_status')
                         .eq('id', session.user.id)
                         .single();
                     
-                    isPremium = profile && (profile.subscription_status === 'active' || profile.subscription_status === 'trialing');
+                    console.log('Profile:', profile);
+                    
+                    if (profile) {
+                        isPremium = profile.subscription_status === 'active' || profile.subscription_status === 'trialing';
+                        console.log('Premium status:', isPremium ? 'YES (active/trialing)' : 'NO (' + profile.subscription_status + ')');
+                    } else {
+                        console.log('No profile found');
+                        isPremium = false;
+                    }
+                } else {
+                    console.log('No session - user not logged in');
+                    isPremium = false;
                 }
             } catch (error) {
-                console.log('Premium check error:', error);
+                console.error('Premium check error:', error);
                 isPremium = false;
             }
+            
+            console.log('Final isPremium:', isPremium);
             return isPremium;
+        }
+
+        // Show image in lightbox (for premium users)
+        function showImageLightbox(imageSrc, signal) {
+            const lightboxHtml = `
+                <div id="imageLightbox" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;" onclick="closeLightbox()">
+                    <div style="position: relative; max-width: 1200px; width: 100%; max-height: 90vh; display: flex; flex-direction: column;">
+                        <button onclick="closeLightbox()" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; z-index: 10001; padding: 10px;">×</button>
+                        
+                        <img src="${imageSrc}" alt="${signal.symbol}" style="width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 0 50px rgba(0,255,136,0.3);">
+                        
+                        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                                <div>
+                                    <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">${getSymbolName(signal.symbol)}</h3>
+                                    <p style="color: var(--text-secondary); font-size: 14px;">${signal.timeframe} • ${signal.direction} • ${formatDate(signal.created_at)}</p>
+                                </div>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    ${signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(255,215,0,0.1); color: var(--accent-gold); border-radius: 6px; font-weight: 600;">🏆 TP3</span>' : ''}
+                                    ${signal.tp2_hit && !signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(0,255,136,0.1); color: var(--accent-green); border-radius: 6px; font-weight: 600;">✅ TP2</span>' : ''}
+                                    ${signal.tp1_hit && !signal.tp2_hit && !signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(0,255,136,0.1); color: var(--accent-green); border-radius: 6px; font-weight: 600;">✅ TP1</span>' : ''}
+                                    ${signal.sl_hit ? '<span style="padding: 6px 12px; background: rgba(255,71,87,0.1); color: var(--accent-red); border-radius: 6px; font-weight: 600;">❌ SL</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', lightboxHtml);
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            if (lightbox) lightbox.remove();
         }
 
         function showPremiumModal() {
@@ -1194,10 +1245,15 @@
             card.className = `highlight-card tp${tpLevel}`;
             
             // Premium check on click
-            card.onclick = () => {
+            card.onclick = (e) => {
+                e.stopPropagation();
+                console.log('Highlight clicked. isPremium:', isPremium);
+                
                 if (isPremium) {
-                    window.location.href = '/';
+                    console.log('Opening lightbox for premium user');
+                    showImageLightbox(signal.original_path || '/images/placeholder.png', signal);
                 } else {
+                    console.log('Opening premium modal for free user');
                     showPremiumModal();
                 }
             };
@@ -1400,10 +1456,15 @@
                 </div>
             `;
             
-            card.onclick = () => {
+            card.onclick = (e) => {
+                e.stopPropagation(); // Prevent accordion toggle
+                console.log('Card clicked. isPremium:', isPremium);
+                
                 if (isPremium) {
-                    window.location.href = '/';
+                    console.log('Opening lightbox for premium user');
+                    showImageLightbox(signal.original_path || '/images/placeholder.png', signal);
                 } else {
+                    console.log('Opening premium modal for free user');
                     showPremiumModal();
                 }
             };
