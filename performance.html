@@ -1335,10 +1335,15 @@
         }
 
         function renderAccordionSignals(signals, gridElement) {
+            console.log('renderAccordionSignals called with', signals.length, 'signals');
+            console.log('gridElement:', gridElement);
+            
             // Sort by date (newest first)
             const sorted = signals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-            sorted.forEach(signal => {
+            sorted.forEach((signal, index) => {
+                console.log(`Creating card ${index + 1} for signal:`, signal.symbol, signal.original_path);
+                
                 let resultBadge = '';
                 let resultClass = '';
                 let pnl = '';
@@ -1412,7 +1417,10 @@
                 };
                 
                 gridElement.appendChild(card);
+                console.log(`Card ${index + 1} appended to grid. Grid now has ${gridElement.children.length} children`);
             });
+            
+            console.log('Finished rendering. Total cards in grid:', gridElement.children.length);
         }
 
         function renderOverviewStats() {
