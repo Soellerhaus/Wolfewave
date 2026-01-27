@@ -4291,7 +4291,6 @@
                 <h4 class="footer-heading">Rechtliches</h4>
                 <a href="impressum.html" class="footer-link">Impressum</a>
                 <a href="datenschutz.html" class="footer-link">Datenschutz</a>
-                <a href="/cdn-cgi/l/email-protection#4a393f3a3a25383e0a3d25262c2f3d2b3c2f39232d242b263964292527" class="footer-link">Kontakt</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -5279,7 +5278,7 @@
                     🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
-                <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
+                <div class="section-subtitle">— Sieh dir 3 erfolgreiche Trades an</div>
             `;
         }
 
@@ -5599,9 +5598,9 @@
             }
             
             if (!isPremium) {
-                // Show preview for guests
+                // Show preview for guests - nur fixierte Success-Signale
                 const preview = getPreviewSignals();
-                grid.innerHTML = preview.map(s => renderSignalCard(s, true, false)).join('');
+                grid.innerHTML = preview.map(s => renderCompletedSignalCard(s)).join('');
                 renderLockedSignals();
                 return;
             }
@@ -5656,15 +5655,29 @@
 
         function getPreviewSignals() {
             const preview = [];
-            for (const market of PREVIEW_MARKETS) {
-                const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
-                if (signal) preview.push(signal);
+            
+            // Nur fixierte Success-Signale für Vorschau verwenden
+            const fixedSuccessSignals = completedSignals.filter(s => s.result_fixed === true && s.result_folder === 'success');
+            
+            // Versuche je ein TP3, TP2, TP1 Signal zu finden
+            const tp3Signal = fixedSuccessSignals.find(s => s.tp3_hit === true);
+            const tp2Signal = fixedSuccessSignals.find(s => s.tp2_hit === true && s.tp3_hit !== true);
+            const tp1Signal = fixedSuccessSignals.find(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true);
+            
+            if (tp3Signal) preview.push(tp3Signal);
+            if (tp2Signal) preview.push(tp2Signal);
+            if (tp1Signal) preview.push(tp1Signal);
+            
+            // Falls weniger als 3 gefunden, fülle mit anderen fixierten Success-Signalen auf
+            if (preview.length < 3) {
+                for (const signal of fixedSuccessSignals) {
+                    if (!preview.some(p => p.id === signal.id)) {
+                        preview.push(signal);
+                        if (preview.length >= 3) break;
+                    }
+                }
             }
-            while (preview.length < 3 && preview.length < allSignals.length) {
-                const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
-                if (signal) preview.push(signal);
-                else break;
-            }
+            
             return preview;
         }
 
