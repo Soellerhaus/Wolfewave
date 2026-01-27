@@ -1121,7 +1121,7 @@
             card.className = `highlight-card tp${tpLevel}`;
             card.onclick = () => showDetail(signal.symbol);
 
-            const badge = tpLevel === 3 ? '🥇 TP3 CHAMPION' : tpLevel === 2 ? '🥈 TP2' : '🥉 TP1';
+            const badge = tpLevel === 3 ? '🥇 TP3 CHAMPION' : tpLevel === 2 ? '🥈 TP2 RUNNER-UP' : '🥉 TP1 BRONZE';
             const badgeClass = `tp${tpLevel}`;
             const pnl = calculatePnL(signal, tpLevel);
             const symbolName = getSymbolName(signal.symbol);
