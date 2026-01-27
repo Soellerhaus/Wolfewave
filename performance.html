@@ -1173,11 +1173,11 @@
                 const total = signals.length;
                 
                 const wins = signals.filter(s => 
-                    s.result === 'TP1_HIT'
+                    s.result_folder === 'success'
                 ).length;
                 
                 const losses = signals.filter(s => 
-                    s.result === 'SL_HIT'
+                    s.result_folder === 'failed' || s.sl_hit === true
                 ).length;
 
                 const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
@@ -1569,7 +1569,7 @@
 
         function renderOverviewStats() {
             const total = allSignals.length;
-            const wins = allSignals.filter(s => s.result === 'TP1_HIT').length;
+            const wins = allSignals.filter(s => s.result_folder === 'success').length;
             const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
 
             document.getElementById('totalSignals').textContent = total;
@@ -1593,7 +1593,7 @@
                 const tf = s.timeframe;
                 if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
                 tfMap[tf].total++;
-                if (s.result === 'TP1_HIT') tfMap[tf].wins++;
+                if (s.result_folder === 'success') tfMap[tf].wins++;
             });
 
             let bestTF = 'N/A';
