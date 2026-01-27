@@ -1071,8 +1071,58 @@
             if (!grid) return;
             grid.innerHTML = '';
 
-            // Use all signals - they are already filtered by loadPerformanceData
-            const filteredSignals = allSignals;
+            // Sort performanceData by avgResultScore (highest first)
+            const sortedByScore = [...performanceData].sort((a, b) => {
+                // First by score, then by win rate
+                if (b.avgResultScore !== a.avgResultScore) {
+                    return b.avgResultScore - a.avgResultScore;
+                }
+                return b.winRate - a.winRate;
+            });
+
+            // Find best TP3 symbol (avgResultScore = 3)
+            const bestTP3Symbol = sortedByScore.find(s => s.avgResultScore === 3);
+            
+            // Find best TP2 symbol (avgResultScore = 2)
+            const bestTP2Symbol = sortedByScore.find(s => s.avgResultScore === 2);
+            
+            // Find best TP1 symbol (avgResultScore = 1)
+            const bestTP1Symbol = sortedByScore.find(s => s.avgResultScore === 1);
+
+            // Create highlight cards for symbols
+            if (bestTP3Symbol) {
+                // Get the best signal from this symbol
+                const bestSignal = bestTP3Symbol.signals
+                    .filter(s => s.tp3_hit === true)
+                    .sort((a, b) => {
+                        const pnlA = calculatePnLValue(a, 3);
+                        const pnlB = calculatePnLValue(b, 3);
+                        return pnlB - pnlA;
+                    })[0];
+                if (bestSignal) grid.appendChild(createHighlightCard(bestSignal, 3));
+            }
+            
+            if (bestTP2Symbol) {
+                const bestSignal = bestTP2Symbol.signals
+                    .filter(s => s.tp2_hit === true)
+                    .sort((a, b) => {
+                        const pnlA = calculatePnLValue(a, 2);
+                        const pnlB = calculatePnLValue(b, 2);
+                        return pnlB - pnlA;
+                    })[0];
+                if (bestSignal) grid.appendChild(createHighlightCard(bestSignal, 2));
+            }
+            
+            if (bestTP1Symbol) {
+                const bestSignal = bestTP1Symbol.signals
+                    .filter(s => s.tp1_hit === true)
+                    .sort((a, b) => {
+                        const pnlA = calculatePnLValue(a, 1);
+                        const pnlB = calculatePnLValue(b, 1);
+                        return pnlB - pnlA;
+                    })[0];
+                if (bestSignal) grid.appendChild(createHighlightCard(bestSignal, 1));
+            }
 
             // Helper function to calculate PnL value
             function calculatePnLValue(signal, tpLevel) {
@@ -1087,31 +1137,8 @@
                 return (diff / signal.entry * 100);
             }
 
-            // Find best TP3
-            const tp3Signals = filteredSignals.filter(s => s.tp3_hit === true);
-            const bestTP3 = tp3Signals.length > 0 ? tp3Signals.sort((a, b) => {
-                return calculatePnLValue(b, 3) - calculatePnLValue(a, 3);
-            })[0] : null;
-
-            // Find best TP2 (excluding TP3)
-            const tp2Signals = filteredSignals.filter(s => s.tp2_hit === true && s.tp3_hit !== true);
-            const bestTP2 = tp2Signals.length > 0 ? tp2Signals.sort((a, b) => {
-                return calculatePnLValue(b, 2) - calculatePnLValue(a, 2);
-            })[0] : null;
-
-            // Find best TP1 (excluding TP2/TP3)
-            const tp1Signals = filteredSignals.filter(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true);
-            const bestTP1 = tp1Signals.length > 0 ? tp1Signals.sort((a, b) => {
-                return calculatePnLValue(b, 1) - calculatePnLValue(a, 1);
-            })[0] : null;
-
-            // Create highlight cards
-            if (bestTP3) grid.appendChild(createHighlightCard(bestTP3, 3));
-            if (bestTP2) grid.appendChild(createHighlightCard(bestTP2, 2));
-            if (bestTP1) grid.appendChild(createHighlightCard(bestTP1, 1));
-
             // Show message if no highlights
-            if (!bestTP3 && !bestTP2 && !bestTP1) {
+            if (!bestTP3Symbol && !bestTP2Symbol && !bestTP1Symbol) {
                 grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center;">Keine Top Performer für diesen Filter verfügbar</p>';
             }
         }
