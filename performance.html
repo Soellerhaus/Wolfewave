@@ -232,137 +232,95 @@
         }
 
         .performance-table th {
+            padding: 16px;
             text-align: left;
-            padding: 20px;
-            font-weight: 600;
-            color: var(--text-secondary);
             font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .performance-table td {
-            padding: 20px;
+            padding: 16px;
             border-top: 1px solid var(--border-color);
-            font-size: 14px;
         }
 
         .performance-table tbody tr {
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
         .performance-table tbody tr:hover {
             background: var(--bg-hover);
         }
 
-        .rank-badge {
-            display: inline-flex;
+        .symbol-cell {
+            display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .rank-badge {
             width: 32px;
             height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
-            font-weight: 600;
             font-size: 16px;
         }
 
-        .rank-badge.rank-1 {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #000;
-        }
-
-        .rank-badge.rank-2 {
-            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
-            color: #000;
-        }
-
-        .rank-badge.rank-3 {
-            background: linear-gradient(135deg, #cd7f32 0%, #e5a96c 100%);
-            color: #000;
-        }
-
-        .symbol-cell {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .rank-1 { background: linear-gradient(135deg, var(--accent-gold), #ffa500); }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #808080); }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #8b4513); }
 
         .win-rate {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            display: inline-block;
+            font-weight: 700;
+            font-size: 16px;
         }
 
-        .win-rate.high {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--accent-green);
-        }
-
-        .win-rate.medium {
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--accent-gold);
-        }
-
-        .win-rate.low {
-            background: rgba(255, 71, 87, 0.1);
-            color: var(--accent-red);
-        }
+        .win-rate.high { color: var(--accent-green); }
+        .win-rate.medium { color: #ffa500; }
+        .win-rate.low { color: var(--accent-red); }
 
         .avg-result {
-            padding: 6px 12px;
+            padding: 4px 12px;
             border-radius: 6px;
-            font-weight: 600;
-            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .avg-result.tp3 {
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--accent-gold);
+            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
+            color: #000;
         }
 
         .avg-result.tp2 {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
+            background: var(--accent-green);
+            color: #000;
         }
 
         .avg-result.tp1 {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(0, 255, 136, 0.2);
             color: var(--accent-green);
+            border: 1px solid var(--accent-green);
         }
 
         .avg-result.sl {
-            background: rgba(255, 71, 87, 0.1);
+            background: rgba(255, 71, 87, 0.2);
             color: var(--accent-red);
-        }
-
-        /* Loading State */
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-            gap: 20px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--accent-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            border: 1px solid var(--accent-red);
         }
 
         /* Detail View */
         .detail-view {
             display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
         }
 
         .detail-view.active {
@@ -370,47 +328,41 @@
         }
 
         .detail-header {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 40px 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
         }
 
-        .detail-info h2 {
+        .detail-title {
             font-size: 32px;
-            margin-bottom: 16px;
+            font-weight: 700;
         }
 
         .detail-stats {
             display: flex;
-            gap: 40px;
-            color: var(--text-secondary);
+            gap: 24px;
         }
 
         .detail-stat {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            text-align: center;
         }
 
         .detail-stat-value {
             font-size: 24px;
             font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .detail-stat-value.green {
             color: var(--accent-green);
         }
 
+        .detail-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Signal Grid */
         .signal-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 40px 60px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
 
@@ -419,12 +371,12 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: all 0.3s;
         }
 
         .signal-card:hover {
             transform: translateY(-4px);
-            border-color: var(--accent-green);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         .signal-card.win {
@@ -439,6 +391,7 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
+            background: #000;
         }
 
         .signal-info {
@@ -456,54 +409,51 @@
             padding: 6px 12px;
             border-radius: 6px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .result-badge.tp3 {
-            background: rgba(255, 215, 0, 0.15);
-            color: var(--accent-gold);
+            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
+            color: #000;
         }
 
         .result-badge.tp2 {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
+            background: var(--accent-green);
+            color: #000;
         }
 
         .result-badge.tp1 {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(0, 255, 136, 0.2);
             color: var(--accent-green);
         }
 
         .result-badge.sl {
-            background: rgba(255, 71, 87, 0.1);
+            background: rgba(255, 71, 87, 0.2);
             color: var(--accent-red);
         }
 
         .result-pnl {
-            font-weight: 600;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 700;
         }
 
-        .result-pnl.positive {
-            color: var(--accent-green);
-        }
-
-        .result-pnl.negative {
-            color: var(--accent-red);
-        }
+        .result-pnl.positive { color: var(--accent-green); }
+        .result-pnl.negative { color: var(--accent-red); }
 
         .signal-meta {
             display: flex;
             justify-content: space-between;
+            font-size: 12px;
             color: var(--text-secondary);
-            font-size: 13px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
         }
 
         .signal-direction {
-            padding: 2px 8px;
+            padding: 4px 8px;
             border-radius: 4px;
             font-weight: 600;
-            font-size: 11px;
         }
 
         .signal-direction.bullish {
@@ -516,20 +466,69 @@
             color: var(--accent-red);
         }
 
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .hero {
+                padding: 40px 20px 20px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .filters,
+            .stats-overview,
+            .table-container,
+            .detail-view {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .performance-table {
+                overflow-x: auto;
+            }
+
+            .performance-table table {
+                min-width: 600px;
+            }
+
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .signal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Highlights Section */
-        .highlights-section {
-            max-width: 1400px;
-            margin: 0 auto 60px;
-            padding: 0 40px;
-        }
-
-        .highlights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 24px;
-            margin-top: 24px;
-        }
-
         .highlight-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -614,452 +613,365 @@
             font-size: 13px;
         }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-
-            .hero {
-                padding: 40px 20px 30px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            .filters {
-                padding: 0 20px;
-            }
-
-            .stats-overview {
-                padding: 0 20px;
-                grid-template-columns: 1fr;
-            }
-
-            .table-container {
-                padding: 0 20px 40px;
-            }
-
-            .performance-table {
-                overflow-x: auto;
-            }
-
-            .performance-table th,
-            .performance-table td {
-                padding: 12px;
-                font-size: 12px;
-            }
-
-            .detail-header {
-                padding: 30px 20px 15px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-
-            .detail-stats {
-                gap: 20px;
-            }
-
-            .signal-grid {
-                padding: 15px 20px 40px;
-                grid-template-columns: 1fr;
-            }
-
             .highlights-section {
-                padding: 0 20px;
+                padding: 0 20px !important;
             }
-
-            .highlights-grid {
-                grid-template-columns: 1fr;
+            #highlightsGrid {
+                grid-template-columns: 1fr !important;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
-        <a href="/" class="logo">
-            <div class="logo-icon">
-                <img src="/logo.png" alt="WolfeWaveSignals Logo">
-            </div>
-            Wolfe<span>Wave</span>Signals
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
+            <div>Wolfe<span>Wave</span>Signals</div>
         </a>
-        <a href="/dashboard" class="back-btn">← Zurück zum Dashboard</a>
+        <a href="index.html" class="back-btn">← Zurück zu Signalen</a>
     </header>
 
-    <!-- Loading State -->
-    <div id="loadingContainer" class="loading-container">
-        <div class="spinner"></div>
-        <p style="color: var(--text-secondary);">Lade Performance-Daten...</p>
+    <section class="hero">
+        <h1>Performance <span>Statistiken</span></h1>
+        <p>Detaillierte Win-Rates und Ergebnisse für alle Trading-Signale nach Symbol, Markt und Zeitrahmen</p>
+    </section>
+
+    <!-- Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <span class="filter-label">Zeitraum:</span>
+            <button class="filter-btn" data-period="7">7 Tage</button>
+            <button class="filter-btn active" data-period="30">30 Tage</button>
+            <button class="filter-btn" data-period="90">90 Tage</button>
+            <button class="filter-btn" data-period="all">Alle</button>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">Markt:</span>
+            <button class="filter-btn active" data-market="all">Alle</button>
+            <button class="filter-btn" data-market="FOREX">Forex</button>
+            <button class="filter-btn" data-market="CRYPTO">Crypto</button>
+            <button class="filter-btn" data-market="COMMODITIES">Rohstoffe</button>
+            <button class="filter-btn" data-market="stocks">Stocks</button>
+        </div>
     </div>
 
-    <!-- Loading State for Detail View -->
-    <div id="loadingDetail" class="loading-container" style="display: none;">
-        <div class="spinner"></div>
-        <p style="color: var(--text-secondary);">Lade Signal-Details...</p>
+    <!-- Stats Overview -->
+    <div class="stats-overview" id="statsOverview">
+        <div class="stat-card">
+            <div class="stat-value green" id="totalSignals">—</div>
+            <div class="stat-label">Gesamt Signale</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value green" id="overallWinRate">—%</div>
+            <div class="stat-label">Gesamt Win-Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value gold" id="avgResult">—</div>
+            <div class="stat-label">Ø Ergebnis</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="bestTimeframe">—</div>
+            <div class="stat-label">Bester Zeitrahmen</div>
+        </div>
     </div>
 
-    <!-- Overview Container -->
-    <div id="overviewContainer" style="display: none;">
-        <!-- Hero -->
-        <section class="hero">
-            <h1>Performance <span>Statistiken</span></h1>
-            <p>Detaillierte Analyse aller Wolfe Wave Trading-Signale mit Win-Rates, durchschnittlichen Ergebnissen und Best Performers nach Symbol, Markt und Zeitrahmen.</p>
-        </section>
+    <!-- Highlights Section -->
+    <div class="highlights-section" style="max-width: 1400px; margin: 40px auto; padding: 0 40px;">
+        <h2 class="section-title" style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">🏆 Top Performer</h2>
+        <div id="highlightsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
+            <!-- Populated by JS -->
+        </div>
+    </div>
 
-        <!-- Filters -->
-        <div class="filters">
-            <div class="filter-group">
-                <span class="filter-label">Markt:</span>
-                <button class="filter-btn active" data-type="market" data-value="all">Alle</button>
-                <button class="filter-btn" data-type="market" data-value="Forex">Forex</button>
-                <button class="filter-btn" data-type="market" data-value="Stocks">Aktien</button>
-                <button class="filter-btn" data-type="market" data-value="Crypto">Krypto</button>
-                <button class="filter-btn" data-type="market" data-value="Commodities">Rohstoffe</button>
-            </div>
+    <!-- Overview Table -->
+    <div class="table-container" id="overviewContainer">
+        <h2 class="section-title">📊 Performance nach Symbol</h2>
+        
+        <div id="loadingOverview" class="loading">
+            <div class="spinner"></div>
+            <p>Lade Performance-Daten...</p>
         </div>
 
-        <!-- Stats Overview -->
-        <div class="stats-overview">
-            <div class="stat-card">
-                <div class="stat-value" id="totalSignals">0</div>
-                <div class="stat-label">Gesamte Signale</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value green" id="overallWinRate">0%</div>
-                <div class="stat-label">Durchschnittliche Win-Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value gold" id="avgResult">N/A</div>
-                <div class="stat-label">Ø Erreichtes Ziel</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="bestTimeframe">N/A</div>
-                <div class="stat-label">Bester Zeitrahmen</div>
-            </div>
-        </div>
-
-        <!-- Highlights Section - TOP TP3, TP2, TP1 -->
-        <div class="highlights-section">
-            <h2 class="section-title">🏆 Top Performer</h2>
-            <div class="highlights-grid" id="highlightsGrid">
-                <!-- Will be populated by JS -->
-            </div>
-        </div>
-
-        <!-- Performance Table -->
-        <div class="table-container">
-            <h2 class="section-title">📊 Performance nach Symbol</h2>
-            <div class="performance-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rang</th>
-                            <th>Symbol</th>
-                            <th>Signale</th>
-                            <th>Win-Rate</th>
-                            <th>Ø Ergebnis</th>
-                            <th>Bester TF</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- Will be populated by JS -->
-                    </tbody>
-                </table>
-            </div>
+        <div class="performance-table" id="performanceTable" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Symbol</th>
+                        <th>Signale</th>
+                        <th>Win-Rate</th>
+                        <th>Ø Ergebnis</th>
+                        <th>Bester TF</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- Detail View -->
-    <div id="detailView" class="detail-view">
+    <div class="detail-view" id="detailView">
         <div class="detail-header">
-            <div class="detail-info">
-                <h2 id="detailTitle">Symbol Details</h2>
-                <div class="detail-stats">
-                    <div class="detail-stat">
-                        <span>Win-Rate</span>
-                        <span class="detail-stat-value green" id="detailWinRate">0%</span>
-                    </div>
-                    <div class="detail-stat">
-                        <span>Signale</span>
-                        <span class="detail-stat-value" id="detailSignals">0</span>
-                    </div>
+            <div>
+                <button class="back-btn" onclick="showOverview()">← Zurück zur Übersicht</button>
+                <h2 class="detail-title" id="detailTitle">—</h2>
+            </div>
+            <div class="detail-stats">
+                <div class="detail-stat">
+                    <div class="detail-stat-value" id="detailWinRate">—%</div>
+                    <div class="detail-stat-label">Win-Rate</div>
+                </div>
+                <div class="detail-stat">
+                    <div class="detail-stat-value" id="detailSignals">—</div>
+                    <div class="detail-stat-label">Signale</div>
                 </div>
             </div>
-            <button class="back-btn" onclick="showOverview()">← Zurück zur Übersicht</button>
         </div>
+
+        <div id="loadingDetail" class="loading">
+            <div class="spinner"></div>
+            <p>Lade Signal-Details...</p>
+        </div>
+
         <div class="signal-grid" id="signalGrid">
-            <!-- Will be populated by JS -->
+            <!-- Populated by JS -->
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const { createClient } = supabase;
-        const supabaseUrl = 'https://lpuqkgwfvdozdcbacxyi.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwdXFrZ3dmdmRvemRjYmFjeHlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY2MTQzNDAsImV4cCI6MjA1MjE5MDM0MH0.N7qElOFaTcZbPqc-B-fTZVnHFy-DKaLfhxEPBKzYEug';
-        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+        // ==================== SUPABASE CONFIG ====================
+        const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
+        
+        // Symbol name mapping
+        const SYMBOL_NAMES = {
+            // Stocks
+            'TRN.OQ': 'Trinity Industries',
+            'SYY.OQ': 'Sysco Corporation',
+            'QS.OQ': 'QuantumScape',
+            'IEX.OQ': 'IDEX Corporation',
+            'DYN.OQ': 'Dyne Therapeutics',
+            'LI.OQ': 'Li Auto',
+            'DIS.N': 'Walt Disney',
+            'UAL.N': 'United Airlines',
+            'DLR.OQ': 'Digital Realty',
+            'LUV.N': 'Southwest Airlines',
+            'ZTS.OQ': 'Zoetis',
+            'SCCO.OQ': 'Southern Copper',
+            'RIOT.OQ': 'Riot Platforms',
+            'DQ.OQ': 'Daqo New Energy',
+            'HBAN.OQ': 'Huntington Bancshares',
+            'FREG.DE': 'Fresenius Medical Care',
+            'TOTF.PA': 'TotalEnergies',
+            'TXN.O': 'Texas Instruments',
+            '2388.HK': 'BOC Hong Kong',
+            '2318.HK': 'Ping An Insurance',
+            'UA.OQ': 'Under Armour',
+            'SEDG.OQ': 'SolarEdge',
+            'RSG.OQ': 'Republic Services',
+            'PRU.OQ': 'Prudential Financial',
+            'PNR.OQ': 'Pentair',
+            'ODFL.OQ': 'Old Dominion Freight',
+            'NCLH.OQ': 'Norwegian Cruise',
+            'ISRG.OQ': 'Intuitive Surgical',
+            'DEO.OQ': 'Diageo',
+            'CTRA.OQ': 'Coterra Energy',
+            'AIZ.OQ': 'Assurant',
+            'ACN.OQ': 'Accenture',
+            'CNC.N': 'Centene',
+            'ATHM.N': 'Autohome',
+            'TSM.N': 'Taiwan Semiconductor',
+            'MO.N': 'Altria Group',
+            'NKE.N': 'Nike',
+            'AKAM.OQ': 'Akamai',
+            'LYFT.OQ': 'Lyft',
+            'F.N': 'Ford Motor',
+            'PUMG.DE': 'Puma',
+            // Crypto
+            'SNXUSD': 'Synthetix',
+            'ATOUSD': 'Cosmos',
+            'TRPUSD': 'Tron',
+            // Forex
+            'EURCZK': 'Euro / Czech Koruna',
+            'NZDUSD': 'New Zealand Dollar / US Dollar'
+        };
+        
+        function getSymbolName(symbol) {
+            return SYMBOL_NAMES[symbol] || symbol;
+        }
+        
+        // Native fetch instead of Supabase SDK
+        async function fetchFromSupabase(table, filters = {}) {
+            let url = `${SUPABASE_URL}/rest/v1/${table}?`;
+            
+            // Add filters
+            if (filters.gte) {
+                url += `created_at=gte.${filters.gte}&`;
+            }
+            if (filters.eq) {
+                url += `${filters.eqField}=eq.${filters.eq}&`;
+            }
+            if (filters.in) {
+                url += `${filters.inField}=in.(${filters.in.join(',')})&`;
+            }
+            
+            // Remove trailing & or ?
+            url = url.replace(/[&?]$/, '');
+            
+            console.log('Fetching from:', url);
+            
+            const response = await fetch(url, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                }
+            });
+            
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+            
+            const data = await response.json();
+            console.log('Got data:', data.length, 'records');
+            return data;
+        }
 
+        // ==================== STATE ====================
+        let currentPeriod = 30;
+        let currentMarket = 'all';
         let allSignals = [];
         let performanceData = [];
-        let currentMarketFilter = 'all';
 
-        const symbolNames = {
-            // Forex
-            'EURUSD': 'EUR/USD', 'GBPUSD': 'GBP/USD', 'USDJPY': 'USD/JPY',
-            'USDCHF': 'USD/CHF', 'AUDUSD': 'AUD/USD', 'USDCAD': 'USD/CAD',
-            'NZDUSD': 'NZD/USD', 'EURGBP': 'EUR/GBP', 'EURJPY': 'EUR/JPY',
-            'GBPJPY': 'GBP/JPY', 'AUDJPY': 'AUD/JPY', 'EURAUD': 'EUR/AUD',
-            'EURCHF': 'EUR/CHF', 'AUDNZD': 'AUD/NZD', 'NZDJPY': 'NZD/JPY',
-            // Crypto
-            'BTCUSD': 'Bitcoin', 'ETHUSD': 'Ethereum', 'XRPUSD': 'Ripple',
-            'LTCUSD': 'Litecoin', 'BCHUSD': 'Bitcoin Cash', 'ADAUSD': 'Cardano',
-            'DOGEUSD': 'Dogecoin', 'BNBUSD': 'Binance Coin', 'SOLUSD': 'Solana',
-            // Stocks
-            'AAPL': 'Apple', 'MSFT': 'Microsoft', 'GOOGL': 'Alphabet',
-            'AMZN': 'Amazon', 'TSLA': 'Tesla', 'META': 'Meta',
-            'NVDA': 'NVIDIA', 'JPM': 'JPMorgan', 'V': 'Visa',
-            'WMT': 'Walmart', 'DIS': 'Disney', 'NFLX': 'Netflix',
-            // Commodities
-            'XAUUSD': 'Gold', 'XAGUSD': 'Silber', 'XPTUSD': 'Platin', 'XPDUSD': 'Palladium',
-            'WTIUSD': 'WTI Öl', 'UKOUSD': 'Brent Öl', 'NATGASUSD': 'Erdgas',
-            'COPPER': 'Kupfer', 'ALUMINIUM': 'Aluminium',
-            'COFFEE': 'Kaffee', 'SUGAR': 'Zucker', 'COTTON': 'Baumwolle',
-            'WHEAT': 'Weizen', 'CORN': 'Mais', 'SOYBEAN': 'Sojabohnen'
-        };
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFilters();
+            loadPerformanceData();
+        });
 
-        const marketMap = {
-            // Forex
-            'EURUSD': 'Forex', 'GBPUSD': 'Forex', 'USDJPY': 'Forex',
-            'USDCHF': 'Forex', 'AUDUSD': 'Forex', 'USDCAD': 'Forex',
-            'NZDUSD': 'Forex', 'EURGBP': 'Forex', 'EURJPY': 'Forex',
-            'GBPJPY': 'Forex', 'AUDJPY': 'Forex', 'EURAUD': 'Forex',
-            'EURCHF': 'Forex', 'AUDNZD': 'Forex', 'NZDJPY': 'Forex',
-            // Crypto
-            'BTCUSD': 'Crypto', 'ETHUSD': 'Crypto', 'XRPUSD': 'Crypto',
-            'LTCUSD': 'Crypto', 'BCHUSD': 'Crypto', 'ADAUSD': 'Crypto',
-            'DOGEUSD': 'Crypto', 'BNBUSD': 'Crypto', 'SOLUSD': 'Crypto',
-            // Stocks
-            'AAPL': 'Stocks', 'MSFT': 'Stocks', 'GOOGL': 'Stocks',
-            'AMZN': 'Stocks', 'TSLA': 'Stocks', 'META': 'Stocks',
-            'NVDA': 'Stocks', 'JPM': 'Stocks', 'V': 'Stocks',
-            'WMT': 'Stocks', 'DIS': 'Stocks', 'NFLX': 'Stocks',
-            // Commodities
-            'XAUUSD': 'Commodities', 'XAGUSD': 'Commodities', 'XPTUSD': 'Commodities', 'XPDUSD': 'Commodities',
-            'WTIUSD': 'Commodities', 'UKOUSD': 'Commodities', 'NATGASUSD': 'Commodities',
-            'COPPER': 'Commodities', 'ALUMINIUM': 'Commodities',
-            'COFFEE': 'Commodities', 'SUGAR': 'Commodities', 'COTTON': 'Commodities',
-            'WHEAT': 'Commodities', 'CORN': 'Commodities', 'SOYBEAN': 'Commodities'
-        };
+        function setupFilters() {
+            // Period filters
+            document.querySelectorAll('[data-period]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-period]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentPeriod = this.dataset.period;
+                    loadPerformanceData();
+                });
+            });
 
-        function getSymbolName(symbol) {
-            return symbolNames[symbol] || symbol;
+            // Market filters
+            document.querySelectorAll('[data-market]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-market]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMarket = this.dataset.market;
+                    loadPerformanceData();
+                });
+            });
         }
 
-        function getMarket(symbol) {
-            return marketMap[symbol] || 'Other';
-        }
-
-        // ==================== DATA LOADING ====================
+        // ==================== LOAD DATA ====================
         async function loadPerformanceData() {
+            document.getElementById('loadingOverview').style.display = 'block';
+            document.getElementById('performanceTable').style.display = 'none';
+
             try {
-                const { data, error } = await supabaseClient
-                    .from('signals')
-                    .select('*')
-                    .not('result', 'is', null)
-                    .order('created_at', { ascending: false });
+                // Build filters
+                const filters = {};
+                
+                if (currentPeriod !== 'all') {
+                    const daysAgo = new Date();
+                    daysAgo.setDate(daysAgo.getDate() - parseInt(currentPeriod));
+                    filters.gte = daysAgo.toISOString();
+                }
 
-                if (error) throw error;
+                if (currentMarket !== 'all') {
+                    if (currentMarket === 'stocks') {
+                        filters.in = ['DAX', 'NASDAQ', 'NYSE'];
+                        filters.inField = 'market';
+                    } else {
+                        filters.eq = currentMarket;
+                        filters.eqField = 'market';
+                    }
+                }
 
-                allSignals = data.map(signal => ({
-                    ...signal,
-                    symbolName: getSymbolName(signal.symbol),
-                    market: getMarket(signal.symbol)
-                }));
+                const data = await fetchFromSupabase('completed_signals', filters);
 
+                allSignals = data || [];
                 processPerformanceData();
+                renderTable();
                 renderOverviewStats();
                 renderHighlights();
-                renderTable();
 
-                document.getElementById('loadingContainer').style.display = 'none';
-                document.getElementById('overviewContainer').style.display = 'block';
-
-            } catch (error) {
-                console.error('Error loading data:', error);
-                document.getElementById('loadingContainer').innerHTML = '<p style="color: var(--accent-red);">Fehler beim Laden der Daten</p>';
-            }
-        }
-
-        // ==================== HELPER FUNCTIONS ====================
-        function calculatePnLValue(signal, tpLevel) {
-            if (!signal.entry) return 0;
-
-            let target = 0;
-            if (tpLevel === 3) target = signal.tp3;
-            else if (tpLevel === 2) target = signal.tp2;
-            else if (tpLevel === 1) target = signal.tp1;
-            else target = signal.sl;
-
-            if (!target) return 0;
-
-            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
-            return (diff / signal.entry * 100);
-        }
-
-        function calculatePnL(signal, tpLevel) {
-            if (!signal.entry) return '';
-
-            let target = 0;
-            if (tpLevel === 3) target = signal.tp3;
-            else if (tpLevel === 2) target = signal.tp2;
-            else if (tpLevel === 1) target = signal.tp1;
-            else target = signal.sl;
-
-            if (!target) return '';
-
-            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
-            const pct = (diff / signal.entry * 100).toFixed(1);
-            
-            return (pct >= 0 ? '+' : '') + pct + '%';
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
-
-        // ==================== HIGHLIGHTS ====================
-        function createHighlightCard(signal, tpLevel) {
-            const card = document.createElement('div');
-            card.className = `highlight-card tp${tpLevel}`;
-            card.onclick = () => showDetail(signal.symbol);
-
-            const badge = tpLevel === 3 ? '🏆 TP3' : tpLevel === 2 ? '✅ TP2' : '✅ TP1';
-            const badgeClass = `tp${tpLevel}`;
-            const pnl = calculatePnL(signal, tpLevel);
-
-            card.innerHTML = `
-                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
-                <div class="highlight-info">
-                    <div class="highlight-header">
-                        <span class="highlight-badge ${badgeClass}">${badge}</span>
-                        <span class="highlight-pnl">${pnl}</span>
-                    </div>
-                    <div class="highlight-symbol">${signal.symbolName}</div>
-                    <div class="highlight-meta">
-                        <span>${signal.timeframe}</span>
-                        <span>${signal.direction}</span>
-                        <span>${formatDate(signal.created_at)}</span>
-                    </div>
-                </div>
-            `;
-
-            return card;
-        }
-
-        function renderHighlights() {
-            const grid = document.getElementById('highlightsGrid');
-            grid.innerHTML = '';
-
-            // Get filtered signals based on current market filter
-            const filteredSignals = currentMarketFilter === 'all' 
-                ? allSignals 
-                : allSignals.filter(s => s.market === currentMarketFilter);
-
-            // Find best TP3
-            const tp3Signals = filteredSignals.filter(s => s.tp3_hit === true);
-            const bestTP3 = tp3Signals.sort((a, b) => {
-                const pnlA = calculatePnLValue(a, 3);
-                const pnlB = calculatePnLValue(b, 3);
-                return pnlB - pnlA;
-            })[0];
-
-            // Find best TP2 (excluding those that hit TP3)
-            const tp2Signals = filteredSignals.filter(s => s.tp2_hit === true && s.tp3_hit !== true);
-            const bestTP2 = tp2Signals.sort((a, b) => {
-                const pnlA = calculatePnLValue(a, 2);
-                const pnlB = calculatePnLValue(b, 2);
-                return pnlB - pnlA;
-            })[0];
-
-            // Find best TP1 (excluding those that hit TP2 or TP3)
-            const tp1Signals = filteredSignals.filter(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true);
-            const bestTP1 = tp1Signals.sort((a, b) => {
-                const pnlA = calculatePnLValue(a, 1);
-                const pnlB = calculatePnLValue(b, 1);
-                return pnlB - pnlA;
-            })[0];
-
-            // Render TP3 highlight
-            if (bestTP3) {
-                grid.appendChild(createHighlightCard(bestTP3, 3));
-            }
-
-            // Render TP2 highlight
-            if (bestTP2) {
-                grid.appendChild(createHighlightCard(bestTP2, 2));
-            }
-
-            // Render TP1 highlight
-            if (bestTP1) {
-                grid.appendChild(createHighlightCard(bestTP1, 1));
-            }
-
-            // Show message if no highlights
-            if (!bestTP3 && !bestTP2 && !bestTP1) {
-                grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center;">Keine Top Performer für diesen Filter verfügbar</p>';
+            } catch (err) {
+                console.error('Error loading data:', err);
+                alert('Fehler beim Laden der Daten: ' + err.message);
+            } finally {
+                document.getElementById('loadingOverview').style.display = 'none';
+                document.getElementById('performanceTable').style.display = 'block';
             }
         }
 
         function processPerformanceData() {
-            // Filter signals by market
-            const filteredSignals = currentMarketFilter === 'all' 
-                ? allSignals 
-                : allSignals.filter(s => s.market === currentMarketFilter);
+            const symbolMap = {};
 
-            // Group by symbol
-            const grouped = filteredSignals.reduce((acc, signal) => {
-                if (!acc[signal.symbol]) {
-                    acc[signal.symbol] = {
-                        symbol: signal.symbol,
-                        symbolName: signal.symbolName,
-                        market: signal.market,
-                        signals: []
+            allSignals.forEach(signal => {
+                const symbol = signal.symbol;
+                
+                if (!symbolMap[symbol]) {
+                    symbolMap[symbol] = {
+                        symbol: symbol,
+                        symbolName: getSymbolName(symbol),  // Use mapping function
+                        signals: [],
+                        market: signal.market
                     };
                 }
-                acc[signal.symbol].signals.push(signal);
-                return acc;
-            }, {});
 
-            // Calculate stats for each symbol
-            performanceData = Object.values(grouped).map(item => {
+                symbolMap[symbol].signals.push(signal);
+            });
+
+            performanceData = Object.values(symbolMap).map(item => {
                 const signals = item.signals;
                 const total = signals.length;
-                const wins = signals.filter(s => s.result === 'TP1_HIT').length;
-                const losses = signals.filter(s => s.result === 'SL_HIT').length;
+                
+                const wins = signals.filter(s => 
+                    s.result === 'TP1_HIT'
+                ).length;
+                
+                const losses = signals.filter(s => 
+                    s.result === 'SL_HIT'
+                ).length;
+
                 const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
 
-                // Average result
-                const tp3 = signals.filter(s => s.tp3_hit === true).length;
-                const tp2 = signals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
-                const tp1 = signals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
-                
-                let avgResultLabel = 'N/A';
+                // Average result - use highest TP level reached
                 let avgResultScore = 0;
+                let avgResultLabel = 'N/A';
                 
                 if (total > 0) {
-                    if (wins > 0) {
-                        if (tp3 > tp2 && tp3 > tp1) {
+                    // Count how many reached each TP level (any TP hit)
+                    const tp3Count = signals.filter(s => s.tp3_hit === true).length;
+                    const tp2Count = signals.filter(s => s.tp2_hit === true).length; 
+                    const tp1Count = signals.filter(s => s.tp1_hit === true).length;
+                    
+                    // Calculate weighted average
+                    const totalTP = tp3Count + tp2Count + tp1Count;
+                    if (totalTP > 0) {
+                        const weightedAvg = (tp3Count * 3 + tp2Count * 2 + tp1Count * 1) / totalTP;
+                        
+                        if (weightedAvg >= 2.5) {
                             avgResultLabel = 'TP3';
                             avgResultScore = 3;
-                        } else if (tp2 > tp1) {
+                        } else if (weightedAvg >= 1.5) {
                             avgResultLabel = 'TP2';
                             avgResultScore = 2;
                         } else {
@@ -1120,6 +1032,86 @@
             });
         }
 
+        function renderHighlights() {
+            const grid = document.getElementById('highlightsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            // Get filtered signals based on current market filter
+            const filteredSignals = currentMarketFilter === 'all' 
+                ? allSignals 
+                : allSignals.filter(s => s.market === currentMarketFilter);
+
+            // Helper function to calculate PnL value
+            function calculatePnLValue(signal, tpLevel) {
+                if (!signal.entry) return 0;
+                let target = 0;
+                if (tpLevel === 3) target = signal.tp3;
+                else if (tpLevel === 2) target = signal.tp2;
+                else if (tpLevel === 1) target = signal.tp1;
+                else target = signal.sl;
+                if (!target) return 0;
+                const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
+                return (diff / signal.entry * 100);
+            }
+
+            // Find best TP3
+            const tp3Signals = filteredSignals.filter(s => s.tp3_hit === true);
+            const bestTP3 = tp3Signals.length > 0 ? tp3Signals.sort((a, b) => {
+                return calculatePnLValue(b, 3) - calculatePnLValue(a, 3);
+            })[0] : null;
+
+            // Find best TP2 (excluding TP3)
+            const tp2Signals = filteredSignals.filter(s => s.tp2_hit === true && s.tp3_hit !== true);
+            const bestTP2 = tp2Signals.length > 0 ? tp2Signals.sort((a, b) => {
+                return calculatePnLValue(b, 2) - calculatePnLValue(a, 2);
+            })[0] : null;
+
+            // Find best TP1 (excluding TP2/TP3)
+            const tp1Signals = filteredSignals.filter(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true);
+            const bestTP1 = tp1Signals.length > 0 ? tp1Signals.sort((a, b) => {
+                return calculatePnLValue(b, 1) - calculatePnLValue(a, 1);
+            })[0] : null;
+
+            // Create highlight cards
+            if (bestTP3) grid.appendChild(createHighlightCard(bestTP3, 3));
+            if (bestTP2) grid.appendChild(createHighlightCard(bestTP2, 2));
+            if (bestTP1) grid.appendChild(createHighlightCard(bestTP1, 1));
+
+            // Show message if no highlights
+            if (!bestTP3 && !bestTP2 && !bestTP1) {
+                grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center;">Keine Top Performer für diesen Filter verfügbar</p>';
+            }
+        }
+
+        function createHighlightCard(signal, tpLevel) {
+            const card = document.createElement('div');
+            card.className = `highlight-card tp${tpLevel}`;
+            card.onclick = () => showDetail(signal.symbol);
+
+            const badge = tpLevel === 3 ? '🏆 TP3' : tpLevel === 2 ? '✅ TP2' : '✅ TP1';
+            const badgeClass = `tp${tpLevel}`;
+            const pnl = calculatePnL(signal, tpLevel);
+
+            card.innerHTML = `
+                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
+                <div class="highlight-info">
+                    <div class="highlight-header">
+                        <span class="highlight-badge ${badgeClass}">${badge}</span>
+                        <span class="highlight-pnl">${pnl}</span>
+                    </div>
+                    <div class="highlight-symbol">${signal.symbolName}</div>
+                    <div class="highlight-meta">
+                        <span>${signal.timeframe}</span>
+                        <span>${signal.direction}</span>
+                        <span>${formatDate(signal.created_at)}</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -1152,22 +1144,17 @@
         }
 
         function renderOverviewStats() {
-            // Use filtered signals based on current market filter
-            const filteredSignals = currentMarketFilter === 'all' 
-                ? allSignals 
-                : allSignals.filter(s => s.market === currentMarketFilter);
-
-            const total = filteredSignals.length;
-            const wins = filteredSignals.filter(s => s.result === 'TP1_HIT').length;
+            const total = allSignals.length;
+            const wins = allSignals.filter(s => s.result === 'TP1_HIT').length;
             const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
 
             document.getElementById('totalSignals').textContent = total;
             document.getElementById('overallWinRate').textContent = winRate + '%';
 
             // Average result
-            const tp3 = filteredSignals.filter(s => s.tp3_hit === true).length;
-            const tp2 = filteredSignals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
-            const tp1 = filteredSignals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
+            const tp3 = allSignals.filter(s => s.tp3_hit === true).length;
+            const tp2 = allSignals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
+            const tp1 = allSignals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
             
             let avgResult = 'N/A';
             if (tp3 > tp2 && tp3 > tp1) avgResult = 'TP3';
@@ -1178,7 +1165,7 @@
 
             // Best timeframe
             const tfMap = {};
-            filteredSignals.forEach(s => {
+            allSignals.forEach(s => {
                 const tf = s.timeframe;
                 if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
                 tfMap[tf].total++;
@@ -1275,31 +1262,27 @@
             });
         }
 
-        // ==================== FILTER HANDLING ====================
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const type = this.dataset.type;
-                const value = this.dataset.value;
+        function calculatePnL(signal, tpLevel) {
+            if (!signal.entry) return '';
 
-                // Update active state
-                document.querySelectorAll(`.filter-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+            let target = 0;
+            if (tpLevel === 3) target = signal.tp3;
+            else if (tpLevel === 2) target = signal.tp2;
+            else if (tpLevel === 1) target = signal.tp1;
+            else target = signal.sl;
 
-                // Update filter
-                if (type === 'market') {
-                    currentMarketFilter = value;
-                }
+            if (!target) return '';
 
-                // Re-process and render
-                processPerformanceData();
-                renderOverviewStats();
-                renderHighlights();
-                renderTable();
-            });
-        });
+            const diff = signal.direction === 'BULLISH' ? target - signal.entry : signal.entry - target;
+            const pct = (diff / signal.entry * 100).toFixed(1);
+            
+            return (pct >= 0 ? '+' : '') + pct + '%';
+        }
 
-        // Initialize
-        loadPerformanceData();
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
     </script>
 </body>
 </html>
