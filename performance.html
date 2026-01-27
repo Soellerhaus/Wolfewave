@@ -884,9 +884,89 @@
         let currentMarket = 'all';
         let allSignals = [];
         let performanceData = [];
+        let isPremium = false;
+
+        // ==================== PREMIUM CHECK ====================
+        async function checkPremiumStatus() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                    const { data: profile } = await supabaseClient
+                        .from('profiles')
+                        .select('subscription_status')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    isPremium = profile && (profile.subscription_status === 'active' || profile.subscription_status === 'trialing');
+                }
+            } catch (error) {
+                console.log('Premium check error:', error);
+                isPremium = false;
+            }
+            return isPremium;
+        }
+
+        function showPremiumModal() {
+            const modalHtml = `
+                <div id="premiumModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--accent-green); border-radius: 16px; max-width: 600px; width: 100%; padding: 40px; position: relative; animation: slideUp 0.3s;">
+                        <button onclick="closePremiumModal()" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">×</button>
+                        
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
+                            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Premium Feature</h2>
+                            <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.6;">
+                                Um vollständige Trading-Charts anzusehen und alle aktiven Wolfe Wave Signale zu erhalten, benötigst du einen Premium-Zugang.
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                            <div style="font-weight: 600; margin-bottom: 12px; color: var(--accent-green);">✓ Mit Premium erhältst du:</div>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="padding: 8px 0; color: var(--text-primary);">📊 Vollständige Trading-Charts in hoher Auflösung</li>
+                                <li style="padding: 8px 0; color: var(--text-primary);">🎯 Alle aktiven Signale (Pending & Running)</li>
+                                <li style="padding: 8px 0; color: var(--text-primary);">📈 Detaillierte Entry, Stop-Loss & Take-Profit Levels</li>
+                                <li style="padding: 8px 0; color: var(--text-primary);">⚡ Real-time Signal Updates</li>
+                                <li style="padding: 8px 0; color: var(--text-primary);">📱 Zugriff auf alle Märkte (Forex, Stocks, Crypto, Commodities)</li>
+                            </ul>
+                        </div>
+
+                        <div style="display: grid; gap: 12px;">
+                            <a href="/pricing" style="display: block; padding: 16px; background: var(--accent-green); color: #000; text-align: center; border-radius: 10px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                                🚀 Jetzt Premium werden (9,99€/Monat)
+                            </a>
+                            <a href="/login" style="display: block; padding: 16px; background: transparent; color: var(--accent-green); text-align: center; border: 1px solid var(--accent-green); border-radius: 10px; font-weight: 600; font-size: 16px; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,255,136,0.1)'" onmouseout="this.style.background='transparent'">
+                                Bereits Premium? Jetzt einloggen
+                            </a>
+                        </div>
+
+                        <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-secondary);">
+                            Jederzeit kündbar • 7 Tage Geld-zurück-Garantie
+                        </p>
+                    </div>
+                </div>
+                <style>
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes slideUp {
+                        from { transform: translateY(30px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                </style>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        function closePremiumModal() {
+            const modal = document.getElementById('premiumModal');
+            if (modal) modal.remove();
+        }
 
         // ==================== INIT ====================
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkPremiumStatus();
             setupFilters();
             loadPerformanceData();
         });
@@ -1143,7 +1223,18 @@
         function createHighlightCard(signal, tpLevel) {
             const card = document.createElement('div');
             card.className = `highlight-card tp${tpLevel}`;
-            card.onclick = () => showDetail(signal.symbol);
+            
+            // Premium check on click
+            card.onclick = () => {
+                if (isPremium) {
+                    window.location.href = '/';
+                } else {
+                    showPremiumModal();
+                }
+            };
+            
+            // Add visual indicator that clicking opens premium modal
+            card.style.position = 'relative';
 
             const badge = tpLevel === 3 ? '🥇 TP3 CHAMPION' : tpLevel === 2 ? '🥈 TP2 RUNNER-UP' : '🥉 TP1 BRONZE';
             const badgeClass = `tp${tpLevel}`;
@@ -1151,7 +1242,10 @@
             const symbolName = getSymbolName(signal.symbol);
 
             card.innerHTML = `
-                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
+                <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px);">
+                    ${isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU'}
+                </div>
+                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="pointer-events: none;">
                 <div class="highlight-info">
                     <div class="highlight-header">
                         <span class="highlight-badge ${badgeClass}">${badge}</span>
@@ -1302,8 +1396,17 @@
 
                 const card = document.createElement('div');
                 card.className = `signal-card ${isWin ? 'win' : isLoss ? 'loss' : ''}`;
+                card.style.cursor = 'pointer';
+                card.style.position = 'relative';
+                
+                // Add premium badge overlay
+                const premiumBadge = isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU';
+                
                 card.innerHTML = `
-                    <img class="signal-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
+                    <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
+                        ${premiumBadge}
+                    </div>
+                    <img class="signal-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="pointer-events: none;">
                     <div class="signal-info">
                         <div class="signal-result">
                             <span class="result-badge ${resultClass}">${resultBadge}</span>
@@ -1315,6 +1418,16 @@
                         </div>
                     </div>
                 `;
+                
+                // Add click handler for premium check
+                card.onclick = () => {
+                    if (isPremium) {
+                        window.location.href = '/';
+                    } else {
+                        showPremiumModal();
+                    }
+                };
+                
                 grid.appendChild(card);
             });
         }
