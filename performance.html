@@ -35,6 +35,22 @@
             line-height: 1.6;
         }
 
+        /* Zoom-Schutz für alle Bilder bei nicht-Premium Usern */
+        .preview-protected {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        /* Verhindere Rechtsklick-Menü auf Bilder */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+        }
+
         /* Header */
         .header {
             padding: 20px 40px;
@@ -567,6 +583,14 @@
             width: 100%;
             height: 220px;
             object-fit: cover;
+            /* Zoom-Schutz für Vorschau-Bilder */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: none;
         }
 
         .highlight-card.tp3 .highlight-image {
@@ -1216,7 +1240,7 @@
                     const tf = s.timeframe;
                     if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
                     tfMap[tf].total++;
-                    if (s.result === 'TP1_HIT') tfMap[tf].wins++;
+                    if (s.result_folder === 'success') tfMap[tf].wins++;
                 });
 
                 let bestTF = 'N/A';
