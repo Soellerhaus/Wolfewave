@@ -536,6 +536,13 @@
             overflow: hidden;
             cursor: pointer;
             transition: all 0.2s;
+            flex: 0 0 350px;
+        }
+
+        .highlight-card.tp3 {
+            flex: 0 0 450px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         }
 
         .highlight-card:hover {
@@ -543,8 +550,9 @@
             border-color: var(--accent-green);
         }
 
-        .highlight-card.tp3 {
-            border-color: rgba(255, 215, 0, 0.3);
+        .highlight-card.tp3:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
         .highlight-card.tp2 {
@@ -559,6 +567,10 @@
             width: 100%;
             height: 220px;
             object-fit: cover;
+        }
+
+        .highlight-card.tp3 .highlight-image {
+            height: 280px;
         }
 
         .highlight-info {
@@ -579,9 +591,15 @@
             font-size: 14px;
         }
 
+        .highlight-card.tp3 .highlight-badge {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
         .highlight-badge.tp3 {
-            background: rgba(255, 215, 0, 0.15);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
             color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
         }
 
         .highlight-badge.tp2 {
@@ -598,6 +616,11 @@
             font-size: 20px;
             font-weight: 700;
             color: var(--accent-green);
+        }
+
+        .highlight-card.tp3 .highlight-pnl {
+            font-size: 26px;
+            color: var(--accent-gold);
         }
 
         .highlight-symbol {
@@ -618,7 +641,18 @@
                 padding: 0 20px !important;
             }
             #highlightsGrid {
-                grid-template-columns: 1fr !important;
+                flex-direction: column;
+                align-items: center;
+            }
+            .highlight-card {
+                flex: 0 0 auto;
+                width: 100%;
+                max-width: 400px;
+            }
+            .highlight-card.tp3 {
+                flex: 0 0 auto;
+                width: 100%;
+                max-width: 400px;
             }
         }
     </style>
@@ -679,8 +713,8 @@
     <!-- Highlights Section -->
     <div class="highlights-section" style="max-width: 1400px; margin: 40px auto; padding: 0 40px;">
         <h2 class="section-title" style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">🏆 Top Performer</h2>
-        <div id="highlightsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
-            <!-- Populated by JS -->
+        <div id="highlightsGrid" style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;">
+            <!-- Populated by JS - TP3 first (largest), then TP2, then TP1 -->
         </div>
     </div>
 
@@ -1089,7 +1123,7 @@
             card.className = `highlight-card tp${tpLevel}`;
             card.onclick = () => showDetail(signal.symbol);
 
-            const badge = tpLevel === 3 ? '🏆 TP3' : tpLevel === 2 ? '✅ TP2' : '✅ TP1';
+            const badge = tpLevel === 3 ? '🥇 TP3 CHAMPION' : tpLevel === 2 ? '🥈 TP2' : '🥉 TP1';
             const badgeClass = `tp${tpLevel}`;
             const pnl = calculatePnL(signal, tpLevel);
 
