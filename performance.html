@@ -1276,14 +1276,11 @@
                 // Create grid container
                 const gridContainer = document.createElement('td');
                 gridContainer.colSpan = 6;
-                gridContainer.style.cssText = 'padding: 0; background: var(--bg-primary);';
-                
-                const contentDiv = document.createElement('div');
-                contentDiv.style.cssText = 'padding: 24px; border-top: 1px solid var(--border-color);';
+                gridContainer.style.cssText = 'padding: 24px; background: var(--bg-primary); border-top: 1px solid var(--border-color);';
                 
                 // Header
                 const headerDiv = document.createElement('div');
-                headerDiv.style.cssText = 'margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;';
+                headerDiv.style.cssText = 'margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;';
                 headerDiv.innerHTML = `
                     <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary);">
                         ${item.symbolName} - Alle Signale
@@ -1294,17 +1291,21 @@
                     </div>
                 `;
                 
-                // Grid
-                const gridDiv = document.createElement('div');
-                gridDiv.id = `${accordionId}-grid`;
-                gridDiv.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;';
+                gridContainer.appendChild(headerDiv);
                 
-                // Pre-render all signals
-                renderAccordionSignals(item.signals, gridDiv);
+                // Create signal cards
+                const cardsContainer = document.createElement('div');
+                cardsContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;';
                 
-                contentDiv.appendChild(headerDiv);
-                contentDiv.appendChild(gridDiv);
-                gridContainer.appendChild(contentDiv);
+                // Sort signals by date (newest first)
+                const sortedSignals = item.signals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                
+                sortedSignals.forEach(signal => {
+                    const card = createSignalCard(signal);
+                    cardsContainer.appendChild(card);
+                });
+                
+                gridContainer.appendChild(cardsContainer);
                 accordionRow.appendChild(gridContainer);
                 tbody.appendChild(accordionRow);
             });
@@ -1334,93 +1335,80 @@
             }
         }
 
-        function renderAccordionSignals(signals, gridElement) {
-            console.log('renderAccordionSignals called with', signals.length, 'signals');
-            console.log('gridElement:', gridElement);
+        function createSignalCard(signal) {
+            let resultBadge = '';
+            let resultClass = '';
+            let pnl = '';
             
-            // Sort by date (newest first)
-            const sorted = signals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            if (signal.tp3_hit === true) {
+                resultBadge = '🏆 TP3';
+                resultClass = 'tp3';
+                pnl = calculatePnL(signal, 3);
+            } else if (signal.tp2_hit === true) {
+                resultBadge = '✅ TP2';
+                resultClass = 'tp2';
+                pnl = calculatePnL(signal, 2);
+            } else if (signal.tp1_hit === true) {
+                resultBadge = '✅ TP1';
+                resultClass = 'tp1';
+                pnl = calculatePnL(signal, 1);
+            } else if (signal.sl_hit === true) {
+                resultBadge = '❌ SL';
+                resultClass = 'sl';
+                pnl = calculatePnL(signal, 0);
+            } else {
+                resultBadge = '⏳ Offen';
+                resultClass = '';
+            }
 
-            sorted.forEach((signal, index) => {
-                console.log(`Creating card ${index + 1} for signal:`, signal.symbol, signal.original_path);
-                
-                let resultBadge = '';
-                let resultClass = '';
-                let pnl = '';
-                
-                if (signal.tp3_hit === true) {
-                    resultBadge = '🏆 TP3';
-                    resultClass = 'tp3';
-                    pnl = calculatePnL(signal, 3);
-                } else if (signal.tp2_hit === true) {
-                    resultBadge = '✅ TP2';
-                    resultClass = 'tp2';
-                    pnl = calculatePnL(signal, 2);
-                } else if (signal.tp1_hit === true) {
-                    resultBadge = '✅ TP1';
-                    resultClass = 'tp1';
-                    pnl = calculatePnL(signal, 1);
-                } else if (signal.sl_hit === true) {
-                    resultBadge = '❌ SL';
-                    resultClass = 'sl';
-                    pnl = calculatePnL(signal, 0);
+            const card = document.createElement('div');
+            card.style.cssText = `
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 0.2s;
+                position: relative;
+            `;
+            
+            card.onmouseover = () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.borderColor = 'var(--accent-green)';
+            };
+            card.onmouseout = () => {
+                card.style.transform = 'translateY(0)';
+                card.style.borderColor = 'var(--border-color)';
+            };
+
+            const premiumBadge = isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU';
+            
+            card.innerHTML = `
+                <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
+                    ${premiumBadge}
+                </div>
+                <img src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+                <div style="padding: 12px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(0, 255, 136, 0.1); color: var(--accent-green);">${resultBadge}</span>
+                        ${pnl ? `<span style="font-weight: 600; font-size: 13px; color: ${pnl.startsWith('+') ? 'var(--accent-green)' : 'var(--accent-red)'};">${pnl}</span>` : ''}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 12px;">
+                        <span>${signal.timeframe} <span style="color: ${signal.direction === 'BULLISH' ? 'var(--accent-green)' : 'var(--accent-red)'}; font-weight: 600;">${signal.direction}</span></span>
+                        <span>${formatDate(signal.created_at)}</span>
+                    </div>
+                </div>
+            `;
+            
+            card.onclick = () => {
+                if (isPremium) {
+                    window.location.href = '/';
                 } else {
-                    resultBadge = '⏳ Offen';
-                    resultClass = '';
+                    showPremiumModal();
                 }
-
-                const card = document.createElement('div');
-                card.style.cssText = `
-                    background: var(--bg-card);
-                    border: 1px solid var(--border-color);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    position: relative;
-                `;
-                
-                card.onmouseover = () => {
-                    card.style.transform = 'translateY(-4px)';
-                    card.style.borderColor = 'var(--accent-green)';
-                };
-                card.onmouseout = () => {
-                    card.style.transform = 'translateY(0)';
-                    card.style.borderColor = 'var(--border-color)';
-                };
-
-                const premiumBadge = isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU';
-                
-                card.innerHTML = `
-                    <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
-                        ${premiumBadge}
-                    </div>
-                    <img src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; pointer-events: none;">
-                    <div style="padding: 12px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <span style="padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(0, 255, 136, 0.1); color: var(--accent-green);" class="result-badge ${resultClass}">${resultBadge}</span>
-                            ${pnl ? `<span style="font-weight: 600; font-size: 13px; color: ${pnl.startsWith('+') ? 'var(--accent-green)' : 'var(--accent-red)'};">${pnl}</span>` : ''}
-                        </div>
-                        <div style="display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 12px;">
-                            <span>${signal.timeframe} <span style="color: ${signal.direction === 'BULLISH' ? 'var(--accent-green)' : 'var(--accent-red)'}; font-weight: 600;">${signal.direction}</span></span>
-                            <span>${formatDate(signal.created_at)}</span>
-                        </div>
-                    </div>
-                `;
-                
-                card.onclick = () => {
-                    if (isPremium) {
-                        window.location.href = '/';
-                    } else {
-                        showPremiumModal();
-                    }
-                };
-                
-                gridElement.appendChild(card);
-                console.log(`Card ${index + 1} appended to grid. Grid now has ${gridElement.children.length} children`);
-            });
+            };
             
-            console.log('Finished rendering. Total cards in grid:', gridElement.children.length);
+            return card;
         }
 
         function renderOverviewStats() {
