@@ -5057,15 +5057,6 @@
                     </div>
                     <div class="user-dropdown">
                         ${(isSubscribed || isAdmin) ? `<div class="dropdown-item" onclick="showMyAlerts()">🔔 Meine Alarme ${alertCountBadge}</div>` : ''}
-                        ${(isSubscribed || isAdmin) ? `
-                            <div class="dropdown-item notification-toggle-item" onclick="event.stopPropagation();">
-                                <span>📧 Email bei ACTIVE</span>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="emailNotificationToggle" onchange="toggleEmailNotifications(this.checked)">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        ` : ''}
                         ${(isSubscribed || isAdmin) ? '<div class="dropdown-divider"></div>' : ''}
                         ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
                         <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
