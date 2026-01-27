@@ -992,27 +992,24 @@
                 let avgResultLabel = 'N/A';
                 
                 if (total > 0) {
-                    // Count how many reached each TP level (any TP hit)
+                    // Count how many reached each TP level
+                    // IMPORTANT: TP3 means TP1+TP2+TP3 all hit (highest level)
                     const tp3Count = signals.filter(s => s.tp3_hit === true).length;
-                    const tp2Count = signals.filter(s => s.tp2_hit === true).length; 
-                    const tp1Count = signals.filter(s => s.tp1_hit === true).length;
+                    const tp2Only = signals.filter(s => s.tp2_hit === true && s.tp3_hit !== true).length;
+                    const tp1Only = signals.filter(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true).length;
+                    const slOnly = signals.filter(s => s.sl_hit === true && !s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
                     
-                    // Calculate weighted average
-                    const totalTP = tp3Count + tp2Count + tp1Count;
-                    if (totalTP > 0) {
-                        const weightedAvg = (tp3Count * 3 + tp2Count * 2 + tp1Count * 1) / totalTP;
-                        
-                        if (weightedAvg >= 2.5) {
-                            avgResultLabel = 'TP3';
-                            avgResultScore = 3;
-                        } else if (weightedAvg >= 1.5) {
-                            avgResultLabel = 'TP2';
-                            avgResultScore = 2;
-                        } else {
-                            avgResultLabel = 'TP1';
-                            avgResultScore = 1;
-                        }
-                    } else if (losses > 0) {
+                    // Determine average by majority
+                    if (tp3Count > tp2Only && tp3Count > tp1Only && tp3Count > slOnly) {
+                        avgResultLabel = 'TP3';
+                        avgResultScore = 3;
+                    } else if (tp2Only > tp1Only && tp2Only > slOnly) {
+                        avgResultLabel = 'TP2';
+                        avgResultScore = 2;
+                    } else if (tp1Only > slOnly && tp1Only > 0) {
+                        avgResultLabel = 'TP1';
+                        avgResultScore = 1;
+                    } else if (slOnly > 0) {
                         avgResultLabel = 'SL';
                         avgResultScore = 0;
                     }
@@ -1071,17 +1068,6 @@
             if (!grid) return;
             grid.innerHTML = '';
 
-            console.log('=== RENDER HIGHLIGHTS DEBUG ===');
-            console.log('performanceData:', performanceData);
-            console.log('Total symbols:', performanceData.length);
-            
-            // Log score distribution
-            const scoreDistribution = performanceData.reduce((acc, s) => {
-                acc[s.avgResultScore] = (acc[s.avgResultScore] || 0) + 1;
-                return acc;
-            }, {});
-            console.log('Score distribution:', scoreDistribution);
-
             // Sort performanceData by avgResultScore (highest first)
             const sortedByScore = [...performanceData].sort((a, b) => {
                 // First by score, then by win rate
@@ -1091,24 +1077,14 @@
                 return b.winRate - a.winRate;
             });
 
-            console.log('Top 3 symbols:', sortedByScore.slice(0, 3).map(s => ({
-                symbol: s.symbol,
-                avgResultScore: s.avgResultScore,
-                avgResultLabel: s.avgResultLabel,
-                winRate: s.winRate
-            })));
-
             // Find best TP3 symbol (avgResultScore = 3)
             const bestTP3Symbol = sortedByScore.find(s => s.avgResultScore === 3);
-            console.log('Best TP3 symbol:', bestTP3Symbol ? bestTP3Symbol.symbol : 'NONE');
             
             // Find best TP2 symbol (avgResultScore = 2)
             const bestTP2Symbol = sortedByScore.find(s => s.avgResultScore === 2);
-            console.log('Best TP2 symbol:', bestTP2Symbol ? bestTP2Symbol.symbol : 'NONE');
             
             // Find best TP1 symbol (avgResultScore = 1)
             const bestTP1Symbol = sortedByScore.find(s => s.avgResultScore === 1);
-            console.log('Best TP1 symbol:', bestTP1Symbol ? bestTP1Symbol.symbol : 'NONE');
 
             // Create highlight cards for symbols
             if (bestTP3Symbol) {
