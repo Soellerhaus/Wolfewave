@@ -1268,28 +1268,44 @@
                 `;
                 tbody.appendChild(row);
 
-                // Accordion row (hidden by default)
+                // Accordion row (hidden by default, but content pre-rendered)
                 const accordionRow = document.createElement('tr');
                 accordionRow.id = accordionId;
                 accordionRow.style.display = 'none';
-                accordionRow.innerHTML = `
-                    <td colspan="6" style="padding: 0; background: var(--bg-primary);">
-                        <div style="padding: 24px; border-top: 1px solid var(--border-color);">
-                            <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
-                                <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary);">
-                                    ${item.symbolName} - Alle Signale
-                                </h3>
-                                <div style="display: flex; gap: 12px; align-items: center;">
-                                    <span style="color: var(--text-secondary); font-size: 14px;">Win-Rate: <strong style="color: var(--accent-green);">${item.winRate}%</strong></span>
-                                    <span style="color: var(--text-secondary); font-size: 14px;">Signale: <strong>${item.total}</strong></span>
-                                </div>
-                            </div>
-                            <div id="${accordionId}-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
-                                <!-- Populated by renderAccordionSignals -->
-                            </div>
-                        </div>
-                    </td>
+                
+                // Create grid container
+                const gridContainer = document.createElement('td');
+                gridContainer.colSpan = 6;
+                gridContainer.style.cssText = 'padding: 0; background: var(--bg-primary);';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.style.cssText = 'padding: 24px; border-top: 1px solid var(--border-color);';
+                
+                // Header
+                const headerDiv = document.createElement('div');
+                headerDiv.style.cssText = 'margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;';
+                headerDiv.innerHTML = `
+                    <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary);">
+                        ${item.symbolName} - Alle Signale
+                    </h3>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <span style="color: var(--text-secondary); font-size: 14px;">Win-Rate: <strong style="color: var(--accent-green);">${item.winRate}%</strong></span>
+                        <span style="color: var(--text-secondary); font-size: 14px;">Signale: <strong>${item.total}</strong></span>
+                    </div>
                 `;
+                
+                // Grid
+                const gridDiv = document.createElement('div');
+                gridDiv.id = `${accordionId}-grid`;
+                gridDiv.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;';
+                
+                // Pre-render all signals
+                renderAccordionSignals(item.signals, gridDiv);
+                
+                contentDiv.appendChild(headerDiv);
+                contentDiv.appendChild(gridDiv);
+                gridContainer.appendChild(contentDiv);
+                accordionRow.appendChild(gridContainer);
                 tbody.appendChild(accordionRow);
             });
         }
@@ -1297,7 +1313,6 @@
         function toggleAccordion(accordionId) {
             const accordion = document.getElementById(accordionId);
             const icon = document.getElementById(`${accordionId}-icon`);
-            const grid = document.getElementById(`${accordionId}-grid`);
             
             if (accordion.style.display === 'none') {
                 // Close all other accordions
@@ -1312,14 +1327,6 @@
                 // Open this accordion
                 accordion.style.display = 'table-row';
                 icon.style.transform = 'rotate(180deg)';
-                
-                // Render signals if not already rendered
-                if (grid.children.length === 0) {
-                    const item = performanceData.find(p => accordionId.includes(p.symbol.replace(/[^a-zA-Z0-9]/g, '_')));
-                    if (item) {
-                        renderAccordionSignals(item.signals, grid);
-                    }
-                }
             } else {
                 // Close accordion
                 accordion.style.display = 'none';
