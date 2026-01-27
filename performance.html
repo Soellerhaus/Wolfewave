@@ -710,6 +710,24 @@
         </div>
     </div>
 
+    <!-- Performance Disclaimer -->
+    <div style="max-width: 1400px; margin: 32px auto 20px; padding: 0 40px;">
+        <div style="background: rgba(255, 152, 0, 0.1); border-left: 4px solid rgba(255, 152, 0, 0.8); padding: 20px 24px; border-radius: 8px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 20px; margin-top: 2px;">ℹ️</span>
+                <div style="flex: 1;">
+                    <h3 style="font-size: 14px; font-weight: 700; color: rgba(255, 152, 0, 0.95); margin: 0 0 8px 0;">Hinweis zur Performance-Statistik</h3>
+                    <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0;">
+                        Die dargestellten Statistiken basieren ausschließlich auf Wolfe Wave-Signalen, die vom Scanner erkannt und verarbeitet wurden. 
+                        Die Win-Rate spiegelt die Erfolgsquote dieser spezifischen Signale wider. 
+                        Externe Backtests mit mehreren tausend Wolfe Wave-Setups zeigen je nach Markt, Zeitraum und Zieldefinition stark variierende Trefferquoten. 
+                        Diese Statistiken dienen zur Einordnung der Scanner-Performance und sind nicht als feste Erfolgsaussage für zukünftige Trades zu verstehen.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Highlights Section -->
     <div class="highlights-section" style="max-width: 1400px; margin: 40px auto; padding: 0 40px;">
         <h2 class="section-title" style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">🏆 Top Performer</h2>
@@ -858,19 +876,6 @@
             
             const data = await response.json();
             console.log('Got data:', data.length, 'records');
-            
-            // DEBUG: Log first 3 signals
-            if (data.length > 0) {
-                console.log('First 3 signals:', data.slice(0, 3).map(s => ({
-                    id: s.id,
-                    symbol: s.symbol,
-                    created_at: s.created_at,
-                    tp1_hit: s.tp1_hit,
-                    tp2_hit: s.tp2_hit,
-                    tp3_hit: s.tp3_hit
-                })));
-            }
-            
             return data;
         }
 
@@ -1109,16 +1114,6 @@
                 const data = await fetchFromSupabase('completed_signals', filters);
 
                 allSignals = data || [];
-                
-                // DEBUG: Check for Ping An Insurance signals
-                const pingAnSignals = allSignals.filter(s => s.symbol && s.symbol.includes('2318'));
-                if (pingAnSignals.length > 0) {
-                    console.log('⚠️ FOUND PING AN INSURANCE SIGNALS:', pingAnSignals.length);
-                    pingAnSignals.forEach(s => {
-                        console.log('  - ID:', s.id, 'Created:', s.created_at, 'TP2:', s.tp2_hit, 'TP3:', s.tp3_hit);
-                    });
-                }
-                
                 processPerformanceData();
                 renderTable();
                 renderOverviewStats();
