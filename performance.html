@@ -1389,7 +1389,7 @@
                 <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px);">
                     ${isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU'}
                 </div>
-                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="pointer-events: none;">
+                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="pointer-events: none; ${!isPremium ? 'filter: blur(8px);' : ''}">
                 <div class="highlight-info">
                     <div class="highlight-header">
                         <span class="highlight-badge ${badgeClass}">${badge}</span>
@@ -1562,7 +1562,7 @@
                 <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
                     ${premiumBadge}
                 </div>
-                <img src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+                <img src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; display: block; ${!isPremium ? 'filter: blur(8px);' : ''}">
                 <div style="padding: 12px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                         <span style="padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(0, 255, 136, 0.1); color: var(--accent-green);">${resultBadge}</span>
