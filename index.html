@@ -4397,7 +4397,7 @@
             <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
             
             <!-- Main Image -->
-            <img src="" alt="Chart" id="modalImage" onerror="this.onerror=null; this.src=''; this.alt='📷 Bild nicht verfügbar'; this.style.opacity='0.3'; this.style.minHeight='300px';">
+            <img src="" alt="Chart" id="modalImage" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22400%22><rect fill=%22%23141414%22 width=%22800%22 height=%22400%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2224%22>Bild nicht verfügbar</text></svg>';">
             
             <!-- Image Info & Counter -->
             <div class="slider-info" id="sliderInfo">
@@ -5779,7 +5779,7 @@
                     ${adminControls}
                     ${alertBell}
                     <div class="signal-image-container">
-                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div class=\\'placeholder-image\\' style=\\'height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;background:var(--bg-card);\\'>📷</div>';">
+                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23141414%22 width=%22400%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23444%22 font-size=%2248%22>📷</text></svg>';">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -5867,7 +5867,7 @@
                     ${fixedBadge}
                     ${adminControls}
                     <div class="signal-image-container" style="position:relative;">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.outerHTML='<div class=\\'placeholder-image\\' style=\\'height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;background:var(--bg-card);\\'>📷</div>';">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23141414%22 width=%22400%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23444%22 font-size=%2248%22>📷</text></svg>';">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
                         ${fixedWatermark}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
@@ -7029,7 +7029,7 @@ USING (
                                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
                                     ${photos.map(photo => `
                                         <div style="position: relative; border: 2px solid ${photo.is_display_photo ? 'var(--accent-green)' : 'var(--border-color)'}; border-radius: 12px; overflow: hidden; background: var(--bg-hover);">
-                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.onerror=null; this.style.opacity='0.3'; this.alt='❌ Nicht gefunden';">
+                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22><rect fill=%22%23141414%22 width=%22200%22 height=%22150%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23f44%22 font-size=%2214%22>❌ Nicht gefunden</text></svg>';">
                                             <div style="padding: 8px; font-size: 11px; color: var(--text-secondary);">
                                                 ${new Date(photo.scanned_at).toLocaleString('de-DE')}
                                             </div>
