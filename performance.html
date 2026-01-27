@@ -909,14 +909,35 @@
                     }
                 );
 
+                let isSubscribed = false;
                 if (subResponse.ok) {
                     const subs = await subResponse.json();
-                    isPremium = subs.length > 0;
-                    console.log('Subscription check:', isPremium ? 'ACTIVE' : 'NO ACTIVE SUBSCRIPTION');
-                } else {
-                    console.log('Could not check subscription');
-                    isPremium = false;
+                    isSubscribed = subs.length > 0;
+                    console.log('Subscription check:', isSubscribed ? 'ACTIVE' : 'NO ACTIVE SUBSCRIPTION');
                 }
+
+                // Check admin status
+                const adminResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${user.id}&select=*`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                );
+
+                let isAdmin = false;
+                if (adminResponse.ok) {
+                    const admins = await adminResponse.json();
+                    isAdmin = admins.length > 0;
+                    console.log('Admin check:', isAdmin ? 'YES - ADMIN USER' : 'NO');
+                }
+
+                // Premium access if subscribed OR admin
+                isPremium = isSubscribed || isAdmin;
+                console.log('Premium access granted:', isPremium ? 'YES' : 'NO');
+                
             } catch (error) {
                 console.error('Premium check error:', error);
                 isPremium = false;
