@@ -1071,10 +1071,8 @@
             if (!grid) return;
             grid.innerHTML = '';
 
-            // Get filtered signals based on current market filter
-            const filteredSignals = currentMarketFilter === 'all' 
-                ? allSignals 
-                : allSignals.filter(s => s.market === currentMarketFilter);
+            // Use all signals - they are already filtered by loadPerformanceData
+            const filteredSignals = allSignals;
 
             // Helper function to calculate PnL value
             function calculatePnLValue(signal, tpLevel) {
@@ -1126,6 +1124,7 @@
             const badge = tpLevel === 3 ? '🥇 TP3 CHAMPION' : tpLevel === 2 ? '🥈 TP2' : '🥉 TP1';
             const badgeClass = `tp${tpLevel}`;
             const pnl = calculatePnL(signal, tpLevel);
+            const symbolName = getSymbolName(signal.symbol);
 
             card.innerHTML = `
                 <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy">
@@ -1134,7 +1133,7 @@
                         <span class="highlight-badge ${badgeClass}">${badge}</span>
                         <span class="highlight-pnl">${pnl}</span>
                     </div>
-                    <div class="highlight-symbol">${signal.symbolName}</div>
+                    <div class="highlight-symbol">${symbolName}</div>
                     <div class="highlight-meta">
                         <span>${signal.timeframe}</span>
                         <span>${signal.direction}</span>
