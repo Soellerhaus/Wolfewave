@@ -1071,6 +1071,17 @@
             if (!grid) return;
             grid.innerHTML = '';
 
+            console.log('=== RENDER HIGHLIGHTS DEBUG ===');
+            console.log('performanceData:', performanceData);
+            console.log('Total symbols:', performanceData.length);
+            
+            // Log score distribution
+            const scoreDistribution = performanceData.reduce((acc, s) => {
+                acc[s.avgResultScore] = (acc[s.avgResultScore] || 0) + 1;
+                return acc;
+            }, {});
+            console.log('Score distribution:', scoreDistribution);
+
             // Sort performanceData by avgResultScore (highest first)
             const sortedByScore = [...performanceData].sort((a, b) => {
                 // First by score, then by win rate
@@ -1080,14 +1091,24 @@
                 return b.winRate - a.winRate;
             });
 
+            console.log('Top 3 symbols:', sortedByScore.slice(0, 3).map(s => ({
+                symbol: s.symbol,
+                avgResultScore: s.avgResultScore,
+                avgResultLabel: s.avgResultLabel,
+                winRate: s.winRate
+            })));
+
             // Find best TP3 symbol (avgResultScore = 3)
             const bestTP3Symbol = sortedByScore.find(s => s.avgResultScore === 3);
+            console.log('Best TP3 symbol:', bestTP3Symbol ? bestTP3Symbol.symbol : 'NONE');
             
             // Find best TP2 symbol (avgResultScore = 2)
             const bestTP2Symbol = sortedByScore.find(s => s.avgResultScore === 2);
+            console.log('Best TP2 symbol:', bestTP2Symbol ? bestTP2Symbol.symbol : 'NONE');
             
             // Find best TP1 symbol (avgResultScore = 1)
             const bestTP1Symbol = sortedByScore.find(s => s.avgResultScore === 1);
+            console.log('Best TP1 symbol:', bestTP1Symbol ? bestTP1Symbol.symbol : 'NONE');
 
             // Create highlight cards for symbols
             if (bestTP3Symbol) {
