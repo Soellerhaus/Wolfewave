@@ -3837,7 +3837,7 @@
             <a href="wolfewaves.html" class="nav-link"><span style="font-size:16px;">📖</span> Tutorial</a>
             <a href="scanner-erklaerung.html" class="nav-link"><span style="font-size:16px;">🔍</span> Scanner</a>
             <a href="maerkte.html" class="nav-link">🌍 Märkte</a>
-              <a href="performance.html">📊 Performance</a>
+              <a href="performance.html" class="nav-link">📊 Performance</a>
             <a href="faq.html" class="nav-link"><span style="font-size:16px;">❓</span> FAQ</a>
             
             <!-- Language Selector in Navigation -->
@@ -4397,7 +4397,7 @@
             <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
             
             <!-- Main Image -->
-            <img src="" alt="Chart" id="modalImage">
+            <img src="" alt="Chart" id="modalImage" onerror="this.onerror=null; this.src=''; this.alt='📷 Bild nicht verfügbar'; this.style.opacity='0.3'; this.style.minHeight='300px';">
             
             <!-- Image Info & Counter -->
             <div class="slider-info" id="sliderInfo">
@@ -5779,7 +5779,7 @@
                     ${adminControls}
                     ${alertBell}
                     <div class="signal-image-container">
-                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">
+                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div class=\\'placeholder-image\\' style=\\'height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;background:var(--bg-card);\\'>📷</div>';">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -5867,7 +5867,7 @@
                     ${fixedBadge}
                     ${adminControls}
                     <div class="signal-image-container" style="position:relative;">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.outerHTML='<div class=\\'placeholder-image\\' style=\\'height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;background:var(--bg-card);\\'>📷</div>';">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
                         ${fixedWatermark}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
@@ -6751,7 +6751,8 @@
                 <img src="${img.url}" 
                      class="slider-thumb ${i === sliderCurrentIndex ? 'active' : ''}" 
                      onclick="goToImage(${i})"
-                     alt="Scan ${i + 1}">
+                     alt="Scan ${i + 1}"
+                     onerror="this.onerror=null; this.style.display='none';">
             `).join('');
         }
 
@@ -7028,7 +7029,7 @@ USING (
                                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
                                     ${photos.map(photo => `
                                         <div style="position: relative; border: 2px solid ${photo.is_display_photo ? 'var(--accent-green)' : 'var(--border-color)'}; border-radius: 12px; overflow: hidden; background: var(--bg-hover);">
-                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;">
+                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.onerror=null; this.style.opacity='0.3'; this.alt='❌ Nicht gefunden';">
                                             <div style="padding: 8px; font-size: 11px; color: var(--text-secondary);">
                                                 ${new Date(photo.scanned_at).toLocaleString('de-DE')}
                                             </div>
