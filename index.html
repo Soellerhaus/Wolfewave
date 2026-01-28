@@ -4288,6 +4288,10 @@
                 <a href="maerkte.html" class="footer-link">Märkte</a>
             </div>
             <div class="footer-links">
+                <h4 class="footer-heading">Community</h4>
+                <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="footer-link">📱 Telegram Kanal</a>
+            </div>
+            <div class="footer-links">
                 <h4 class="footer-heading">Rechtliches</h4>
                 <a href="impressum.html" class="footer-link">Impressum</a>
                 <a href="datenschutz.html" class="footer-link">Datenschutz</a>
@@ -5017,6 +5021,45 @@
             }
         }
 
+        function openTelegramConnect() {
+            const userEmail = currentUser?.email || '';
+            const modal = document.createElement('div');
+            modal.id = 'telegramModal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:10000;';
+            modal.innerHTML = `
+                <div style="background:var(--bg-card);border-radius:16px;padding:32px;max-width:450px;width:90%;text-align:center;border:1px solid var(--border-color);">
+                    <div style="font-size:48px;margin-bottom:16px;">📱</div>
+                    <h2 style="color:var(--text-primary);margin-bottom:8px;">Telegram Premium verbinden</h2>
+                    <p style="color:var(--text-secondary);margin-bottom:24px;">Erhalte alle Signale & TP-Hits direkt auf dein Handy!</p>
+                    
+                    <div style="background:var(--bg-hover);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;">
+                        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;"><strong>So geht's:</strong></p>
+                        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:8px;">1️⃣ Klicke auf den Button unten</p>
+                        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:8px;">2️⃣ Starte den Bot mit <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;">/start</code></p>
+                        <p style="color:var(--text-secondary);font-size:13px;">3️⃣ Sende: <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;">/verify ${userEmail}</code></p>
+                    </div>
+                    
+                    <a href="https://t.me/wolfewavesignals_bot" target="_blank" style="display:block;background:var(--accent-green);color:#000;padding:14px 24px;border-radius:10px;font-weight:700;text-decoration:none;margin-bottom:12px;">
+                        🤖 Bot öffnen
+                    </a>
+                    
+                    <button onclick="closeTelegramModal()" style="background:transparent;border:1px solid var(--border-color);color:var(--text-secondary);padding:10px 20px;border-radius:8px;cursor:pointer;">
+                        Schließen
+                    </button>
+                    
+                    <p style="text-align:center;margin-top:16px;color:var(--text-secondary);font-size:13px;">
+                        Oder folge unserem <a href="https://t.me/wolfewavesignals" target="_blank" style="color:var(--accent-green);">öffentlichen Kanal</a> für kostenlose Updates
+                    </p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeTelegramModal() {
+            const modal = document.getElementById('telegramModal');
+            if (modal) modal.remove();
+        }
+
         function handleLogout() {
             clearTokens();
             currentUser = null;
@@ -5056,6 +5099,7 @@
                     </div>
                     <div class="user-dropdown">
                         ${(isSubscribed || isAdmin) ? `<div class="dropdown-item" onclick="showMyAlerts()">🔔 Meine Alarme ${alertCountBadge}</div>` : ''}
+                        ${(isSubscribed || isAdmin) ? `<div class="dropdown-item" onclick="openTelegramConnect()">📱 Telegram verbinden</div>` : ''}
                         ${(isSubscribed || isAdmin) ? '<div class="dropdown-divider"></div>' : ''}
                         ${isSubscribed ? '<div class="dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
                         <div class="dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
@@ -5278,7 +5322,7 @@
                     🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
-                <div class="section-subtitle">— Sieh dir 3 erfolgreiche Trades an</div>
+                <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
             `;
         }
 
@@ -5598,9 +5642,9 @@
             }
             
             if (!isPremium) {
-                // Show preview for guests - nur fixierte Success-Signale
+                // Show preview for guests
                 const preview = getPreviewSignals();
-                grid.innerHTML = preview.map(s => renderCompletedSignalCard(s)).join('');
+                grid.innerHTML = preview.map(s => renderSignalCard(s, true, false)).join('');
                 renderLockedSignals();
                 return;
             }
@@ -5655,29 +5699,15 @@
 
         function getPreviewSignals() {
             const preview = [];
-            
-            // Nur fixierte Success-Signale für Vorschau verwenden
-            const fixedSuccessSignals = completedSignals.filter(s => s.result_fixed === true && s.result_folder === 'success');
-            
-            // Versuche je ein TP3, TP2, TP1 Signal zu finden
-            const tp3Signal = fixedSuccessSignals.find(s => s.tp3_hit === true);
-            const tp2Signal = fixedSuccessSignals.find(s => s.tp2_hit === true && s.tp3_hit !== true);
-            const tp1Signal = fixedSuccessSignals.find(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true);
-            
-            if (tp3Signal) preview.push(tp3Signal);
-            if (tp2Signal) preview.push(tp2Signal);
-            if (tp1Signal) preview.push(tp1Signal);
-            
-            // Falls weniger als 3 gefunden, fülle mit anderen fixierten Success-Signalen auf
-            if (preview.length < 3) {
-                for (const signal of fixedSuccessSignals) {
-                    if (!preview.some(p => p.id === signal.id)) {
-                        preview.push(signal);
-                        if (preview.length >= 3) break;
-                    }
-                }
+            for (const market of PREVIEW_MARKETS) {
+                const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
+                if (signal) preview.push(signal);
             }
-            
+            while (preview.length < 3 && preview.length < allSignals.length) {
+                const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
+                if (signal) preview.push(signal);
+                else break;
+            }
             return preview;
         }
 
