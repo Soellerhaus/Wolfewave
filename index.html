@@ -5551,7 +5551,7 @@
             
             document.getElementById('totalSignals').textContent = allSignals.length;
             
-            const successTotal = completedSignals.filter(s => s.result_folder === 'success').length;
+            const successTotal = completedSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
             document.getElementById('successCount').textContent = successTotal;
             
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
@@ -5596,7 +5596,8 @@
             const tp2 = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
             const tp1 = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
             const sl = completedSignals.filter(s => s.sl_hit && !s.tp1_hit).length;
-            const success = completedSignals.filter(s => s.result_folder === 'success').length;
+            // Berechne Success basierend auf TP-Hits (nicht result_folder)
+            const success = completedSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
             const rate = total > 0 ? ((success / total) * 100).toFixed(1) : 0;
             
             document.getElementById('successRateValue').textContent = rate + '%';
