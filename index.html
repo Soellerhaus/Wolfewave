@@ -1687,7 +1687,7 @@
 
         .result-badge {
             position: absolute;
-            top: 16px;
+            top: 45px;
             left: 16px;
             font-size: 10px;
             font-weight: 700;
@@ -1739,7 +1739,7 @@
         .signal-badge {
             position: absolute;
             top: 16px;
-            right: 16px;
+            left: 16px;
             padding: 6px 14px;
             border-radius: 6px;
             font-size: 11px;
@@ -4661,6 +4661,7 @@
 
         let allSignals = [];
         let completedSignals = [];
+        let symbolNames = {}; // Cache für Symbol-Namen
         let currentUser = null;
         let isSubscribed = false;
         let isAdmin = false;
@@ -4792,6 +4793,7 @@
             updateGridZoom(); // Zoom-Indikator setzen
             updateTradingHours(); // Handelszeiten aktualisieren
             setInterval(updateTradingHours, 60000); // Jede Minute aktualisieren
+            await loadSymbolNames(); // Symbol-Namen laden
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
@@ -4801,6 +4803,32 @@
             updateStats();
             renderSignals();
             setupEventListeners();
+        }
+
+        // Symbol-Namen aus DB laden
+        async function loadSymbolNames() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/symbol_markets?select=symbol,name&name=not.is.null`,
+                    { headers: { 'apikey': SUPABASE_KEY } }
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    data.forEach(item => {
+                        if (item.symbol && item.name) {
+                            symbolNames[item.symbol] = item.name;
+                        }
+                    });
+                    console.log(`Loaded ${Object.keys(symbolNames).length} symbol names`);
+                }
+            } catch (e) {
+                console.error('Error loading symbol names:', e);
+            }
+        }
+
+        // Symbol-Name abrufen (mit Fallback auf Symbol)
+        function getSymbolName(symbol) {
+            return symbolNames[symbol] || symbol;
         }
 
         // ==================== AUTH ====================
@@ -5828,7 +5856,7 @@
                     <div class="signal-info">
                         <div class="signal-header">
                             <div>
-                                <div class="signal-title">${signal.symbol_name || signal.symbol}</div>
+                                <div class="signal-title">${getSymbolName(signal.symbol)}</div>
                                 <div class="signal-symbol">${signal.symbol}</div>
                             </div>
                             <div class="signal-time">
@@ -5917,8 +5945,8 @@
                     <div class="signal-info">
                         <div class="signal-header">
                             <div>
-                                <div class="signal-title">${signal.symbol}</div>
-                                <div class="signal-symbol">${signal.wedge_id}</div>
+                                <div class="signal-title">${getSymbolName(signal.symbol)}</div>
+                                <div class="signal-symbol">${signal.symbol}</div>
                             </div>
                             <div class="signal-time">
                                 <div class="signal-date">${formatDate(signal.created_at)}</div>
