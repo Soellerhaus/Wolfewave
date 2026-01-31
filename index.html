@@ -180,224 +180,13 @@
         .animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
 
         /* Header */
-        .header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: rgba(12, 12, 12, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            transition: transform 0.3s ease;
-            width: 100%;
-            max-width: 100vw;
-        }
-
-        .header.header-hidden {
-            transform: translateY(-100%);
-        }
 
         /* Burger Menu - VERBESSERT */
-        .burger-menu {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 2px solid var(--accent-green);
-            border-radius: 10px;
-            cursor: pointer;
-            padding: 8px;
-            z-index: 101;
-            transition: all 0.3s ease;
-        }
-
-        .burger-menu:hover {
-            background: rgba(0, 255, 136, 0.2);
-            transform: scale(1.05);
-        }
-
-        .burger-menu span {
-            display: block;
-            width: 22px;
-            height: 3px;
-            background: var(--accent-green);
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .burger-menu.active {
-            background: var(--accent-green);
-        }
-
-        .burger-menu.active span {
-            background: #000;
-        }
-
-        .burger-menu.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .burger-menu.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .burger-menu.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
 
         /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 98;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
 
         /* Mobile Menu Dropdown - MODERNISIERT */
-        .mobile-menu {
-            display: flex;
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            max-width: 80vw;
-            height: 100vh;
-            background: linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(12, 12, 12, 0.98) 100%);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(0, 255, 136, 0.2);
-            padding: 0;
-            flex-direction: column;
-            gap: 0;
-            z-index: 99;
-            transition: right 0.3s ease;
-            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
-            overflow-y: auto;
-        }
 
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .mobile-menu-item {
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 14px 18px;
-            margin: 0 16px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid transparent;
-        }
-
-        .mobile-menu-item:hover {
-            background: rgba(0, 255, 136, 0.1);
-            border-color: rgba(0, 255, 136, 0.3);
-        }
-
-        .mobile-menu-item .success-value {
-            color: var(--accent-green);
-            font-weight: 700;
-            margin-left: auto;
-        }
-
-        .mobile-menu-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-            margin: 8px 16px;
-        }
-
-        .mobile-menu-btn {
-            width: calc(100% - 32px);
-            margin: 0 16px;
-            padding: 16px;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .mobile-menu-btn:hover {
-            border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .mobile-menu-btn.primary {
-            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
-            border-color: var(--accent-green);
-            color: #000;
-            font-weight: 700;
-        }
-
-        .mobile-menu-btn.primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
-        }
-
-        .logo-icon img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-        }
-
-        .logo span {
-            color: var(--accent-green);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
         
         /* Language Selector Button */
         .language-btn {
@@ -421,44 +210,15 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        .language-text {
-            font-size: 13px;
-        }
+
         
-        .language-dropdown {
-            position: absolute;
-            top: 45px;
-            left: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 8px 0;
-            min-width: 180px;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-            display: none;
-        }
+
         
-        .language-dropdown.active {
-            display: block;
-        }
+
         
-        .language-option {
-            padding: 10px 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-primary);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+
         
-        .language-option:hover {
-            background: rgba(0, 255, 136, 0.1);
-        }
+
         
         /* Google Translate Widget Styling */
         #google_translate_element {
@@ -529,94 +289,14 @@
             top: 0px !important;
         }
 
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            margin-left: 40px;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-green);
-        }
         
         /* Language Selector in Navigation */
-        .nav-language-container {
-            position: relative;
-        }
+
         
-        .nav-language-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-family: inherit;
-        }
+
         
-        .nav-language-btn:hover {
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
-        }
+
         
-        .language-text {
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .header-success-rate {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 230, 118, 0.1);
-            border: 1px solid rgba(0, 230, 118, 0.3);
-            border-radius: 20px;
-            padding: 6px 14px;
-        }
-
-        .success-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .success-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -3261,63 +2941,33 @@
                 /* Visibility controlled by JS based on user status */
             }
 
-            .header {
-                padding: 12px 16px;
-                flex-direction: row;
-                gap: 0;
-            }
+    
 
-            .header-nav {
-                display: none;
-            }
+    
 
-            .header-success-rate {
-                display: none;
-            }
+    
 
-            .success-label {
-                display: none;
-            }
+    
 
-            .header-right {
-                display: none;
-            }
+    
 
             /* Burger Menu Button */
-            .burger-menu {
-                display: flex !important;
-            }
+    
 
             /* Mobile Menu */
-            .mobile-menu {
-                display: flex;
-            }
+    
             
             /* Icon-only mode for very small screens */
             @media (max-width: 360px) {
-                .mobile-menu {
-                    width: 180px;
-                    padding: 16px 12px 16px !important;
-                }
+        
                 
-                .mobile-menu-item {
-                    padding: 10px 12px;
-                    font-size: 14px;
-                    justify-content: center;
-                }
+        
                 
-                .mobile-menu-item .menu-text {
-                    display: none;
-                }
+        
                 
-                .mobile-menu-item .menu-icon {
-                    font-size: 20px;
-                }
+        
                 
-                .mobile-menu-btn {
-                    font-size: 11px;
-                    padding: 10px 8px;
-                }
+        
                 
                 /* TABS ICON-ONLY MODE */
                 .tabs {
@@ -3371,14 +3021,9 @@
                 }
             }
 
-            .logo-icon img {
-                width: 50px;
-                height: 50px;
-            }
+    
 
-            .logo {
-                font-size: 18px;
-            }
+    
 
             /* Hero kompakter */
             .hero {
@@ -5163,7 +4808,7 @@
             if (modal) modal.remove();
         }
 
-        function handleLogout() {
+        window.handleLogout = function handleLogout() {
             clearTokens();
             currentUser = null;
             isSubscribed = false;
@@ -5171,7 +4816,7 @@
             currentTab = 'all';
             updateUIForGuest();
             renderSignals();
-        }
+        };
 
         // ==================== UI UPDATES ====================
         function updateUIForUser() {
@@ -5263,12 +4908,12 @@
             `;
         }
 
-        function toggleUserMenu() {
+        window.toggleUserMenu = function toggleUserMenu() {
             document.querySelector('.user-menu-container').classList.toggle('open');
             
             // Load notification preference when menu opens
             loadEmailNotificationPreference();
-        }
+        };
         
         // ==================== EMAIL NOTIFICATIONS FOR PENDING → ACTIVE ====================
         
@@ -5296,7 +4941,7 @@
             }
         }
         
-        async function toggleEmailNotifications(enabled) {
+        window.toggleEmailNotifications = async function toggleEmailNotifications(enabled) {
             if (!currentUser) return;
             
             try {
@@ -5333,111 +4978,12 @@
                 const toggle = document.getElementById('emailNotificationToggle');
                 if (toggle) toggle.checked = !enabled;
             }
-        }
+        };
         
-        function toggleLanguageMenu() {
-            const dropdown = document.getElementById('languageDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
-            }
-        }
-        
-        function changeLanguage(langCode) {
-            // Close dropdown
-            const dropdown = document.getElementById('languageDropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
-            }
-            
-            // Set Google Translate cookie
-            var googleTransCookie = '/de/' + langCode;
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
-            
-            // Update button text
-            const langMap = {
-                'de': 'DE', 'en': 'EN', 'es': 'ES', 'fr': 'FR', 'it': 'IT', 
-                'pt': 'PT', 'ru': 'RU', 'zh-CN': 'CN', 'ja': 'JP', 'ko': 'KR',
-                'ar': 'AR', 'tr': 'TR', 'pl': 'PL', 'nl': 'NL'
-            };
-            
-            const langBtn = document.querySelector('.language-text');
-            if (langBtn && langMap[langCode]) {
-                langBtn.textContent = langMap[langCode];
-            }
-            
-            // Reload to apply translation
-            window.location.reload();
-        }
-        
-        function changeLanguageMobile(langCode) {
-            // Set Google Translate cookie
-            var googleTransCookie = '/de/' + langCode;
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
-            
-            // Reload to apply translation
-            window.location.reload();
-        }
-        
-        // Close language dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('languageDropdown');
-            const langBtn = document.querySelector('.language-btn');
-            
-            if (dropdown && langBtn && !dropdown.contains(e.target) && !langBtn.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
+        // Language-Funktionen werden jetzt von header.js bereitgestellt
 
-        function toggleMobileMenu() {
-            const burger = document.querySelector('.burger-menu');
-            const menu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            const header = document.querySelector('.header');
-            const tabsSection = document.getElementById('tabsSection');
-            const signalGrid = document.querySelector('.signal-grid');
-            
-            if (burger && menu && overlay) {
-                const isOpening = !menu.classList.contains('active');
-                
-                burger.classList.toggle('active');
-                menu.classList.toggle('active');
-                overlay.classList.toggle('active');
-                
-                // CRITICAL: Hide header completely when menu opens
-                if (header) {
-                    header.style.display = isOpening ? 'none' : '';
-                }
-                
-                // Hide signal content when menu opens
-                if (tabsSection) {
-                    tabsSection.style.display = isOpening ? 'none' : '';
-                }
-                if (signalGrid) {
-                    signalGrid.style.display = isOpening ? 'none' : '';
-                }
-            }
-        }
 
-        // Close mobile menu when clicking outside - FIXED
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('mobileMenu');
-            const burger = document.querySelector('.burger-menu');
-            const overlay = document.getElementById('mobileMenuOverlay');
-            const header = document.querySelector('.header');
-            
-            // Nur schließen wenn Menü offen ist UND Klick außerhalb
-            if (menu && burger && menu.classList.contains('active')) {
-                // Prüfe ob Klick innerhalb des Menüs oder Burgers
-                if (!menu.contains(e.target) && !burger.contains(e.target)) {
-                    menu.classList.remove('active');
-                    burger.classList.remove('active');
-                    if (overlay) overlay.classList.remove('active');
-                    if (header) header.style.display = ''; // Show header again
-                }
-            }
-        });
+        // toggleMobileMenu wird jetzt von header.js bereitgestellt
 
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
@@ -5549,14 +5095,14 @@
         }
         
         // Mobile Search Handler
-        function handleMobileSearch(value) {
+        window.handleMobileSearch = function handleMobileSearch(value) {
             const desktopSearch = document.getElementById('searchSymbol');
             if (desktopSearch) {
                 desktopSearch.value = value;
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(renderSignals, 300);
             }
-        }
+        };
 
         // ==================== RENDERING ====================
         function renderSignals() {
@@ -6175,7 +5721,7 @@
         }
         
         // Meine Alarme anzeigen
-        function showMyAlerts() {
+        window.showMyAlerts = function showMyAlerts() {
             const list = document.getElementById('myAlertsList');
             document.getElementById('myAlertsCount').textContent = userAlerts.length;
             
@@ -6216,7 +5762,7 @@
             document.getElementById('myAlertsModal').classList.add('active');
             // User dropdown schließen
             document.querySelector('.user-menu-container')?.classList.remove('open');
-        }
+        };
         
         function closeMyAlertsModal() {
             document.getElementById('myAlertsModal').classList.remove('active');
@@ -6362,10 +5908,10 @@
         }
 
         // ==================== MODALS ====================
-        function showLogin() {
+        window.showLogin = function showLogin() {
             toggleAuthForm('login');
             document.getElementById('authModal').classList.add('active');
-        }
+        };
 
         function toggleAuthForm(form) {
             document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
@@ -7573,7 +7119,7 @@ USING (
         // Diese hat die KORREKTE Price ID: price_1SsQnR2OhtqoguwQnrWvqqeHY
         // JWT Verification muss in Supabase DEAKTIVIERT sein!
         // ==================== CHECKOUT CONFIRMATION MODAL ====================
-        function showCheckout() {
+        window.showCheckout = function showCheckout() {
             if (!currentUser) {
                 showLogin();
                 return;
@@ -7586,7 +7132,7 @@ USING (
             document.getElementById('confirmWiderruf').checked = false;
             document.getElementById('confirmAGB').checked = false;
             updateCheckoutButton();
-        }
+        };
         
         function closeCheckoutConfirm() {
             document.getElementById('checkoutConfirmModal').classList.remove('active');
@@ -7658,7 +7204,7 @@ USING (
         }
 
         // ==================== ABO VERWALTEN (Stripe Customer Portal) ====================
-        async function manageSubscription() {
+        window.manageSubscription = async function manageSubscription() {
             if (!currentUser) {
                 showLogin();
                 return;
@@ -7707,7 +7253,7 @@ USING (
                     window.location.href = `mailto:support@wolfewavesignals.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 }
             }
-        }
+        };
 
         // Modal event listeners
         document.getElementById('authModal').addEventListener('click', e => {
@@ -8087,26 +7633,19 @@ USING (
         let ticking = false;
         
         function updateHeader() {
-            const header = document.querySelector('.header');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const burger = document.querySelector('.burger-menu');
+            const header = document.querySelector('.site-header');
             const currentScrollY = window.scrollY;
             
-            // Nur auf Mobile (unter 768px)
+            if (!header) { ticking = false; return; }
+            
             if (window.innerWidth <= 768) {
                 if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                    // Scrollt nach unten - Header verstecken
-                    header.classList.add('header-hidden');
-                    // Mobile Menu auch schließen
-                    if (mobileMenu) mobileMenu.classList.remove('active');
-                    if (burger) burger.classList.remove('active');
+                    header.style.transform = 'translateY(-100%)';
                 } else if (currentScrollY < lastScrollY) {
-                    // Scrollt nach oben - Header zeigen
-                    header.classList.remove('header-hidden');
+                    header.style.transform = 'translateY(0)';
                 }
             } else {
-                // Desktop - Header immer zeigen
-                header.classList.remove('header-hidden');
+                header.style.transform = 'translateY(0)';
             }
             
             lastScrollY = currentScrollY;
@@ -8470,4 +8009,3 @@ USING (
             
             // Wenn abgelehnt, Analytics deaktivieren
             if (localStorage
-                
