@@ -127,6 +127,13 @@
             transform: translateY(4px);
         }
 
+        /* Language dropdown uses click, not hover - controlled via JS */
+        #langMenu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+        }
+
         .nav-dropdown-item {
             display: block;
             color: rgba(255,255,255,0.7);
@@ -424,26 +431,26 @@
                 <a href="performance.html" class="nav-link ${isActive('performance.html')}">📊 Performance</a>
 
                 <!-- Language Selector -->
-                <div class="nav-dropdown">
-                    <button class="nav-dropdown-toggle">
-                        🌐 DE
+                <div class="nav-dropdown" id="langDropdown">
+                    <button class="nav-dropdown-toggle" id="langToggle" onclick="toggleLangDropdown(event)">
+                        🌐 <span id="currentLangText">DE</span>
                         <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M2 4l4 4 4-4"/>
                         </svg>
                     </button>
-                    <div class="nav-dropdown-menu" style="min-width: 140px;">
-                        <div class="nav-dropdown-item" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('en')">🇬🇧 English</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('es')">🇪🇸 Español</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-                        <div class="nav-dropdown-item" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
+                    <div class="nav-dropdown-menu" id="langMenu" style="min-width: 140px;">
+                        <div class="nav-dropdown-item" onclick="selectLanguage('de', 'DE')">🇩🇪 Deutsch</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('en', 'EN')">🇬🇧 English</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('es', 'ES')">🇪🇸 Español</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('fr', 'FR')">🇫🇷 Français</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('it', 'IT')">🇮🇹 Italiano</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('pt', 'PT')">🇵🇹 Português</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('ru', 'RU')">🇷🇺 Русский</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('zh-CN', '中文')">🇨🇳 中文</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('ja', '日本')">🇯🇵 日本語</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('ko', '한국')">🇰🇷 한국어</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('ar', 'AR')">🇸🇦 العربية</div>
+                        <div class="nav-dropdown-item" onclick="selectLanguage('tr', 'TR')">🇹🇷 Türkçe</div>
                     </div>
                 </div>
             </nav>
@@ -472,19 +479,19 @@
             <a href="faq.html" class="mobile-nav-link ${isActive('faq.html')}">❓ FAQ</a>
 
             <div class="mobile-nav-section">🌐 Sprache / Language</div>
-            <select id="mobileLangSelector" onchange="changeLanguage(this.value)" style="width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 8px; color: #fff; font-size: 14px;">
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="it">🇮🇹 Italiano</option>
-                <option value="pt">🇵🇹 Português</option>
-                <option value="ru">🇷🇺 Русский</option>
-                <option value="zh-CN">🇨🇳 中文</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="ar">🇸🇦 العربية</option>
-                <option value="tr">🇹🇷 Türkçe</option>
+            <select id="mobileLangSelector" onchange="selectLanguageFromMobile(this)" style="width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 8px; color: #fff; font-size: 14px;">
+                <option value="de" data-label="DE">🇩🇪 Deutsch</option>
+                <option value="en" data-label="EN">🇬🇧 English</option>
+                <option value="es" data-label="ES">🇪🇸 Español</option>
+                <option value="fr" data-label="FR">🇫🇷 Français</option>
+                <option value="it" data-label="IT">🇮🇹 Italiano</option>
+                <option value="pt" data-label="PT">🇵🇹 Português</option>
+                <option value="ru" data-label="RU">🇷🇺 Русский</option>
+                <option value="zh-CN" data-label="中文">🇨🇳 中文</option>
+                <option value="ja" data-label="日本">🇯🇵 日本語</option>
+                <option value="ko" data-label="한국">🇰🇷 한국어</option>
+                <option value="ar" data-label="AR">🇸🇦 العربية</option>
+                <option value="tr" data-label="TR">🇹🇷 Türkçe</option>
             </select>
 
             <div class="mobile-header-actions" id="mobileHeaderActions">
@@ -572,5 +579,100 @@
         `;
         if (mobileActions) mobileActions.innerHTML = mobileUserHTML;
     };
+
+    // ==================== LANGUAGE FUNCTIONS ====================
+    
+    // Toggle Language Dropdown (Click statt Hover)
+    window.toggleLangDropdown = function(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById('langDropdown');
+        const menu = document.getElementById('langMenu');
+        
+        if (menu.style.opacity === '1') {
+            menu.style.opacity = '0';
+            menu.style.visibility = 'hidden';
+            menu.style.transform = 'translateY(10px)';
+        } else {
+            menu.style.opacity = '1';
+            menu.style.visibility = 'visible';
+            menu.style.transform = 'translateY(4px)';
+        }
+    };
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('langMenu');
+        const dropdown = document.getElementById('langDropdown');
+        if (menu && dropdown && !dropdown.contains(e.target)) {
+            menu.style.opacity = '0';
+            menu.style.visibility = 'hidden';
+            menu.style.transform = 'translateY(10px)';
+        }
+    });
+    
+    // Select Language
+    window.selectLanguage = function(langCode, langLabel) {
+        // Update display
+        const langText = document.getElementById('currentLangText');
+        if (langText) langText.textContent = langLabel;
+        
+        // Update mobile selector
+        const mobileSelector = document.getElementById('mobileLangSelector');
+        if (mobileSelector) mobileSelector.value = langCode;
+        
+        // Close dropdown
+        const menu = document.getElementById('langMenu');
+        if (menu) {
+            menu.style.opacity = '0';
+            menu.style.visibility = 'hidden';
+            menu.style.transform = 'translateY(10px)';
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('selectedLanguage', langCode);
+        localStorage.setItem('selectedLanguageLabel', langLabel);
+        
+        // Call the actual translation function if it exists
+        if (typeof changeLanguage === 'function') {
+            changeLanguage(langCode);
+        }
+    };
+    
+    // Select from Mobile
+    window.selectLanguageFromMobile = function(select) {
+        const langCode = select.value;
+        const option = select.options[select.selectedIndex];
+        const langLabel = option.getAttribute('data-label') || langCode.toUpperCase();
+        
+        // Update header display
+        const langText = document.getElementById('currentLangText');
+        if (langText) langText.textContent = langLabel;
+        
+        // Save to localStorage
+        localStorage.setItem('selectedLanguage', langCode);
+        localStorage.setItem('selectedLanguageLabel', langLabel);
+        
+        // Call the actual translation function if it exists
+        if (typeof changeLanguage === 'function') {
+            changeLanguage(langCode);
+        }
+    };
+    
+    // Restore saved language on load
+    function restoreSavedLanguage() {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        const savedLabel = localStorage.getItem('selectedLanguageLabel');
+        
+        if (savedLang && savedLabel) {
+            const langText = document.getElementById('currentLangText');
+            if (langText) langText.textContent = savedLabel;
+            
+            const mobileSelector = document.getElementById('mobileLangSelector');
+            if (mobileSelector) mobileSelector.value = savedLang;
+        }
+    }
+    
+    // Run on load
+    setTimeout(restoreSavedLanguage, 100);
 
 })();
