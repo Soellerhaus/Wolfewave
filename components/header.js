@@ -422,6 +422,30 @@
                 </div>
 
                 <a href="performance.html" class="nav-link ${isActive('performance.html')}">📊 Performance</a>
+
+                <!-- Language Selector -->
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-toggle">
+                        🌐 DE
+                        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 4l4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div class="nav-dropdown-menu" style="min-width: 140px;">
+                        <div class="nav-dropdown-item" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('en')">🇬🇧 English</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('es')">🇪🇸 Español</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('pt')">🇵🇹 Português</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+                        <div class="nav-dropdown-item" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
+                    </div>
+                </div>
             </nav>
 
             <div class="header-actions" id="headerActions">
@@ -446,6 +470,22 @@
             <a href="scanner-erklaerung.html" class="mobile-nav-link ${isActive('scanner-erklaerung.html')}">🔍 Scanner</a>
             <a href="maerkte.html" class="mobile-nav-link ${isActive('maerkte.html')}">🌍 Märkte</a>
             <a href="faq.html" class="mobile-nav-link ${isActive('faq.html')}">❓ FAQ</a>
+
+            <div class="mobile-nav-section">🌐 Sprache / Language</div>
+            <select id="mobileLangSelector" onchange="changeLanguage(this.value)" style="width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 8px; color: #fff; font-size: 14px;">
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh-CN">🇨🇳 中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+            </select>
 
             <div class="mobile-header-actions" id="mobileHeaderActions">
                 <button class="header-btn header-btn-outline" onclick="showLogin()">Login</button>
