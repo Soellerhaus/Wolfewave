@@ -11,7 +11,7 @@
     // Auf Unterseiten leiten Login/Premium zur index.html weiter.
     
     window.toggleMobileMenu = function() {
-        var menu = document.getElementById('mobileMenu');
+        var menu = document.getElementById('wwsMobileMenu');
         if (!menu) return;
         if (menu.classList.contains('open')) {
             menu.classList.remove('open');
@@ -54,9 +54,10 @@
         };
     }
     
-    // Header CSS
-    const headerStyles = `
-        <style>
+    // Header CSS - in <head> injizieren für maximale Kompatibilität
+    const styleEl = document.createElement('style');
+    styleEl.id = 'header-component-styles';
+    styleEl.textContent = `
         /* ==================== HEADER STYLES ==================== */
         .site-header {
             position: fixed;
@@ -372,7 +373,7 @@
             pointer-events: none;
         }
 
-        .mobile-menu {
+        .wws-mobile-menu {
             display: none;
             position: fixed;
             top: 70px;
@@ -386,11 +387,11 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .mobile-menu.open {
+        .wws-mobile-menu.open {
             display: block !important;
         }
 
-        .mobile-nav-link {
+        .wws-mobile-nav-link {
             display: block;
             color: rgba(255,255,255,0.8);
             text-decoration: none;
@@ -399,12 +400,12 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .mobile-nav-link:hover,
-        .mobile-nav-link.active {
+        .wws-mobile-nav-link:hover,
+        .wws-mobile-nav-link.active {
             color: var(--accent-green, #00ff88);
         }
 
-        .mobile-nav-section {
+        .wws-mobile-nav-section {
             color: rgba(255,255,255,0.5);
             font-size: 12px;
             text-transform: uppercase;
@@ -412,14 +413,14 @@
             letter-spacing: 1px;
         }
 
-        .mobile-header-actions {
+        .wws-mobile-header-actions {
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .mobile-header-actions .header-btn {
+        .wws-mobile-header-actions .header-btn {
             width: 100%;
             text-align: center;
             padding: 14px 20px;
@@ -452,8 +453,8 @@
         body {
             padding-top: 70px;
         }
-        </style>
     `;
+    document.head.appendChild(styleEl);
 
     // Prüfe ob Seite aktiv ist
     function isActive(page) {
@@ -469,9 +470,8 @@
         return lernenPages.includes(currentPage);
     }
 
-    // Header HTML
+    // Header HTML (ohne CSS - das ist jetzt im <head>)
     const headerHTML = `
-        ${headerStyles}
         <header class="site-header">
             <a href="index.html" class="header-logo">
                 <img src="/images/Wolf.png" alt="Wolf Logo">
@@ -535,18 +535,18 @@
             </button>
         </header>
 
-        <div class="mobile-menu" id="mobileMenu">
-            <div class="mobile-nav-section">Navigation</div>
-            <a href="index.html" class="mobile-nav-link ${isActive('index.html')}">🏠 Signale</a>
-            <a href="performance.html" class="mobile-nav-link ${isActive('performance.html')}">📊 Performance</a>
+        <div class="wws-mobile-menu" id="wwsMobileMenu">
+            <div class="wws-mobile-nav-section">Navigation</div>
+            <a href="index.html" class="wws-mobile-nav-link ${isActive('index.html')}">🏠 Signale</a>
+            <a href="performance.html" class="wws-mobile-nav-link ${isActive('performance.html')}">📊 Performance</a>
             
-            <div class="mobile-nav-section">Lernen</div>
-            <a href="wolfewaves.html" class="mobile-nav-link ${isActive('wolfewaves.html')}">📖 Tutorial</a>
-            <a href="scanner-erklaerung.html" class="mobile-nav-link ${isActive('scanner-erklaerung.html')}">🔍 Scanner</a>
-            <a href="maerkte.html" class="mobile-nav-link ${isActive('maerkte.html')}">🌍 Märkte</a>
-            <a href="faq.html" class="mobile-nav-link ${isActive('faq.html')}">❓ FAQ</a>
+            <div class="wws-mobile-nav-section">Lernen</div>
+            <a href="wolfewaves.html" class="wws-mobile-nav-link ${isActive('wolfewaves.html')}">📖 Tutorial</a>
+            <a href="scanner-erklaerung.html" class="wws-mobile-nav-link ${isActive('scanner-erklaerung.html')}">🔍 Scanner</a>
+            <a href="maerkte.html" class="wws-mobile-nav-link ${isActive('maerkte.html')}">🌍 Märkte</a>
+            <a href="faq.html" class="wws-mobile-nav-link ${isActive('faq.html')}">❓ FAQ</a>
 
-            <div class="mobile-nav-section">🌐 Sprache / Language</div>
+            <div class="wws-mobile-nav-section">🌐 Sprache / Language</div>
             <select id="mobileLangSelector" onchange="selectLanguageFromMobile(this)" style="width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 8px; color: #fff; font-size: 14px;">
                 <option value="de" data-label="DE">🇩🇪 Deutsch</option>
                 <option value="en" data-label="EN">🇬🇧 English</option>
@@ -562,7 +562,7 @@
                 <option value="tr" data-label="TR">🇹🇷 Türkçe</option>
             </select>
 
-            <div class="mobile-header-actions" id="mobileHeaderActions">
+            <div class="wws-mobile-header-actions" id="wwsMobileHeaderActions">
                 <button class="header-btn header-btn-outline" onclick="showLogin()">Login</button>
                 <button class="header-btn header-btn-primary" onclick="showCheckout()">Premium 9,99€/Monat</button>
             </div>
@@ -577,8 +577,8 @@
 
     // Schließe Menü wenn Link geklickt wird
     document.addEventListener('click', function(e) {
-        if (e.target.classList && e.target.classList.contains('mobile-nav-link')) {
-            var menu = document.getElementById('mobileMenu');
+        if (e.target.classList && e.target.classList.contains('wws-mobile-nav-link')) {
+            var menu = document.getElementById('wwsMobileMenu');
             if (menu) {
                 menu.classList.remove('open');
                 document.body.style.overflow = '';
@@ -589,7 +589,7 @@
     // Header für eingeloggten User aktualisieren
     window.updateHeaderForUser = function(user, isSubscribed, isAdmin) {
         const actions = document.getElementById('headerActions');
-        const mobileActions = document.getElementById('mobileHeaderActions');
+        const mobileActions = document.getElementById('wwsMobileHeaderActions');
         
         if (!user) {
             // Ausgeloggt
