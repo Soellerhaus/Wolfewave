@@ -834,63 +834,9 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
-    <header class="header">
-        <a href="index.html" class="logo">
-            <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
-            <div>Wolfe<span>Wave</span>Signals</div>
-        </a>
-        
-        <nav class="header-nav">
-            <a href="index.html" class="nav-link">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-text">Home</span>
-            </a>
-            <a href="wolfewaves.html" class="nav-link active">
-                <span class="nav-icon">📖</span>
-                <span class="nav-text">Tutorial</span>
-            </a>
-            <a href="scanner-erklaerung.html" class="nav-link">
-                <span class="nav-icon">🔍</span>
-                <span class="nav-text">Scanner</span>
-            </a>
-            <a href="maerkte.html" class="nav-link">
-                <span class="nav-icon">🌍</span>
-                <span class="nav-text">Märkte</span>
-            </a>
-            <a href="performance.html" class="nav-link">
-                <span class="nav-icon">📊</span>
-                <span class="nav-text">Performance</span>
-            </a>
-            <a href="faq.html" class="nav-link">
-                <span class="nav-icon">❓</span>
-                <span class="nav-text">FAQ</span>
-            </a>
-        </nav>
-        
-            <div class="nav-language-container">
-                <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
-                    🌐 <span class="language-text">DE</span>
-                </button>
-                <div class="language-dropdown" id="languageDropdown">
-                    <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
-                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
-                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-                    <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
-                    <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-                    <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
-                    <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-                    <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
-                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-                    <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
-                    <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
-                    <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
-                </div>
-            </div>
-            <div id="google_translate_element" style="display: none;"></div>
-        <a href="index.html" class="back-btn">Zu den Signalen →</a>
-    </header>
+    <!-- Modularer Header -->
+    <div id="site-header"></div>
+    <script src="/components/header.js"></script>
 
     <section class="hero">
         <h1>Was sind <span>Wolfe Waves</span>?</h1>
@@ -1443,14 +1389,9 @@
         
     </main>
 
-    <footer class="footer">
-        <a href="index.html">Home</a>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="wolfewaves.html">Was sind Wolfe Waves?</a>
-        <br><br>
-        © 2025 WolfeWaveSignals. Alle Rechte vorbehalten.
-    </footer>
+    <!-- Modularer Footer -->
+    <div id="site-footer"></div>
+    <script src="/components/footer.js"></script>
     
     <script>
         function showDiagram(type) {
