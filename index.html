@@ -1277,6 +1277,21 @@
             transform: scale(1.1);
         }
 
+        .admin-btn-featured {
+            background: rgba(255, 215, 0, 0.9);
+            color: #000;
+        }
+
+        .admin-btn-featured:hover {
+            background: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        .admin-btn-featured.is-featured {
+            background: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
         /* Admin Modal */
         .admin-modal {
             display: none;
@@ -3896,7 +3911,7 @@
                 <span>LIVE</span>
             </div>
             <button class="btn btn-outline" onclick="showLogin()">Login</button>
-            <button class="btn btn-primary" onclick="showCheckout()">🎉 Einführungsangebot 9,99€/Monat</button>
+            <button class="btn btn-primary" onclick="showCheckout()">Premium 9,99€/Monat</button>
         </div>
         <!-- Burger Menu für Mobile -->
         <button class="burger-menu" onclick="toggleMobileMenu()">
@@ -3972,6 +3987,13 @@
     <section class="hero">
         <h1 class="animate-fade-in-up animate-delay-1">Professionelle <span>Wolfe Wave</span> Signale</h1>
         
+        <!-- Risiko-Hinweis -->
+        <div class="animate-fade-in-up animate-delay-2" style="margin: 16px auto 24px; padding: 10px 20px; background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3); border-radius: 8px; max-width: 600px;">
+            <p style="color: rgba(255,255,255,0.8); font-size: 12px; margin: 0; text-align: center;">
+                ⚠️ <strong>Risikohinweis:</strong> Trading ist spekulativ. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
+            </p>
+        </div>
+        
         <!-- Hero CTA Buttons -->
         <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
             <button class="btn btn-primary btn-lg" onclick="showCheckout()">
@@ -4039,10 +4061,11 @@
                 </div>
                 
                 <div style="background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
-                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--accent-gold);">🎯 70%+ Erfolgsrate</h2>
+                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--accent-gold);">🎯 <span id="featureSuccessRate">—%</span> Erfolgsrate</h2>
                     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary);">
                         Bewährte Wolfe Wave Patterns mit nachgewiesener Performance. Jedes Signal enthält klare Entry-, 
                         Stop-Loss- und drei Take-Profit-Levels (TP1, TP2, TP3) für optimales Risikomanagement.
+                        <a href="performance.html" style="color: var(--accent-green); text-decoration: none;"> → Alle Statistiken ansehen</a>
                     </p>
                 </div>
                 
@@ -4190,7 +4213,7 @@
             🎁 Kostenlose Vorschau
             <span class="section-badge">Gratis</span>
         </div>
-        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
+        <div class="section-subtitle">— Sieh dir bis zu 6 echte Signale an</div>
     </section>
 
     <main class="main animate-fade-in-up animate-delay-5">
@@ -4247,21 +4270,9 @@
                     </div>
 
                     <div class="paywall-price">
-                        <div style="background: var(--accent-green); color: #000; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 8px; display: inline-block;">🎉 EINFÜHRUNGSANGEBOT</div>
-                        <br>
                         <span class="paywall-price-amount">9,99€</span>
                         <span class="paywall-price-period">/ Monat</span>
-                        <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; text-decoration: line-through;">Statt 19,90€</div>
-                        
-                        <!-- Countdown Timer -->
-                        <div id="offerCountdown" style="margin-top: 15px; padding: 16px; background: linear-gradient(135deg, rgba(0,255,136,0.15) 0%, rgba(0,255,136,0.08) 100%); border: 1px solid rgba(0,255,136,0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,255,136,0.1);">
-                            <div style="font-size: 11px; color: var(--accent-green); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                                <span style="font-size: 14px;">⏰</span>
-                                <span>Angebot endet in</span>
-                            </div>
-                            <div id="countdownTimer" style="font-size: 32px; font-weight: 800; color: var(--accent-green); font-family: 'Space Grotesk', monospace; letter-spacing: 4px; text-align: center; text-shadow: 0 2px 12px rgba(0,255,136,0.4), 0 0 30px rgba(0,255,136,0.2);">00T 00:00:00</div>
-                            <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 10px; text-align: center;">Danach: 19,90€/Monat</div>
-                        </div>
+                        <div style="color: var(--text-secondary); font-size: 12px; margin-top: 8px;">✓ Jederzeit kündbar</div>
                     </div>
 
                     <button class="paywall-btn" onclick="showCheckout()">
@@ -4519,6 +4530,39 @@
         🛡 Admin-Modus aktiv
     </div>
 
+    <!-- Featured Signal Modal -->
+    <div class="alert-modal" id="featuredModal" style="display: none;">
+        <div class="alert-modal-card" style="max-width: 400px;">
+            <span class="alert-modal-close" onclick="closeFeaturedModal()">✕</span>
+            <div class="alert-modal-header">
+                <div class="alert-modal-icon">⭐</div>
+                <div>
+                    <div class="alert-modal-title">Zur Vorschau hinzufügen</div>
+                    <div class="alert-modal-subtitle" id="featuredModalSubtitle">Signal auswählen</div>
+                </div>
+            </div>
+            
+            <div style="padding: 20px;">
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+                    Wähle eine Position (1-6) für dieses Signal auf der Startseite:
+                </p>
+                
+                <div id="featuredPositions" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="removeFeatured()" class="btn btn-outline" style="flex: 1; padding: 12px;">
+                        🗑️ Entfernen
+                    </button>
+                    <button onclick="closeFeaturedModal()" class="btn btn-outline" style="flex: 1; padding: 12px;">
+                        Abbrechen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Alert Modal (Glocke klicken) -->
     <div class="alert-modal" id="alertModal">
         <div class="alert-modal-card">
@@ -4617,48 +4661,7 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
 
-        // ==================== COUNTDOWN TIMER ====================
-        // Einführungsangebot endet am 1. März 2026 um 23:59:59
-        const OFFER_END_DATE = new Date('2026-03-01T23:59:59');
-        
-        function updateCountdown() {
-            const now = new Date();
-            const diff = OFFER_END_DATE - now;
-            
-            const countdownEl = document.getElementById('countdownTimer');
-            const containerEl = document.getElementById('offerCountdown');
-            
-            if (!countdownEl) return;
-            
-            if (diff <= 0) {
-                // Angebot abgelaufen
-                if (containerEl) {
-                    containerEl.innerHTML = `
-                        <div style="font-size: 12px; color: var(--accent-green); font-weight: 600;">
-                            ⏰ Einführungsangebot beendet
-                        </div>
-                        <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">
-                            Regulärer Preis: 19,90€/Monat
-                        </div>
-                    `;
-                }
-                return;
-            }
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            countdownEl.textContent = `${days}T ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            
-            // Immer grün bleiben (kein Farbwechsel mehr)
-        }
-        
-        // Countdown starten
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
+        // ==================== APP STATE ====================
         let allSignals = [];
         let completedSignals = [];
         let symbolNames = {}; // Cache für Symbol-Namen
@@ -4676,6 +4679,11 @@
         let currentAlertMarket = null;
         let currentAlertId = null;
         const MAX_ALERTS = 15;
+
+        // Featured System (Vorschau auf Startseite)
+        let featuredSignals = [];
+        let currentFeaturedSignalId = null;
+        let currentFeaturedSignalType = null;
 
         // Zoom-Steuerung
         let gridColumns = 4;
@@ -4794,6 +4802,7 @@
             updateTradingHours(); // Handelszeiten aktualisieren
             setInterval(updateTradingHours, 60000); // Jede Minute aktualisieren
             await loadSymbolNames(); // Symbol-Namen laden
+            await fetchFeaturedSignals(); // Featured Signale für Vorschau laden
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
@@ -4829,6 +4838,186 @@
         // Symbol-Name abrufen (mit Fallback auf Symbol)
         function getSymbolName(symbol) {
             return symbolNames[symbol] || symbol;
+        }
+
+        // ==================== FEATURED SIGNALS SYSTEM ====================
+        async function fetchFeaturedSignals() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/featured_signals?select=*&order=position.asc`,
+                    { headers: { 'apikey': SUPABASE_KEY } }
+                );
+                if (response.ok) {
+                    featuredSignals = await response.json();
+                    console.log(`Loaded ${featuredSignals.length} featured signals`);
+                }
+            } catch (e) {
+                console.error('Error loading featured signals:', e);
+                featuredSignals = [];
+            }
+        }
+
+        function toggleFeatured(signalId, signalType) {
+            if (!isAdmin) return;
+            
+            currentFeaturedSignalId = signalId;
+            currentFeaturedSignalType = signalType;
+            
+            // Finde Signal-Details
+            let signal = allSignals.find(s => s.wedge_id === signalId);
+            if (!signal) {
+                signal = completedSignals.find(s => s.wedge_id === signalId);
+            }
+            
+            const symbolName = signal ? getSymbolName(signal.symbol) : signalId;
+            document.getElementById('featuredModalSubtitle').textContent = symbolName;
+            
+            // Render Position-Buttons
+            renderFeaturedPositions();
+            
+            // Modal öffnen
+            document.getElementById('featuredModal').style.display = 'flex';
+        }
+
+        function renderFeaturedPositions() {
+            const container = document.getElementById('featuredPositions');
+            let html = '';
+            
+            for (let i = 1; i <= 6; i++) {
+                const existing = featuredSignals.find(f => f.position === i);
+                const isCurrentSignal = existing && existing.signal_id === currentFeaturedSignalId;
+                const isOccupied = existing && !isCurrentSignal;
+                
+                let buttonStyle = 'padding: 16px; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.2s;';
+                let buttonContent = `<div style="font-size: 24px; margin-bottom: 4px;">${i}</div>`;
+                
+                if (isCurrentSignal) {
+                    buttonStyle += 'background: var(--accent-gold); color: #000; border: 2px solid var(--accent-gold);';
+                    buttonContent += '<div style="font-size: 10px;">Aktuell</div>';
+                } else if (isOccupied) {
+                    buttonStyle += 'background: var(--bg-hover); color: var(--text-secondary); border: 2px solid var(--border-color);';
+                    // Finde Signal-Name
+                    let occSignal = allSignals.find(s => s.wedge_id === existing.signal_id) || 
+                                   completedSignals.find(s => s.wedge_id === existing.signal_id);
+                    const occName = occSignal ? getSymbolName(occSignal.symbol).substring(0, 10) : existing.signal_id.substring(0, 8);
+                    buttonContent += `<div style="font-size: 9px; opacity: 0.7;">${occName}</div>`;
+                } else {
+                    buttonStyle += 'background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--border-color);';
+                    buttonContent += '<div style="font-size: 10px; color: var(--accent-green);">Frei</div>';
+                }
+                
+                html += `<div style="${buttonStyle}" onclick="setFeaturedPosition(${i})">${buttonContent}</div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        async function setFeaturedPosition(position) {
+            if (!isAdmin || !currentFeaturedSignalId) return;
+            
+            try {
+                // Erst prüfen ob das Signal bereits featured ist
+                const existingForSignal = featuredSignals.find(f => f.signal_id === currentFeaturedSignalId);
+                
+                // Falls Signal bereits an anderer Position → alte Position löschen
+                if (existingForSignal) {
+                    await fetch(
+                        `${SUPABASE_URL}/rest/v1/featured_signals?signal_id=eq.${currentFeaturedSignalId}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                }
+                
+                // Falls Position bereits belegt → alte Position löschen
+                const existingAtPosition = featuredSignals.find(f => f.position === position);
+                if (existingAtPosition) {
+                    await fetch(
+                        `${SUPABASE_URL}/rest/v1/featured_signals?position=eq.${position}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                }
+                
+                // Neuen Eintrag erstellen
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/featured_signals`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify({
+                            signal_id: currentFeaturedSignalId,
+                            signal_type: currentFeaturedSignalType,
+                            position: position,
+                            added_by: currentUser?.email || 'admin'
+                        })
+                    }
+                );
+                
+                if (response.ok) {
+                    await fetchFeaturedSignals();
+                    renderFeaturedPositions();
+                    renderSignals(); // Vorschau aktualisieren
+                    closeFeaturedModal();
+                    alert(`Signal auf Position ${position} gesetzt!`);
+                } else {
+                    const error = await response.json();
+                    alert('Fehler: ' + (error.message || 'Konnte Position nicht setzen'));
+                }
+            } catch (e) {
+                console.error('Error setting featured position:', e);
+                alert('Fehler beim Speichern');
+            }
+        }
+
+        async function removeFeatured() {
+            if (!isAdmin || !currentFeaturedSignalId) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/featured_signals?signal_id=eq.${currentFeaturedSignalId}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    await fetchFeaturedSignals();
+                    renderSignals();
+                    closeFeaturedModal();
+                    alert('Signal aus Vorschau entfernt!');
+                }
+            } catch (e) {
+                console.error('Error removing featured:', e);
+            }
+        }
+
+        function closeFeaturedModal() {
+            document.getElementById('featuredModal').style.display = 'none';
+            currentFeaturedSignalId = null;
+            currentFeaturedSignalType = null;
+        }
+
+        function isFeatured(signalId) {
+            return featuredSignals.some(f => f.signal_id === signalId);
         }
 
         // ==================== AUTH ====================
@@ -5262,7 +5451,7 @@
                     <span>LIVE</span>
                 </div>
                 <button class="btn btn-outline" onclick="showLogin()">Login</button>
-                <button class="btn btn-primary" onclick="showCheckout()">🎉 Einführungsangebot 9,99€/Monat</button>
+                <button class="btn btn-primary" onclick="showCheckout()">Premium 9,99€/Monat</button>
             `;
             
             document.getElementById('tabsSection').classList.remove('visible');
@@ -5641,6 +5830,10 @@
             // Mobile Menu Success Rate aktualisieren
             const mobileSuccessRate = document.querySelector('#mobileSuccessRate .success-value');
             if(mobileSuccessRate) mobileSuccessRate.textContent = rate + '%';
+            
+            // Feature-Box Success Rate aktualisieren
+            const featureRate = document.getElementById('featureSuccessRate');
+            if(featureRate) featureRate.textContent = rate + '%';
         }
         
         // Mobile Search Handler
@@ -5731,6 +5924,44 @@
         }
 
         function getPreviewSignals() {
+            // Wenn Featured Signale vorhanden, diese verwenden
+            if (featuredSignals.length > 0) {
+                const preview = [];
+                
+                // Sortiert nach Position (1-6)
+                const sortedFeatured = [...featuredSignals].sort((a, b) => a.position - b.position);
+                
+                for (const featured of sortedFeatured) {
+                    let signal = null;
+                    
+                    if (featured.signal_type === 'active') {
+                        signal = allSignals.find(s => s.wedge_id === featured.signal_id);
+                    } else {
+                        signal = completedSignals.find(s => s.wedge_id === featured.signal_id);
+                    }
+                    
+                    // Nur hinzufügen wenn Signal noch existiert
+                    if (signal) {
+                        // Markiere ob es ein completed Signal ist für spezielle Darstellung
+                        signal._isFeaturedCompleted = featured.signal_type === 'completed';
+                        preview.push(signal);
+                    }
+                }
+                
+                // Wenn weniger als gewünscht, mit neuesten auffüllen (bis zu 6)
+                if (preview.length < 6) {
+                    for (const signal of allSignals) {
+                        if (preview.length >= 6) break;
+                        if (!preview.some(p => p.id === signal.id || p.wedge_id === signal.wedge_id)) {
+                            preview.push(signal);
+                        }
+                    }
+                }
+                
+                return preview.slice(0, 6);
+            }
+            
+            // Fallback: alte Logik (3 Signale aus verschiedenen Märkten)
             const preview = [];
             for (const market of PREVIEW_MARKETS) {
                 const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
@@ -5822,8 +6053,10 @@
             }
             
             // Admin controls (nur für Admins sichtbar)
+            const signalIsFeatured = isFeatured(signal.wedge_id);
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
+                    <button class="admin-btn admin-btn-featured ${signalIsFeatured ? 'is-featured' : ''}" onclick="event.stopPropagation(); toggleFeatured('${signal.wedge_id}', 'active')" title="${signalIsFeatured ? 'In Vorschau (klicken zum Ändern)' : 'Zur Vorschau hinzufügen'}">⭐</button>
                     <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✓</button>
                     <button class="admin-btn admin-btn-blacklist" data-blacklist-signal="${signal.id}" data-wedge-id="${signal.wedge_id || ''}" title="Blacklist (nie wieder anzeigen)">🚫</button>
                     <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
@@ -5906,8 +6139,10 @@
             }
             
             // Admin controls for completed signals - ENHANCED
+            const signalIsFeatured = isFeatured(signal.wedge_id);
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px; flex-direction: column; gap: 4px;">
+                    <button class="admin-btn admin-btn-featured ${signalIsFeatured ? 'is-featured' : ''}" onclick="event.stopPropagation(); toggleFeatured('${signal.wedge_id}', 'completed')" title="${signalIsFeatured ? 'In Vorschau (klicken zum Ändern)' : 'Zur Vorschau hinzufügen'}">⭐</button>
                     <button class="admin-btn admin-btn-primary" onclick="event.stopPropagation(); openEditSignalModal('${signal.id}')" title="TP/SL manuell bearbeiten">✏️</button>
                     <button class="admin-btn admin-btn-success" onclick="event.stopPropagation(); openPhotoManager('${signal.wedge_id}')" title="Fotos verwalten">📸</button>
                     <button class="admin-btn admin-btn-blacklist" onclick="event.stopPropagation(); fixResultStatus('${signal.id}')" title="Ergebnis fixieren">🔒</button>
