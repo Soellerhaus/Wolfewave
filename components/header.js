@@ -185,6 +185,10 @@
         }
 
         /* User Menu (eingeloggt) */
+        .header-user-container {
+            position: relative;
+        }
+
         .header-user {
             display: flex;
             align-items: center;
@@ -193,7 +197,10 @@
             background: rgba(255,255,255,0.05);
             border-radius: 8px;
             cursor: pointer;
-            position: relative;
+        }
+
+        .header-user:hover {
+            background: rgba(255,255,255,0.1);
         }
 
         .header-user-avatar {
@@ -228,6 +235,56 @@
             color: var(--accent-green, #00ff88);
             text-transform: uppercase;
             font-weight: 600;
+        }
+
+        /* User Dropdown */
+        .header-user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 220px;
+            background: rgba(20, 20, 20, 0.98);
+            border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            border-radius: 12px;
+            padding: 8px;
+            margin-top: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 1001;
+        }
+
+        .header-user-container:hover .header-user-dropdown,
+        .header-user-container.open .header-user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .header-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .header-dropdown-item:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .header-dropdown-divider {
+            height: 1px;
+            background: var(--border-color, rgba(255,255,255,0.1));
+            margin: 8px 0;
         }
 
         /* Mobile Menu */
@@ -422,7 +479,12 @@
                 <button class="header-btn header-btn-primary" onclick="showCheckout()">Premium 9,99€</button>
             `;
             if (actions) actions.innerHTML = guestHTML;
-            if (mobileActions) mobileActions.innerHTML = guestHTML.replace(/header-btn /g, 'header-btn ');
+            if (mobileActions) {
+                mobileActions.innerHTML = `
+                    <button class="header-btn header-btn-outline" onclick="showLogin()">Login</button>
+                    <button class="header-btn header-btn-primary" onclick="showCheckout()">Premium 9,99€/Monat</button>
+                `;
+            }
             return;
         }
 
@@ -431,23 +493,42 @@
         const badge = isAdmin ? 'Admin' : (isSubscribed ? 'Premium' : 'Free');
         
         const userHTML = `
-            <div class="header-user" onclick="toggleUserMenu()">
-                <div class="header-user-avatar">${initial}</div>
-                <div class="header-user-info">
-                    <span class="header-user-email">${user.email}</span>
-                    <span class="header-user-badge">${badge}</span>
+            <div class="header-user-container">
+                <div class="header-user">
+                    <div class="header-user-avatar">${initial}</div>
+                    <div class="header-user-info">
+                        <span class="header-user-email">${user.email}</span>
+                        <span class="header-user-badge">${badge}</span>
+                    </div>
+                </div>
+                <div class="header-user-dropdown">
+                    ${(isSubscribed || isAdmin) ? '<div class="header-dropdown-item" onclick="showMyAlerts()">🔔 Meine Alarme</div>' : ''}
+                    ${(isSubscribed || isAdmin) ? '<div class="header-dropdown-item" onclick="openTelegramConnect()">📱 Telegram verbinden</div>' : ''}
+                    ${(isSubscribed || isAdmin) ? '<div class="header-dropdown-divider"></div>' : ''}
+                    ${isSubscribed ? '<div class="header-dropdown-item" onclick="manageSubscription()">💳 Abo verwalten</div>' : '<div class="header-dropdown-item" onclick="showCheckout()">⭐ Premium werden</div>'}
+                    <div class="header-dropdown-divider"></div>
+                    <div class="header-dropdown-item" onclick="handleLogout()">🚪 Ausloggen</div>
                 </div>
             </div>
         `;
         
         if (actions) actions.innerHTML = userHTML;
         
+        // Mobile
         const mobileUserHTML = `
             <div style="padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 12px;">
-                <div style="font-size: 14px; color: #fff;">${user.email}</div>
-                <div style="font-size: 12px; color: var(--accent-green); margin-top: 4px;">${badge}</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-green); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000;">${initial}</div>
+                    <div>
+                        <div style="font-size: 14px; color: #fff;">${user.email}</div>
+                        <div style="font-size: 12px; color: var(--accent-green); margin-top: 2px;">${badge}</div>
+                    </div>
+                </div>
             </div>
-            <button class="header-btn header-btn-outline" onclick="logout()" style="width: 100%;">Ausloggen</button>
+            ${(isSubscribed || isAdmin) ? '<button class="header-btn header-btn-outline" onclick="showMyAlerts()" style="width: 100%; margin-bottom: 8px;">🔔 Meine Alarme</button>' : ''}
+            ${(isSubscribed || isAdmin) ? '<button class="header-btn header-btn-outline" onclick="openTelegramConnect()" style="width: 100%; margin-bottom: 8px;">📱 Telegram verbinden</button>' : ''}
+            ${isSubscribed ? '<button class="header-btn header-btn-outline" onclick="manageSubscription()" style="width: 100%; margin-bottom: 8px;">💳 Abo verwalten</button>' : '<button class="header-btn header-btn-primary" onclick="showCheckout()" style="width: 100%; margin-bottom: 8px;">⭐ Premium werden</button>'}
+            <button class="header-btn header-btn-outline" onclick="handleLogout()" style="width: 100%;">🚪 Ausloggen</button>
         `;
         if (mobileActions) mobileActions.innerHTML = mobileUserHTML;
     };
