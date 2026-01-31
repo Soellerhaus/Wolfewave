@@ -431,14 +431,14 @@
                 <a href="performance.html" class="nav-link ${isActive('performance.html')}">📊 Performance</a>
 
                 <!-- Language Selector -->
-                <div class="nav-dropdown" id="langDropdown">
+                <div class="nav-dropdown notranslate" id="langDropdown" translate="no">
                     <button class="nav-dropdown-toggle" id="langToggle" onclick="toggleLangDropdown(event)">
                         🌐 <span id="currentLangText">DE</span>
                         <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M2 4l4 4 4-4"/>
                         </svg>
                     </button>
-                    <div class="nav-dropdown-menu" id="langMenu" style="min-width: 140px;">
+                    <div class="nav-dropdown-menu notranslate" id="langMenu" style="min-width: 140px;" translate="no">
                         <div class="nav-dropdown-item" onclick="selectLanguage('de', 'DE')">🇩🇪 Deutsch</div>
                         <div class="nav-dropdown-item" onclick="selectLanguage('en', 'EN')">🇬🇧 English</div>
                         <div class="nav-dropdown-item" onclick="selectLanguage('es', 'ES')">🇪🇸 Español</div>
@@ -664,15 +664,48 @@
         const savedLabel = localStorage.getItem('selectedLanguageLabel');
         
         if (savedLang && savedLabel) {
+            // Update header text
             const langText = document.getElementById('currentLangText');
             if (langText) langText.textContent = savedLabel;
             
+            // Update mobile selector
             const mobileSelector = document.getElementById('mobileLangSelector');
             if (mobileSelector) mobileSelector.value = savedLang;
+            
+            // If not German, trigger translation
+            if (savedLang !== 'de' && typeof changeLanguage === 'function') {
+                changeLanguage(savedLang);
+            }
         }
     }
     
-    // Run on load
+    // Protect language display from Google Translate changes
+    function protectLanguageDisplay() {
+        const savedLabel = localStorage.getItem('selectedLanguageLabel');
+        if (savedLabel) {
+            const langText = document.getElementById('currentLangText');
+            if (langText && langText.textContent !== savedLabel) {
+                langText.textContent = savedLabel;
+            }
+        }
+    }
+    
+    // Run on load with multiple retries
     setTimeout(restoreSavedLanguage, 100);
+    setTimeout(protectLanguageDisplay, 500);
+    setTimeout(protectLanguageDisplay, 1000);
+    setTimeout(protectLanguageDisplay, 2000);
+    
+    // Also watch for changes
+    const observer = new MutationObserver(function(mutations) {
+        protectLanguageDisplay();
+    });
+    
+    setTimeout(function() {
+        const langText = document.getElementById('currentLangText');
+        if (langText) {
+            observer.observe(langText, { childList: true, characterData: true, subtree: true });
+        }
+    }, 200);
 
 })();
