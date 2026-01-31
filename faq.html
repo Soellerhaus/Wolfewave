@@ -873,51 +873,9 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-inner">
-            <a href="index.html" class="logo">
-                <div class="logo-icon">
-                    <img src="wolf.png" alt="WolfeWaveSignals Logo" width="40" height="40">
-                </div>
-                <span class="logo-text"><span class="green">Wolfe</span>Wave<span class="green">Signals</span></span>
-            </a>
-            <div class="nav-language-container">
-                <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
-                    🌐 <span class="language-text">DE</span>
-                </button>
-                <div class="language-dropdown" id="languageDropdown">
-                    <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
-                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
-                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-                    <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
-                    <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-                    <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
-                    <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-                    <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
-                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-                    <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
-                    <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
-                    <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
-                </div>
-            </div>
-            <div id="google_translate_element" style="display: none;"></div>
-            <nav class="nav" id="mainNav">
-                <a href="index.html">📊 Signale</a>
-                <a href="https://www.wolfewavesignals.com/wolfewaves.html">📖 Tutorial</a>
-                <a href="https://www.wolfewavesignals.com/scanner-erklaerung.html">🔍 Scanner</a>
-                <a href="https://www.wolfewavesignals.com/maerkte.html">🌍 Märkte</a>
-                <a href="faq.html" class="active">FAQ</a>
-            </nav>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menü öffnen">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
+    <!-- Modularer Header -->
+    <div id="site-header"></div>
+    <script src="/components/header.js"></script>
 
     <!-- HERO -->
     <section class="hero">
@@ -1310,23 +1268,9 @@
 
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-brand-icon">
-                    <img src="wolf.png" alt="WolfeWaveSignals" width="32" height="32">
-                </div>
-                <span>© 2025 WolfeWaveSignals. Alle Rechte vorbehalten.</span>
-            </div>
-            <div class="footer-links">
-                <a href="impressum.html">Impressum</a>
-                <a href="datenschutz.html">Datenschutz</a>
-                <a href="agb.html">AGB</a>
-                <a href="kontakt.html">Kontakt</a>
-            </div>
-        </div>
-    </footer>
+    <!-- Modularer Footer -->
+    <div id="site-footer"></div>
+    <script src="/components/footer.js"></script>
 
     <script>
         function toggleFaq(element) {
