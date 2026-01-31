@@ -36,57 +36,8 @@
         }
 
         /* Header */
-        .header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: rgba(12, 12, 12, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 22px;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-        }
-
-        .logo-icon img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-
-        .logo span {
-            color: var(--accent-green);
-        }
-
-        .back-btn {
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .back-btn:hover {
+        /* old header/footer styles removed */
+.back-btn:hover {
             border-color: var(--accent-green);
             color: var(--accent-green);
         }
@@ -184,9 +135,7 @@
             margin-bottom: 8px;
         }
 
-        .stat-value.green {
-            color: var(--accent-green);
-        }
+        .stat-value/* removed old header/footer style */
 
         .stat-value.gold {
             color: var(--accent-gold);
@@ -489,9 +438,7 @@
 
         /* Mobile */
         @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
+            /* removed old header/footer style */
 
             .hero {
                 padding: 40px 20px 20px;
