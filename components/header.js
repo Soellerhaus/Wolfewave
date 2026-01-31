@@ -388,7 +388,15 @@
 
             .header-burger {
                 display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
             }
+        }
+
+        /* Override alte Seiten-Styles */
+        .header:not(.site-header) {
+            display: none !important;
         }
 
         /* Body Padding für fixed Header */
