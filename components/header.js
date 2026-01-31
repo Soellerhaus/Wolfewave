@@ -299,18 +299,28 @@
             display: none;
             flex-direction: column;
             gap: 5px;
-            padding: 10px;
+            padding: 14px 10px;
             background: none;
             border: none;
             cursor: pointer;
+            z-index: 1002;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            position: relative;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
+            justify-content: center;
         }
 
         .header-burger span {
+            display: block;
             width: 24px;
             height: 2px;
             background: #fff;
             border-radius: 2px;
             transition: all 0.3s;
+            pointer-events: none;
         }
 
         .mobile-menu {
@@ -322,12 +332,13 @@
             bottom: 0;
             background: rgba(10, 10, 10, 0.98);
             padding: 20px;
-            z-index: 999;
+            z-index: 1001;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .mobile-menu.open {
-            display: block;
+            display: block !important;
         }
 
         .mobile-nav-link {
@@ -368,15 +379,15 @@
         /* Responsive */
         @media (max-width: 900px) {
             .header-nav {
-                display: none;
+                display: none !important;
             }
             
             .header-actions {
-                display: none;
+                display: none !important;
             }
 
             .header-burger {
-                display: flex;
+                display: flex !important;
             }
         }
 
@@ -510,9 +521,55 @@
     // Mobile Menu Toggle
     window.toggleMobileMenu = function() {
         const menu = document.getElementById('mobileMenu');
-        menu.classList.toggle('open');
-        document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+        if (!menu) return;
+        
+        const isOpen = menu.classList.contains('open');
+        if (isOpen) {
+            menu.classList.remove('open');
+            document.body.style.overflow = '';
+        } else {
+            menu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
     };
+    
+    // Burger-Button: Click + Touch robust binden
+    setTimeout(function() {
+        const burger = document.querySelector('.header-burger');
+        if (!burger) return;
+        
+        // Entferne onclick um Doppel-Aufruf zu vermeiden
+        burger.removeAttribute('onclick');
+        
+        let touchHandled = false;
+        
+        burger.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            touchHandled = true;
+            toggleMobileMenu();
+        }, { passive: false });
+        
+        burger.addEventListener('click', function(e) {
+            // Nur wenn kein Touch (Desktop)
+            if (!touchHandled) {
+                toggleMobileMenu();
+            }
+            touchHandled = false;
+        });
+    }, 50);
+
+    // Schließe Menü wenn Link geklickt wird
+    setTimeout(function() {
+        document.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                const menu = document.getElementById('mobileMenu');
+                if (menu) {
+                    menu.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    }, 100);
 
     // Header für eingeloggten User aktualisieren
     window.updateHeaderForUser = function(user, isSubscribed, isAdmin) {
