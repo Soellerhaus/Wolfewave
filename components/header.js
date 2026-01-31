@@ -4,6 +4,55 @@
 (function() {
     // Aktuelle Seite ermitteln für Active-State
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const isIndexPage = (currentPage === '' || currentPage === 'index.html');
+
+    // ==================== GLOBALE FUNKTIONEN ====================
+    // Diese müssen SOFORT definiert werden, bevor onclick im HTML sie aufruft.
+    // Auf Unterseiten leiten Login/Premium zur index.html weiter.
+    
+    window.toggleMobileMenu = function() {
+        var menu = document.getElementById('mobileMenu');
+        if (!menu) return;
+        if (menu.classList.contains('open')) {
+            menu.classList.remove('open');
+            document.body.style.overflow = '';
+        } else {
+            menu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    // Fallbacks für Funktionen die nur in index.html existieren
+    if (typeof window.showLogin === 'undefined') {
+        window.showLogin = function() {
+            window.location.href = 'index.html#login';
+        };
+    }
+    if (typeof window.showCheckout === 'undefined') {
+        window.showCheckout = function() {
+            window.location.href = 'index.html#premium';
+        };
+    }
+    if (typeof window.handleLogout === 'undefined') {
+        window.handleLogout = function() {
+            window.location.href = 'index.html#logout';
+        };
+    }
+    if (typeof window.showMyAlerts === 'undefined') {
+        window.showMyAlerts = function() {
+            window.location.href = 'index.html#alerts';
+        };
+    }
+    if (typeof window.openTelegramConnect === 'undefined') {
+        window.openTelegramConnect = function() {
+            window.location.href = 'index.html#telegram';
+        };
+    }
+    if (typeof window.manageSubscription === 'undefined') {
+        window.manageSubscription = function() {
+            window.location.href = 'index.html#subscription';
+        };
+    }
     
     // Header CSS
     const headerStyles = `
@@ -525,20 +574,6 @@
     if (headerContainer) {
         headerContainer.innerHTML = headerHTML;
     }
-
-    // Mobile Menu Toggle
-    window.toggleMobileMenu = function() {
-        var menu = document.getElementById('mobileMenu');
-        if (!menu) return;
-        
-        if (menu.classList.contains('open')) {
-            menu.classList.remove('open');
-            document.body.style.overflow = '';
-        } else {
-            menu.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-    };
 
     // Schließe Menü wenn Link geklickt wird
     document.addEventListener('click', function(e) {
