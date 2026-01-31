@@ -658,13 +658,9 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <a href="index.html" class="logo">
-            <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
-            <div>Wolfe<span>Wave</span>Signals</div>
-        </a>
-        <a href="index.html" class="back-btn">← Zurück zu Signalen</a>
-    </header>
+    <!-- Modularer Header -->
+    <div id="site-header"></div>
+    <script src="/components/header.js"></script>
 
     <section class="hero">
         <h1>Performance <span>Statistiken</span></h1>
@@ -1635,5 +1631,9 @@
             return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
         }
     </script>
+
+    <!-- Modularer Footer -->
+    <div id="site-footer"></div>
+    <script src="/components/footer.js"></script>
 </body>
 </html>
