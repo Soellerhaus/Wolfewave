@@ -3720,6 +3720,16 @@
                         <span class="paywall-price-amount">9,99€</span>
                         <span class="paywall-price-period">/ Monat</span>
                         <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; text-decoration: line-through;">Statt 19,90€</div>
+                        
+                        <!-- Countdown Timer -->
+                        <div id="offerCountdown" style="margin-top: 15px; padding: 16px; background: linear-gradient(135deg, rgba(0,255,136,0.15) 0%, rgba(0,255,136,0.08) 100%); border: 1px solid rgba(0,255,136,0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,255,136,0.1);">
+                            <div style="font-size: 11px; color: var(--accent-green); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <span style="font-size: 14px;">⏰</span>
+                                <span>Angebot endet in</span>
+                            </div>
+                            <div id="countdownTimer" style="font-size: 32px; font-weight: 800; color: var(--accent-green); font-family: 'Space Grotesk', monospace; letter-spacing: 4px; text-align: center; text-shadow: 0 2px 12px rgba(0,255,136,0.4), 0 0 30px rgba(0,255,136,0.2);">00T 00:00:00</div>
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 10px; text-align: center;">Danach: 19,90€/Monat</div>
+                        </div>
                     </div>
 
                     <button class="paywall-btn" onclick="showCheckout()">
@@ -4073,6 +4083,47 @@
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
 
         // ==================== COUNTDOWN TIMER ====================
+        // Einführungsangebot endet am 1. März 2026 um 23:59:59
+        const OFFER_END_DATE = new Date('2026-03-01T23:59:59');
+        
+        function updateCountdown() {
+            const now = new Date();
+            const diff = OFFER_END_DATE - now;
+            
+            const countdownEl = document.getElementById('countdownTimer');
+            const containerEl = document.getElementById('offerCountdown');
+            
+            if (!countdownEl) return;
+            
+            if (diff <= 0) {
+                // Angebot abgelaufen
+                if (containerEl) {
+                    containerEl.innerHTML = `
+                        <div style="font-size: 12px; color: var(--accent-green); font-weight: 600;">
+                            ⏰ Einführungsangebot beendet
+                        </div>
+                        <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">
+                            Regulärer Preis: 19,90€/Monat
+                        </div>
+                    `;
+                }
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            countdownEl.textContent = `${days}T ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Immer grün bleiben (kein Farbwechsel mehr)
+        }
+        
+        // Countdown starten
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
         let allSignals = [];
         let completedSignals = [];
         let currentUser = null;
@@ -4439,14 +4490,15 @@
             }
         }
 
-        window.handleLogout = function handleLogout() {
+        function handleLogout() {
+            clearTokens();
             currentUser = null;
             isSubscribed = false;
             isAdmin = false;
             currentTab = 'all';
             updateUIForGuest();
             renderSignals();
-        };
+        }
 
         // ==================== UI UPDATES ====================
         function updateUIForUser() {
@@ -4551,11 +4603,12 @@
             `;
         }
 
-        window.toggleUserMenu = function toggleUserMenu() {
+        function toggleUserMenu() {
+            document.querySelector('.user-menu-container').classList.toggle('open');
             
             // Load notification preference when menu opens
             loadEmailNotificationPreference();
-        };
+        }
         
         // ==================== EMAIL NOTIFICATIONS FOR PENDING → ACTIVE ====================
         
@@ -4583,7 +4636,7 @@
             }
         }
         
-        window.toggleEmailNotifications = async function toggleEmailNotifications(enabled) {
+        async function toggleEmailNotifications(enabled) {
             if (!currentUser) return;
             
             try {
@@ -4620,7 +4673,7 @@
                 const toggle = document.getElementById('emailNotificationToggle');
                 if (toggle) toggle.checked = !enabled;
             }
-        };
+        }
         
         function toggleLanguageMenu() {
             const dropdown = document.getElementById('languageDropdown');
@@ -4788,14 +4841,14 @@
         }
         
         // Mobile Search Handler
-        window.handleMobileSearch = function handleMobileSearch(value) {
+        function handleMobileSearch(value) {
             const desktopSearch = document.getElementById('searchSymbol');
             if (desktopSearch) {
                 desktopSearch.value = value;
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(renderSignals, 300);
             }
-        };
+        }
 
         // ==================== RENDERING ====================
         function renderSignals() {
@@ -5372,7 +5425,8 @@
         }
         
         // Meine Alarme anzeigen
-        window.showMyAlerts = function showMyAlerts() {
+        function showMyAlerts() {
+            const list = document.getElementById('myAlertsList');
             document.getElementById('myAlertsCount').textContent = userAlerts.length;
             
             if (userAlerts.length === 0) {
@@ -5412,7 +5466,7 @@
             document.getElementById('myAlertsModal').classList.add('active');
             // User dropdown schließen
             document.querySelector('.user-menu-container')?.classList.remove('open');
-        };
+        }
         
         function closeMyAlertsModal() {
             document.getElementById('myAlertsModal').classList.remove('active');
@@ -5558,10 +5612,10 @@
         }
 
         // ==================== MODALS ====================
-        window.showLogin = function showLogin() {
+        function showLogin() {
             toggleAuthForm('login');
             document.getElementById('authModal').classList.add('active');
-        };
+        }
 
         function toggleAuthForm(form) {
             document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
@@ -6769,10 +6823,11 @@ USING (
         // Diese hat die KORREKTE Price ID: price_1SsQnR2OhtqoguwQnrWvqqeHY
         // JWT Verification muss in Supabase DEAKTIVIERT sein!
         // ==================== CHECKOUT CONFIRMATION MODAL ====================
-        window.showCheckout = function showCheckout() {
+        function showCheckout() {
+            if (!currentUser) {
                 showLogin();
                 return;
-            };
+            }
             
             // Show confirmation modal
             document.getElementById('checkoutConfirmModal').classList.add('active');
@@ -6853,10 +6908,11 @@ USING (
         }
 
         // ==================== ABO VERWALTEN (Stripe Customer Portal) ====================
-        window.manageSubscription = async function manageSubscription() {
+        async function manageSubscription() {
+            if (!currentUser) {
                 showLogin();
                 return;
-            };
+            }
             
             try {
                 showToast('⏳ Lade Abo-Verwaltung...', 'success');
