@@ -8008,4 +8008,10 @@ USING (
             checkCookieConsent();
             
             // Wenn abgelehnt, Analytics deaktivieren
-            if (localStorage
+            if (localStorage.getItem('cookieConsent') === 'necessary') {
+                window['ga-disable-G-F3BQLK365X'] = true;
+            }
+        });
+    </script>
+</body>
+</html>
