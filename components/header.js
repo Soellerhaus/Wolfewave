@@ -582,6 +582,19 @@
 
     // ==================== LANGUAGE FUNCTIONS ====================
     
+    // Google Translate changeLanguage function (if not already defined)
+    if (typeof window.changeLanguage === 'undefined') {
+        window.changeLanguage = function(lang) {
+            // Set Google Translate cookie
+            var domain = window.location.hostname;
+            document.cookie = "googtrans=/de/" + lang + "; path=/; domain=" + domain;
+            document.cookie = "googtrans=/de/" + lang + "; path=/";
+            
+            // Reload to apply translation
+            window.location.reload();
+        };
+    }
+    
     // Toggle Language Dropdown (Click statt Hover)
     window.toggleLangDropdown = function(event) {
         event.stopPropagation();
@@ -628,13 +641,26 @@
             menu.style.transform = 'translateY(10px)';
         }
         
+        // Get current saved language
+        const currentLang = localStorage.getItem('selectedLanguage') || 'de';
+        
         // Save to localStorage
         localStorage.setItem('selectedLanguage', langCode);
         localStorage.setItem('selectedLanguageLabel', langLabel);
         
-        // Call the actual translation function if it exists
-        if (typeof changeLanguage === 'function') {
-            changeLanguage(langCode);
+        // Only reload if language actually changed
+        if (langCode !== currentLang) {
+            // Set Google Translate cookie
+            var domain = window.location.hostname;
+            if (langCode === 'de') {
+                // Reset to German - clear cookies
+                document.cookie = "googtrans=; path=/; domain=" + domain + "; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            } else {
+                document.cookie = "googtrans=/de/" + langCode + "; path=/; domain=" + domain;
+                document.cookie = "googtrans=/de/" + langCode + "; path=/";
+            }
+            window.location.reload();
         }
     };
     
@@ -644,68 +670,39 @@
         const option = select.options[select.selectedIndex];
         const langLabel = option.getAttribute('data-label') || langCode.toUpperCase();
         
-        // Update header display
-        const langText = document.getElementById('currentLangText');
-        if (langText) langText.textContent = langLabel;
-        
-        // Save to localStorage
-        localStorage.setItem('selectedLanguage', langCode);
-        localStorage.setItem('selectedLanguageLabel', langLabel);
-        
-        // Call the actual translation function if it exists
-        if (typeof changeLanguage === 'function') {
-            changeLanguage(langCode);
-        }
+        // Use the same logic as desktop
+        selectLanguage(langCode, langLabel);
     };
     
     // Restore saved language on load
     function restoreSavedLanguage() {
-        const savedLang = localStorage.getItem('selectedLanguage');
-        const savedLabel = localStorage.getItem('selectedLanguageLabel');
+        const savedLang = localStorage.getItem('selectedLanguage') || 'de';
+        const savedLabel = localStorage.getItem('selectedLanguageLabel') || 'DE';
         
-        if (savedLang && savedLabel) {
-            // Update header text
-            const langText = document.getElementById('currentLangText');
-            if (langText) langText.textContent = savedLabel;
-            
-            // Update mobile selector
-            const mobileSelector = document.getElementById('mobileLangSelector');
-            if (mobileSelector) mobileSelector.value = savedLang;
-            
-            // If not German, trigger translation
-            if (savedLang !== 'de' && typeof changeLanguage === 'function') {
-                changeLanguage(savedLang);
-            }
-        }
+        // Update header text
+        const langText = document.getElementById('currentLangText');
+        if (langText) langText.textContent = savedLabel;
+        
+        // Update mobile selector
+        const mobileSelector = document.getElementById('mobileLangSelector');
+        if (mobileSelector) mobileSelector.value = savedLang;
     }
     
     // Protect language display from Google Translate changes
     function protectLanguageDisplay() {
-        const savedLabel = localStorage.getItem('selectedLanguageLabel');
-        if (savedLabel) {
-            const langText = document.getElementById('currentLangText');
-            if (langText && langText.textContent !== savedLabel) {
-                langText.textContent = savedLabel;
-            }
+        const savedLabel = localStorage.getItem('selectedLanguageLabel') || 'DE';
+        const langText = document.getElementById('currentLangText');
+        if (langText && langText.textContent !== savedLabel) {
+            langText.textContent = savedLabel;
         }
     }
     
-    // Run on load with multiple retries
-    setTimeout(restoreSavedLanguage, 100);
-    setTimeout(protectLanguageDisplay, 500);
+    // Run on load with multiple retries to fight Google Translate
+    setTimeout(restoreSavedLanguage, 50);
+    setTimeout(protectLanguageDisplay, 300);
+    setTimeout(protectLanguageDisplay, 600);
     setTimeout(protectLanguageDisplay, 1000);
     setTimeout(protectLanguageDisplay, 2000);
-    
-    // Also watch for changes
-    const observer = new MutationObserver(function(mutations) {
-        protectLanguageDisplay();
-    });
-    
-    setTimeout(function() {
-        const langText = document.getElementById('currentLangText');
-        if (langText) {
-            observer.observe(langText, { childList: true, characterData: true, subtree: true });
-        }
-    }, 200);
+    setTimeout(protectLanguageDisplay, 3000);
 
 })();
