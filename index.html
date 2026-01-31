@@ -3847,18 +3847,6 @@
     <section class="hero">
         <h1 class="animate-fade-in-up animate-delay-1">Professionelle <span>Wolfe Wave</span> Signale</h1>
         
-        <!-- Success Rate im Hero -->
-        <div class="animate-fade-in-up animate-delay-2" style="display: flex; align-items: center; justify-content: center; gap: 20px; margin: 16px auto;">
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); border-radius: 8px;">
-                <span style="color: var(--accent-green); font-weight: 700; font-size: 18px;" id="heroSuccessRate">—%</span>
-                <span style="color: rgba(255,255,255,0.7); font-size: 12px;">Success Rate</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.5); font-size: 11px;">
-                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite;"></span>
-                LIVE
-            </div>
-        </div>
-        
         <!-- Risiko-Hinweis - dezent aber sichtbar -->
         <p class="animate-fade-in-up animate-delay-2" style="margin: 12px auto 20px; color: rgba(255,255,255,0.5); font-size: 11px; text-align: center; letter-spacing: 0.3px;">
             ⚠️ Trading ist spekulativ · Vergangene Ergebnisse garantieren keine zukünftigen Gewinne
@@ -4083,7 +4071,7 @@
             🎁 Kostenlose Vorschau
             <span class="section-badge">Gratis</span>
         </div>
-        <div class="section-subtitle">— Sieh dir bis zu 6 echte Signale an</div>
+        <div class="section-subtitle">— Sieh dir 4 echte Signale an</div>
     </section>
 
     <main class="main animate-fade-in-up animate-delay-5">
@@ -5271,7 +5259,7 @@
                     🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
-                <div class="section-subtitle">— Sieh dir bis zu 6 echte Signale an</div>
+                <div class="section-subtitle">— Sieh dir 4 echte Signale an</div>
             `;
         }
 
@@ -5652,7 +5640,7 @@
             if (featuredSignals.length > 0) {
                 const preview = [];
                 
-                // Sortiert nach Position (1-6)
+                // Sortiert nach Position (1-4 für 2 Reihen)
                 const sortedFeatured = [...featuredSignals].sort((a, b) => a.position - b.position);
                 
                 for (const featured of sortedFeatured) {
@@ -5672,31 +5660,31 @@
                     }
                 }
                 
-                // Wenn weniger als gewünscht, mit neuesten auffüllen (bis zu 6)
-                if (preview.length < 6) {
+                // Wenn weniger als gewünscht, mit neuesten auffüllen (bis zu 4 für 2 Reihen)
+                if (preview.length < 4) {
                     for (const signal of allSignals) {
-                        if (preview.length >= 6) break;
+                        if (preview.length >= 4) break;
                         if (!preview.some(p => p.id === signal.id || p.wedge_id === signal.wedge_id)) {
                             preview.push(signal);
                         }
                     }
                 }
                 
-                return preview.slice(0, 6);
+                return preview.slice(0, 4);
             }
             
-            // Fallback: alte Logik (3 Signale aus verschiedenen Märkten)
+            // Fallback: 4 Signale aus verschiedenen Märkten (2 Reihen)
             const preview = [];
             for (const market of PREVIEW_MARKETS) {
                 const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
             }
-            while (preview.length < 3 && preview.length < allSignals.length) {
+            while (preview.length < 4 && preview.length < allSignals.length) {
                 const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
                 else break;
             }
-            return preview;
+            return preview.slice(0, 4);
         }
 
         function getFilteredSignals() {
@@ -8482,3 +8470,4 @@ USING (
             
             // Wenn abgelehnt, Analytics deaktivieren
             if (localStorage
+                
