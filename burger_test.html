@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Test</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --accent-green: #00ff88;
+            --border-color: rgba(255,255,255,0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255,255,255,0.6);
+        }
+        body { margin: 0; background: #0a0a0a; color: #fff; font-family: sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="site-header"></div>
+    <script src="/components/header.js"></script>
+    
+    <div style="padding: 100px 20px;">
+        <h1>Burger Test Page</h1>
+        <p>Auf dem Smartphone sollte oben rechts ein Burger-Menü (☰) erscheinen.</p>
+        <p>Klicke darauf - das Mobile-Menü sollte sich öffnen.</p>
+        
+        <div id="debug" style="margin-top: 40px; padding: 20px; background: #1a1a1a; border-radius: 8px; font-family: monospace; font-size: 12px;"></div>
+    </div>
+    
+    <script>
+        var dbg = document.getElementById('debug');
+        function log(msg) {
+            dbg.innerHTML += msg + '<br>';
+        }
+        
+        setTimeout(function() {
+            log('Window width: ' + window.innerWidth + 'px');
+            log('toggleMobileMenu exists: ' + (typeof window.toggleMobileMenu));
+            
+            var burger = document.querySelector('.header-burger');
+            if (burger) {
+                var cs = getComputedStyle(burger);
+                log('Burger found: YES');
+                log('Burger display: ' + cs.display);
+                log('Burger visibility: ' + cs.visibility);
+                log('Burger opacity: ' + cs.opacity);
+                log('Burger pointer-events: ' + cs.pointerEvents);
+                log('Burger z-index: ' + cs.zIndex);
+                log('Burger position: ' + cs.position);
+                var rect = burger.getBoundingClientRect();
+                log('Burger rect: top=' + rect.top + ' left=' + rect.left + ' width=' + rect.width + ' height=' + rect.height);
+                log('Burger onclick: ' + burger.getAttribute('onclick'));
+            } else {
+                log('Burger found: NO !!!');
+            }
+            
+            var menu = document.getElementById('wwsMobileMenu');
+            log('Mobile menu found: ' + (menu ? 'YES' : 'NO'));
+            
+            var style = document.getElementById('header-component-styles');
+            log('Style in head: ' + (style ? 'YES' : 'NO'));
+            
+            // Check if anything overlaps the burger
+            if (burger) {
+                var rect = burger.getBoundingClientRect();
+                var centerX = rect.left + rect.width / 2;
+                var centerY = rect.top + rect.height / 2;
+                var topElement = document.elementFromPoint(centerX, centerY);
+                log('Element at burger center: ' + (topElement ? topElement.tagName + '.' + topElement.className : 'null'));
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
