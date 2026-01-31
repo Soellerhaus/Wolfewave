@@ -520,11 +520,10 @@
 
     // Mobile Menu Toggle
     window.toggleMobileMenu = function() {
-        const menu = document.getElementById('mobileMenu');
+        var menu = document.getElementById('mobileMenu');
         if (!menu) return;
         
-        const isOpen = menu.classList.contains('open');
-        if (isOpen) {
+        if (menu.classList.contains('open')) {
             menu.classList.remove('open');
             document.body.style.overflow = '';
         } else {
@@ -532,44 +531,17 @@
             document.body.style.overflow = 'hidden';
         }
     };
-    
-    // Burger-Button: Click + Touch robust binden
-    setTimeout(function() {
-        const burger = document.querySelector('.header-burger');
-        if (!burger) return;
-        
-        // Entferne onclick um Doppel-Aufruf zu vermeiden
-        burger.removeAttribute('onclick');
-        
-        let touchHandled = false;
-        
-        burger.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            touchHandled = true;
-            toggleMobileMenu();
-        }, { passive: false });
-        
-        burger.addEventListener('click', function(e) {
-            // Nur wenn kein Touch (Desktop)
-            if (!touchHandled) {
-                toggleMobileMenu();
-            }
-            touchHandled = false;
-        });
-    }, 50);
 
     // Schließe Menü wenn Link geklickt wird
-    setTimeout(function() {
-        document.querySelectorAll('.mobile-nav-link').forEach(function(link) {
-            link.addEventListener('click', function() {
-                const menu = document.getElementById('mobileMenu');
-                if (menu) {
-                    menu.classList.remove('open');
-                    document.body.style.overflow = '';
-                }
-            });
-        });
-    }, 100);
+    document.addEventListener('click', function(e) {
+        if (e.target.classList && e.target.classList.contains('mobile-nav-link')) {
+            var menu = document.getElementById('mobileMenu');
+            if (menu) {
+                menu.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+    });
 
     // Header für eingeloggten User aktualisieren
     window.updateHeaderForUser = function(user, isSubscribed, isAdmin) {
