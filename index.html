@@ -3987,12 +3987,10 @@
     <section class="hero">
         <h1 class="animate-fade-in-up animate-delay-1">Professionelle <span>Wolfe Wave</span> Signale</h1>
         
-        <!-- Risiko-Hinweis -->
-        <div class="animate-fade-in-up animate-delay-2" style="margin: 16px auto 24px; padding: 10px 20px; background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3); border-radius: 8px; max-width: 600px;">
-            <p style="color: rgba(255,255,255,0.8); font-size: 12px; margin: 0; text-align: center;">
-                ⚠️ <strong>Risikohinweis:</strong> Trading ist spekulativ. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
-            </p>
-        </div>
+        <!-- Risiko-Hinweis - dezent aber sichtbar -->
+        <p class="animate-fade-in-up animate-delay-2" style="margin: 12px auto 20px; color: rgba(255,255,255,0.5); font-size: 11px; text-align: center; letter-spacing: 0.3px;">
+            ⚠️ Trading ist spekulativ · Vergangene Ergebnisse garantieren keine zukünftigen Gewinne
+        </p>
         
         <!-- Hero CTA Buttons -->
         <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
@@ -4835,9 +4833,30 @@
             }
         }
 
-        // Symbol-Name abrufen (mit Fallback auf Symbol)
+        // Symbol-Name abrufen (mit intelligentem Fallback)
         function getSymbolName(symbol) {
-            return symbolNames[symbol] || symbol;
+            if (!symbol) return 'Unbekannt';
+            
+            // Wenn Name in DB vorhanden
+            if (symbolNames[symbol]) {
+                return symbolNames[symbol];
+            }
+            
+            // Fallback: Symbol aufbereiten (z.B. "PBI.OQ" → "PBI")
+            // Entferne Suffixe wie .OQ, .N, .DE, etc.
+            let cleanSymbol = symbol.replace(/\.(OQ|N|DE|L|PA|AS|SW|MC|MI|AX|HK|T|SS|SZ|F)$/i, '');
+            
+            // Forex-Paare schön formatieren (z.B. "EURUSD" → "EUR/USD")
+            if (cleanSymbol.length === 6 && /^[A-Z]+$/.test(cleanSymbol)) {
+                const base = cleanSymbol.substring(0, 3);
+                const quote = cleanSymbol.substring(3, 6);
+                const forexPairs = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'AUD', 'NZD', 'CAD', 'HKD', 'SGD'];
+                if (forexPairs.includes(base) && forexPairs.includes(quote)) {
+                    return `${base}/${quote}`;
+                }
+            }
+            
+            return cleanSymbol;
         }
 
         // ==================== FEATURED SIGNALS SYSTEM ====================
@@ -4885,7 +4904,7 @@
             
             for (let i = 1; i <= 6; i++) {
                 const existing = featuredSignals.find(f => f.position === i);
-                const isCurrentSignal = existing && existing.signal_id === currentFeaturedSignalId;
+                const isCurrentSignal = existing && existing.wedge_id === currentFeaturedSignalId;
                 const isOccupied = existing && !isCurrentSignal;
                 
                 let buttonStyle = 'padding: 16px; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.2s;';
@@ -4897,9 +4916,9 @@
                 } else if (isOccupied) {
                     buttonStyle += 'background: var(--bg-hover); color: var(--text-secondary); border: 2px solid var(--border-color);';
                     // Finde Signal-Name
-                    let occSignal = allSignals.find(s => s.wedge_id === existing.signal_id) || 
-                                   completedSignals.find(s => s.wedge_id === existing.signal_id);
-                    const occName = occSignal ? getSymbolName(occSignal.symbol).substring(0, 10) : existing.signal_id.substring(0, 8);
+                    let occSignal = allSignals.find(s => s.wedge_id === existing.wedge_id) || 
+                                   completedSignals.find(s => s.wedge_id === existing.wedge_id);
+                    const occName = occSignal ? getSymbolName(occSignal.symbol).substring(0, 10) : existing.wedge_id.substring(0, 8);
                     buttonContent += `<div style="font-size: 9px; opacity: 0.7;">${occName}</div>`;
                 } else {
                     buttonStyle += 'background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--border-color);';
@@ -4917,12 +4936,12 @@
             
             try {
                 // Erst prüfen ob das Signal bereits featured ist
-                const existingForSignal = featuredSignals.find(f => f.signal_id === currentFeaturedSignalId);
+                const existingForSignal = featuredSignals.find(f => f.wedge_id === currentFeaturedSignalId);
                 
                 // Falls Signal bereits an anderer Position → alte Position löschen
                 if (existingForSignal) {
                     await fetch(
-                        `${SUPABASE_URL}/rest/v1/featured_signals?signal_id=eq.${currentFeaturedSignalId}`,
+                        `${SUPABASE_URL}/rest/v1/featured_signals?wedge_id=eq.${currentFeaturedSignalId}`,
                         {
                             method: 'DELETE',
                             headers: {
@@ -4960,7 +4979,7 @@
                             'Prefer': 'return=representation'
                         },
                         body: JSON.stringify({
-                            signal_id: currentFeaturedSignalId,
+                            wedge_id: currentFeaturedSignalId,
                             signal_type: currentFeaturedSignalType,
                             position: position,
                             added_by: currentUser?.email || 'admin'
@@ -4989,7 +5008,7 @@
             
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/featured_signals?signal_id=eq.${currentFeaturedSignalId}`,
+                    `${SUPABASE_URL}/rest/v1/featured_signals?wedge_id=eq.${currentFeaturedSignalId}`,
                     {
                         method: 'DELETE',
                         headers: {
@@ -5017,7 +5036,7 @@
         }
 
         function isFeatured(signalId) {
-            return featuredSignals.some(f => f.signal_id === signalId);
+            return featuredSignals.some(f => f.wedge_id === signalId);
         }
 
         // ==================== AUTH ====================
@@ -5935,9 +5954,9 @@
                     let signal = null;
                     
                     if (featured.signal_type === 'active') {
-                        signal = allSignals.find(s => s.wedge_id === featured.signal_id);
+                        signal = allSignals.find(s => s.wedge_id === featured.wedge_id);
                     } else {
-                        signal = completedSignals.find(s => s.wedge_id === featured.signal_id);
+                        signal = completedSignals.find(s => s.wedge_id === featured.wedge_id);
                     }
                     
                     // Nur hinzufügen wenn Signal noch existiert
