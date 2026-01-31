@@ -693,40 +693,9 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
-    <header class="header">
-        <a href="index.html" class="logo">
-            <div class="logo-icon"><img src="/images/Wolf.png" alt="Wolf Logo"></div>
-            <div>Wolfe<span>Wave</span>Signals</div>
-        </a>
-            <div class="nav-language-container">
-                <button class="nav-language-btn" onclick="toggleLanguageMenu()" title="Sprache wählen / Change Language">
-                    🌐 <span class="language-text">DE</span>
-                </button>
-                <div class="language-dropdown" id="languageDropdown">
-                    <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-                    <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
-                    <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
-                    <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-                    <div class="language-option" onclick="changeLanguage('it')">🇮🇹 Italiano</div>
-                    <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-                    <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-                    <div class="language-option" onclick="changeLanguage('zh-CN')">🇨🇳 中文</div>
-                    <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-                    <div class="language-option" onclick="changeLanguage('ko')">🇰🇷 한국어</div>
-                    <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-                    <div class="language-option" onclick="changeLanguage('tr')">🇹🇷 Türkçe</div>
-                    <div class="language-option" onclick="changeLanguage('pl')">🇵🇱 Polski</div>
-                    <div class="language-option" onclick="changeLanguage('nl')">🇳🇱 Nederlands</div>
-                </div>
-            </div>
-            <div id="google_translate_element" style="display: none;"></div>
-        <nav class="header-nav">
-            <a href="index.html" class="nav-link">🏠 Signale</a>
-            <a href="wolfewaves.html" class="nav-link">📖 Tutorial</a>
-            <a href="maerkte.html" class="nav-link active">🌍 Märkte</a>
-            <a href="index.html" class="btn-primary">Jetzt starten</a>
-        </nav>
-    </header>
+    <!-- Modularer Header -->
+    <div id="site-header"></div>
+    <script src="/components/header.js"></script>
 
     <section class="hero">
         <h1>🔍 Scanner <span>Universum</span></h1>
@@ -890,21 +859,9 @@
         </section>
     </main>
 
-    <footer class="footer">
-        <div style="margin-bottom: 16px;">
-            <a href="index.html">Startseite</a>
-            <a href="wolfewaves.html">Was sind Wolfe Waves?</a>
-            <a href="maerkte.html">Märkte</a>
-            <a href="impressum.html">Impressum</a>
-            <a href="datenschutz.html">Datenschutz</a>
-        </div>
-        <div style="color: var(--text-secondary); font-size: 11px;">
-            © 2025 wolfewavesignals.com — Trading-Signale für professionelle Händler<br>
-            <span style="color: #666; font-size: 10px; margin-top: 8px; display: inline-block;">
-                ⚠ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit Risiken verbunden. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne.
-            </span>
-        </div>
-    </footer>
+    <!-- Modularer Footer -->
+    <div id="site-footer"></div>
+    <script src="/components/footer.js"></script>
 
     <script>
         // All instruments data from GBE Brokers Product Specifications
