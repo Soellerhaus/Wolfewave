@@ -180,14 +180,226 @@
         .animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
 
         /* Header */
-        /* old header/mobile styles removed */
-/* Burger Menu - VERBESSERT */
-        /* old header/mobile styles removed */
-/* Mobile Menu Overlay */
-        /* old header/mobile styles removed */
-/* Mobile Menu Dropdown - MODERNISIERT */
-        /* old header/mobile styles removed */
-/* Language Selector Button */
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        .header.header-hidden {
+            transform: translateY(-100%);
+        }
+
+        /* Burger Menu - VERBESSERT */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--accent-green);
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 101;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: scale(1.05);
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 22px;
+            height: 3px;
+            background: var(--accent-green);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active {
+            background: var(--accent-green);
+        }
+
+        .burger-menu.active span {
+            background: #000;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 98;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Mobile Menu Dropdown - MODERNISIERT */
+        .mobile-menu {
+            display: flex;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            max-width: 80vw;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(12, 12, 12, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 0;
+            flex-direction: column;
+            gap: 0;
+            z-index: 99;
+            transition: right 0.3s ease;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-item {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 14px 18px;
+            margin: 0 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+        }
+
+        .mobile-menu-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .mobile-menu-item .success-value {
+            color: var(--accent-green);
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+            margin: 8px 16px;
+        }
+
+        .mobile-menu-btn {
+            width: calc(100% - 32px);
+            margin: 0 16px;
+            padding: 16px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mobile-menu-btn:hover {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .mobile-menu-btn.primary {
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            border-color: var(--accent-green);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .mobile-menu-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .logo-icon img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        /* Language Selector Button */
         .language-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
@@ -209,8 +421,46 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        /* old header/mobile styles removed */
-/* Google Translate Widget Styling */
+        .language-text {
+            font-size: 13px;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 45px;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 180px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-option:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        /* Google Translate Widget Styling */
         #google_translate_element {
             font-family: inherit;
         }
@@ -279,10 +529,96 @@
             top: 0px !important;
         }
 
-        /* old header/mobile styles removed */
-/* Language Selector in Navigation */
-        /* old header/mobile styles removed */
-@keyframes pulse {
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-left: 40px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-green);
+        }
+        
+        /* Language Selector in Navigation */
+        .nav-language-container {
+            position: relative;
+        }
+        
+        .nav-language-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: inherit;
+        }
+        
+        .nav-language-btn:hover {
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        .language-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .header-success-rate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 20px;
+            padding: 6px 14px;
+        }
+
+        .success-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .success-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(1.2); }
         }
@@ -941,6 +1277,21 @@
             transform: scale(1.1);
         }
 
+        .admin-btn-featured {
+            background: rgba(255, 215, 0, 0.9);
+            color: #000;
+        }
+
+        .admin-btn-featured:hover {
+            background: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        .admin-btn-featured.is-featured {
+            background: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
         /* Admin Modal */
         .admin-modal {
             display: none;
@@ -1351,7 +1702,7 @@
 
         .result-badge {
             position: absolute;
-            top: 16px;
+            top: 45px;
             left: 16px;
             font-size: 10px;
             font-weight: 700;
@@ -2910,16 +3261,63 @@
                 /* Visibility controlled by JS based on user status */
             }
 
-            /* old header/mobile styles removed */
-/* Burger Menu Button */
-            /* removed */
+            .header {
+                padding: 12px 16px;
+                flex-direction: row;
+                gap: 0;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .header-success-rate {
+                display: none;
+            }
+
+            .success-label {
+                display: none;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            /* Burger Menu Button */
+            .burger-menu {
+                display: flex !important;
+            }
 
             /* Mobile Menu */
-            /* old header/mobile styles removed */
+            .mobile-menu {
+                display: flex;
+            }
             
             /* Icon-only mode for very small screens */
             @media (max-width: 360px) {
-                /* old mobile menu styles removed */
+                .mobile-menu {
+                    width: 180px;
+                    padding: 16px 12px 16px !important;
+                }
+                
+                .mobile-menu-item {
+                    padding: 10px 12px;
+                    font-size: 14px;
+                    justify-content: center;
+                }
+                
+                .mobile-menu-item .menu-text {
+                    display: none;
+                }
+                
+                .mobile-menu-item .menu-icon {
+                    font-size: 20px;
+                }
+                
+                .mobile-menu-btn {
+                    font-size: 11px;
+                    padding: 10px 8px;
+                }
                 
                 /* TABS ICON-ONLY MODE */
                 .tabs {
@@ -2973,8 +3371,16 @@
                 }
             }
 
-            /* old header/mobile styles removed */
-/* Hero kompakter */
+            .logo-icon img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            /* Hero kompakter */
             .hero {
                 padding: 20px 16px !important;
             }
@@ -3434,15 +3840,17 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
-    <!-- Hidden Google Translate (for backend) -->
-    <div id="google_translate_element" style="display: none;"></div>
-    
+    <!-- Mobile Menu Overlay -->
     <!-- Modularer Header -->
     <div id="site-header"></div>
-    <script src="/components/header.js"></script>
 
     <section class="hero">
         <h1 class="animate-fade-in-up animate-delay-1">Professionelle <span>Wolfe Wave</span> Signale</h1>
+        
+        <!-- Risiko-Hinweis - dezent aber sichtbar -->
+        <p class="animate-fade-in-up animate-delay-2" style="margin: 12px auto 20px; color: rgba(255,255,255,0.5); font-size: 11px; text-align: center; letter-spacing: 0.3px;">
+            ⚠️ Trading ist spekulativ · Vergangene Ergebnisse garantieren keine zukünftigen Gewinne
+        </p>
         
         <!-- Hero CTA Buttons -->
         <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
@@ -3452,6 +3860,10 @@
             <a href="#previewHeader" class="btn btn-outline btn-lg">
                 Vorschau ansehen ↓
             </a>
+            <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="btn btn-lg" style="background: #0088cc; color: #fff; text-decoration: none; border: none;">
+                📱 Telegram Kanal
+            </a>
+        </div>
     </section>
 
     <!-- Mobile CTA (nur für nicht-eingeloggte User) -->
@@ -3507,18 +3919,19 @@
                 </div>
                 
                 <div style="background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
-                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--accent-gold);">🎯 70%+ Erfolgsrate</h2>
+                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--accent-gold);">🎯 <span id="featureSuccessRate">—%</span> Erfolgsrate</h2>
                     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary);">
                         Bewährte Wolfe Wave Patterns mit nachgewiesener Performance. Jedes Signal enthält klare Entry-, 
                         Stop-Loss- und drei Take-Profit-Levels (TP1, TP2, TP3) für optimales Risikomanagement.
+                        <a href="performance.html" style="color: var(--accent-green); text-decoration: none;"> → Alle Statistiken ansehen</a>
                     </p>
                 </div>
                 
                 <div style="background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
                     <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #4DABF7;">⚡ Echtzeit-Alerts</h2>
                     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary);">
-                        Sofortige Benachrichtigungen per Email bei neuen Trading-Signalen. 
-                        Verpasse keine profitable Gelegenheit mehr – der Scanner arbeitet rund um die Uhr.
+                        Erhalte Signale per Email oder direkt aufs Handy via <a href="https://t.me/wolfewavesignals" target="_blank" style="color: #0088cc; text-decoration: none;">Telegram</a>. 
+                        Der Scanner arbeitet 24/7 – verpasse keine Gelegenheit mehr.
                     </p>
                 </div>
             </div>
@@ -3658,7 +4071,7 @@
             🎁 Kostenlose Vorschau
             <span class="section-badge">Gratis</span>
         </div>
-        <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
+        <div class="section-subtitle">— Sieh dir 4 echte Signale an</div>
     </section>
 
     <main class="main animate-fade-in-up animate-delay-5">
@@ -3715,21 +4128,9 @@
                     </div>
 
                     <div class="paywall-price">
-                        <div style="background: var(--accent-green); color: #000; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 8px; display: inline-block;">🎉 EINFÜHRUNGSANGEBOT</div>
-                        <br>
                         <span class="paywall-price-amount">9,99€</span>
                         <span class="paywall-price-period">/ Monat</span>
-                        <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; text-decoration: line-through;">Statt 19,90€</div>
-                        
-                        <!-- Countdown Timer -->
-                        <div id="offerCountdown" style="margin-top: 15px; padding: 16px; background: linear-gradient(135deg, rgba(0,255,136,0.15) 0%, rgba(0,255,136,0.08) 100%); border: 1px solid rgba(0,255,136,0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,255,136,0.1);">
-                            <div style="font-size: 11px; color: var(--accent-green); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                                <span style="font-size: 14px;">⏰</span>
-                                <span>Angebot endet in</span>
-                            </div>
-                            <div id="countdownTimer" style="font-size: 32px; font-weight: 800; color: var(--accent-green); font-family: 'Space Grotesk', monospace; letter-spacing: 4px; text-align: center; text-shadow: 0 2px 12px rgba(0,255,136,0.4), 0 0 30px rgba(0,255,136,0.2);">00T 00:00:00</div>
-                            <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 10px; text-align: center;">Danach: 19,90€/Monat</div>
-                        </div>
+                        <div style="color: var(--text-secondary); font-size: 12px; margin-top: 8px;">✓ Jederzeit kündbar</div>
                     </div>
 
                     <button class="paywall-btn" onclick="showCheckout()">
@@ -3760,10 +4161,13 @@
                 <a href="maerkte.html" class="footer-link">Märkte</a>
             </div>
             <div class="footer-links">
+                <h4 class="footer-heading">Community</h4>
+                <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="footer-link">📱 Telegram Kanal</a>
+            </div>
+            <div class="footer-links">
                 <h4 class="footer-heading">Rechtliches</h4>
                 <a href="impressum.html" class="footer-link">Impressum</a>
                 <a href="datenschutz.html" class="footer-link">Datenschutz</a>
-                <a href="/cdn-cgi/l/email-protection#4a393f3a3a25383e0a3d25262c2f3d2b3c2f39232d242b263964292527" class="footer-link">Kontakt</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -3869,7 +4273,7 @@
             <button class="slider-nav slider-next" onclick="nextImage()" id="sliderNext">›</button>
             
             <!-- Main Image -->
-            <img src="" alt="Chart" id="modalImage" onerror="this.onerror=null; this.src=''; this.alt='📷 Bild nicht verfügbar'; this.style.opacity='0.3'; this.style.minHeight='300px';">
+            <img src="" alt="Chart" id="modalImage" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22400%22><rect fill=%22%23141414%22 width=%22800%22 height=%22400%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2224%22>Bild nicht verfügbar</text></svg>';">
             
             <!-- Image Info & Counter -->
             <div class="slider-info" id="sliderInfo">
@@ -3984,6 +4388,39 @@
         🛡 Admin-Modus aktiv
     </div>
 
+    <!-- Featured Signal Modal -->
+    <div class="alert-modal" id="featuredModal" style="display: none;">
+        <div class="alert-modal-card" style="max-width: 400px;">
+            <span class="alert-modal-close" onclick="closeFeaturedModal()">✕</span>
+            <div class="alert-modal-header">
+                <div class="alert-modal-icon">⭐</div>
+                <div>
+                    <div class="alert-modal-title">Zur Vorschau hinzufügen</div>
+                    <div class="alert-modal-subtitle" id="featuredModalSubtitle">Signal auswählen</div>
+                </div>
+            </div>
+            
+            <div style="padding: 20px;">
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+                    Wähle eine Position (1-6) für dieses Signal auf der Startseite:
+                </p>
+                
+                <div id="featuredPositions" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="removeFeatured()" class="btn btn-outline" style="flex: 1; padding: 12px;">
+                        🗑️ Entfernen
+                    </button>
+                    <button onclick="closeFeaturedModal()" class="btn btn-outline" style="flex: 1; padding: 12px;">
+                        Abbrechen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Alert Modal (Glocke klicken) -->
     <div class="alert-modal" id="alertModal">
         <div class="alert-modal-card">
@@ -4076,56 +4513,19 @@
         </div>
     </div>
 
+    <!-- Modularer Header laden -->
+    <script src="/components/header.js"></script>
+
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4NDM4MTksImV4cCI6MjA1MjQxOTgxOX0.xB5JmB_Ekg89J5dKb-r4qT3Rq2a2ptVkIafB3J2FpTM'
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/signals`;
 
-        // ==================== COUNTDOWN TIMER ====================
-        // Einführungsangebot endet am 1. März 2026 um 23:59:59
-        const OFFER_END_DATE = new Date('2026-03-01T23:59:59');
-        
-        function updateCountdown() {
-            const now = new Date();
-            const diff = OFFER_END_DATE - now;
-            
-            const countdownEl = document.getElementById('countdownTimer');
-            const containerEl = document.getElementById('offerCountdown');
-            
-            if (!countdownEl) return;
-            
-            if (diff <= 0) {
-                // Angebot abgelaufen
-                if (containerEl) {
-                    containerEl.innerHTML = `
-                        <div style="font-size: 12px; color: var(--accent-green); font-weight: 600;">
-                            ⏰ Einführungsangebot beendet
-                        </div>
-                        <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">
-                            Regulärer Preis: 19,90€/Monat
-                        </div>
-                    `;
-                }
-                return;
-            }
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            countdownEl.textContent = `${days}T ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            
-            // Immer grün bleiben (kein Farbwechsel mehr)
-        }
-        
-        // Countdown starten
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
+        // ==================== APP STATE ====================
         let allSignals = [];
         let completedSignals = [];
+        let symbolNames = {}; // Cache für Symbol-Namen
         let currentUser = null;
         let isSubscribed = false;
         let isAdmin = false;
@@ -4140,6 +4540,11 @@
         let currentAlertMarket = null;
         let currentAlertId = null;
         const MAX_ALERTS = 15;
+
+        // Featured System (Vorschau auf Startseite)
+        let featuredSignals = [];
+        let currentFeaturedSignalId = null;
+        let currentFeaturedSignalType = null;
 
         // Zoom-Steuerung
         let gridColumns = 4;
@@ -4257,6 +4662,8 @@
             updateGridZoom(); // Zoom-Indikator setzen
             updateTradingHours(); // Handelszeiten aktualisieren
             setInterval(updateTradingHours, 60000); // Jede Minute aktualisieren
+            await loadSymbolNames(); // Symbol-Namen laden
+            await fetchFeaturedSignals(); // Featured Signale für Vorschau laden
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
@@ -4266,6 +4673,233 @@
             updateStats();
             renderSignals();
             setupEventListeners();
+        }
+
+        // Symbol-Namen aus DB laden
+        async function loadSymbolNames() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/symbol_markets?select=symbol,name&name=not.is.null`,
+                    { headers: { 'apikey': SUPABASE_KEY } }
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    data.forEach(item => {
+                        if (item.symbol && item.name) {
+                            symbolNames[item.symbol] = item.name;
+                        }
+                    });
+                    console.log(`Loaded ${Object.keys(symbolNames).length} symbol names`);
+                }
+            } catch (e) {
+                console.error('Error loading symbol names:', e);
+            }
+        }
+
+        // Symbol-Name abrufen (mit intelligentem Fallback)
+        function getSymbolName(symbol) {
+            if (!symbol) return 'Unbekannt';
+            
+            // Wenn Name in DB vorhanden
+            if (symbolNames[symbol]) {
+                return symbolNames[symbol];
+            }
+            
+            // Fallback: Symbol aufbereiten (z.B. "PBI.OQ" → "PBI")
+            // Entferne Suffixe wie .OQ, .N, .DE, etc.
+            let cleanSymbol = symbol.replace(/\.(OQ|N|DE|L|PA|AS|SW|MC|MI|AX|HK|T|SS|SZ|F)$/i, '');
+            
+            // Forex-Paare schön formatieren (z.B. "EURUSD" → "EUR/USD")
+            if (cleanSymbol.length === 6 && /^[A-Z]+$/.test(cleanSymbol)) {
+                const base = cleanSymbol.substring(0, 3);
+                const quote = cleanSymbol.substring(3, 6);
+                const forexPairs = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'AUD', 'NZD', 'CAD', 'HKD', 'SGD'];
+                if (forexPairs.includes(base) && forexPairs.includes(quote)) {
+                    return `${base}/${quote}`;
+                }
+            }
+            
+            return cleanSymbol;
+        }
+
+        // ==================== FEATURED SIGNALS SYSTEM ====================
+        async function fetchFeaturedSignals() {
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/featured_signals?select=*&order=position.asc`,
+                    { headers: { 'apikey': SUPABASE_KEY } }
+                );
+                if (response.ok) {
+                    featuredSignals = await response.json();
+                    console.log(`Loaded ${featuredSignals.length} featured signals`);
+                }
+            } catch (e) {
+                console.error('Error loading featured signals:', e);
+                featuredSignals = [];
+            }
+        }
+
+        function toggleFeatured(signalId, signalType) {
+            if (!isAdmin) return;
+            
+            currentFeaturedSignalId = signalId;
+            currentFeaturedSignalType = signalType;
+            
+            // Finde Signal-Details
+            let signal = allSignals.find(s => s.wedge_id === signalId);
+            if (!signal) {
+                signal = completedSignals.find(s => s.wedge_id === signalId);
+            }
+            
+            const symbolName = signal ? getSymbolName(signal.symbol) : signalId;
+            document.getElementById('featuredModalSubtitle').textContent = symbolName;
+            
+            // Render Position-Buttons
+            renderFeaturedPositions();
+            
+            // Modal öffnen
+            document.getElementById('featuredModal').style.display = 'flex';
+        }
+
+        function renderFeaturedPositions() {
+            const container = document.getElementById('featuredPositions');
+            let html = '';
+            
+            for (let i = 1; i <= 6; i++) {
+                const existing = featuredSignals.find(f => f.position === i);
+                const isCurrentSignal = existing && existing.wedge_id === currentFeaturedSignalId;
+                const isOccupied = existing && !isCurrentSignal;
+                
+                let buttonStyle = 'padding: 16px; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.2s;';
+                let buttonContent = `<div style="font-size: 24px; margin-bottom: 4px;">${i}</div>`;
+                
+                if (isCurrentSignal) {
+                    buttonStyle += 'background: var(--accent-gold); color: #000; border: 2px solid var(--accent-gold);';
+                    buttonContent += '<div style="font-size: 10px;">Aktuell</div>';
+                } else if (isOccupied) {
+                    buttonStyle += 'background: var(--bg-hover); color: var(--text-secondary); border: 2px solid var(--border-color);';
+                    // Finde Signal-Name
+                    let occSignal = allSignals.find(s => s.wedge_id === existing.wedge_id) || 
+                                   completedSignals.find(s => s.wedge_id === existing.wedge_id);
+                    const occName = occSignal ? getSymbolName(occSignal.symbol).substring(0, 10) : existing.wedge_id.substring(0, 8);
+                    buttonContent += `<div style="font-size: 9px; opacity: 0.7;">${occName}</div>`;
+                } else {
+                    buttonStyle += 'background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--border-color);';
+                    buttonContent += '<div style="font-size: 10px; color: var(--accent-green);">Frei</div>';
+                }
+                
+                html += `<div style="${buttonStyle}" onclick="setFeaturedPosition(${i})">${buttonContent}</div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        async function setFeaturedPosition(position) {
+            if (!isAdmin || !currentFeaturedSignalId) return;
+            
+            try {
+                // Erst prüfen ob das Signal bereits featured ist
+                const existingForSignal = featuredSignals.find(f => f.wedge_id === currentFeaturedSignalId);
+                
+                // Falls Signal bereits an anderer Position → alte Position löschen
+                if (existingForSignal) {
+                    await fetch(
+                        `${SUPABASE_URL}/rest/v1/featured_signals?wedge_id=eq.${currentFeaturedSignalId}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                }
+                
+                // Falls Position bereits belegt → alte Position löschen
+                const existingAtPosition = featuredSignals.find(f => f.position === position);
+                if (existingAtPosition) {
+                    await fetch(
+                        `${SUPABASE_URL}/rest/v1/featured_signals?position=eq.${position}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${getAccessToken()}`
+                            }
+                        }
+                    );
+                }
+                
+                // Neuen Eintrag erstellen
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/featured_signals`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify({
+                            wedge_id: currentFeaturedSignalId,
+                            signal_type: currentFeaturedSignalType,
+                            position: position,
+                            added_by: currentUser?.email || 'admin'
+                        })
+                    }
+                );
+                
+                if (response.ok) {
+                    await fetchFeaturedSignals();
+                    renderFeaturedPositions();
+                    renderSignals(); // Vorschau aktualisieren
+                    closeFeaturedModal();
+                    alert(`Signal auf Position ${position} gesetzt!`);
+                } else {
+                    const error = await response.json();
+                    alert('Fehler: ' + (error.message || 'Konnte Position nicht setzen'));
+                }
+            } catch (e) {
+                console.error('Error setting featured position:', e);
+                alert('Fehler beim Speichern');
+            }
+        }
+
+        async function removeFeatured() {
+            if (!isAdmin || !currentFeaturedSignalId) return;
+            
+            try {
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/featured_signals?wedge_id=eq.${currentFeaturedSignalId}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${getAccessToken()}`
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    await fetchFeaturedSignals();
+                    renderSignals();
+                    closeFeaturedModal();
+                    alert('Signal aus Vorschau entfernt!');
+                }
+            } catch (e) {
+                console.error('Error removing featured:', e);
+            }
+        }
+
+        function closeFeaturedModal() {
+            document.getElementById('featuredModal').style.display = 'none';
+            currentFeaturedSignalId = null;
+            currentFeaturedSignalType = null;
+        }
+
+        function isFeatured(signalId) {
+            return featuredSignals.some(f => f.wedge_id === signalId);
         }
 
         // ==================== AUTH ====================
@@ -4490,6 +5124,45 @@
             }
         }
 
+        function openTelegramConnect() {
+            const userEmail = currentUser?.email || '';
+            const modal = document.createElement('div');
+            modal.id = 'telegramModal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:10000;';
+            modal.innerHTML = `
+                <div style="background:var(--bg-card);border-radius:16px;padding:32px;max-width:450px;width:90%;text-align:center;border:1px solid var(--border-color);">
+                    <div style="font-size:48px;margin-bottom:16px;">📱</div>
+                    <h2 style="color:var(--text-primary);margin-bottom:8px;">Telegram Premium verbinden</h2>
+                    <p style="color:var(--text-secondary);margin-bottom:24px;">Erhalte alle Signale & TP-Hits direkt auf dein Handy!</p>
+                    
+                    <div style="background:var(--bg-hover);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;">
+                        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;"><strong>So geht's:</strong></p>
+                        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:8px;">1️⃣ Klicke auf den Button unten</p>
+                        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:8px;">2️⃣ Starte den Bot mit <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;">/start</code></p>
+                        <p style="color:var(--text-secondary);font-size:13px;">3️⃣ Sende: <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;">/verify ${userEmail}</code></p>
+                    </div>
+                    
+                    <a href="https://t.me/wolfewavesignals_bot" target="_blank" style="display:block;background:var(--accent-green);color:#000;padding:14px 24px;border-radius:10px;font-weight:700;text-decoration:none;margin-bottom:12px;">
+                        🤖 Bot öffnen
+                    </a>
+                    
+                    <button onclick="closeTelegramModal()" style="background:transparent;border:1px solid var(--border-color);color:var(--text-secondary);padding:10px 20px;border-radius:8px;cursor:pointer;">
+                        Schließen
+                    </button>
+                    
+                    <p style="text-align:center;margin-top:16px;color:var(--text-secondary);font-size:13px;">
+                        Oder folge unserem <a href="https://t.me/wolfewavesignals" target="_blank" style="color:var(--accent-green);">öffentlichen Kanal</a> für kostenlose Updates
+                    </p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeTelegramModal() {
+            const modal = document.getElementById('telegramModal');
+            if (modal) modal.remove();
+        }
+
         function handleLogout() {
             clearTokens();
             currentUser = null;
@@ -4503,8 +5176,8 @@
         // ==================== UI UPDATES ====================
         function updateUIForUser() {
             // Modularer Header aktualisieren
-            if (typeof window.updateHeaderForUser === 'function') {
-                window.updateHeaderForUser(currentUser, isSubscribed, isAdmin);
+            if (typeof updateHeaderForUser === 'function') {
+                updateHeaderForUser(currentUser, isSubscribed, isAdmin);
             }
             
             // Show tabs for premium users
@@ -4516,12 +5189,6 @@
                 const seoContent = document.getElementById('seoContent');
                 if (seoContent) {
                     seoContent.style.display = 'none';
-                }
-                
-                // Show trading hours for premium users
-                const tradingHoursBar = document.getElementById('tradingHoursBar');
-                if (tradingHoursBar) {
-                    tradingHoursBar.style.display = 'block';
                 }
                 
                 // Update header
@@ -4559,9 +5226,9 @@
         }
 
         function updateUIForGuest() {
-            // Modularer Header zurücksetzen
-            if (typeof window.updateHeaderForUser === 'function') {
-                window.updateHeaderForUser(null, false, false);
+            // Modularer Header aktualisieren (null = ausgeloggt)
+            if (typeof updateHeaderForUser === 'function') {
+                updateHeaderForUser(null, false, false);
             }
             
             document.getElementById('tabsSection').classList.remove('visible');
@@ -4581,25 +5248,18 @@
                 seoContent.style.display = 'block';
             }
             
-            // Hide trading hours for guests
-            const tradingHoursBar = document.getElementById('tradingHoursBar');
-            if (tradingHoursBar) {
-                tradingHoursBar.style.display = 'none';
-            }
-            
             // Mobile CTA anzeigen für Gäste (nur auf Mobile)
             const mobileCTA = document.getElementById('mobileCTA');
             if (mobileCTA && window.innerWidth <= 768) {
                 mobileCTA.classList.add('visible');
             }
             
-            
             document.getElementById('previewHeader').innerHTML = `
                 <div class="section-title">
                     🎁 Kostenlose Vorschau
                     <span class="section-badge">Gratis</span>
                 </div>
-                <div class="section-subtitle">— Sieh dir 3 echte Signale an</div>
+                <div class="section-subtitle">— Sieh dir 4 echte Signale an</div>
             `;
         }
 
@@ -4730,7 +5390,54 @@
             }
         });
 
-        // toggleMobileMenu wird jetzt von header.js bereitgestellt
+        function toggleMobileMenu() {
+            const burger = document.querySelector('.burger-menu');
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const header = document.querySelector('.header');
+            const tabsSection = document.getElementById('tabsSection');
+            const signalGrid = document.querySelector('.signal-grid');
+            
+            if (burger && menu && overlay) {
+                const isOpening = !menu.classList.contains('active');
+                
+                burger.classList.toggle('active');
+                menu.classList.toggle('active');
+                overlay.classList.toggle('active');
+                
+                // CRITICAL: Hide header completely when menu opens
+                if (header) {
+                    header.style.display = isOpening ? 'none' : '';
+                }
+                
+                // Hide signal content when menu opens
+                if (tabsSection) {
+                    tabsSection.style.display = isOpening ? 'none' : '';
+                }
+                if (signalGrid) {
+                    signalGrid.style.display = isOpening ? 'none' : '';
+                }
+            }
+        }
+
+        // Close mobile menu when clicking outside - FIXED
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const header = document.querySelector('.header');
+            
+            // Nur schließen wenn Menü offen ist UND Klick außerhalb
+            if (menu && burger && menu.classList.contains('active')) {
+                // Prüfe ob Klick innerhalb des Menüs oder Burgers
+                if (!menu.contains(e.target) && !burger.contains(e.target)) {
+                    menu.classList.remove('active');
+                    burger.classList.remove('active');
+                    if (overlay) overlay.classList.remove('active');
+                    if (header) header.style.display = ''; // Show header again
+                }
+            }
+        });
 
         // ==================== FETCH DATA ====================
         async function fetchSignals() {
@@ -4777,7 +5484,7 @@
             
             document.getElementById('totalSignals').textContent = allSignals.length;
             
-            const successTotal = completedSignals.filter(s => s.result_folder === 'success').length;
+            const successTotal = completedSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
             document.getElementById('successCount').textContent = successTotal;
             
             const todaySignals = allSignals.filter(s => new Date(s.created_at) >= today);
@@ -4822,7 +5529,8 @@
             const tp2 = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
             const tp1 = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
             const sl = completedSignals.filter(s => s.sl_hit && !s.tp1_hit).length;
-            const success = completedSignals.filter(s => s.result_folder === 'success').length;
+            // Berechne Success basierend auf TP-Hits (nicht result_folder)
+            const success = completedSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
             const rate = total > 0 ? ((success / total) * 100).toFixed(1) : 0;
             
             document.getElementById('successRateValue').textContent = rate + '%';
@@ -4831,13 +5539,13 @@
             document.getElementById('tp1Count').textContent = tp1;
             document.getElementById('slCount').textContent = sl;
             
-            // NEU: Header Success Rate aktualisieren
-            const headerValue = document.getElementById('headerSuccessValue');
-            if(headerValue) headerValue.textContent = rate + '%';
+            // Hero Success Rate aktualisieren
+            const heroRate = document.getElementById('heroSuccessRate');
+            if(heroRate) heroRate.textContent = rate + '%';
             
-            // Mobile Menu Success Rate aktualisieren
-            const mobileSuccessRate = document.querySelector('#mobileSuccessRate .success-value');
-            if(mobileSuccessRate) mobileSuccessRate.textContent = rate + '%';
+            // Feature-Box Success Rate aktualisieren
+            const featureRate = document.getElementById('featureSuccessRate');
+            if(featureRate) featureRate.textContent = rate + '%';
         }
         
         // Mobile Search Handler
@@ -4928,17 +5636,55 @@
         }
 
         function getPreviewSignals() {
+            // Wenn Featured Signale vorhanden, diese verwenden
+            if (featuredSignals.length > 0) {
+                const preview = [];
+                
+                // Sortiert nach Position (1-4 für 2 Reihen)
+                const sortedFeatured = [...featuredSignals].sort((a, b) => a.position - b.position);
+                
+                for (const featured of sortedFeatured) {
+                    let signal = null;
+                    
+                    if (featured.signal_type === 'active') {
+                        signal = allSignals.find(s => s.wedge_id === featured.wedge_id);
+                    } else {
+                        signal = completedSignals.find(s => s.wedge_id === featured.wedge_id);
+                    }
+                    
+                    // Nur hinzufügen wenn Signal noch existiert
+                    if (signal) {
+                        // Markiere ob es ein completed Signal ist für spezielle Darstellung
+                        signal._isFeaturedCompleted = featured.signal_type === 'completed';
+                        preview.push(signal);
+                    }
+                }
+                
+                // Wenn weniger als gewünscht, mit neuesten auffüllen (bis zu 4 für 2 Reihen)
+                if (preview.length < 4) {
+                    for (const signal of allSignals) {
+                        if (preview.length >= 4) break;
+                        if (!preview.some(p => p.id === signal.id || p.wedge_id === signal.wedge_id)) {
+                            preview.push(signal);
+                        }
+                    }
+                }
+                
+                return preview.slice(0, 4);
+            }
+            
+            // Fallback: 4 Signale aus verschiedenen Märkten (2 Reihen)
             const preview = [];
             for (const market of PREVIEW_MARKETS) {
                 const signal = allSignals.find(s => s.market === market && !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
             }
-            while (preview.length < 3 && preview.length < allSignals.length) {
+            while (preview.length < 4 && preview.length < allSignals.length) {
                 const signal = allSignals.find(s => !preview.some(p => p.id === s.id));
                 if (signal) preview.push(signal);
                 else break;
             }
-            return preview;
+            return preview.slice(0, 4);
         }
 
         function getFilteredSignals() {
@@ -5019,8 +5765,10 @@
             }
             
             // Admin controls (nur für Admins sichtbar)
+            const signalIsFeatured = isFeatured(signal.wedge_id);
             const adminControls = isAdmin && isVisible ? `
                 <div class="admin-controls">
+                    <button class="admin-btn admin-btn-featured ${signalIsFeatured ? 'is-featured' : ''}" onclick="event.stopPropagation(); toggleFeatured('${signal.wedge_id}', 'active')" title="${signalIsFeatured ? 'In Vorschau (klicken zum Ändern)' : 'Zur Vorschau hinzufügen'}">⭐</button>
                     <button class="admin-btn admin-btn-success" data-success-signal="${signal.id}" title="Zu Success hinzufügen">✓</button>
                     <button class="admin-btn admin-btn-blacklist" data-blacklist-signal="${signal.id}" data-wedge-id="${signal.wedge_id || ''}" title="Blacklist (nie wieder anzeigen)">🚫</button>
                     <button class="admin-btn admin-btn-delete" data-delete-signal="${signal.id}" title="Signal löschen">×</button>
@@ -5043,7 +5791,7 @@
                     ${adminControls}
                     ${alertBell}
                     <div class="signal-image-container">
-                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.parentElement.insertAdjacentHTML('afterbegin', '<div class=\\'placeholder-image\\' style=\\'height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;background:var(--bg-card);\\'>📷</div>');">
+                        <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23141414%22 width=%22400%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23444%22 font-size=%2248%22>📷</text></svg>';">
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
@@ -5053,7 +5801,7 @@
                     <div class="signal-info">
                         <div class="signal-header">
                             <div>
-                                <div class="signal-title">${signal.symbol_name || signal.symbol}</div>
+                                <div class="signal-title">${getSymbolName(signal.symbol)}</div>
                                 <div class="signal-symbol">${signal.symbol}</div>
                             </div>
                             <div class="signal-time">
@@ -5103,8 +5851,10 @@
             }
             
             // Admin controls for completed signals - ENHANCED
+            const signalIsFeatured = isFeatured(signal.wedge_id);
             const adminControls = isAdmin ? `
                 <div class="admin-controls" style="right: auto; left: 12px; top: 48px; flex-direction: column; gap: 4px;">
+                    <button class="admin-btn admin-btn-featured ${signalIsFeatured ? 'is-featured' : ''}" onclick="event.stopPropagation(); toggleFeatured('${signal.wedge_id}', 'completed')" title="${signalIsFeatured ? 'In Vorschau (klicken zum Ändern)' : 'Zur Vorschau hinzufügen'}">⭐</button>
                     <button class="admin-btn admin-btn-primary" onclick="event.stopPropagation(); openEditSignalModal('${signal.id}')" title="TP/SL manuell bearbeiten">✏️</button>
                     <button class="admin-btn admin-btn-success" onclick="event.stopPropagation(); openPhotoManager('${signal.wedge_id}')" title="Fotos verwalten">📸</button>
                     <button class="admin-btn admin-btn-blacklist" onclick="event.stopPropagation(); fixResultStatus('${signal.id}')" title="Ergebnis fixieren">🔒</button>
@@ -5131,7 +5881,7 @@
                     ${fixedBadge}
                     ${adminControls}
                     <div class="signal-image-container" style="position:relative;">
-                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.parentElement.insertAdjacentHTML('afterbegin', '<div class=\\'placeholder-image\\' style=\\'height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;background:var(--bg-card);\\'>📷</div>');">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
+                        ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23141414%22 width=%22400%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23444%22 font-size=%2248%22>📷</text></svg>';">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
                         ${fixedWatermark}
                         <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
                         <div class="signal-tags">
@@ -5142,8 +5892,8 @@
                     <div class="signal-info">
                         <div class="signal-header">
                             <div>
-                                <div class="signal-title">${signal.symbol}</div>
-                                <div class="signal-symbol">${signal.wedge_id}</div>
+                                <div class="signal-title">${getSymbolName(signal.symbol)}</div>
+                                <div class="signal-symbol">${signal.symbol}</div>
                             </div>
                             <div class="signal-time">
                                 <div class="signal-date">${formatDate(signal.created_at)}</div>
@@ -6293,7 +7043,7 @@ USING (
                                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
                                     ${photos.map(photo => `
                                         <div style="position: relative; border: 2px solid ${photo.is_display_photo ? 'var(--accent-green)' : 'var(--border-color)'}; border-radius: 12px; overflow: hidden; background: var(--bg-hover);">
-                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.onerror=null; this.style.opacity='0.3'; this.alt='❌ Nicht gefunden';">
+                                            <img src="${photo.image_url}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22><rect fill=%22%23141414%22 width=%22200%22 height=%22150%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23f44%22 font-size=%2214%22>❌ Nicht gefunden</text></svg>';">
                                             <div style="padding: 8px; font-size: 11px; color: var(--text-secondary);">
                                                 ${new Date(photo.scanned_at).toLocaleString('de-DE')}
                                             </div>
@@ -7337,20 +8087,26 @@ USING (
         let ticking = false;
         
         function updateHeader() {
-            const header = document.querySelector('.site-header');
+            const header = document.querySelector('.header');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
             const currentScrollY = window.scrollY;
-            
-            if (!header) { ticking = false; return; }
             
             // Nur auf Mobile (unter 768px)
             if (window.innerWidth <= 768) {
                 if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                    header.style.transform = 'translateY(-100%)';
+                    // Scrollt nach unten - Header verstecken
+                    header.classList.add('header-hidden');
+                    // Mobile Menu auch schließen
+                    if (mobileMenu) mobileMenu.classList.remove('active');
+                    if (burger) burger.classList.remove('active');
                 } else if (currentScrollY < lastScrollY) {
-                    header.style.transform = 'translateY(0)';
+                    // Scrollt nach oben - Header zeigen
+                    header.classList.remove('header-hidden');
                 }
             } else {
-                header.style.transform = 'translateY(0)';
+                // Desktop - Header immer zeigen
+                header.classList.remove('header-hidden');
             }
             
             lastScrollY = currentScrollY;
@@ -7714,3 +8470,4 @@ USING (
             
             // Wenn abgelehnt, Analytics deaktivieren
             if (localStorage
+                
