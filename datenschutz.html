@@ -6,8 +6,16 @@
     <title>Datenschutzerklärung - WolfeWaveSignals</title>
     <meta name="description" content="Datenschutzerklärung von WolfeWaveSignals - Informationen zur Verarbeitung Ihrer personenbezogenen Daten.">
     <meta name="robots" content="noindex, follow">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
+    </style>
     <link rel="canonical" href="https://wolfewavesignals.com/datenschutz.html">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -371,7 +379,7 @@
 
     <main class="content">
         <h1>Datenschutzerklärung</h1>
-        <p class="last-updated">Stand: Januar 2025</p>
+        <p class="last-updated">Stand: Februar 2026</p>
 
         <h2>1. Verantwortlicher</h2>
         <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
@@ -380,12 +388,12 @@
             Schöntalweg 10<br>
             6992 Hirschegg<br>
             Österreich</p>
-            <p>E-Mail: <a href="/cdn-cgi/l/email-protection#c8bbbdb8b8a7babc88bfa7a4aeadbfa9beadbba1afa6a9a4bbe6aba7a5"><span class="__cf_email__" data-cfemail="ccbfb9bcbca3beb88cbba3a0aaa9bbadbaa9bfa5aba2ada0bfe2afa3a1">[email&#160;protected]</span></a></p>
+            <p>E-Mail: mail@wolfewavesignals.com</p>
         </div>
 
         <h2>2. Erhebung und Speicherung personenbezogener Daten</h2>
         
-        <h3>2.1 Beim Besuch der Website</h3>
+        <h3>2.1 Beim Besuch der Website (Server-Logfiles)</h3>
         <p>Beim Aufrufen unserer Website werden durch den auf Ihrem Endgerät zum Einsatz kommenden Browser automatisch Informationen an den Server unserer Website gesendet. Diese Informationen werden temporär in einem sog. Logfile gespeichert:</p>
         <ul>
             <li>IP-Adresse des anfragenden Rechners</li>
@@ -394,46 +402,114 @@
             <li>Website, von der aus der Zugriff erfolgt (Referrer-URL)</li>
             <li>Verwendeter Browser und ggf. das Betriebssystem</li>
         </ul>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der technischen Bereitstellung und Sicherheit der Website).</p>
+        <p><strong>Speicherdauer:</strong> Die Logfiles werden nach 30 Tagen automatisch gelöscht.</p>
 
         <h3>2.2 Bei Registrierung und Login</h3>
         <p>Wenn Sie sich auf unserer Website registrieren, erheben wir:</p>
         <ul>
             <li>E-Mail-Adresse</li>
-            <li>Passwort (verschlüsselt gespeichert)</li>
+            <li>Passwort (verschlüsselt gespeichert über Supabase Auth)</li>
         </ul>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung bzw. vorvertragliche Maßnahmen).</p>
+        <p><strong>Speicherdauer:</strong> Ihre Daten werden gespeichert, solange Ihr Konto aktiv ist. Nach Löschung des Kontos werden Ihre Daten innerhalb von 30 Tagen entfernt.</p>
 
         <h3>2.3 Bei Abschluss eines Abonnements</h3>
-        <p>Für die Zahlungsabwicklung nutzen wir <strong>Lemon Squeezy</strong>. Weitere Informationen: <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Lemon Squeezy</a>.</p>
+        <p>Für die Zahlungsabwicklung nutzen wir <strong>Stripe, Inc.</strong> (510 Townsend Street, San Francisco, CA 94103, USA). Dabei werden folgende Daten an Stripe übermittelt:</p>
+        <ul>
+            <li>E-Mail-Adresse</li>
+            <li>Zahlungsinformationen (Kreditkartendaten werden ausschließlich von Stripe verarbeitet und nicht auf unseren Servern gespeichert)</li>
+        </ul>
+        <p>Die Datenübermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO) sowie des EU-U.S. Data Privacy Framework.</p>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).</p>
+        <p>Weitere Informationen: <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Stripe</a>.</p>
 
         <h2>3. Hosting</h2>
-        <p>Unsere Website wird bei <strong>GitHub Pages</strong> gehostet. Weitere Informationen: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">Datenschutzerklärung von GitHub</a>.</p>
+        <p>Unsere Website wird über <strong>Vercel Inc.</strong> (340 S Lemon Ave #4133, Walnut, CA 91789, USA) gehostet. Bei jedem Zugriff auf unsere Website werden Server-Logdaten erhoben. Die Datenübermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln sowie des EU-U.S. Data Privacy Framework.</p>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der zuverlässigen Bereitstellung der Website).</p>
+        <p>Weitere Informationen: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Datenschutzerklärung von Vercel</a>.</p>
 
         <h2>4. Datenbank</h2>
-        <p>Für die Speicherung nutzen wir <strong>Supabase</strong> (Server in der EU). Weitere Informationen: <a href="https://supabase.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Supabase</a>.</p>
+        <p>Für die Speicherung von Nutzerdaten und Trading-Signalen nutzen wir <strong>Supabase</strong> (Server in der EU, Region Frankfurt). Supabase verarbeitet Daten im Auftrag auf Basis eines Auftragsverarbeitungsvertrags (AVV).</p>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
+        <p>Weitere Informationen: <a href="https://supabase.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Supabase</a>.</p>
 
-        <h2>5. Cookies und Local Storage</h2>
-        <p>Unsere Website verwendet <strong>Local Storage</strong> zur Speicherung Ihrer Login-Session. Es werden keine Tracking-Cookies von Drittanbietern verwendet.</p>
+        <h2>5. Webanalyse (Google Analytics 4)</h2>
+        <p>Diese Website nutzt <strong>Google Analytics 4</strong>, einen Webanalysedienst der Google Ireland Limited (Gordon House, Barrow Street, Dublin 4, Irland). Google Analytics verwendet Cookies, die eine Analyse der Nutzung der Website ermöglichen. Die dadurch erzeugten Informationen werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
+        <p>Wir setzen Google Analytics mit aktivierter IP-Anonymisierung ein, sodass Ihre IP-Adresse innerhalb der EU gekürzt wird. Google Analytics wird <strong>nur mit Ihrer ausdrücklichen Einwilligung</strong> geladen.</p>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung). Sie können Ihre Einwilligung jederzeit widerrufen — entweder über unseren Cookie-Banner oder indem Sie die Cookies in Ihrem Browser löschen.</p>
+        <p><strong>Opt-out:</strong> Sie können die Erfassung durch Google Analytics verhindern, indem Sie das Browser-Add-on zur Deaktivierung von Google Analytics herunterladen: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">https://tools.google.com/dlpage/gaoptout</a></p>
+        <p>Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Google</a>.</p>
 
-        <h2>6. Ihre Rechte</h2>
+        <h2>6. Google Translate</h2>
+        <p>Diese Website nutzt den <strong>Google Translate</strong> Dienst der Google Ireland Limited zur automatischen Übersetzung von Inhalten. Dabei werden Seiteninhalte an Google-Server übermittelt. Google Translate setzt ein Cookie (<code>googtrans</code>) zur Speicherung der gewählten Spracheinstellung.</p>
+        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der internationalen Zugänglichkeit der Website).</p>
+        <p>Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Datenschutzerklärung von Google</a>.</p>
+
+        <h2>7. Cookies und Local Storage</h2>
+        <p>Unsere Website verwendet Cookies und Local Storage für verschiedene Zwecke:</p>
+        
+        <h3>Technisch notwendige Cookies/Storage</h3>
+        <div class="highlight-box">
+            <p><strong>Local Storage (sb_access_token)</strong> — Speicherung Ihrer Login-Session. Erforderlich für die Nutzung des Benutzerkontos.</p>
+            <p><strong>Cookie (cookieConsent)</strong> — Speicherung Ihrer Cookie-Einwilligung. Dauer: 1 Jahr.</p>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse) bzw. § 165 Abs. 3 TKG 2021 (technisch notwendig).</p>
+        </div>
+
+        <h3>Funktionale Cookies</h3>
+        <div class="highlight-box">
+            <p><strong>Cookie (googtrans)</strong> — Speicherung der gewählten Übersetzungssprache (Google Translate). Dauer: Session.</p>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
+        </div>
+
+        <h3>Analyse-Cookies (nur mit Einwilligung)</h3>
+        <div class="highlight-box">
+            <p><strong>Cookie (_ga)</strong> — Google Analytics: Unterscheidung eindeutiger Nutzer. Dauer: 2 Jahre.</p>
+            <p><strong>Cookie (_ga_*)</strong> — Google Analytics: Speicherung des Sitzungsstatus. Dauer: 2 Jahre.</p>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung). Diese Cookies werden nur gesetzt, wenn Sie über den Cookie-Banner aktiv zugestimmt haben.</p>
+        </div>
+
+        <h2>8. Datenübermittlung in Drittländer</h2>
+        <p>Einige der von uns eingesetzten Dienstleister verarbeiten Daten in den USA. Die USA verfügen über kein von der EU-Kommission anerkanntes allgemeines Datenschutzniveau. Die Datenübermittlung erfolgt auf folgenden Grundlagen:</p>
         <ul>
-            <li><strong>Auskunftsrecht:</strong> Auskunft über gespeicherte Daten</li>
-            <li><strong>Berichtigungsrecht:</strong> Berichtigung unrichtiger Daten</li>
-            <li><strong>Löschungsrecht:</strong> Löschung Ihrer Daten</li>
-            <li><strong>Einschränkung:</strong> Einschränkung der Verarbeitung</li>
-            <li><strong>Datenübertragbarkeit:</strong> Daten in gängigem Format</li>
-            <li><strong>Widerspruchsrecht:</strong> Widerspruch gegen Verarbeitung</li>
+            <li><strong>Stripe:</strong> EU-Standardvertragsklauseln + EU-U.S. Data Privacy Framework</li>
+            <li><strong>Vercel:</strong> EU-Standardvertragsklauseln + EU-U.S. Data Privacy Framework</li>
+            <li><strong>Google (Analytics, Translate):</strong> EU-Standardvertragsklauseln + EU-U.S. Data Privacy Framework</li>
         </ul>
-        <p>Kontakt: <a href="/cdn-cgi/l/email-protection#c3b0b6b3b3acb1b783b4acafa5a6b4a2b5a6b0aaa4ada2afb0eda0acae"><span class="__cf_email__" data-cfemail="8cfff9fcfce3fef8ccfbe3e0eae9fbedfae9ffe5ebe2ede0ffa2efe3e1">[email&#160;protected]</span></a></p>
 
-        <h2>7. Datensicherheit</h2>
+        <h2>9. Ihre Rechte</h2>
+        <p>Sie haben gegenüber uns folgende Rechte hinsichtlich Ihrer personenbezogenen Daten:</p>
+        <ul>
+            <li><strong>Auskunftsrecht (Art. 15 DSGVO):</strong> Auskunft über Ihre gespeicherten Daten</li>
+            <li><strong>Berichtigungsrecht (Art. 16 DSGVO):</strong> Berichtigung unrichtiger Daten</li>
+            <li><strong>Löschungsrecht (Art. 17 DSGVO):</strong> Löschung Ihrer Daten</li>
+            <li><strong>Einschränkung (Art. 18 DSGVO):</strong> Einschränkung der Verarbeitung</li>
+            <li><strong>Datenübertragbarkeit (Art. 20 DSGVO):</strong> Ihre Daten in einem gängigen, maschinenlesbaren Format</li>
+            <li><strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Widerspruch gegen die Verarbeitung</li>
+            <li><strong>Widerruf der Einwilligung (Art. 7 Abs. 3 DSGVO):</strong> Erteilte Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen</li>
+        </ul>
+        <p>Kontakt für Datenschutzanfragen: mail@wolfewavesignals.com</p>
+
+        <h3>Beschwerderecht bei der Aufsichtsbehörde</h3>
+        <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren. Die für uns zuständige Aufsichtsbehörde ist:</p>
+        <div class="highlight-box">
+            <p><strong>Österreichische Datenschutzbehörde (DSB)</strong><br>
+            Barichgasse 40-42<br>
+            1030 Wien<br>
+            Österreich</p>
+            <p>Website: <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">www.dsb.gv.at</a></p>
+        </div>
+
+        <h2>10. Datensicherheit</h2>
         <ul>
             <li>SSL/TLS-Verschlüsselung für alle Datenübertragungen</li>
-            <li>Verschlüsselte Speicherung von Passwörtern</li>
+            <li>Verschlüsselte Speicherung von Passwörtern (bcrypt via Supabase Auth)</li>
+            <li>Row Level Security (RLS) auf Datenbankebene</li>
             <li>Regelmäßige Sicherheitsupdates</li>
         </ul>
 
-        <h2>8. Änderungen</h2>
-        <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen. Für Ihren erneuten Besuch gilt dann die neue Datenschutzerklärung.</p>
+        <h2>11. Änderungen</h2>
+        <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslagen oder Änderungen des Dienstes anzupassen. Die jeweils aktuelle Fassung ist auf dieser Seite abrufbar. Für Ihren erneuten Besuch gilt die aktualisierte Datenschutzerklärung.</p>
     </main>
 
     <!-- Modularer Footer -->
