@@ -563,8 +563,8 @@
             </select>
 
             <div class="wws-mobile-header-actions" id="wwsMobileHeaderActions">
-                <button class="header-btn header-btn-outline" onclick="showLogin()">Login</button>
-                <button class="header-btn header-btn-primary" onclick="showCheckout()">Premium 9,99€/Monat</button>
+                <button class="header-btn header-btn-outline" onclick="toggleMobileMenu(); showLogin();">Login</button>
+                <button class="header-btn header-btn-primary" onclick="toggleMobileMenu(); showCheckout();">Premium 9,99€/Monat</button>
             </div>
         </div>
     `;
@@ -600,8 +600,8 @@
             if (actions) actions.innerHTML = guestHTML;
             if (mobileActions) {
                 mobileActions.innerHTML = `
-                    <button class="header-btn header-btn-outline" onclick="showLogin()">Login</button>
-                    <button class="header-btn header-btn-primary" onclick="showCheckout()">Premium 9,99€/Monat</button>
+                    <button class="header-btn header-btn-outline" onclick="toggleMobileMenu(); showLogin();">Login</button>
+                    <button class="header-btn header-btn-primary" onclick="toggleMobileMenu(); showCheckout();">Premium 9,99€/Monat</button>
                 `;
             }
             return;
@@ -644,10 +644,10 @@
                     </div>
                 </div>
             </div>
-            ${(isSubscribed || isAdmin) ? '<button class="header-btn header-btn-outline" onclick="showMyAlerts()" style="width: 100%; margin-bottom: 8px;">🔔 Meine Alarme</button>' : ''}
-            ${(isSubscribed || isAdmin) ? '<button class="header-btn header-btn-outline" onclick="openTelegramConnect()" style="width: 100%; margin-bottom: 8px;">📱 Telegram verbinden</button>' : ''}
-            ${isSubscribed ? '<button class="header-btn header-btn-outline" onclick="manageSubscription()" style="width: 100%; margin-bottom: 8px;">💳 Abo verwalten</button>' : '<button class="header-btn header-btn-primary" onclick="showCheckout()" style="width: 100%; margin-bottom: 8px;">⭐ Premium werden</button>'}
-            <button class="header-btn header-btn-outline" onclick="handleLogout()" style="width: 100%;">🚪 Ausloggen</button>
+            ${(isSubscribed || isAdmin) ? '<button class="header-btn header-btn-outline" onclick="toggleMobileMenu(); showMyAlerts();" style="width: 100%; margin-bottom: 8px;">🔔 Meine Alarme</button>' : ''}
+            ${(isSubscribed || isAdmin) ? '<button class="header-btn header-btn-outline" onclick="toggleMobileMenu(); openTelegramConnect();" style="width: 100%; margin-bottom: 8px;">📱 Telegram verbinden</button>' : ''}
+            ${isSubscribed ? '<button class="header-btn header-btn-outline" onclick="toggleMobileMenu(); manageSubscription();" style="width: 100%; margin-bottom: 8px;">💳 Abo verwalten</button>' : '<button class="header-btn header-btn-primary" onclick="toggleMobileMenu(); showCheckout();" style="width: 100%; margin-bottom: 8px;">⭐ Premium werden</button>'}
+            <button class="header-btn header-btn-outline" onclick="toggleMobileMenu(); handleLogout();" style="width: 100%;">🚪 Ausloggen</button>
         `;
         if (mobileActions) mobileActions.innerHTML = mobileUserHTML;
     };
