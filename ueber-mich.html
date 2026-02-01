@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Über mich - Wer steckt hinter WolfeWaveSignals?</title>
+    <meta name="description" content="Lerne den Entwickler hinter WolfeWaveSignals kennen. Warum Wolfe Waves, wie der Scanner entstanden ist und was den Dienst antreibt.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.wolfewavesignals.com/ueber-mich.html">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Google Analytics: Wird über Cookie-Consent auf der Hauptseite gesteuert -->
+    
+    <style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --accent-green: #00ff88;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --border-color: #1f1f1f;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(12, 12, 12, 0.95);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-icon img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .back-link {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 16px;
+            color: var(--accent-green);
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            font-size: 16px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        p, li {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-green);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text-primary);
+        }
+
+        .warning-box {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-left: 3px solid #ff4757;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .warning-box p {
+            color: #ff4757;
+            margin-bottom: 0;
+        }
+
+        .form-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .form-box h3 {
+            margin-top: 0;
+            color: var(--accent-green);
+        }
+
+        .form-field {
+            border-bottom: 1px dashed var(--border-color);
+            padding: 8px 0;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .contact-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--accent-green);
+        }
+
+        .contact-info p {
+            margin-bottom: 4px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        .footer a:hover {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .content {
+                padding: 40px 20px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    
+        /* Language Selector in Navigation */
+        .nav-language-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .nav-language-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: inherit;
+        }
+        
+        .nav-language-btn:hover {
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        .language-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 45px;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 180px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-option:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
+        body > .skiptranslate > iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        body {
+            top: 0px !important;
+        }
+    </style>
+
+    <!-- Google Translate Widget -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'de',
+                includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+                multilanguagePage: true
+            }, 'google_translate_element');
+            
+            // Minimize top banner displacement
+            setTimeout(function() {
+                document.body.style.top = '0';
+            }, 100);
+            
+            // AUTO-DETECT and translate on first visit
+            setTimeout(function() {
+                autoTranslateToUserLanguage();
+            }, 1000);
+        }
+        
+        function autoTranslateToUserLanguage() {
+            if (document.cookie.indexOf('googtrans') !== -1) {
+                return;
+            }
+            
+            var userLang = navigator.language || navigator.userLanguage;
+            userLang = userLang.split('-')[0];
+            
+            if (userLang === 'de') {
+                return;
+            }
+            
+            var supportedLangs = ['en','es','fr','it','pt','ru','zh','ja','ko','ar','tr','pl','nl','sv','da','no','fi','cs','hu','ro','el','he','id','th','vi','uk','bg','hr','sk','sl'];
+            
+            if (supportedLangs.indexOf(userLang) !== -1) {
+                if (userLang === 'zh') {
+                    userLang = 'zh-CN';
+                }
+                
+                var googleTransCookie = '/de/' + userLang;
+                document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+                document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+                
+                window.location.reload();
+            }
+        }
+        
+        function toggleLanguageMenu() {
+            const dropdown = document.getElementById('languageDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+        }
+        
+        function changeLanguage(langCode) {
+            const dropdown = document.getElementById('languageDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('active');
+            }
+            
+            var googleTransCookie = '/de/' + langCode;
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
+            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
+            
+            const langMap = {
+                'de': 'DE', 'en': 'EN', 'es': 'ES', 'fr': 'FR', 'it': 'IT', 
+                'pt': 'PT', 'ru': 'RU', 'zh-CN': 'CN', 'ja': 'JP', 'ko': 'KR',
+                'ar': 'AR', 'tr': 'TR', 'pl': 'PL', 'nl': 'NL'
+            };
+            
+            const langBtn = document.querySelector('.language-text');
+            if (langBtn && langMap[langCode]) {
+                langBtn.textContent = langMap[langCode];
+            }
+            
+            window.location.reload();
+        }
+        
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('languageDropdown');
+            const langBtn = document.querySelector('.nav-language-btn');
+            
+            if (dropdown && langBtn && !dropdown.contains(e.target) && !langBtn.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+<body>
+    <!-- Modularer Header -->
+    <div id="site-header"></div>
+    <script src="/components/header.js"></script>
+
+    <main class="content" style="max-width: 800px; margin: 0 auto; padding: 60px 40px;">
+
+        <!-- Intro -->
+        <p style="color: var(--accent-green); font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;">Über mich</p>
+        <h1 style="font-size: clamp(28px, 4vw, 40px); margin-bottom: 20px; line-height: 1.2;">Ein Trader.<br>Ein Pattern.<br>Ein Scanner.</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8; margin-bottom: 48px;">
+            Ich bin Claudio – Schweizer, lebe in Österreich. WolfeWaveSignals ist kein Fintech-Startup mit 20 Leuten, sondern ein Solo-Projekt, das aus jahrelanger Trading-Erfahrung und einer Faszination für ein einziges Chartmuster entstanden ist.
+        </p>
+
+        <!-- Mein Weg -->
+        <h2 style="font-size: 22px; margin-bottom: 16px;">Mein Weg zum Trading</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Mit 16 habe ich meine erste Aktie gekauft – ABB, an der Schweizer Börse. Der Kurs war gerade stark gefallen, und ich habe den klassischen Anfängerfehler gemacht: ins fallende Messer gegriffen. Diesmal hatte ich Glück. Über drei Jahre stieg die Aktie von 4 auf 21 Schweizer Franken. Der Trade ging gut aus – aber ehrlich gesagt vor allem, weil ich ihn einfach laufen liess, ohne täglich hinzuschauen.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Durch einen Freund bin ich dann auf CFD-Daytrading gekommen. Schnell rein, schnell raus, Hebel – und deutlich mehr Stress. Ich habe auch News-Trading versucht: Informationen zusammensuchen, abschätzen ob sie stimmen, dann im richtigen Moment den Trade setzen und hoffen, dass die Richtung passt. Für mich war das viel zu zeitintensiv und zu unsicher.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 40px;">
+            Was mich aber immer fasziniert hat, waren die Muster im Chart. Elliott Waves, Harmonic Patterns, Fibonacci-Levels – all das hat denselben Kern: Preisbewegungen folgen bestimmten Strukturen. Und irgendwann bin ich auf Wolfe Waves gestossen.
+        </p>
+
+        <!-- Wolfe Wave Entdeckung -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 32px; margin-bottom: 40px;">
+            <h2 style="font-size: 20px; margin-bottom: 16px;">Warum gerade Wolfe Waves?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Was mich an Wolfe Waves sofort gepackt hat: der Keil. Dieses konvergierende Muster aus fünf Punkten – man kann es selbst suchen, und man findet es überall. In jedem Timeframe, in jedem Markt. Forex, Aktien, Krypto – die Keile sind da.
+            </p>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Und das Beste: Wenn Punkt 5 diesen Überschuss über die Trendlinie macht und dann dreht, hat man ein klares Ziel – die Linie zwischen Punkt 1 und 4. Das ist bei uns das Take-Profit-Ziel 3.
+            </p>
+            <p style="color: var(--text-secondary);">
+                Im Gegensatz zu News-Trading oder reinem Bauchgefühl hat Wolfe Wave klare geometrische Regeln. Und Regeln lassen sich programmieren.
+            </p>
+        </div>
+
+        <!-- Vom manuellen Suchen zum Scanner -->
+        <h2 style="font-size: 22px; margin-bottom: 16px;">Vom manuellen Suchen zum Scanner</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Das Problem: Wolfe Waves manuell zu suchen ist zeitaufwendig. Ich bin berufstätig und habe nicht den ganzen Tag Zeit, Charts durchzugehen. Also habe ich angefangen, den Prozess zu automatisieren.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Zuerst bekam ich nur die nackten Signale. Dann habe ich den Scanner weiterentwickelt, bis ich auch ein visuelles Bild vom erkannten Pattern hatte. Und irgendwann dachte ich mir: Wenn der Scanner für mich funktioniert, kann ich ihn auch anderen zur Verfügung stellen.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 40px;">
+            So ist WolfeWaveSignals entstanden. Der Scanner läuft auf einem Server, erkennt automatisch Patterns und stellt sie auf dieser Website dar. Der Preis deckt die Serverkosten – es geht mir nicht darum, reich zu werden, sondern darum, ein nützliches Tool zugänglich zu machen.
+        </p>
+
+        <!-- Was der Scanner macht -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 32px; margin-bottom: 40px;">
+            <h2 style="font-size: 20px; margin-bottom: 16px;">Was der Scanner macht – und was nicht</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Der Scanner analysiert rund um die Uhr Forex-, Aktien- und Krypto-Märkte in mehreren Timeframes. Er sucht nach Wolfe-Wave-Keilen, validiert sie anhand geometrischer Regeln und generiert automatisch Entry, Stop-Loss und drei Take-Profit Levels.
+            </p>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Was er <strong style="color: var(--text-primary);">nicht</strong> macht: Er gibt keine Kauf- oder Verkaufsempfehlungen. Er kennt dein Konto nicht, dein Risikoprofil nicht, deine Strategie nicht. Die Signale sind Muster-Erkennungen – nicht mehr und nicht weniger.
+            </p>
+            <p style="color: var(--text-secondary);">
+                Mehr zur Funktionsweise: <a href="scanner-erklaerung.html" style="color: var(--accent-green);">So funktioniert der Scanner →</a>
+            </p>
+        </div>
+
+        <!-- Mein eigenes Trading -->
+        <h2 style="font-size: 22px; margin-bottom: 16px;">Mein eigenes Trading heute</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Ich trade selbst ausschliesslich Wolfe Waves. Auch bei langfristigen Aktien-Positionen schaue ich mir die Timeframes an, ob ich Keile finde, die mir eine zusätzliche Bestätigung geben.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 40px;">
+            Das heisst: Ich nutze denselben Scanner, den du hier siehst. Ich sehe dieselben Signale. Ich habe kein Geheimwissen und keinen Informationsvorsprung – nur das gleiche Tool.
+        </p>
+
+        <!-- Philosophie -->
+        <h2 style="font-size: 22px; margin-bottom: 16px;">Woran ich glaube</h2>
+
+        <div style="display: grid; gap: 16px; margin-bottom: 40px;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px;">
+                <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Transparenz statt Marketing</p>
+                <p style="color: var(--text-secondary); margin-bottom: 0;">
+                    Jedes Signal wird öffentlich dokumentiert – ob Gewinn oder Verlust. Die Performance-Seite zeigt ungefilterte Ergebnisse, keine handverlesenen Highlights. Du siehst exakt die gleichen Daten, die ich sehe.
+                </p>
+            </div>
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px;">
+                <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Algorithmus statt Bauchgefühl</p>
+                <p style="color: var(--text-secondary); margin-bottom: 0;">
+                    Der Scanner hat keine Meinung. Er erkennt geometrische Muster nach festen Regeln. Kein „ich denke der Markt geht hoch", kein guru-artiges Auftreten. Nur Daten.
+                </p>
+            </div>
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px;">
+                <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Ehrlichkeit über Risiko</p>
+                <p style="color: var(--text-secondary); margin-bottom: 0;">
+                    Ich werde dir nie sagen, dass du mit meinen Signalen reich wirst. Trading ist riskant. Manche Signale scheitern. Der Scanner ist ein Werkzeug – nicht mehr. Dein Risikomanagement ist deine Verantwortung.
+                </p>
+            </div>
+        </div>
+
+        <!-- Kontakt -->
+        <h2 style="font-size: 22px; margin-bottom: 16px;">Kontakt</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Fragen, Feedback oder Ideen? Ich lese jede Nachricht selbst.
+        </p>
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 40px;">
+            <p style="margin-bottom: 8px;"><strong>E-Mail:</strong> <a href="mailto:mail@wolfewavesignals.com" style="color: var(--accent-green);">mail@wolfewavesignals.com</a></p>
+            <p style="margin-bottom: 0;"><strong>Telegram:</strong> <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" style="color: var(--accent-green);">t.me/wolfewavesignals</a></p>
+        </div>
+
+        <!-- CTA -->
+        <div style="text-align: center; padding: 48px 24px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px;">
+            <p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Neugierig geworden?</p>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">3 Signale sind kostenlos sichtbar – kein Account nötig.</p>
+            <a href="index.html" style="display: inline-block; background: var(--accent-green); color: #000; padding: 14px 32px; border-radius: 10px; font-weight: 600; text-decoration: none; font-size: 1rem; transition: all 0.2s;">Signale ansehen →</a>
+        </div>
+
+    </main>
+
+    <!-- Modularer Footer -->
+    <div id="site-footer"></div>
+    <script src="/components/footer.js"></script>
+</body>
+</html>
