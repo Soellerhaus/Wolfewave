@@ -6,21 +6,20 @@
     <title>Widerrufsbelehrung - WolfeWaveSignals</title>
     <meta name="description" content="Widerrufsbelehrung für WolfeWaveSignals Trading-Signal-Abonnements.">
     <meta name="robots" content="noindex, follow">
-    <link rel="canonical" href="https://wolfewavesignals.com/widerruf.html">
+    <link rel="canonical" href="https://www.wolfewavesignals.com/widerruf.html">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-F3BQLK365X');
-    </script>
+    <!-- Google Analytics: Wird über Cookie-Consent auf der Hauptseite gesteuert -->
     
     <style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -307,43 +306,12 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        /* Hide Google Translate branding - AGGRESSIVE */
-        .goog-te-banner-frame,
-        .goog-te-balloon-frame {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-        }
-        
-        .goog-logo-link {
+        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
+        body > .skiptranslate > iframe.goog-te-banner-frame {
             display: none !important;
         }
-        
-        .goog-te-gadget {
-            color: transparent !important;
-            font-size: 0 !important;
-        }
-        
-        .goog-te-gadget span {
-            display: none !important;
-        }
-        
-        body > .skiptranslate {
-            display: none !important;
-        }
-        
-        iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-        
         body {
             top: 0px !important;
-            position: static !important;
         }
     </style>
 
@@ -358,31 +326,10 @@
                 multilanguagePage: true
             }, 'google_translate_element');
             
-            // AGGRESSIVE: Remove Google Translate banner frame immediately
+            // Minimize top banner displacement
             setTimeout(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                    bannerFrame.style.visibility = 'hidden';
-                }
-                
-                var skipTranslate = document.querySelector('body > .skiptranslate');
-                if (skipTranslate) {
-                    skipTranslate.style.display = 'none';
-                }
-                
                 document.body.style.top = '0';
-                document.body.style.position = 'static';
             }, 100);
-            
-            // Keep checking and removing banner
-            setInterval(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                }
-                document.body.style.top = '0';
-            }, 500);
             
             // AUTO-DETECT and translate on first visit
             setTimeout(function() {
@@ -466,7 +413,7 @@
 
     <main class="content">
         <h1>Widerrufsbelehrung</h1>
-        <p class="last-updated">Stand: Januar 2025</p>
+        <p class="last-updated">Stand: Februar 2026</p>
 
         <h2>Widerrufsrecht</h2>
         <p>Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>
@@ -479,7 +426,7 @@
             <p><strong>Claudio Scheiwiller</strong></p>
             <p>Schöntalweg 10</p>
             <p>6992 Hirschegg, Österreich</p>
-            <p>E-Mail: <a href="/cdn-cgi/l/email-protection#4136202d322433272d3801262c20282d6f222e2c" style="color: var(--accent-green);"><span class="__cf_email__" data-cfemail="b8cfd9d4cbddcaded4c1f8dfd5d9d1d496dbd7d5">[email&#160;protected]</span></a></p>
+            <p>E-Mail: <a href="mailto:mail@wolfewavesignals.com" style="color: var(--accent-green);">mail@wolfewavesignals.com</a></p>
         </div>
 
         <p style="margin-top: 16px;">mittels einer eindeutigen Erklärung (z.B. ein mit der Post versandter Brief oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.</p>
@@ -494,7 +441,7 @@
         <h2>Vorzeitiges Erlöschen des Widerrufsrechts</h2>
         
         <div class="warning-box">
-            <p><strong>âš ï¸ Wichtiger Hinweis:</strong></p>
+            <p><strong>⚠️ Wichtiger Hinweis:</strong></p>
             <p style="margin-top: 12px; color: var(--text-secondary);">Bei WolfeWaveSignals handelt es sich um eine digitale Dienstleistung (Zugang zu Trading-Signalen), die sofort nach Kaufabschluss bereitgestellt wird.</p>
         </div>
 
@@ -507,12 +454,12 @@
         </ul>
 
         <div class="highlight-box">
-            <p><strong>ðŸ”’ Bei WolfeWaveSignals:</strong></p>
+            <p><strong>🔒 Bei WolfeWaveSignals:</strong></p>
             <p style="margin-top: 8px;">Beim Checkout bestätigen Sie durch Aktivieren der Checkbox:</p>
             <p style="margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-style: italic;">
-                â˜‘ï¸ „Ich stimme zu, dass die Dienstleistung (Zugang zu Trading-Signalen) sofort nach Zahlungseingang beginnt. Mir ist bekannt, dass ich mein Widerrufsrecht mit Beginn der Dienstleistung verliere."
+                ☑️ „Ich stimme zu, dass die Dienstleistung (Zugang zu Trading-Signalen) sofort nach Zahlungseingang beginnt. Mir ist bekannt, dass ich mein Widerrufsrecht mit Beginn der Dienstleistung verliere."
             </p>
-            <p style="margin-top: 12px; color: var(--accent-green);"><strong>â†’ Mit dieser Zustimmung erlischt Ihr Widerrufsrecht, sobald Sie Zugang zu den Signalen erhalten.</strong></p>
+            <p style="margin-top: 12px; color: var(--accent-green);"><strong>→ Mit dieser Zustimmung erlischt Ihr Widerrufsrecht, sobald Sie Zugang zu den Signalen erhalten.</strong></p>
         </div>
 
         <h3>Warum diese Regelung?</h3>
@@ -529,12 +476,12 @@
         <p>(Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es zurück.)</p>
 
         <div class="form-box">
-            <h3>ðŸ“ Widerrufsformular</h3>
+            <h3>📝 Widerrufsformular</h3>
             <p>An:</p>
             <p>Claudio Scheiwiller<br>
             Schöntalweg 10<br>
             6992 Hirschegg, Österreich<br>
-            E-Mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aaddcbc6d9cfd8ccc6d3eacdc7cbc3c684c9c5c7">[email&#160;protected]</a></p>
+            E-Mail: mail@wolfewavesignals.com</p>
             
             <p style="margin-top: 20px;">Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung:</p>
             
@@ -560,7 +507,7 @@
         </div>
 
         <div class="highlight-box">
-            <p><strong>ðŸ’¡ Tipp:</strong> Am einfachsten widerrufen Sie per E-Mail an <a href="/cdn-cgi/l/email-protection#3b4c5a57485e495d57427b5c565a525715585456" style="color: var(--accent-green);"><span class="__cf_email__" data-cfemail="f384929f809681959f8ab3949e929a9fdd909c9e">[email&#160;protected]</span></a> mit dem Betreff "Widerruf" und Ihren Kontaktdaten.</p>
+            <p><strong>💡 Tipp:</strong> Am einfachsten widerrufen Sie per E-Mail an <a href="mailto:mail@wolfewavesignals.com" style="color: var(--accent-green);">mail@wolfewavesignals.com</a> mit dem Betreff "Widerruf" und Ihren Kontaktdaten.</p>
         </div>
 
         <h2>Fragen?</h2>
@@ -569,7 +516,7 @@
         <div class="contact-info">
             <h3>Kontakt</h3>
             <p><strong>Claudio Scheiwiller</strong></p>
-            <p>E-Mail: <a href="/cdn-cgi/l/email-protection#9becfaf7e8fee9fdf7e2dbfcf6faf2f7b5f8f4f6" style="color: var(--accent-green);"><span class="__cf_email__" data-cfemail="4d3a2c213e283f2b21340d2a202c2421632e2220">[email&#160;protected]</span></a></p>
+            <p>E-Mail: <a href="mailto:mail@wolfewavesignals.com" style="color: var(--accent-green);">mail@wolfewavesignals.com</a></p>
         </div>
     </main>
 
