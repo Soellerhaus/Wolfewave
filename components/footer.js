@@ -140,6 +140,7 @@
                         <a href="wolfewaves.html" class="footer-link">Was sind Wolfe Waves?</a>
                         <a href="maerkte.html" class="footer-link">Märkte</a>
                         <a href="performance.html" class="footer-link">Performance</a>
+                        <a href="ueber-mich.html" class="footer-link">Über mich</a>
                     </div>
                 </div>
 
@@ -163,10 +164,10 @@
 
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    © ${currentYear} wolfewavesignals.com — Trading-Signale für professionelle Händler
+                    \u00A9 ${currentYear} wolfewavesignals.com \u2013 Trading-Signale für professionelle Händler
                 </p>
                 <p class="footer-disclaimer">
-                    ⚠️ Risikohinweis: Der Handel mit Finanzinstrumenten ist mit erheblichen Risiken verbunden und kann zum Totalverlust des eingesetzten Kapitals führen. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne. Diese Website stellt keine Anlageberatung dar.
+                    \u26A0\uFE0F Risikohinweis: Der Handel mit Finanzinstrumenten ist mit erheblichen Risiken verbunden und kann zum Totalverlust des eingesetzten Kapitals führen. Vergangene Ergebnisse garantieren keine zukünftigen Gewinne. Diese Website stellt keine Anlageberatung dar.
                 </p>
             </div>
         </footer>
