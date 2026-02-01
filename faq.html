@@ -5,6 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Häufige Fragen | WolfeWaveSignals</title>
     <meta name="description" content="Häufig gestellte Fragen zu WolfeWaveSignals. Erfahre alles über unsere Trading Signale, den Scanner und Premium-Features.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.wolfewavesignals.com/faq.html">
+    
+    <!-- FAQPage Schema.org für Google Rich Results -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Was ist WolfeWaveSignals?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "WolfeWaveSignals ist eine Trading-Signale-Plattform, die sich auf Wolfe Wave Patterns spezialisiert hat. Unser Scanner läuft 24/7 und erkennt diese Chartmuster automatisch in verschiedenen Märkten. Als Abonnent erhältst du die erkannten Signale in Echtzeit – mit Entry, Stop-Loss und Take-Profit Levels."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Was kostet das Premium-Abo?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Der aktuelle Einführungspreis beträgt 9,99€ pro Monat (inkl. MwSt.). Das Abo verlängert sich monatlich und kann jederzeit gekündigt werden."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Welche Märkte werden gescannt?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Unser Scanner analysiert drei große Marktkategorien: Forex (wichtige Währungspaare), Stocks (Aktienindizes und Einzelaktien) und Crypto (Kryptowährungen wie BTC, ETH)."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Was bedeuten PENDING, ACTIVE und SUCCESS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "PENDING bedeutet, das Pattern wurde erkannt, aber der Entry noch nicht erreicht. ACTIVE heißt, der Entry wurde getriggert und der Trade läuft. SUCCESS bedeutet, der Trade ist abgeschlossen (TP erreicht oder SL ausgelöst)."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Kann ich die Signale 1:1 traden?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Die Signale sind Setup-Ideen und Orientierungshilfen, keine Handelsanweisungen. Wir empfehlen, Signale mit deiner eigenen Analyse zu kombinieren und eigenes Risikomanagement anzuwenden."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Ist Trading nicht riskant?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ja, Trading ist riskant. Du kannst Geld verlieren – auch mehr als du einsetzt, wenn du mit Hebel tradest. Investiere nur Geld, dessen Verlust du dir leisten kannst. WolfeWaveSignals ist ein Hilfstool, keine Garantie für Gewinne."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Wie kann ich mein Abo kündigen?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Du kannst dein Abo jederzeit kündigen. Nach der Kündigung behältst du den Zugang bis zum Ende des bezahlten Zeitraums. Die Kündigung erfolgt über dein Account-Dashboard oder per E-Mail."
+                }
+            }
+        ]
+    }
+    </script>
     <style>
         *, *::before, *::after {
             margin: 0;
@@ -720,43 +788,12 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        /* Hide Google Translate branding - AGGRESSIVE */
-        .goog-te-banner-frame,
-        .goog-te-balloon-frame {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-        }
-        
-        .goog-logo-link {
+        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
+        body > .skiptranslate > iframe.goog-te-banner-frame {
             display: none !important;
         }
-        
-        .goog-te-gadget {
-            color: transparent !important;
-            font-size: 0 !important;
-        }
-        
-        .goog-te-gadget span {
-            display: none !important;
-        }
-        
-        body > .skiptranslate {
-            display: none !important;
-        }
-        
-        iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-        
         body {
             top: 0px !important;
-            position: static !important;
         }
     </style>
 
@@ -771,31 +808,10 @@
                 multilanguagePage: true
             }, 'google_translate_element');
             
-            // AGGRESSIVE: Remove Google Translate banner frame immediately
+            // Minimize top banner displacement
             setTimeout(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                    bannerFrame.style.visibility = 'hidden';
-                }
-                
-                var skipTranslate = document.querySelector('body > .skiptranslate');
-                if (skipTranslate) {
-                    skipTranslate.style.display = 'none';
-                }
-                
                 document.body.style.top = '0';
-                document.body.style.position = 'static';
             }, 100);
-            
-            // Keep checking and removing banner
-            setInterval(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                }
-                document.body.style.top = '0';
-            }, 500);
             
             // AUTO-DETECT and translate on first visit
             setTimeout(function() {
@@ -948,7 +964,7 @@
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
                         <p>Unser aktueller <strong>Einführungspreis</strong> beträgt:</p>
-                        <p style="font-size: 1.5rem; color: var(--accent-green); font-weight: 700; margin: 16px 0;">9,99€ / Monat</p>
+                        <p style="font-size: 1.5rem; color: var(--accent-green); font-weight: 700; margin: 16px 0;">9,99€ / Monat <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 400;">(inkl. MwSt.)</span></p>
                         <p>Das Abo verlängert sich monatlich und kann jederzeit gekündigt werden. Du behältst den Zugang bis zum Ende der bezahlten Periode.</p>
                     </div>
                 </div>
