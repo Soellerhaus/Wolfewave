@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>So funktioniert unser Scanner | WolfeWaveSignals</title>
     <meta name="description" content="Erfahre, wie unser Wolfe Wave Scanner arbeitet. Einfach erklärt für Einsteiger und Profis.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.wolfewavesignals.com/scanner-erklaerung.html">
     <style>
         /* ========================================
            CSS RESET & BASE STYLES
@@ -895,43 +897,12 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        /* Hide Google Translate branding - AGGRESSIVE */
-        .goog-te-banner-frame,
-        .goog-te-balloon-frame {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-        }
-        
-        .goog-logo-link {
+        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
+        body > .skiptranslate > iframe.goog-te-banner-frame {
             display: none !important;
         }
-        
-        .goog-te-gadget {
-            color: transparent !important;
-            font-size: 0 !important;
-        }
-        
-        .goog-te-gadget span {
-            display: none !important;
-        }
-        
-        body > .skiptranslate {
-            display: none !important;
-        }
-        
-        iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-        
         body {
             top: 0px !important;
-            position: static !important;
         }
     </style>
 
@@ -946,31 +917,10 @@
                 multilanguagePage: true
             }, 'google_translate_element');
             
-            // AGGRESSIVE: Remove Google Translate banner frame immediately
+            // Minimize top banner displacement
             setTimeout(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                    bannerFrame.style.visibility = 'hidden';
-                }
-                
-                var skipTranslate = document.querySelector('body > .skiptranslate');
-                if (skipTranslate) {
-                    skipTranslate.style.display = 'none';
-                }
-                
                 document.body.style.top = '0';
-                document.body.style.position = 'static';
             }, 100);
-            
-            // Keep checking and removing banner
-            setInterval(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                }
-                document.body.style.top = '0';
-            }, 500);
             
             // AUTO-DETECT and translate on first visit
             setTimeout(function() {
