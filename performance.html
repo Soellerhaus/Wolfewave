@@ -6,7 +6,7 @@
     <title>Performance Statistiken - WolfeWaveSignals</title>
     <meta name="description" content="Detaillierte Performance-Statistiken und Win-Rates für alle Wolfe Wave Trading-Signale nach Symbol, Markt und Zeitrahmen.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -18,13 +18,18 @@
         :root {
             --bg-primary: #0c0c0c;
             --bg-card: #141414;
+            --bg-card-elevated: #1a1a1a;
             --bg-hover: rgba(255, 255, 255, 0.05);
             --accent-green: #00ff88;
+            --accent-green-dim: rgba(0, 255, 136, 0.15);
             --accent-red: #ff4757;
             --accent-gold: #ffd700;
+            --accent-blue: #4fc3f7;
             --text-primary: #ffffff;
             --text-secondary: #6b7280;
+            --text-tertiary: #4a4a4a;
             --border-color: #1f1f1f;
+            --border-glow: rgba(0, 255, 136, 0.2);
         }
 
         body {
@@ -35,22 +40,60 @@
             line-height: 1.6;
         }
 
-        /* Header */
-        /* old header/footer styles removed */
-.back-btn:hover {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        /* Hero */
+        /* ========== HERO SECTION ========== */
         .hero {
             text-align: center;
-            padding: 60px 40px 40px;
+            padding: 80px 40px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(0,255,136,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-green);
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
         }
 
         .hero h1 {
-            font-size: 42px;
+            font-size: 48px;
+            font-weight: 700;
             margin-bottom: 16px;
+            letter-spacing: -1px;
+            line-height: 1.15;
         }
 
         .hero h1 span {
@@ -60,14 +103,222 @@
         .hero p {
             font-size: 18px;
             color: var(--text-secondary);
-            max-width: 700px;
+            max-width: 720px;
+            margin: 0 auto 32px;
+            line-height: 1.7;
+        }
+
+        .hero-subtext {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Filters */
+        /* ========== TRUST BAR ========== */
+        .trust-bar {
+            max-width: 1000px;
+            margin: 0 auto 48px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .trust-item .icon {
+            font-size: 18px;
+        }
+
+        .trust-item strong {
+            color: var(--text-primary);
+        }
+
+        /* ========== KPI STATS ========== */
+        .stats-overview {
+            max-width: 1400px;
+            margin: 0 auto 48px;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-2px);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover::after {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.gold { color: var(--accent-gold); }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ========== PREMIUM CTA BANNER ========== */
+        .premium-cta-banner {
+            max-width: 1400px;
+            margin: 0 auto 48px;
+            padding: 0 40px;
+        }
+
+        .premium-cta-inner {
+            background: linear-gradient(135deg, rgba(0,255,136,0.06) 0%, rgba(0,255,136,0.02) 50%, rgba(255,215,0,0.04) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 20px;
+            padding: 40px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-cta-inner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .cta-content h3 span {
+            color: var(--accent-green);
+        }
+
+        .cta-content p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+            max-width: 550px;
+        }
+
+        .cta-features {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cta-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .cta-feature .check {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .btn-premium {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-premium:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-premium-sub {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== FILTERS ========== */
         .filters {
             max-width: 1400px;
-            margin: 0 auto 40px;
+            margin: 0 auto 32px;
             padding: 0 40px;
             display: flex;
             gap: 20px;
@@ -111,46 +362,78 @@
             color: #000;
         }
 
-        /* Stats Overview */
-        .stats-overview {
+        /* ========== DISCLAIMER ========== */
+        .disclaimer-wrapper {
             max-width: 1400px;
-            margin: 0 auto 40px;
+            margin: 32px auto 20px;
             padding: 0 40px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
         }
 
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
+        .disclaimer-box {
+            background: rgba(255, 152, 0, 0.08);
+            border-left: 4px solid rgba(255, 152, 0, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 8px;
+        .disclaimer-toggle {
+            padding: 16px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
         }
 
-        .stat-value/* removed old header/footer style */
-
-        .stat-value.gold {
-            color: var(--accent-gold);
+        .disclaimer-toggle:hover {
+            background: rgba(255, 152, 0, 0.04);
         }
 
-        .stat-label {
+        .disclaimer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .disclaimer-title {
             font-size: 14px;
-            color: var(--text-secondary);
+            font-weight: 700;
+            color: rgba(255, 152, 0, 0.95);
         }
 
-        /* Table Container */
-        .table-container {
+        .disclaimer-icon {
+            font-size: 18px;
+            color: rgba(255, 152, 0, 0.8);
+            transition: transform 0.3s;
+        }
+
+        .disclaimer-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .disclaimer-text {
+            padding: 0 24px 20px 24px;
+            border-top: 1px solid rgba(255, 152, 0, 0.15);
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-top: 0;
+            padding-top: 16px;
+        }
+
+        .disclaimer-text a {
+            color: rgba(255, 152, 0, 0.95);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        /* ========== HIGHLIGHTS SECTION ========== */
+        .highlights-section {
             max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px 60px;
+            margin: 40px auto;
+            padding: 0 40px;
         }
 
         .section-title {
@@ -162,352 +445,40 @@
             gap: 12px;
         }
 
-        /* Performance Table */
-        .performance-table {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .performance-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .performance-table thead {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .performance-table th {
-            padding: 16px;
-            text-align: left;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .performance-table td {
-            padding: 16px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .performance-table tbody tr {
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .performance-table tbody tr:hover {
-            background: var(--bg-hover);
-        }
-
-        .symbol-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .rank-badge {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 16px;
-        }
-
-        .rank-1 { background: linear-gradient(135deg, var(--accent-gold), #ffa500); }
-        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #808080); }
-        .rank-3 { background: linear-gradient(135deg, #cd7f32, #8b4513); }
-
-        .win-rate {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .win-rate.high { color: var(--accent-green); }
-        .win-rate.medium { color: #ffa500; }
-        .win-rate.low { color: var(--accent-red); }
-
-        .avg-result {
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .avg-result.tp3 {
-            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
-            color: #000;
-        }
-
-        .avg-result.tp2 {
-            background: var(--accent-green);
-            color: #000;
-        }
-
-        .avg-result.tp1 {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--accent-green);
-            border: 1px solid var(--accent-green);
-        }
-
-        .avg-result.sl {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--accent-red);
-            border: 1px solid var(--accent-red);
-        }
-
-        /* Detail View */
-        .detail-view {
-            display: none;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px 60px;
-        }
-
-        .detail-view.active {
-            display: block;
-        }
-
-        .detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .detail-title {
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .detail-stats {
-            display: flex;
-            gap: 24px;
-        }
-
-        .detail-stat {
-            text-align: center;
-        }
-
-        .detail-stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .detail-stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* Signal Grid */
-        .signal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .signal-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .signal-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        .signal-card.win {
-            border-color: rgba(0, 255, 136, 0.3);
-        }
-
-        .signal-card.loss {
-            border-color: rgba(255, 71, 87, 0.3);
-        }
-
-        .signal-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #000;
-        }
-
-        .signal-info {
-            padding: 16px;
-        }
-
-        .signal-result {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .result-badge {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .result-badge.tp3 {
-            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
-            color: #000;
-        }
-
-        .result-badge.tp2 {
-            background: var(--accent-green);
-            color: #000;
-        }
-
-        .result-badge.tp1 {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--accent-green);
-        }
-
-        .result-badge.sl {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--accent-red);
-        }
-
-        .result-pnl {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .result-pnl.positive { color: var(--accent-green); }
-        .result-pnl.negative { color: var(--accent-red); }
-
-        .signal-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .signal-direction {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .signal-direction.bullish {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--accent-green);
-        }
-
-        .signal-direction.bearish {
-            background: rgba(255, 71, 87, 0.1);
-            color: var(--accent-red);
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--border-color);
-            border-top: 3px solid var(--accent-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            /* removed old header/footer style */
-
-            .hero {
-                padding: 40px 20px 20px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .filters,
-            .stats-overview,
-            .table-container,
-            .detail-view {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-
-            .performance-table {
-                overflow-x: auto;
-            }
-
-            .performance-table table {
-                min-width: 600px;
-            }
-
-            .detail-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-            }
-
-            .signal-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Highlights Section */
         .highlight-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s;
             flex: 0 0 350px;
+            position: relative;
         }
 
         .highlight-card.tp3 {
             flex: 0 0 450px;
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
         }
 
         .highlight-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
             border-color: var(--accent-green);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
 
         .highlight-card.tp3:hover {
             border-color: var(--accent-gold);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
         }
 
         .highlight-card.tp2 {
-            border-color: rgba(0, 255, 136, 0.3);
+            border-color: rgba(0, 255, 136, 0.25);
         }
 
         .highlight-card.tp1 {
-            border-color: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.15);
         }
 
         .highlight-image {
@@ -563,6 +534,7 @@
             font-size: 20px;
             font-weight: 700;
             color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .highlight-card.tp3 .highlight-pnl {
@@ -583,24 +555,390 @@
             font-size: 13px;
         }
 
+        /* ========== PERFORMANCE TABLE ========== */
+        .table-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 32px;
+        }
+
+        .performance-table {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .performance-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .performance-table thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .performance-table th {
+            padding: 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .performance-table td {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .performance-table tbody tr {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .performance-table tbody tr:hover {
+            background: var(--bg-hover);
+        }
+
+        .symbol-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .rank-badge {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 16px;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, var(--accent-gold), #ffa500); }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #808080); }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #8b4513); }
+
+        .win-rate {
+            font-weight: 700;
+            font-size: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .win-rate.high { color: var(--accent-green); }
+        .win-rate.medium { color: #ffa500; }
+        .win-rate.low { color: var(--accent-red); }
+
+        .avg-result {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .avg-result.tp3 {
+            background: linear-gradient(135deg, var(--accent-gold), #ffa500);
+            color: #000;
+        }
+
+        .avg-result.tp2 {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .avg-result.tp1 {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .avg-result.sl {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        /* ========== BOTTOM PREMIUM CTA ========== */
+        .premium-bottom-cta {
+            max-width: 1400px;
+            margin: 0 auto 60px;
+            padding: 0 40px;
+        }
+
+        .premium-bottom-inner {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 56px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-bottom-inner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-gold), var(--accent-green));
+        }
+
+        .premium-bottom-inner::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(0,255,136,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .premium-bottom-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .premium-bottom-inner h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .premium-bottom-inner h2 span {
+            color: var(--accent-green);
+        }
+
+        .premium-bottom-inner > p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 36px;
+        }
+
+        .premium-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            text-align: left;
+        }
+
+        .pf-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .pf-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .pf-text strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .pf-text span {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .premium-bottom-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-premium-large {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 48px;
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-premium-large:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.35);
+        }
+
+        .premium-bottom-sub {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        /* ========== LOADING ========== */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== DETAIL VIEW ========== */
+        .detail-view {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .detail-view.active {
+            display: block;
+        }
+
+        /* ========== MOBILE ========== */
         @media (max-width: 768px) {
-            .highlights-section {
-                padding: 0 20px !important;
+            .hero {
+                padding: 50px 20px 32px;
             }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .trust-bar {
+                gap: 16px;
+                padding: 0 20px;
+            }
+
+            .trust-item {
+                font-size: 12px;
+            }
+
+            .filters,
+            .stats-overview,
+            .table-container,
+            .detail-view,
+            .highlights-section,
+            .premium-cta-banner,
+            .premium-bottom-cta,
+            .disclaimer-wrapper {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .premium-cta-inner {
+                flex-direction: column;
+                padding: 32px 24px;
+                text-align: center;
+            }
+
+            .cta-features {
+                justify-content: center;
+            }
+
+            .cta-buttons {
+                width: 100%;
+            }
+
+            .btn-premium {
+                width: 100%;
+            }
+
+            .performance-table {
+                overflow-x: auto;
+            }
+
+            .performance-table table {
+                min-width: 600px;
+            }
+
+            .signal-grid,
             #highlightsGrid {
                 flex-direction: column;
                 align-items: center;
             }
-            .highlight-card {
-                flex: 0 0 auto;
-                width: 100%;
-                max-width: 400px;
-            }
+
+            .highlight-card,
             .highlight-card.tp3 {
                 flex: 0 0 auto;
                 width: 100%;
                 max-width: 400px;
             }
+
+            .premium-bottom-inner {
+                padding: 40px 24px;
+            }
+
+            .premium-bottom-inner h2 {
+                font-size: 24px;
+            }
+
+            .premium-features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out both;
         }
     </style>
 </head>
@@ -609,12 +947,83 @@
     <div id="site-header"></div>
     <script src="/components/header.js"></script>
 
+    <!-- ==================== HERO ==================== -->
     <section class="hero">
-        <h1>Performance <span>Statistiken</span></h1>
-        <p>Detaillierte Win-Rates und Ergebnisse für alle Trading-Signale nach Symbol, Markt und Zeitrahmen</p>
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            Scanner aktiv — Märkte werden analysiert
+        </div>
+        <h1>Performance <span>Übersicht</span></h1>
+        <p>Jedes Signal, das unser Wolfe Wave Scanner erkannt hat — vollständig transparent.
+           Entdecke was hätte getradet werden können, mit exakten Entry-, Stop-Loss- und Take-Profit-Levels.</p>
+        <div class="hero-subtext">Alle Symbole werden mit vollständigem Namen angezeigt · Daten werden live aus der Datenbank geladen</div>
     </section>
 
-    <!-- Filters -->
+    <!-- ==================== TRUST BAR ==================== -->
+    <div class="trust-bar">
+        <div class="trust-item">
+            <span class="icon">🔍</span>
+            <span>Automatisierter Scanner — <strong>24/7 aktiv</strong></span>
+        </div>
+        <div class="trust-item">
+            <span class="icon">📊</span>
+            <span>Echte Daten — <strong>keine Manipulation</strong></span>
+        </div>
+        <div class="trust-item">
+            <span class="icon">✅</span>
+            <span>Verifizierte Ergebnisse — <strong>TP &amp; SL transparent</strong></span>
+        </div>
+        <div class="trust-item">
+            <span class="icon">🔒</span>
+            <span>Unabhängig — <strong>kein Interessenkonflikt</strong></span>
+        </div>
+    </div>
+
+    <!-- ==================== STATS OVERVIEW ==================== -->
+    <div class="stats-overview" id="statsOverview">
+        <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value green" id="totalSignals">—</div>
+            <div class="stat-label">Gesamt Signale</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value green" id="overallWinRate">—%</div>
+            <div class="stat-label">Gesamt Win-Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value gold" id="avgResult">—</div>
+            <div class="stat-label">Ø Ergebnis</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏱</div>
+            <div class="stat-value" id="bestTimeframe">—</div>
+            <div class="stat-label">Bester Zeitrahmen</div>
+        </div>
+    </div>
+
+    <!-- ==================== PREMIUM CTA BANNER ==================== -->
+    <div class="premium-cta-banner">
+        <div class="premium-cta-inner">
+            <div class="cta-content">
+                <h3>Diese Signale <span>live</span> erhalten?</h3>
+                <p>Premium-Mitglieder erhalten jedes neue Wolfe Wave Signal in Echtzeit — direkt per Telegram-Benachrichtigung oder E-Mail-Alarm. Kein Signal mehr verpassen.</p>
+                <div class="cta-features">
+                    <div class="cta-feature"><span class="check">✓</span> Live Telegram-Signale</div>
+                    <div class="cta-feature"><span class="check">✓</span> E-Mail-Alarme</div>
+                    <div class="cta-feature"><span class="check">✓</span> Alle Märkte &amp; Zeitrahmen</div>
+                    <div class="cta-feature"><span class="check">✓</span> Entry, SL &amp; TP Levels</div>
+                </div>
+            </div>
+            <div class="cta-buttons">
+                <a href="/" class="btn-premium">🚀 Jetzt Premium starten</a>
+                <div class="btn-premium-sub">Jederzeit kündbar · Sofortiger Zugang</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FILTERS ==================== -->
     <div class="filters">
         <div class="filter-group">
             <span class="filter-label">Zeitraum:</span>
@@ -633,44 +1042,24 @@
         </div>
     </div>
 
-    <!-- Stats Overview -->
-    <div class="stats-overview" id="statsOverview">
-        <div class="stat-card">
-            <div class="stat-value green" id="totalSignals">—</div>
-            <div class="stat-label">Gesamt Signale</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value green" id="overallWinRate">—%</div>
-            <div class="stat-label">Gesamt Win-Rate</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value gold" id="avgResult">—</div>
-            <div class="stat-label">Ø Ergebnis</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="bestTimeframe">—</div>
-            <div class="stat-label">Bester Zeitrahmen</div>
-        </div>
-    </div>
-
-    <!-- Performance Disclaimer -->
-    <div style="max-width: 1400px; margin: 32px auto 20px; padding: 0 40px;">
-        <div style="background: rgba(255, 152, 0, 0.1); border-left: 4px solid rgba(255, 152, 0, 0.8); border-radius: 8px; overflow: hidden;">
-            <div onclick="toggleDisclaimer()" style="padding: 16px 24px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none;">
-                <div style="display: flex; align-items: center; gap: 12px;">
+    <!-- ==================== DISCLAIMER ==================== -->
+    <div class="disclaimer-wrapper">
+        <div class="disclaimer-box">
+            <div class="disclaimer-toggle" onclick="toggleDisclaimer()">
+                <div class="disclaimer-left">
                     <span style="font-size: 20px;">ℹ️</span>
-                    <h3 style="font-size: 14px; font-weight: 700; color: rgba(255, 152, 0, 0.95); margin: 0;">Hinweis zur Performance-Statistik</h3>
+                    <h3 class="disclaimer-title">Hinweis zur Performance-Statistik</h3>
                 </div>
-                <span id="disclaimerIcon" style="font-size: 18px; color: rgba(255, 152, 0, 0.8); transition: transform 0.3s;">▼</span>
+                <span id="disclaimerIcon" class="disclaimer-icon">▼</span>
             </div>
-            <div id="disclaimerContent" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
-                <div style="padding: 0 24px 20px 24px; border-top: 1px solid rgba(255, 152, 0, 0.2);">
-                    <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 16px 0 12px 0;">
+            <div id="disclaimerContent" class="disclaimer-content">
+                <div class="disclaimer-text">
+                    <p>
                         Die Success Rate basiert ausschließlich auf den aktuell vom Scanner erkannten Wolfe-Wave-Signalen. 
                         Externe Backtests mit mehreren tausend Wolfe-Wave-Setups zeigen je nach Markt, Zeitrahmen und 
                         Zieldefinition stark variierende Trefferquoten und dienen nur zur Einordnung, nicht als feste 
                         Erfolgszusage – siehe z. B. die Analyse auf 
-                        <a href="https://www.forex-central.net/trading-wolfe-waves.php" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 152, 0, 0.95); text-decoration: underline; font-weight: 600;">Interpreting the Wolfe Wave Pattern (Trader's Guide)</a> 
+                        <a href="https://www.forex-central.net/trading-wolfe-waves.php" target="_blank" rel="noopener noreferrer">Interpreting the Wolfe Wave Pattern (Trader's Guide)</a> 
                         zur Einordnung.
                     </p>
                 </div>
@@ -678,30 +1067,13 @@
         </div>
     </div>
 
-    <script>
-        function toggleDisclaimer() {
-            const content = document.getElementById('disclaimerContent');
-            const icon = document.getElementById('disclaimerIcon');
-            
-            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-                content.style.maxHeight = '0px';
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.style.transform = 'rotate(180deg)';
-            }
-        }
-    </script>
-
-    <!-- Highlights Section -->
-    <div class="highlights-section" style="max-width: 1400px; margin: 40px auto; padding: 0 40px;">
-        <h2 class="section-title" style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">🏆 Top Performer</h2>
-        <div id="highlightsGrid" style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;">
-            <!-- Populated by JS - TP3 first (largest), then TP2, then TP1 -->
-        </div>
+    <!-- ==================== HIGHLIGHTS ==================== -->
+    <div class="highlights-section">
+        <h2 class="section-title">🏆 Top Performer</h2>
+        <div id="highlightsGrid" style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;"></div>
     </div>
 
-    <!-- Overview Table -->
+    <!-- ==================== TABLE ==================== -->
     <div class="table-container" id="overviewContainer">
         <h2 class="section-title">📊 Performance nach Symbol</h2>
         
@@ -722,10 +1094,67 @@
                         <th>Bester TF</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    <!-- Populated by JS -->
-                </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- ==================== BOTTOM PREMIUM CTA ==================== -->
+    <div class="premium-bottom-cta">
+        <div class="premium-bottom-inner">
+            <div class="premium-bottom-icon">🚀</div>
+            <h2>Verpasse kein Signal mehr.<br><span>Werde jetzt Premium.</span></h2>
+            <p>Alle Signale die du hier siehst, hätten live getradet werden können. Als Premium-Mitglied bekommst du jedes neue Signal sofort — bevor der Markt reagiert.</p>
+
+            <div class="premium-features-grid">
+                <div class="pf-item">
+                    <div class="pf-icon">📱</div>
+                    <div class="pf-text">
+                        <strong>Telegram Live-Signale</strong>
+                        <span>Sofortige Push-Benachrichtigung bei jedem neuen Wolfe Wave Signal direkt auf dein Handy.</span>
+                    </div>
+                </div>
+                <div class="pf-item">
+                    <div class="pf-icon">📧</div>
+                    <div class="pf-text">
+                        <strong>E-Mail-Alarme</strong>
+                        <span>Detaillierte E-Mail mit Chart, Entry, Stop-Loss und allen Take-Profit Levels.</span>
+                    </div>
+                </div>
+                <div class="pf-item">
+                    <div class="pf-icon">📊</div>
+                    <div class="pf-text">
+                        <strong>Vollständige Charts</strong>
+                        <span>Hochauflösende Trading-Charts mit eingezeichneten Wolfe Wave Patterns.</span>
+                    </div>
+                </div>
+                <div class="pf-item">
+                    <div class="pf-icon">🎯</div>
+                    <div class="pf-text">
+                        <strong>Exakte Levels</strong>
+                        <span>Entry, Stop-Loss, TP1, TP2 und TP3 — klar definiert für jedes Signal.</span>
+                    </div>
+                </div>
+                <div class="pf-item">
+                    <div class="pf-icon">🌍</div>
+                    <div class="pf-text">
+                        <strong>Alle Märkte</strong>
+                        <span>Forex, Crypto, Aktien und Rohstoffe — alles in einem Abo abgedeckt.</span>
+                    </div>
+                </div>
+                <div class="pf-item">
+                    <div class="pf-icon">⚡</div>
+                    <div class="pf-text">
+                        <strong>24/7 Scanner</strong>
+                        <span>Unser Algorithmus scannt rund um die Uhr alle Timeframes auf neue Setups.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-bottom-buttons">
+                <a href="/" class="btn-premium-large">🚀 Premium-Abo starten</a>
+                <div class="premium-bottom-sub">Jederzeit kündbar · Sofortiger Zugang · Alle Features inklusive</div>
+            </div>
         </div>
     </div>
 
@@ -737,73 +1166,109 @@
         const SUPABASE_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
         
-        // Create Supabase client
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
         console.log('Supabase client created:', supabaseClient);
         
-        // Symbol name mapping
+        // ==================== FULL SYMBOL NAME MAPPING ====================
+        // WICHTIG: Alle Symbole mit vollständigem, ausgeschriebenem Namen!
         const SYMBOL_NAMES = {
-            // Stocks
-            'TRN.OQ': 'Trinity Industries',
+            // Stocks - US NASDAQ / NYSE
+            'TRN.OQ': 'Trinity Industries Inc.',
             'SYY.OQ': 'Sysco Corporation',
-            'QS.OQ': 'QuantumScape',
+            'QS.OQ': 'QuantumScape Corporation',
             'IEX.OQ': 'IDEX Corporation',
-            'DYN.OQ': 'Dyne Therapeutics',
-            'LI.OQ': 'Li Auto',
-            'DIS.N': 'Walt Disney',
-            'UAL.N': 'United Airlines',
-            'DLR.OQ': 'Digital Realty',
-            'LUV.N': 'Southwest Airlines',
-            'ZTS.OQ': 'Zoetis',
-            'SCCO.OQ': 'Southern Copper',
-            'RIOT.OQ': 'Riot Platforms',
-            'DQ.OQ': 'Daqo New Energy',
-            'HBAN.OQ': 'Huntington Bancshares',
-            'FREG.DE': 'Fresenius Medical Care',
-            'TOTF.PA': 'TotalEnergies',
-            'TXN.O': 'Texas Instruments',
-            '2388.HK': 'BOC Hong Kong',
-            '2318.HK': 'Ping An Insurance',
-            'UA.OQ': 'Under Armour',
-            'SEDG.OQ': 'SolarEdge',
-            'RSG.OQ': 'Republic Services',
-            'PRU.OQ': 'Prudential Financial',
-            'PNR.OQ': 'Pentair',
-            'ODFL.OQ': 'Old Dominion Freight',
-            'NCLH.OQ': 'Norwegian Cruise',
-            'ISRG.OQ': 'Intuitive Surgical',
-            'DEO.OQ': 'Diageo',
-            'CTRA.OQ': 'Coterra Energy',
-            'AIZ.OQ': 'Assurant',
-            'ACN.OQ': 'Accenture',
-            'CNC.N': 'Centene',
-            'ATHM.N': 'Autohome',
-            'TSM.N': 'Taiwan Semiconductor',
-            'MO.N': 'Altria Group',
-            'NKE.N': 'Nike',
-            'AKAM.OQ': 'Akamai',
-            'LYFT.OQ': 'Lyft',
-            'F.N': 'Ford Motor',
-            'PUMG.DE': 'Puma',
-            // Crypto
-            'SNXUSD': 'Synthetix',
-            'ATOUSD': 'Cosmos',
-            'TRPUSD': 'Tron',
-            // Forex
-            'EURCZK': 'Euro / Czech Koruna',
-            'NZDUSD': 'New Zealand Dollar / US Dollar'
+            'DYN.OQ': 'Dyne Therapeutics Inc.',
+            'LI.OQ': 'Li Auto Inc.',
+            'DIS.N': 'The Walt Disney Company',
+            'UAL.N': 'United Airlines Holdings Inc.',
+            'DLR.OQ': 'Digital Realty Trust Inc.',
+            'LUV.N': 'Southwest Airlines Co.',
+            'ZTS.OQ': 'Zoetis Inc.',
+            'SCCO.OQ': 'Southern Copper Corporation',
+            'RIOT.OQ': 'Riot Platforms Inc.',
+            'DQ.OQ': 'Daqo New Energy Corp.',
+            'HBAN.OQ': 'Huntington Bancshares Incorporated',
+            'TXN.O': 'Texas Instruments Incorporated',
+            'UA.OQ': 'Under Armour Inc.',
+            'SEDG.OQ': 'SolarEdge Technologies Inc.',
+            'RSG.OQ': 'Republic Services Inc.',
+            'PRU.OQ': 'Prudential Financial Inc.',
+            'PNR.OQ': 'Pentair plc',
+            'ODFL.OQ': 'Old Dominion Freight Line Inc.',
+            'NCLH.OQ': 'Norwegian Cruise Line Holdings Ltd.',
+            'ISRG.OQ': 'Intuitive Surgical Inc.',
+            'DEO.OQ': 'Diageo plc',
+            'CTRA.OQ': 'Coterra Energy Inc.',
+            'AIZ.OQ': 'Assurant Inc.',
+            'ACN.OQ': 'Accenture plc',
+            'CNC.N': 'Centene Corporation',
+            'ATHM.N': 'Autohome Inc.',
+            'TSM.N': 'Taiwan Semiconductor Manufacturing Co.',
+            'MO.N': 'Altria Group Inc.',
+            'NKE.N': 'Nike Inc.',
+            'AKAM.OQ': 'Akamai Technologies Inc.',
+            'LYFT.OQ': 'Lyft Inc.',
+            'F.N': 'Ford Motor Company',
+            'CZR.OQ': 'Caesars Entertainment Inc.',
+            'CBSH.OQ': 'Commerce Bancshares Inc.',
+            // Stocks - Europe
+            'FREG.DE': 'Fresenius Medical Care AG',
+            'TOTF.PA': 'TotalEnergies SE',
+            'PUMG.DE': 'Puma SE',
+            // Stocks - Hong Kong
+            '2388.HK': 'BOC Hong Kong Holdings Ltd.',
+            '2318.HK': 'Ping An Insurance Group Co.',
+            // Crypto — vollständige Namen mit Pair
+            'SNXUSD': 'Synthetix (SNX/USD)',
+            'ATOUSD': 'Cosmos (ATOM/USD)',
+            'TRPUSD': 'Tron (TRX/USD)',
+            'BTCUSD': 'Bitcoin (BTC/USD)',
+            'ETHUSD': 'Ethereum (ETH/USD)',
+            'SOLUSD': 'Solana (SOL/USD)',
+            'XRPUSD': 'Ripple (XRP/USD)',
+            'DOGUSD': 'Dogecoin (DOGE/USD)',
+            'ADAUSD': 'Cardano (ADA/USD)',
+            'AVXUSD': 'Avalanche (AVAX/USD)',
+            'LNKUSD': 'Chainlink (LINK/USD)',
+            'DOTUSD': 'Polkadot (DOT/USD)',
+            'MATUSD': 'Polygon (MATIC/USD)',
+            'UNIUSD': 'Uniswap (UNI/USD)',
+            // Forex — vollständig ausgeschrieben (deutsch)
+            'EURCZK': 'Euro / Tschechische Krone (EUR/CZK)',
+            'NZDUSD': 'Neuseeland-Dollar / US-Dollar (NZD/USD)',
+            'EURUSD': 'Euro / US-Dollar (EUR/USD)',
+            'GBPUSD': 'Britisches Pfund / US-Dollar (GBP/USD)',
+            'USDJPY': 'US-Dollar / Japanischer Yen (USD/JPY)',
+            'USDCHF': 'US-Dollar / Schweizer Franken (USD/CHF)',
+            'AUDUSD': 'Australischer Dollar / US-Dollar (AUD/USD)',
+            'USDCAD': 'US-Dollar / Kanadischer Dollar (USD/CAD)',
+            'NZDCHF': 'Neuseeland-Dollar / Schweizer Franken (NZD/CHF)',
+            'USDNOK': 'US-Dollar / Norwegische Krone (USD/NOK)',
+            'EURGBP': 'Euro / Britisches Pfund (EUR/GBP)',
+            'EURJPY': 'Euro / Japanischer Yen (EUR/JPY)',
+            'GBPJPY': 'Britisches Pfund / Japanischer Yen (GBP/JPY)',
+            'AUDNZD': 'Australischer Dollar / Neuseeland-Dollar (AUD/NZD)',
+            'EURNZD': 'Euro / Neuseeland-Dollar (EUR/NZD)',
+            'GBPCHF': 'Britisches Pfund / Schweizer Franken (GBP/CHF)',
+            // Commodities — vollständig deutsch
+            'XAUUSD': 'Gold (XAU/USD)',
+            'XAGUSD': 'Silber (XAG/USD)',
+            'XPTUSD': 'Platin (XPT/USD)',
+            'XPDUSD': 'Palladium (XPD/USD)',
+            'WTIUSD': 'Rohöl WTI (WTI/USD)',
+            'BRNUSD': 'Rohöl Brent (BRN/USD)',
+            'NGUSD': 'Erdgas (NG/USD)'
         };
         
         function getSymbolName(symbol) {
             return SYMBOL_NAMES[symbol] || symbol;
         }
         
-        // Native fetch instead of Supabase SDK
+        // Native fetch
         async function fetchFromSupabase(table, filters = {}) {
             let url = `${SUPABASE_URL}/rest/v1/${table}?`;
             
-            // Add filters
             if (filters.gte) {
                 url += `created_at=gte.${filters.gte}&`;
             }
@@ -814,7 +1279,6 @@
                 url += `${filters.inField}=in.(${filters.in.join(',')})&`;
             }
             
-            // Remove trailing & or ?
             url = url.replace(/[&?]$/, '');
             
             console.log('Fetching from:', url);
@@ -867,7 +1331,6 @@
                     return false;
                 }
 
-                // Check if user is authenticated
                 const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -884,7 +1347,6 @@
                 const user = await userResponse.json();
                 console.log('User logged in:', user.id);
 
-                // Check subscription status
                 const subResponse = await fetch(
                     `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${user.id}&status=eq.active&select=*`,
                     {
@@ -902,7 +1364,6 @@
                     console.log('Subscription check:', isSubscribed ? 'ACTIVE' : 'NO ACTIVE SUBSCRIPTION');
                 }
 
-                // Check admin status
                 const adminResponse = await fetch(
                     `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${user.id}&select=*`,
                     {
@@ -920,7 +1381,6 @@
                     console.log('Admin check:', isAdmin ? 'YES - ADMIN USER' : 'NO');
                 }
 
-                // Premium access if subscribed OR admin
                 isPremium = isSubscribed || isAdmin;
                 console.log('Premium access granted:', isPremium ? 'YES' : 'NO');
                 
@@ -933,15 +1393,13 @@
             return isPremium;
         }
 
-        // Show image in lightbox (for premium users)
+        // ==================== LIGHTBOX & MODALS ====================
         function showImageLightbox(imageSrc, signal) {
             const lightboxHtml = `
                 <div id="imageLightbox" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;" onclick="closeLightbox()">
                     <div style="position: relative; max-width: 1200px; width: 100%; max-height: 90vh; display: flex; flex-direction: column;">
                         <button onclick="closeLightbox()" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; z-index: 10001; padding: 10px;">×</button>
-                        
                         <img src="${imageSrc}" alt="${signal.symbol}" style="width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 0 50px rgba(0,255,136,0.3);">
-                        
                         <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                                 <div>
@@ -969,50 +1427,41 @@
 
         function showPremiumModal() {
             const modalHtml = `
-                <div id="premiumModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;">
-                    <div style="background: var(--bg-card); border: 2px solid var(--accent-green); border-radius: 16px; max-width: 500px; width: 100%; padding: 40px; position: relative; animation: slideUp 0.3s;">
+                <div id="premiumModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--accent-green); border-radius: 20px; max-width: 520px; width: 100%; padding: 44px; position: relative; animation: slideUp 0.3s;">
                         <button onclick="closePremiumModal()" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">×</button>
                         
                         <div style="text-align: center; margin-bottom: 30px;">
-                            <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
-                            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Premium Feature</h2>
-                            <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.6;">
-                                Um vollständige Trading-Charts und alle aktiven Wolfe Wave Signale anzusehen, werde jetzt Premium-Mitglied.
+                            <div style="font-size: 52px; margin-bottom: 16px;">🔒</div>
+                            <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Premium Feature</h2>
+                            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.7;">
+                                Um vollständige Trading-Charts und alle aktiven Wolfe Wave Signale zu sehen, werde jetzt Premium-Mitglied.
                             </p>
                         </div>
 
-                        <div style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-                            <div style="font-weight: 600; margin-bottom: 12px; color: var(--accent-green);">✓ Als Premium-Mitglied erhältst du:</div>
+                        <div style="background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 14px; padding: 24px; margin-bottom: 24px;">
+                            <div style="font-weight: 600; margin-bottom: 14px; color: var(--accent-green); font-size: 15px;">Als Premium-Mitglied erhältst du:</div>
                             <ul style="list-style: none; padding: 0; margin: 0;">
-                                <li style="padding: 8px 0; color: var(--text-primary);">📊 Vollständige Trading-Charts in hoher Auflösung</li>
-                                <li style="padding: 8px 0; color: var(--text-primary);">🎯 Alle aktiven Signale unter <strong>Success</strong></li>
-                                <li style="padding: 8px 0; color: var(--text-primary);">📈 Detaillierte Entry, Stop-Loss & Take-Profit Levels</li>
-                                <li style="padding: 8px 0; color: var(--text-primary);">⚡ Real-time Signal Updates</li>
-                                <li style="padding: 8px 0; color: var(--text-primary);">📱 Zugriff auf alle Märkte</li>
+                                <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">📱 Live Telegram-Signale in Echtzeit</li>
+                                <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">📧 E-Mail-Alarme bei jedem neuen Signal</li>
+                                <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">📊 Vollständige Trading-Charts in hoher Auflösung</li>
+                                <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">🎯 Alle aktiven Signale unter <strong>Success</strong></li>
+                                <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">📈 Exakte Entry, Stop-Loss &amp; Take-Profit Levels</li>
+                                <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">🌍 Zugriff auf alle Märkte &amp; Zeitrahmen</li>
                             </ul>
                         </div>
 
                         <div style="display: grid; gap: 12px;">
-                            <a href="/" style="display: block; padding: 16px; background: var(--accent-green); color: #000; text-align: center; border-radius: 10px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <a href="/" style="display: block; padding: 16px; background: var(--accent-green); color: #000; text-align: center; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 0 30px rgba(0,255,136,0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
                                 🚀 Jetzt Premium werden
                             </a>
                         </div>
 
                         <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-secondary);">
-                            Alle Signale findest du als Premium-Mitglied unter <strong style="color: var(--accent-green);">Success</strong>
+                            Jederzeit kündbar · Sofortiger Zugang
                         </p>
                     </div>
                 </div>
-                <style>
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-                    @keyframes slideUp {
-                        from { transform: translateY(30px); opacity: 0; }
-                        to { transform: translateY(0); opacity: 1; }
-                    }
-                </style>
             `;
             document.body.insertAdjacentHTML('beforeend', modalHtml);
         }
@@ -1029,8 +1478,20 @@
             loadPerformanceData();
         });
 
+        function toggleDisclaimer() {
+            const content = document.getElementById('disclaimerContent');
+            const icon = document.getElementById('disclaimerIcon');
+            
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
         function setupFilters() {
-            // Period filters
             document.querySelectorAll('[data-period]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-period]').forEach(b => b.classList.remove('active'));
@@ -1040,7 +1501,6 @@
                 });
             });
 
-            // Market filters
             document.querySelectorAll('[data-market]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-market]').forEach(b => b.classList.remove('active'));
@@ -1057,7 +1517,6 @@
             document.getElementById('performanceTable').style.display = 'none';
 
             try {
-                // Build filters
                 const filters = {};
                 
                 if (currentPeriod !== 'all') {
@@ -1102,7 +1561,7 @@
                 if (!symbolMap[symbol]) {
                     symbolMap[symbol] = {
                         symbol: symbol,
-                        symbolName: getSymbolName(symbol),  // Use mapping function
+                        symbolName: getSymbolName(symbol),
                         signals: [],
                         market: signal.market
                     };
@@ -1115,7 +1574,6 @@
                 const signals = item.signals;
                 const total = signals.length;
                 
-                // Berechne Wins basierend auf TP-Hits (nicht result_folder)
                 const wins = signals.filter(s => 
                     s.tp1_hit || s.tp2_hit || s.tp3_hit
                 ).length;
@@ -1126,19 +1584,15 @@
 
                 const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
 
-                // Average result - use highest TP level reached
                 let avgResultScore = 0;
                 let avgResultLabel = 'N/A';
                 
                 if (total > 0) {
-                    // Count how many reached each TP level
-                    // IMPORTANT: TP3 means TP1+TP2+TP3 all hit (highest level)
                     const tp3Count = signals.filter(s => s.tp3_hit === true).length;
                     const tp2Only = signals.filter(s => s.tp2_hit === true && s.tp3_hit !== true).length;
                     const tp1Only = signals.filter(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true).length;
                     const slOnly = signals.filter(s => s.sl_hit === true && !s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
                     
-                    // Determine average by majority
                     if (tp3Count > tp2Only && tp3Count > tp1Only && tp3Count > slOnly) {
                         avgResultLabel = 'TP3';
                         avgResultScore = 3;
@@ -1154,13 +1608,11 @@
                     }
                 }
 
-                // Best timeframe
                 const tfMap = {};
                 signals.forEach(s => {
                     const tf = s.timeframe;
                     if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
                     tfMap[tf].total++;
-                    // Berechne Wins basierend auf TP-Hits
                     if (s.tp1_hit || s.tp2_hit || s.tp3_hit) tfMap[tf].wins++;
                 });
 
@@ -1189,18 +1641,55 @@
                 };
             });
 
-            // Sort by win rate, but prioritize symbols with more signals
             performanceData.sort((a, b) => {
-                // If both have 2+ signals, sort by win rate
                 if (a.total >= 2 && b.total >= 2) {
                     return b.winRate - a.winRate;
                 }
-                // If only one has 2+ signals, it goes first
                 if (a.total >= 2) return -1;
                 if (b.total >= 2) return 1;
-                // If both have <2 signals, sort by win rate
                 return b.winRate - a.winRate;
             });
+        }
+
+        // ==================== RENDER ====================
+        function renderOverviewStats() {
+            const total = allSignals.length;
+            const wins = allSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
+            const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
+
+            document.getElementById('totalSignals').textContent = total;
+            document.getElementById('overallWinRate').textContent = winRate + '%';
+
+            const tp3 = allSignals.filter(s => s.tp3_hit === true).length;
+            const tp2 = allSignals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
+            const tp1 = allSignals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
+            
+            let avgResult = 'N/A';
+            if (tp3 > tp2 && tp3 > tp1) avgResult = 'TP3';
+            else if (tp2 > tp1) avgResult = 'TP2';
+            else if (tp1 > 0) avgResult = 'TP1';
+            
+            document.getElementById('avgResult').textContent = avgResult;
+
+            const tfMap = {};
+            allSignals.forEach(s => {
+                const tf = s.timeframe;
+                if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
+                tfMap[tf].total++;
+                if (s.tp1_hit || s.tp2_hit || s.tp3_hit) tfMap[tf].wins++;
+            });
+
+            let bestTF = 'N/A';
+            let bestTFRate = 0;
+            Object.entries(tfMap).forEach(([tf, stats]) => {
+                const rate = stats.total > 0 ? stats.wins / stats.total : 0;
+                if (rate > bestTFRate) {
+                    bestTFRate = rate;
+                    bestTF = tf;
+                }
+            });
+
+            document.getElementById('bestTimeframe').textContent = bestTF;
         }
 
         function renderHighlights() {
@@ -1208,60 +1697,38 @@
             if (!grid) return;
             grid.innerHTML = '';
 
-            // Sort performanceData by avgResultScore (highest first)
             const sortedByScore = [...performanceData].sort((a, b) => {
-                // First by score, then by win rate
                 if (b.avgResultScore !== a.avgResultScore) {
                     return b.avgResultScore - a.avgResultScore;
                 }
                 return b.winRate - a.winRate;
             });
 
-            // Find best TP3 symbol (avgResultScore = 3)
             const bestTP3Symbol = sortedByScore.find(s => s.avgResultScore === 3);
-            
-            // Find best TP2 symbol (avgResultScore = 2)
             const bestTP2Symbol = sortedByScore.find(s => s.avgResultScore === 2);
-            
-            // Find best TP1 symbol (avgResultScore = 1)
             const bestTP1Symbol = sortedByScore.find(s => s.avgResultScore === 1);
 
-            // Create highlight cards for symbols
             if (bestTP3Symbol) {
-                // Get the best signal from this symbol
                 const bestSignal = bestTP3Symbol.signals
                     .filter(s => s.tp3_hit === true)
-                    .sort((a, b) => {
-                        const pnlA = calculatePnLValue(a, 3);
-                        const pnlB = calculatePnLValue(b, 3);
-                        return pnlB - pnlA;
-                    })[0];
+                    .sort((a, b) => calculatePnLValue(b, 3) - calculatePnLValue(a, 3))[0];
                 if (bestSignal) grid.appendChild(createHighlightCard(bestSignal, 3));
             }
             
             if (bestTP2Symbol) {
                 const bestSignal = bestTP2Symbol.signals
                     .filter(s => s.tp2_hit === true)
-                    .sort((a, b) => {
-                        const pnlA = calculatePnLValue(a, 2);
-                        const pnlB = calculatePnLValue(b, 2);
-                        return pnlB - pnlA;
-                    })[0];
+                    .sort((a, b) => calculatePnLValue(b, 2) - calculatePnLValue(a, 2))[0];
                 if (bestSignal) grid.appendChild(createHighlightCard(bestSignal, 2));
             }
             
             if (bestTP1Symbol) {
                 const bestSignal = bestTP1Symbol.signals
                     .filter(s => s.tp1_hit === true)
-                    .sort((a, b) => {
-                        const pnlA = calculatePnLValue(a, 1);
-                        const pnlB = calculatePnLValue(b, 1);
-                        return pnlB - pnlA;
-                    })[0];
+                    .sort((a, b) => calculatePnLValue(b, 1) - calculatePnLValue(a, 1))[0];
                 if (bestSignal) grid.appendChild(createHighlightCard(bestSignal, 1));
             }
 
-            // Helper function to calculate PnL value
             function calculatePnLValue(signal, tpLevel) {
                 if (!signal.entry) return 0;
                 let target = 0;
@@ -1274,9 +1741,8 @@
                 return (diff / signal.entry * 100);
             }
 
-            // Show message if no highlights
             if (!bestTP3Symbol && !bestTP2Symbol && !bestTP1Symbol) {
-                grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center;">Keine Top Performer für diesen Filter verfügbar</p>';
+                grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center; padding: 40px 0;">Keine Top Performer für diesen Filter verfügbar</p>';
             }
         }
 
@@ -1284,21 +1750,15 @@
             const card = document.createElement('div');
             card.className = `highlight-card tp${tpLevel}`;
             
-            // Premium check on click
             card.onclick = (e) => {
                 e.stopPropagation();
-                console.log('Highlight clicked. isPremium:', isPremium);
-                
                 if (isPremium) {
-                    console.log('Opening lightbox for premium user');
                     showImageLightbox(signal.original_path || '/images/placeholder.png', signal);
                 } else {
-                    console.log('Opening premium modal for free user');
                     showPremiumModal();
                 }
             };
             
-            // Add visual indicator that clicking opens premium modal
             card.style.position = 'relative';
 
             const badge = tpLevel === 3 ? '🥇 TP3 CHAMPION' : tpLevel === 2 ? '🥈 TP2 RUNNER-UP' : '🥉 TP1 BRONZE';
@@ -1310,7 +1770,7 @@
                 <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px);">
                     ${isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU'}
                 </div>
-                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="pointer-events: none;">
+                <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${symbolName}" loading="lazy" style="pointer-events: none;">
                 <div class="highlight-info">
                     <div class="highlight-header">
                         <span class="highlight-badge ${badgeClass}">${badge}</span>
@@ -1340,7 +1800,7 @@
                 const avgResultClass = item.avgResult.toLowerCase();
                 const accordionId = `accordion-${item.symbol.replace(/[^a-zA-Z0-9]/g, '_')}`;
 
-                // Main row
+                // Main row — VOLLSTÄNDIGER SYMBOLNAME im Titel
                 const row = document.createElement('tr');
                 row.style.cursor = 'pointer';
                 row.onclick = () => toggleAccordion(accordionId);
@@ -1348,52 +1808,50 @@
                     <td>${rankBadge}</td>
                     <td>
                         <div class="symbol-cell">
-                            <strong>${item.symbolName}</strong>
-                            <span style="color: var(--text-secondary); font-size: 12px;">${item.symbol}</span>
+                            <div>
+                                <strong style="display: block; margin-bottom: 2px;">${item.symbolName}</strong>
+                                <span style="color: var(--text-tertiary); font-size: 12px; font-family: 'JetBrains Mono', monospace;">${item.symbol}</span>
+                            </div>
                         </div>
                     </td>
-                    <td>${item.total}</td>
+                    <td><span style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">${item.total}</span></td>
                     <td><span class="win-rate ${winRateClass}">${item.winRate}%</span></td>
                     <td><span class="avg-result ${avgResultClass}">${item.avgResult}</span></td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             ${item.bestTF}
-                            <span id="${accordionId}-icon" style="font-size: 12px; transition: transform 0.3s;">▼</span>
+                            <span id="${accordionId}-icon" style="font-size: 12px; transition: transform 0.3s; color: var(--text-secondary);">▼</span>
                         </div>
                     </td>
                 `;
                 tbody.appendChild(row);
 
-                // Accordion row (hidden by default, but content pre-rendered)
+                // Accordion row
                 const accordionRow = document.createElement('tr');
                 accordionRow.id = accordionId;
                 accordionRow.style.display = 'none';
                 
-                // Create grid container
                 const gridContainer = document.createElement('td');
                 gridContainer.colSpan = 6;
                 gridContainer.style.cssText = 'padding: 24px; background: var(--bg-primary); border-top: 1px solid var(--border-color);';
                 
-                // Header
                 const headerDiv = document.createElement('div');
-                headerDiv.style.cssText = 'margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;';
+                headerDiv.style.cssText = 'margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;';
                 headerDiv.innerHTML = `
                     <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary);">
-                        ${item.symbolName} - Alle Signale
+                        ${item.symbolName} — Alle Signale
                     </h3>
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <span style="color: var(--text-secondary); font-size: 14px;">Win-Rate: <strong style="color: var(--accent-green);">${item.winRate}%</strong></span>
-                        <span style="color: var(--text-secondary); font-size: 14px;">Signale: <strong>${item.total}</strong></span>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <span style="color: var(--text-secondary); font-size: 14px;">Win-Rate: <strong style="color: var(--accent-green); font-family: 'JetBrains Mono', monospace;">${item.winRate}%</strong></span>
+                        <span style="color: var(--text-secondary); font-size: 14px;">Signale: <strong style="font-family: 'JetBrains Mono', monospace;">${item.total}</strong></span>
                     </div>
                 `;
                 
                 gridContainer.appendChild(headerDiv);
                 
-                // Create signal cards
                 const cardsContainer = document.createElement('div');
                 cardsContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;';
                 
-                // Sort signals by date (newest first)
                 const sortedSignals = item.signals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 
                 sortedSignals.forEach(signal => {
@@ -1412,7 +1870,6 @@
             const icon = document.getElementById(`${accordionId}-icon`);
             
             if (accordion.style.display === 'none') {
-                // Close all other accordions
                 document.querySelectorAll('[id^="accordion-"]').forEach(acc => {
                     if (acc.id !== accordionId) {
                         acc.style.display = 'none';
@@ -1421,11 +1878,9 @@
                     }
                 });
                 
-                // Open this accordion
                 accordion.style.display = 'table-row';
                 icon.style.transform = 'rotate(180deg)';
             } else {
-                // Close accordion
                 accordion.style.display = 'none';
                 icon.style.transform = 'rotate(0deg)';
             }
@@ -1461,33 +1916,37 @@
             card.style.cssText = `
                 background: var(--bg-card);
                 border: 1px solid var(--border-color);
-                border-radius: 10px;
+                border-radius: 12px;
                 overflow: hidden;
                 cursor: pointer;
-                transition: all 0.2s;
+                transition: all 0.25s;
                 position: relative;
             `;
             
             card.onmouseover = () => {
                 card.style.transform = 'translateY(-4px)';
                 card.style.borderColor = 'var(--accent-green)';
+                card.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
             };
             card.onmouseout = () => {
                 card.style.transform = 'translateY(0)';
                 card.style.borderColor = 'var(--border-color)';
+                card.style.boxShadow = 'none';
             };
 
             const premiumBadge = isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU';
+            const symbolFullName = getSymbolName(signal.symbol);
             
             card.innerHTML = `
                 <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
                     ${premiumBadge}
                 </div>
-                <img src="${signal.original_path || '/images/placeholder.png'}" alt="${signal.symbol}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-                <div style="padding: 12px;">
+                <img src="${signal.original_path || '/images/placeholder.png'}" alt="${symbolFullName}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+                <div style="padding: 14px;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${symbolFullName}">${symbolFullName}</div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                         <span style="padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(0, 255, 136, 0.1); color: var(--accent-green);">${resultBadge}</span>
-                        ${pnl ? `<span style="font-weight: 600; font-size: 13px; color: ${pnl.startsWith('+') ? 'var(--accent-green)' : 'var(--accent-red)'};">${pnl}</span>` : ''}
+                        ${pnl ? `<span style="font-weight: 700; font-size: 13px; font-family: 'JetBrains Mono', monospace; color: ${pnl.startsWith('+') ? 'var(--accent-green)' : 'var(--accent-red)'};">${pnl}</span>` : ''}
                     </div>
                     <div style="display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 12px;">
                         <span>${signal.timeframe} <span style="color: ${signal.direction === 'BULLISH' ? 'var(--accent-green)' : 'var(--accent-red)'}; font-weight: 600;">${signal.direction}</span></span>
@@ -1497,63 +1956,15 @@
             `;
             
             card.onclick = (e) => {
-                e.stopPropagation(); // Prevent accordion toggle
-                console.log('Card clicked. isPremium:', isPremium);
-                
+                e.stopPropagation();
                 if (isPremium) {
-                    console.log('Opening lightbox for premium user');
                     showImageLightbox(signal.original_path || '/images/placeholder.png', signal);
                 } else {
-                    console.log('Opening premium modal for free user');
                     showPremiumModal();
                 }
             };
             
             return card;
-        }
-
-        function renderOverviewStats() {
-            const total = allSignals.length;
-            // Berechne Wins basierend auf TP-Hits (nicht result_folder)
-            const wins = allSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
-            const winRate = total > 0 ? (wins / total * 100).toFixed(1) : 0;
-
-            document.getElementById('totalSignals').textContent = total;
-            document.getElementById('overallWinRate').textContent = winRate + '%';
-
-            // Average result
-            const tp3 = allSignals.filter(s => s.tp3_hit === true).length;
-            const tp2 = allSignals.filter(s => s.tp2_hit === true && s.tp3_hit === false).length;
-            const tp1 = allSignals.filter(s => s.tp1_hit === true && s.tp2_hit === false && s.tp3_hit === false).length;
-            
-            let avgResult = 'N/A';
-            if (tp3 > tp2 && tp3 > tp1) avgResult = 'TP3';
-            else if (tp2 > tp1) avgResult = 'TP2';
-            else if (tp1 > 0) avgResult = 'TP1';
-            
-            document.getElementById('avgResult').textContent = avgResult;
-
-            // Best timeframe
-            const tfMap = {};
-            allSignals.forEach(s => {
-                const tf = s.timeframe;
-                if (!tfMap[tf]) tfMap[tf] = { wins: 0, total: 0 };
-                tfMap[tf].total++;
-                // Berechne Wins basierend auf TP-Hits
-                if (s.tp1_hit || s.tp2_hit || s.tp3_hit) tfMap[tf].wins++;
-            });
-
-            let bestTF = 'N/A';
-            let bestTFRate = 0;
-            Object.entries(tfMap).forEach(([tf, stats]) => {
-                const rate = stats.total > 0 ? stats.wins / stats.total : 0;
-                if (rate > bestTFRate) {
-                    bestTFRate = rate;
-                    bestTF = tf;
-                }
-            });
-
-            document.getElementById('bestTimeframe').textContent = bestTF;
         }
 
         function calculatePnL(signal, tpLevel) {
