@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Performance Statistiken - WolfeWaveSignals</title>
     <meta name="description" content="Detaillierte Performance-Statistiken und Win-Rates für alle Wolfe Wave Trading-Signale nach Symbol, Markt und Zeitrahmen.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/JetBrainsMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'JetBrains Mono';
+            src: url('/fonts/JetBrainsMono-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
+    </style>
     
     <style>
         * {
@@ -967,15 +983,15 @@
         </div>
         <div class="trust-item">
             <span class="icon">📊</span>
-            <span>Echte Daten — <strong>keine Manipulation</strong></span>
+            <span>Echte Daten — <strong>automatisch erfasst</strong></span>
         </div>
         <div class="trust-item">
             <span class="icon">✅</span>
             <span>Verifizierte Ergebnisse — <strong>TP &amp; SL transparent</strong></span>
         </div>
         <div class="trust-item">
-            <span class="icon">🔒</span>
-            <span>Unabhängig — <strong>kein Interessenkonflikt</strong></span>
+            <span class="icon">🤖</span>
+            <span>Algorithmisch — <strong>keine manuelle Selektion</strong></span>
         </div>
     </div>
 
@@ -1017,8 +1033,8 @@
                 </div>
             </div>
             <div class="cta-buttons">
-                <a href="/" class="btn-premium">🚀 Jetzt Premium starten</a>
-                <div class="btn-premium-sub">Jederzeit kündbar · Sofortiger Zugang</div>
+                <a href="/" class="btn-premium">🚀 Alle Signale freischalten — 9,99€/Monat</a>
+                <div class="btn-premium-sub">Jederzeit kündbar · Sofortiger Zugang · inkl. MwSt.</div>
             </div>
         </div>
     </div>
@@ -1047,20 +1063,35 @@
         <div class="disclaimer-box">
             <div class="disclaimer-toggle" onclick="toggleDisclaimer()">
                 <div class="disclaimer-left">
-                    <span style="font-size: 20px;">ℹ️</span>
-                    <h3 class="disclaimer-title">Hinweis zur Performance-Statistik</h3>
+                    <span style="font-size: 20px;">⚠️</span>
+                    <h3 class="disclaimer-title">Wichtiger Hinweis zur Performance-Statistik</h3>
                 </div>
-                <span id="disclaimerIcon" class="disclaimer-icon">▼</span>
+                <span id="disclaimerIcon" class="disclaimer-icon" style="transform: rotate(180deg);">▼</span>
             </div>
-            <div id="disclaimerContent" class="disclaimer-content">
+            <div id="disclaimerContent" class="disclaimer-content" style="max-height: 500px;">
                 <div class="disclaimer-text">
                     <p>
-                        Die Success Rate basiert ausschließlich auf den aktuell vom Scanner erkannten Wolfe-Wave-Signalen. 
+                        <strong>Hypothetische Ergebnisse:</strong> Die gezeigten Ergebnisse sind hypothetisch und zeigen, 
+                        was passiert wäre, wenn die Signale zum exakten Entry-Preis gehandelt worden wären. 
+                        Slippage, Spreads, Swaps und Transaktionskosten sind <strong>nicht berücksichtigt</strong> und 
+                        würden die tatsächliche Performance reduzieren.
+                    </p>
+                    <p>
+                        <strong>Win-Rate Definition:</strong> Als „Win" gilt jedes Signal, bei dem mindestens Take-Profit 1 
+                        erreicht wurde, unabhängig vom weiteren Kursverlauf. Die Win-Rate basiert ausschließlich auf den 
+                        aktuell vom Scanner erkannten Wolfe-Wave-Signalen.
+                    </p>
+                    <p>
                         Externe Backtests mit mehreren tausend Wolfe-Wave-Setups zeigen je nach Markt, Zeitrahmen und 
                         Zieldefinition stark variierende Trefferquoten und dienen nur zur Einordnung, nicht als feste 
-                        Erfolgszusage – siehe z. B. die Analyse auf 
+                        Erfolgszusage – siehe z.&nbsp;B. die Analyse auf 
                         <a href="https://www.forex-central.net/trading-wolfe-waves.php" target="_blank" rel="noopener noreferrer">Interpreting the Wolfe Wave Pattern (Trader's Guide)</a> 
                         zur Einordnung.
+                    </p>
+                    <p>
+                        <strong>Vergangene Ergebnisse sind keine Garantie für zukünftige Gewinne.</strong> 
+                        Trading birgt erhebliche Risiken bis hin zum Totalverlust. Diese Informationen stellen 
+                        keine Anlageberatung und keine persönliche Empfehlung dar.
                     </p>
                 </div>
             </div>
@@ -1152,8 +1183,8 @@
             </div>
 
             <div class="premium-bottom-buttons">
-                <a href="/" class="btn-premium-large">🚀 Premium-Abo starten</a>
-                <div class="premium-bottom-sub">Jederzeit kündbar · Sofortiger Zugang · Alle Features inklusive</div>
+                <a href="/" class="btn-premium-large">🚀 Premium-Abo starten — 9,99€/Monat</a>
+                <div class="premium-bottom-sub">Jederzeit kündbar · Sofortiger Zugang · Alle Features inklusive · inkl. MwSt.</div>
             </div>
         </div>
     </div>
@@ -1168,7 +1199,6 @@
         
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log('Supabase client created:', supabaseClient);
         
         // ==================== FULL SYMBOL NAME MAPPING ====================
         // WICHTIG: Alle Symbole mit vollständigem, ausgeschriebenem Namen!
@@ -1281,8 +1311,6 @@
             
             url = url.replace(/[&?]$/, '');
             
-            console.log('Fetching from:', url);
-            
             const response = await fetch(url, {
                 headers: {
                     'apikey': SUPABASE_KEY,
@@ -1295,16 +1323,12 @@
                 }
             });
             
-            console.log('Response status:', response.status);
-            
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Error response:', errorText);
                 throw new Error(`HTTP ${response.status}: ${errorText}`);
             }
             
             const data = await response.json();
-            console.log('Got data:', data.length, 'records');
             return data;
         }
 
@@ -1323,10 +1347,8 @@
         async function checkPremiumStatus() {
             try {
                 const token = getAccessToken();
-                console.log('Access token:', token ? 'EXISTS' : 'MISSING');
                 
                 if (!token) {
-                    console.log('No access token - user not logged in');
                     isPremium = false;
                     return false;
                 }
@@ -1339,13 +1361,11 @@
                 });
 
                 if (!userResponse.ok) {
-                    console.log('Token invalid or expired');
                     isPremium = false;
                     return false;
                 }
 
                 const user = await userResponse.json();
-                console.log('User logged in:', user.id);
 
                 const subResponse = await fetch(
                     `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${user.id}&status=eq.active&select=*`,
@@ -1361,7 +1381,6 @@
                 if (subResponse.ok) {
                     const subs = await subResponse.json();
                     isSubscribed = subs.length > 0;
-                    console.log('Subscription check:', isSubscribed ? 'ACTIVE' : 'NO ACTIVE SUBSCRIPTION');
                 }
 
                 const adminResponse = await fetch(
@@ -1378,18 +1397,14 @@
                 if (adminResponse.ok) {
                     const admins = await adminResponse.json();
                     isAdmin = admins.length > 0;
-                    console.log('Admin check:', isAdmin ? 'YES - ADMIN USER' : 'NO');
                 }
 
                 isPremium = isSubscribed || isAdmin;
-                console.log('Premium access granted:', isPremium ? 'YES' : 'NO');
                 
             } catch (error) {
-                console.error('Premium check error:', error);
                 isPremium = false;
             }
             
-            console.log('Final isPremium:', isPremium);
             return isPremium;
         }
 
@@ -1544,8 +1559,7 @@
                 renderHighlights();
 
             } catch (err) {
-                console.error('Error loading data:', err);
-                alert('Fehler beim Laden der Daten: ' + err.message);
+                alert('Fehler beim Laden der Daten. Bitte Seite neu laden.');
             } finally {
                 document.getElementById('loadingOverview').style.display = 'none';
                 document.getElementById('performanceTable').style.display = 'block';
