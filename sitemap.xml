@@ -6,7 +6,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://www.wolfewavesignals.com/</loc>
-    <lastmod>2025-01-25</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -14,7 +14,7 @@
   <!-- Tutorial / Wolfe Waves Erklärung -->
   <url>
     <loc>https://www.wolfewavesignals.com/wolfewaves.html</loc>
-    <lastmod>2025-01-25</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -22,7 +22,7 @@
   <!-- Scanner Erklärung -->
   <url>
     <loc>https://www.wolfewavesignals.com/scanner-erklaerung.html</loc>
-    <lastmod>2025-01-25</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -30,15 +30,31 @@
   <!-- Märkte -->
   <url>
     <loc>https://www.wolfewavesignals.com/maerkte.html</loc>
-    <lastmod>2025-01-25</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  
+  <!-- Performance -->
+  <url>
+    <loc>https://www.wolfewavesignals.com/performance.html</loc>
+    <lastmod>2026-02-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Über mich -->
+  <url>
+    <loc>https://www.wolfewavesignals.com/ueber-mich.html</loc>
+    <lastmod>2026-02-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   
   <!-- FAQ -->
   <url>
     <loc>https://www.wolfewavesignals.com/faq.html</loc>
-    <lastmod>2025-01-25</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -46,7 +62,7 @@
   <!-- Impressum -->
   <url>
     <loc>https://www.wolfewavesignals.com/impressum.html</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -54,15 +70,23 @@
   <!-- Datenschutz -->
   <url>
     <loc>https://www.wolfewavesignals.com/datenschutz.html</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
-  <!-- AGBs -->
+  <!-- AGB -->
   <url>
-    <loc>https://www.wolfewavesignals.com/agbs.html</loc>
-    <lastmod>2025-01-20</lastmod>
+    <loc>https://www.wolfewavesignals.com/agb.html</loc>
+    <lastmod>2026-02-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- Widerruf -->
+  <url>
+    <loc>https://www.wolfewavesignals.com/widerruf.html</loc>
+    <lastmod>2026-02-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
