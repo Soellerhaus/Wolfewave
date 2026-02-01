@@ -497,6 +497,7 @@
                 </div>
 
                 <a href="performance.html" class="nav-link ${isActive('performance.html')}">📊 Performance</a>
+                <a href="ueber-mich.html" class="nav-link ${isActive('ueber-mich.html')}">👤 Über mich</a>
 
                 <!-- Language Selector -->
                 <div class="nav-dropdown notranslate" id="langDropdown" translate="no">
@@ -539,6 +540,7 @@
             <div class="wws-mobile-nav-section">Navigation</div>
             <a href="index.html" class="wws-mobile-nav-link ${isActive('index.html')}">🏠 Signale</a>
             <a href="performance.html" class="wws-mobile-nav-link ${isActive('performance.html')}">📊 Performance</a>
+            <a href="ueber-mich.html" class="wws-mobile-nav-link ${isActive('ueber-mich.html')}">👤 Über mich</a>
             
             <div class="wws-mobile-nav-section">Lernen</div>
             <a href="wolfewaves.html" class="wws-mobile-nav-link ${isActive('wolfewaves.html')}">📖 Tutorial</a>
