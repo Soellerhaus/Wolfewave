@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widerrufsbelehrung - WolfeWaveSignals</title>
-    <meta name="description" content="Widerrufsbelehrung für WolfeWaveSignals Trading-Signal-Abonnements.">
+    <title>Allgemeine Geschäftsbedingungen - WolfeWaveSignals</title>
+    <meta name="description" content="Allgemeine Geschäftsbedingungen (AGB) für WolfeWaveSignals Trading-Signal-Abonnements.">
     <meta name="robots" content="noindex, follow">
-    <link rel="canonical" href="https://wolfewavesignals.com/widerruf.html">
+    <link rel="canonical" href="https://www.wolfewavesignals.com/agb.html">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-F3BQLK365X');
-    </script>
+    <!-- Google Analytics: Wird über Cookie-Consent auf der Hauptseite gesteuert -->
     
     <style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -307,43 +306,12 @@
             background: rgba(0, 255, 136, 0.1);
         }
         
-        /* Hide Google Translate branding - AGGRESSIVE */
-        .goog-te-banner-frame,
-        .goog-te-balloon-frame {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-        }
-        
-        .goog-logo-link {
+        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
+        body > .skiptranslate > iframe.goog-te-banner-frame {
             display: none !important;
         }
-        
-        .goog-te-gadget {
-            color: transparent !important;
-            font-size: 0 !important;
-        }
-        
-        .goog-te-gadget span {
-            display: none !important;
-        }
-        
-        body > .skiptranslate {
-            display: none !important;
-        }
-        
-        iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-        
         body {
             top: 0px !important;
-            position: static !important;
         }
     </style>
 
@@ -358,31 +326,10 @@
                 multilanguagePage: true
             }, 'google_translate_element');
             
-            // AGGRESSIVE: Remove Google Translate banner frame immediately
+            // Minimize top banner displacement
             setTimeout(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                    bannerFrame.style.visibility = 'hidden';
-                }
-                
-                var skipTranslate = document.querySelector('body > .skiptranslate');
-                if (skipTranslate) {
-                    skipTranslate.style.display = 'none';
-                }
-                
                 document.body.style.top = '0';
-                document.body.style.position = 'static';
             }, 100);
-            
-            // Keep checking and removing banner
-            setInterval(function() {
-                var bannerFrame = document.querySelector('.goog-te-banner-frame');
-                if (bannerFrame) {
-                    bannerFrame.style.display = 'none';
-                }
-                document.body.style.top = '0';
-            }, 500);
             
             // AUTO-DETECT and translate on first visit
             setTimeout(function() {
@@ -465,112 +412,96 @@
     <script src="/components/header.js"></script>
 
     <main class="content">
-        <h1>Widerrufsbelehrung</h1>
-        <p class="last-updated">Stand: Januar 2025</p>
+        <h1>Allgemeine Geschäftsbedingungen (AGB)</h1>
+        <p class="last-updated">Stand: Februar 2026</p>
 
-        <h2>Widerrufsrecht</h2>
-        <p>Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>
-        
-        <p>Die Widerrufsfrist beträgt <strong>vierzehn Tage ab dem Tag des Vertragsabschlusses</strong>.</p>
-
-        <p>Um Ihr Widerrufsrecht auszuüben, müssen Sie uns:</p>
-        
-        <div class="contact-info">
-            <p><strong>Claudio Scheiwiller</strong></p>
-            <p>Schöntalweg 10</p>
-            <p>6992 Hirschegg, Österreich</p>
-            <p>E-Mail: <a href="/cdn-cgi/l/email-protection#4136202d322433272d3801262c20282d6f222e2c" style="color: var(--accent-green);"><span class="__cf_email__" data-cfemail="b8cfd9d4cbddcaded4c1f8dfd5d9d1d496dbd7d5">[email&#160;protected]</span></a></p>
-        </div>
-
-        <p style="margin-top: 16px;">mittels einer eindeutigen Erklärung (z.B. ein mit der Post versandter Brief oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.</p>
-
-        <p>Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.</p>
-
-        <h2>Folgen des Widerrufs</h2>
-        <p>Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.</p>
-        
-        <p>Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung Entgelte berechnet.</p>
-
-        <h2>Vorzeitiges Erlöschen des Widerrufsrechts</h2>
-        
-        <div class="warning-box">
-            <p><strong>âš ï¸ Wichtiger Hinweis:</strong></p>
-            <p style="margin-top: 12px; color: var(--text-secondary);">Bei WolfeWaveSignals handelt es sich um eine digitale Dienstleistung (Zugang zu Trading-Signalen), die sofort nach Kaufabschluss bereitgestellt wird.</p>
-        </div>
-
-        <p>Gemäß § 18 Abs. 1 Z 11 FAGG (Fern- und Auswärtsgeschäfte-Gesetz) bzw. Art. 16 lit. m der EU-Verbraucherrechterichtlinie erlischt das Widerrufsrecht bei digitalen Inhalten vorzeitig, wenn:</p>
-        
-        <ul>
-            <li>Der Verbraucher <strong>ausdrücklich zugestimmt</strong> hat, dass der Unternehmer mit der Ausführung des Vertrags vor Ablauf der Widerrufsfrist beginnt</li>
-            <li>Der Verbraucher seine <strong>Kenntnis davon bestätigt</strong> hat, dass er durch seine Zustimmung sein Widerrufsrecht verliert</li>
-            <li>Der Unternehmer dem Verbraucher eine <strong>Bestätigung</strong> über diese Zustimmung übermittelt hat</li>
-        </ul>
-
+        <h2>§ 1 Geltungsbereich</h2>
+        <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle über die Website <strong>wolfewavesignals.com</strong> abgeschlossenen Verträge zwischen:</p>
         <div class="highlight-box">
-            <p><strong>ðŸ”’ Bei WolfeWaveSignals:</strong></p>
-            <p style="margin-top: 8px;">Beim Checkout bestätigen Sie durch Aktivieren der Checkbox:</p>
-            <p style="margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-style: italic;">
-                â˜‘ï¸ „Ich stimme zu, dass die Dienstleistung (Zugang zu Trading-Signalen) sofort nach Zahlungseingang beginnt. Mir ist bekannt, dass ich mein Widerrufsrecht mit Beginn der Dienstleistung verliere."
-            </p>
-            <p style="margin-top: 12px; color: var(--accent-green);"><strong>â†’ Mit dieser Zustimmung erlischt Ihr Widerrufsrecht, sobald Sie Zugang zu den Signalen erhalten.</strong></p>
-        </div>
-
-        <h3>Warum diese Regelung?</h3>
-        <p>Da Sie sofort nach dem Kauf vollen Zugriff auf alle Trading-Signale erhalten, würde ein nachträglicher Widerruf bedeuten, dass Sie die Dienstleistung kostenlos genutzt haben. Die Zustimmung zum sofortigen Beginn schützt sowohl Sie (sofortiger Zugang) als auch uns (faire Vergütung).</p>
-
-        <h3>Sie haben trotzdem Rechte:</h3>
-        <ul>
-            <li><strong>Kündigung:</strong> Sie können Ihr Abo jederzeit zum Monatsende kündigen</li>
-            <li><strong>Keine automatische Verlängerung ohne Info:</strong> Sie werden vor jeder Verlängerung informiert</li>
-            <li><strong>Kostenlose Vorschau:</strong> Sie können 3 Signale kostenlos ansehen, bevor Sie sich entscheiden</li>
-        </ul>
-
-        <h2>Muster-Widerrufsformular</h2>
-        <p>(Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es zurück.)</p>
-
-        <div class="form-box">
-            <h3>ðŸ“ Widerrufsformular</h3>
-            <p>An:</p>
-            <p>Claudio Scheiwiller<br>
+            <p><strong>Claudio Scheiwiller</strong><br>
             Schöntalweg 10<br>
             6992 Hirschegg, Österreich<br>
-            E-Mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aaddcbc6d9cfd8ccc6d3eacdc7cbc3c684c9c5c7">[email&#160;protected]</a></p>
-            
-            <p style="margin-top: 20px;">Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung:</p>
-            
-            <div class="form-field">WolfeWaveSignals Premium-Abonnement</div>
-            
-            <p>Bestellt am (*) / erhalten am (*):</p>
-            <div class="form-field">____________________</div>
-            
-            <p>Name des/der Verbraucher(s):</p>
-            <div class="form-field">____________________</div>
-            
-            <p>Anschrift des/der Verbraucher(s):</p>
-            <div class="form-field">____________________</div>
-            
-            <p>E-Mail-Adresse (für Rückabwicklung):</p>
-            <div class="form-field">____________________</div>
-            
-            <p style="margin-top: 20px;">Datum: ____________________</p>
-            <p>Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier):</p>
-            <div class="form-field">____________________</div>
-            
-            <p style="margin-top: 16px; font-size: 12px; color: var(--text-secondary);">(*) Unzutreffendes streichen.</p>
+            E-Mail: mail@wolfewavesignals.com</p>
+            <p style="margin-top: 8px;">(im Folgenden „Anbieter")</p>
+        </div>
+        <p>und dem Nutzer (im Folgenden „Kunde"), der ein Abonnement für den Trading-Signal-Dienst abschließt.</p>
+        <p>Es gelten ausschließlich diese AGB. Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.</p>
+
+        <h2>§ 2 Leistungsbeschreibung</h2>
+        <p>Der Anbieter betreibt einen automatisierten Scanner, der Wolfe-Wave-Chartmuster in verschiedenen Finanzmärkten (Forex, Aktien, Kryptowährungen) erkennt. Der Dienst umfasst:</p>
+        <ul>
+            <li>Automatisch generierte Trading-Signale mit Entry, Stop-Loss und Take-Profit Levels</li>
+            <li>Zugang zu aktuellen und historischen Signalen über die Website</li>
+            <li>Einsehbare Performance-Statistiken der erkannten Signale</li>
+        </ul>
+
+        <div class="warning-box">
+            <p><strong>⚠️ Wichtiger Hinweis:</strong></p>
+            <p style="margin-top: 12px; color: var(--text-secondary);">Die bereitgestellten Signale stellen <strong>keine Anlageberatung, keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten und keine persönliche Empfehlung</strong> dar. Sie dienen ausschließlich zu Informations- und Bildungszwecken. Jede Anlageentscheidung erfolgt auf eigenes Risiko und in eigener Verantwortung des Kunden.</p>
         </div>
 
-        <div class="highlight-box">
-            <p><strong>ðŸ’¡ Tipp:</strong> Am einfachsten widerrufen Sie per E-Mail an <a href="/cdn-cgi/l/email-protection#3b4c5a57485e495d57427b5c565a525715585456" style="color: var(--accent-green);"><span class="__cf_email__" data-cfemail="f384929f809681959f8ab3949e929a9fdd909c9e">[email&#160;protected]</span></a> mit dem Betreff "Widerruf" und Ihren Kontaktdaten.</p>
-        </div>
+        <h2>§ 3 Vertragsschluss</h2>
+        <p>Der Vertrag kommt zustande, wenn der Kunde:</p>
+        <ul>
+            <li>ein Benutzerkonto auf der Website erstellt,</li>
+            <li>ein Premium-Abonnement auswählt,</li>
+            <li>die Zahlung über den Zahlungsdienstleister Stripe erfolgreich durchführt.</li>
+        </ul>
+        <p>Die Darstellung der Leistungen auf der Website stellt kein rechtlich bindendes Angebot dar, sondern eine Aufforderung zur Abgabe eines Angebots (invitatio ad offerendum). Der Vertragsschluss erfolgt mit der Bestätigung der Zahlung.</p>
 
-        <h2>Fragen?</h2>
-        <p>Bei Fragen zum Widerrufsrecht kontaktieren Sie uns gerne:</p>
-        
-        <div class="contact-info">
-            <h3>Kontakt</h3>
-            <p><strong>Claudio Scheiwiller</strong></p>
-            <p>E-Mail: <a href="/cdn-cgi/l/email-protection#9becfaf7e8fee9fdf7e2dbfcf6faf2f7b5f8f4f6" style="color: var(--accent-green);"><span class="__cf_email__" data-cfemail="4d3a2c213e283f2b21340d2a202c2421632e2220">[email&#160;protected]</span></a></p>
-        </div>
+        <h2>§ 4 Preise und Zahlung</h2>
+        <p>Der aktuelle Preis für das Premium-Abonnement beträgt <strong>9,99 € pro Monat (inkl. MwSt.)</strong>.</p>
+        <p>Die Zahlung erfolgt über <strong>Stripe, Inc.</strong> Akzeptierte Zahlungsmittel werden im Checkout angezeigt. Der Betrag wird monatlich im Voraus abgebucht.</p>
+        <p>Der Anbieter behält sich Preisänderungen vor. Bestehende Abonnements sind von Preisänderungen bis zum Ende der laufenden Abrechnungsperiode nicht betroffen. Über Preisänderungen wird der Kunde mindestens 30 Tage im Voraus per E-Mail informiert.</p>
+
+        <h2>§ 5 Laufzeit und Kündigung</h2>
+        <p>Das Abonnement wird auf unbestimmte Zeit geschlossen und verlängert sich monatlich automatisch.</p>
+        <p>Der Kunde kann das Abonnement <strong>jederzeit zum Ende des laufenden Abrechnungsmonats</strong> kündigen. Nach der Kündigung bleibt der Zugang bis zum Ende des bezahlten Zeitraums bestehen.</p>
+        <p>Die Kündigung kann erfolgen über:</p>
+        <ul>
+            <li>Das Account-Dashboard auf der Website</li>
+            <li>E-Mail an mail@wolfewavesignals.com</li>
+        </ul>
+        <p>Der Anbieter kann das Abonnement mit einer Frist von 30 Tagen zum Monatsende kündigen. In diesem Fall wird der anteilige Betrag für den nicht genutzten Zeitraum erstattet.</p>
+
+        <h2>§ 6 Widerrufsrecht</h2>
+        <p>Es gelten die Regelungen unserer <a href="widerruf.html" style="color: var(--accent-green);">Widerrufsbelehrung</a>. Diese ist Bestandteil dieser AGB.</p>
+
+        <h2>§ 7 Verfügbarkeit und Gewährleistung</h2>
+        <p>Der Anbieter bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit des Dienstes. Eine Verfügbarkeit von 100 % kann technisch nicht garantiert werden. Kurzfristige Ausfälle durch Wartungsarbeiten, technische Störungen oder höhere Gewalt begründen keinen Anspruch auf Minderung oder Schadensersatz.</p>
+        <p>Der Anbieter gewährleistet nicht die Richtigkeit, Vollständigkeit oder Aktualität der generierten Signale. Automatisch generierte Signale können fehlerhaft sein. Der Anbieter schuldet ausschließlich die technische Bereitstellung des Dienstes, nicht den wirtschaftlichen Erfolg des Kunden.</p>
+
+        <h2>§ 8 Haftung</h2>
+        <p>Der Anbieter haftet unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie für die Verletzung von Leben, Körper und Gesundheit.</p>
+        <p>Bei leichter Fahrlässigkeit haftet der Anbieter nur bei Verletzung wesentlicher Vertragspflichten (Kardinalpflichten), und zwar begrenzt auf den vorhersehbaren, vertragstypischen Schaden. Die Haftung ist in jedem Fall begrenzt auf die vom Kunden in den letzten 12 Monaten gezahlten Abonnementgebühren.</p>
+        <p><strong>Der Anbieter haftet nicht für Verluste aus Trading-Entscheidungen, die auf Grundlage der bereitgestellten Signale getroffen wurden.</strong> Trading birgt erhebliche Risiken bis hin zum Totalverlust des eingesetzten Kapitals. Der Kunde handelt stets auf eigenes Risiko.</p>
+
+        <h2>§ 9 Nutzungsrechte und Pflichten des Kunden</h2>
+        <p>Das Abonnement ist persönlich und nicht übertragbar. Der Kunde verpflichtet sich:</p>
+        <ul>
+            <li>Zugangsdaten nicht an Dritte weiterzugeben</li>
+            <li>Den Dienst nicht zu automatisieren (Scraping, API-Zugriffe) ohne schriftliche Genehmigung</li>
+            <li>Signale nicht gewerblich weiterzuverbreiten</li>
+            <li>Keine Maßnahmen zu ergreifen, die die Funktionsfähigkeit des Dienstes beeinträchtigen</li>
+        </ul>
+        <p>Bei Verstoß gegen diese Pflichten ist der Anbieter berechtigt, den Zugang zu sperren und das Abonnement fristlos zu kündigen.</p>
+
+        <h2>§ 10 Datenschutz</h2>
+        <p>Die Verarbeitung personenbezogener Daten erfolgt gemäß unserer <a href="datenschutz.html" style="color: var(--accent-green);">Datenschutzerklärung</a>, die Bestandteil dieser AGB ist.</p>
+
+        <h2>§ 11 Streitbeilegung</h2>
+        <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener" style="color: var(--accent-green);">https://ec.europa.eu/consumers/odr</a>.</p>
+        <p>Wir sind weder verpflichtet noch bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+        <h2>§ 12 Anwendbares Recht und Gerichtsstand</h2>
+        <p>Es gilt das Recht der Republik Österreich unter Ausschluss des UN-Kaufrechts. Für Verbraucher im Sinne des Konsumentenschutzgesetzes (KSchG) gelten die zwingenden Bestimmungen des Staates, in dem der Verbraucher seinen gewöhnlichen Aufenthalt hat.</p>
+        <p>Gerichtsstand für Streitigkeiten ist das sachlich zuständige Gericht am Sitz des Anbieters. Für Verbraucher gilt der Gerichtsstand an ihrem Wohnsitz oder gewöhnlichen Aufenthalt.</p>
+
+        <h2>§ 13 Salvatorische Klausel</h2>
+        <p>Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, so wird dadurch die Wirksamkeit der übrigen Bestimmungen nicht berührt. An die Stelle der unwirksamen Bestimmung tritt eine Regelung, die dem wirtschaftlichen Zweck der unwirksamen Bestimmung am nächsten kommt.</p>
+
+        <h2>§ 14 Änderungen der AGB</h2>
+        <p>Der Anbieter behält sich vor, diese AGB zu ändern. Über Änderungen wird der Kunde mindestens 30 Tage vor Inkrafttreten per E-Mail informiert. Widerspricht der Kunde nicht innerhalb von 30 Tagen, gelten die neuen AGB als akzeptiert. Auf dieses Widerspruchsrecht und die Folgen wird der Kunde in der Änderungsmitteilung gesondert hingewiesen.</p>
     </main>
 
     <!-- Modularer Footer -->
