@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impressum - WolfeWaveSignals</title>
-    <meta name="description" content="Impressum von WolfeWaveSignals - Angaben gemäß § 5 ECG und § 25 MedienG.">
+    <meta name="description" content="Impressum von WolfeWaveSignals - Angaben gemäß § 5 ECG.">
     <meta name="robots" content="noindex, follow">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+            font-weight: 400 700;
+            font-display: swap;
+        }
+    </style>
     <link rel="canonical" href="https://wolfewavesignals.com/impressum.html">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -384,11 +392,15 @@
             <p>Schöntalweg 10</p>
             <p>6992 Hirschegg</p>
             <p>Österreich</p>
+            <p style="margin-top: 12px;"><strong>Unternehmensgegenstand:</strong> Bereitstellung algorithmischer Trading-Signale (Wolfe Wave Pattern-Erkennung)</p>
+            <!-- Falls USt-pflichtig (Umsatz > 35.000€/Jahr), hier UID-Nummer ergänzen: -->
+            <!-- <p><strong>UID-Nr.:</strong> ATU00000000</p> -->
         </div>
 
         <h2>Kontakt</h2>
         <div class="info-box">
-            <p><strong>E-Mail:</strong> <a href="/cdn-cgi/l/email-protection#7c0f090c0c130e083c0b13101a190b1d0a190f151b121d100f521f1311"><span class="__cf_email__" data-cfemail="e89b9d9898879a9ca89f87848e8d9f899e8d9b818f8689849bc68b8785">[email&#160;protected]</span></a></p>
+            <p><strong>E-Mail:</strong> mail@wolfewavesignals.com</p>
+            <p><strong>Telegram:</strong> <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener">t.me/wolfewavesignals</a></p>
             <p><strong>Website:</strong> <a href="https://wolfewavesignals.com">wolfewavesignals.com</a></p>
         </div>
 
@@ -410,9 +422,10 @@
 
         <div class="warning-box">
             <h3>⚠️ Risikohinweis</h3>
-            <p><strong>Trading birgt erhebliche Risiken.</strong> Die auf dieser Website bereitgestellten Informationen und Signale dienen ausschließlich zu Informations- und Bildungszwecken und stellen keine Anlageberatung dar.</p>
-            <p>Der Handel mit Finanzinstrumenten wie Aktien, Forex, CFDs oder Kryptowährungen kann zum Totalverlust des eingesetzten Kapitals führen. Vergangene Ergebnisse sind keine Garantie für zukünftige Gewinne.</p>
-            <p>Handeln Sie nur mit Geld, dessen Verlust Sie sich leisten können. Konsultieren Sie bei Bedarf einen unabhängigen Finanzberater.</p>
+            <p><strong>Trading birgt erhebliche Risiken.</strong> Die auf dieser Website bereitgestellten Informationen und Signale dienen ausschließlich zu Informations- und Bildungszwecken und stellen <strong>keine Anlageberatung, keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten und keine persönliche Empfehlung</strong> dar.</p>
+            <p>Der Handel mit Finanzinstrumenten wie Aktien, Forex, CFDs oder Kryptowährungen kann zum <strong>Totalverlust des eingesetzten Kapitals</strong> führen. Insbesondere gehebelte Produkte wie CFDs bergen das Risiko, mehr als das eingesetzte Kapital zu verlieren. Vergangene Ergebnisse sind keine Garantie für zukünftige Gewinne.</p>
+            <p>Der Betreiber dieser Website übernimmt <strong>keine Haftung</strong> für Verluste, die durch die Nutzung der bereitgestellten Informationen und Signale entstehen. Jede Anlageentscheidung erfolgt auf eigenes Risiko und in eigener Verantwortung.</p>
+            <p>Handeln Sie nur mit Geld, dessen Verlust Sie sich leisten können. Konsultieren Sie bei Bedarf einen unabhängigen, zugelassenen Finanzberater.</p>
         </div>
     </main>
 
