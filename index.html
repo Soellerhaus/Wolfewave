@@ -4290,6 +4290,49 @@
             if (stateEl) stateEl.textContent = text;
         }
 
+        // Neueste Bilder aus signal_images laden und Signal-Kacheln aktualisieren
+        async function updateSignalImages() {
+            try {
+                // Lade das neueste Bild pro wedge_id (oder display_photo falls gesetzt)
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/signal_images?select=wedge_id,image_url,is_display_photo,scanned_at&order=scanned_at.desc`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Range': '0-9999' } }
+                );
+                if (!response.ok) return;
+                const allImages = await response.json();
+                
+                // Pro wedge_id: display_photo bevorzugen, sonst neuestes Bild
+                const latestByWedge = {};
+                allImages.forEach(img => {
+                    if (!img.wedge_id) return;
+                    if (!latestByWedge[img.wedge_id]) {
+                        latestByWedge[img.wedge_id] = img.image_url;
+                    }
+                    if (img.is_display_photo) {
+                        latestByWedge[img.wedge_id] = img.image_url;
+                    }
+                });
+                
+                // Aktive Signale aktualisieren
+                allSignals.forEach(s => {
+                    if (s.wedge_id && latestByWedge[s.wedge_id]) {
+                        s.image_path = latestByWedge[s.wedge_id];
+                    }
+                });
+                
+                // Completed Signale aktualisieren
+                completedSignals.forEach(s => {
+                    if (s.wedge_id && latestByWedge[s.wedge_id]) {
+                        s.original_path = latestByWedge[s.wedge_id];
+                    }
+                });
+                
+                console.log(`Updated card images for ${Object.keys(latestByWedge).length} signals`);
+            } catch (e) {
+                console.error('Error updating signal images:', e);
+            }
+        }
+
         // ==================== INIT ====================
         async function init() {
             updateGridZoom(); // Zoom-Indikator setzen
@@ -4300,6 +4343,7 @@
             await checkSession();
             await fetchSignals();
             await fetchCompletedSignals();
+            await updateSignalImages(); // Neueste Bilder für Kacheln laden
             if (currentUser && (isSubscribed || isAdmin)) {
                 await fetchUserAlerts();
             }
