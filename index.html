@@ -4374,12 +4374,17 @@
         }
 
         // Symbol-Name abrufen (mit intelligentem Fallback)
-        function getSymbolName(symbol) {
+        function getSymbolName(symbol, signal) {
             if (!symbol) return 'Unbekannt';
             
-            // Wenn Name in DB vorhanden
+            // Wenn Name in symbol_markets Cache vorhanden
             if (symbolNames[symbol]) {
                 return symbolNames[symbol];
+            }
+            
+            // Fallback: symbol_name aus dem Signal-Objekt nutzen
+            if (signal && signal.symbol_name && signal.symbol_name !== symbol) {
+                return signal.symbol_name;
             }
             
             // Fallback: Symbol aufbereiten (z.B. "PBI.OQ" → "PBI")
@@ -4428,7 +4433,7 @@
                 signal = completedSignals.find(s => s.wedge_id === signalId);
             }
             
-            const symbolName = signal ? getSymbolName(signal.symbol) : signalId;
+            const symbolName = signal ? getSymbolName(signal.symbol, signal) : signalId;
             document.getElementById('featuredModalSubtitle').textContent = symbolName;
             
             // Render Position-Buttons
@@ -4458,7 +4463,7 @@
                     // Finde Signal-Name
                     let occSignal = allSignals.find(s => s.wedge_id === existing.wedge_id) || 
                                    completedSignals.find(s => s.wedge_id === existing.wedge_id);
-                    const occName = occSignal ? getSymbolName(occSignal.symbol).substring(0, 10) : existing.wedge_id.substring(0, 8);
+                    const occName = occSignal ? getSymbolName(occSignal.symbol, occSignal).substring(0, 10) : existing.wedge_id.substring(0, 8);
                     buttonContent += `<div style="font-size: 9px; opacity: 0.7;">${occName}</div>`;
                 } else {
                     buttonStyle += 'background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--border-color);';
@@ -5381,7 +5386,7 @@
                     <div class="signal-info">
                         <div class="signal-header">
                             <div>
-                                <div class="signal-title">${getSymbolName(signal.symbol)}</div>
+                                <div class="signal-title">${getSymbolName(signal.symbol, signal)}</div>
                                 <div class="signal-symbol">${signal.symbol}</div>
                             </div>
                             <div class="signal-time">
@@ -5472,7 +5477,7 @@
                     <div class="signal-info">
                         <div class="signal-header">
                             <div>
-                                <div class="signal-title">${getSymbolName(signal.symbol)}</div>
+                                <div class="signal-title">${getSymbolName(signal.symbol, signal)}</div>
                                 <div class="signal-symbol">${signal.symbol}</div>
                             </div>
                             <div class="signal-time">
