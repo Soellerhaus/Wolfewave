@@ -4419,19 +4419,32 @@
         // Symbol-Namen aus DB laden
         async function loadSymbolNames() {
             try {
-                const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/symbol_markets?select=symbol,name&name=not.is.null&limit=10000`,
-                    { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=none' } }
-                );
-                if (response.ok) {
+                let offset = 0;
+                const batchSize = 1000;
+                let hasMore = true;
+                
+                while (hasMore) {
+                    const response = await fetch(
+                        `${SUPABASE_URL}/rest/v1/symbol_markets?select=symbol,name&name=not.is.null&limit=${batchSize}&offset=${offset}`,
+                        { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=none' } }
+                    );
+                    if (!response.ok) break;
+                    
                     const data = await response.json();
                     data.forEach(item => {
                         if (item.symbol && item.name) {
                             symbolNames[item.symbol] = item.name;
                         }
                     });
-                    console.log(`Loaded ${Object.keys(symbolNames).length} symbol names`);
+                    
+                    if (data.length < batchSize) {
+                        hasMore = false;
+                    } else {
+                        offset += batchSize;
+                    }
                 }
+                
+                console.log(`Loaded ${Object.keys(symbolNames).length} symbol names`);
             } catch (e) {
                 console.error('Error loading symbol names:', e);
             }
