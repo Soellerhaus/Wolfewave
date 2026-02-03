@@ -300,6 +300,14 @@
             cursor: pointer;
             transition: all 0.2s;
             border: none;
+            text-decoration: none !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            text-decoration: none !important;
         }
 
         .btn-outline {
@@ -314,14 +322,52 @@
         }
 
         .btn-primary {
-            background: var(--accent-green);
+            background: linear-gradient(135deg, var(--accent-green) 0%, #00cc6a 100%);
             color: #000;
+            font-weight: 600;
+            border: none;
         }
 
         .btn-primary:hover {
-            background: #00cc6a;
+            background: linear-gradient(135deg, #00ff9d 0%, var(--accent-green) 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            text-decoration: none !important;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            text-decoration: none !important;
+        }
+
+        .btn-telegram {
+            background: linear-gradient(135deg, #0088cc 0%, #0077b5 100%);
+            color: #fff;
+            border: none;
+            text-decoration: none !important;
+        }
+
+        .btn-telegram:hover {
+            background: linear-gradient(135deg, #00a0e4 0%, #0088cc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 136, 204, 0.3);
+            text-decoration: none !important;
+        }
+
+        .btn-icon {
+            margin-right: 6px;
         }
 
         /* Hero Section */
@@ -3028,15 +3074,33 @@
             }
 
             .hero-cta {
-                margin-top: 20px !important;
-                flex-direction: column !important;
+                margin-top: 24px !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
                 gap: 10px !important;
+                justify-content: center !important;
             }
 
             .hero-cta .btn-lg {
-                width: 100% !important;
-                padding: 12px 20px !important;
-                font-size: 14px !important;
+                flex: 0 0 auto !important;
+                padding: 12px 16px !important;
+                font-size: 13px !important;
+                min-width: auto !important;
+                width: auto !important;
+            }
+
+            .hero-cta .btn-lg .btn-icon {
+                margin-right: 4px;
+            }
+
+            /* Stack to column on very small screens */
+            @media (max-width: 380px) {
+                .hero-cta {
+                    flex-direction: column !important;
+                }
+                .hero-cta .btn-lg {
+                    width: 100% !important;
+                }
             }
 
             .hero-social-proof {
@@ -3487,14 +3551,14 @@
         
         <!-- Hero CTA Buttons -->
         <div class="hero-cta animate-fade-in-up animate-delay-3" id="heroCTA">
-            <button class="btn btn-primary btn-lg" onclick="showCheckout()">
-                🚀 Jetzt Premium werden
+            <button class="btn btn-primary btn-lg btn-glow" onclick="showCheckout()">
+                <span class="btn-icon">✨</span> Premium freischalten
             </button>
-            <a href="#previewHeader" class="btn btn-outline btn-lg">
-                Vorschau ansehen ↓
+            <a href="#previewHeader" class="btn btn-secondary btn-lg">
+                <span class="btn-icon">👁</span> Vorschau
             </a>
-            <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="btn btn-lg" style="background: #0088cc; color: #fff; text-decoration: none; border: none;">
-                📱 Telegram Kanal
+            <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="btn btn-telegram btn-lg">
+                <span class="btn-icon">📱</span> Telegram
             </a>
         </div>
     </section>
@@ -4295,8 +4359,8 @@
             try {
                 // Lade das neueste Bild pro wedge_id (oder display_photo falls gesetzt)
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?select=wedge_id,image_url,is_display_photo,scanned_at&order=scanned_at.desc`,
-                    { headers: { 'apikey': SUPABASE_KEY, 'Range': '0-9999' } }
+                    `${SUPABASE_URL}/rest/v1/signal_images?select=wedge_id,image_url,is_display_photo,scanned_at&order=scanned_at.desc&limit=10000`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=none' } }
                 );
                 if (!response.ok) return;
                 const allImages = await response.json();
@@ -4356,8 +4420,8 @@
         async function loadSymbolNames() {
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/symbol_markets?select=symbol,name&name=not.is.null`,
-                    { headers: { 'apikey': SUPABASE_KEY, 'Range': '0-9999' } }
+                    `${SUPABASE_URL}/rest/v1/symbol_markets?select=symbol,name&name=not.is.null&limit=10000`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=none' } }
                 );
                 if (response.ok) {
                     const data = await response.json();
@@ -5026,11 +5090,11 @@
         async function fetchSignals() {
             try {
                 // Nur pending und active Signale laden (nicht inactive, expired, etc.)
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/signals?select=*&status=in.(pending,active)&order=created_at.desc&limit=10000`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Range': '0-9999'
+                        'Prefer': 'count=none'
                     }
                 });
                 
@@ -5044,11 +5108,11 @@
 
         async function fetchCompletedSignals() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/completed_signals?select=*&order=created_at.desc`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/completed_signals?select=*&order=created_at.desc&limit=10000`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Range': '0-9999'
+                        'Prefer': 'count=none'
                     }
                 });
                 
