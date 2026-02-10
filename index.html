@@ -599,6 +599,76 @@
             margin: 0 auto;
         }
 
+        /* FXBlue Live Performance Banner */
+        .fxblue-banner {
+            padding: 30px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.02) 50%, transparent 100%);
+        }
+
+        .fxblue-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .fxblue-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .fxblue-live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: livePulse 2s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .fxblue-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fxblue-link {
+            display: inline-block;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        .fxblue-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.15);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .fxblue-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .fxblue-disclaimer {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            opacity: 0.7;
+        }
+
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -3590,6 +3660,20 @@
         <div class="stat-card" id="newTodayCard">
             <div class="stat-number" id="todayCount">—</div>
             <div class="stat-label">Neu heute</div>
+        </div>
+    </section>
+
+    <!-- FXBlue Live Performance Banner -->
+    <section class="fxblue-banner" id="fxblueBanner">
+        <div class="fxblue-container">
+            <div class="fxblue-header">
+                <span class="fxblue-live-dot"></span>
+                <span class="fxblue-title">Live Trading Performance</span>
+            </div>
+            <a href="https://www.fxblue.com/users/WolfeWaveSignals" target="_blank" rel="noopener" class="fxblue-link">
+                <img src="https://www.fxblue.com/banner.aspx?id=WolfeWaveSignals&t=300" alt="WolfeWaveSignals Live Performance" class="fxblue-img" />
+            </a>
+            <p class="fxblue-disclaimer">Verifiziertes Live-Konto bei FXBlue · Vergangene Performance garantiert keine zukünftigen Ergebnisse</p>
         </div>
     </section>
 
