@@ -1,0 +1,13 @@
+<!-- FXBlue Live Performance Banner -->
+<section class="fxblue-banner" id="fxblueBanner">
+    <div class="fxblue-container">
+        <div class="fxblue-header">
+            <span class="fxblue-live-dot"></span>
+            <span class="fxblue-title">Live Trading Performance</span>
+        </div>
+        <a href="https://www.fxblue.com/users/WolfeWaveSignals" target="_blank" rel="noopener" class="fxblue-link">
+            <img src="https://www.fxblue.com/banner.aspx?id=WolfeWaveSignals&t=300" alt="WolfeWaveSignals Live Performance" class="fxblue-img" />
+        </a>
+        <p class="fxblue-disclaimer">Verifiziertes Live-Konto bei FXBlue · Vergangene Performance garantiert keine zukünftigen Ergebnisse</p>
+    </div>
+</section>
