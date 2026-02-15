@@ -1557,13 +1557,13 @@
             text-transform: uppercase;
         }
 
-        .badge-bullish {
-            background: var(--accent-green);
+        .badge-pending {
+            background: #ff9800;
             color: #000;
         }
 
-        .badge-bearish {
-            background: var(--accent-red);
+        .badge-active {
+            background: #ff3d3d;
             color: #fff;
         }
 
@@ -2141,14 +2141,14 @@
             font-weight: 600;
         }
 
-        .signal-header-info .signal-direction.bullish {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--accent-green);
+        .signal-header-info .signal-direction.pending {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
         }
 
-        .signal-header-info .signal-direction.bearish {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--accent-red);
+        .signal-header-info .signal-direction.active {
+            background: rgba(255, 61, 61, 0.2);
+            color: #ff3d3d;
         }
 
         .signal-counter {
@@ -3111,14 +3111,6 @@
                 .tab[data-tab="pending"] { font-size: 0 !important; }
                 .tab[data-tab="pending"]::before { content: "⏳"; font-size: 14px !important; }
                 
-                .tab[data-tab="bullish"]::before { content: "📈"; }
-                .tab[data-tab="bullish"] { font-size: 0 !important; }
-                .tab[data-tab="bullish"]::before { font-size: 14px !important; }
-                
-                .tab[data-tab="bearish"]::before { content: "📉"; }
-                .tab[data-tab="bearish"] { font-size: 0 !important; }
-                .tab[data-tab="bearish"]::before { font-size: 14px !important; }
-                
                 .tab[data-tab="success"] { font-size: 0 !important; }
                 .tab[data-tab="success"]::before { content: "🏆"; font-size: 14px !important; }
                 
@@ -3763,8 +3755,6 @@
                     ⏳ PENDING
                     <span class="tab-badge tab-badge-pending" id="pendingCount">0</span>
                 </button>
-                <button class="tab" data-tab="bullish">Bullish</button>
-                <button class="tab" data-tab="bearish">Bearish</button>
                 <button class="tab tab-success" data-tab="success">
                     🏆 Success
                     <span class="tab-badge tab-badge-gold" id="successTabCount">0</span>
@@ -5455,10 +5445,6 @@
                 filtered = filtered.filter(s => s.status === 'active');
             } else if (currentTab === 'pending') {
                 filtered = filtered.filter(s => s.status === 'pending');
-            } else if (currentTab === 'bullish') {
-                filtered = filtered.filter(s => s.direction === 'BULLISH');
-            } else if (currentTab === 'bearish') {
-                filtered = filtered.filter(s => s.direction === 'BEARISH');
             }
             
             // Button filters
@@ -5506,7 +5492,7 @@
 
         function renderSignalCard(signal, isVisible, isPreview) {
             const imageUrl = signal.image_path?.startsWith('http') ? signal.image_path : `${STORAGE_URL}/${signal.image_path}`;
-            const isBullish = signal.direction === 'BULLISH';
+            const isPending = signal.status === 'pending';
             const isNew = isNewSignal(signal.created_at);
             
             let badge = '';
@@ -5544,7 +5530,7 @@
                     ${alertBell}
                     <div class="signal-image-container">
                         <img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23141414%22 width=%22400%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23444%22 font-size=%2248%22>📷</text></svg>';">
-                        <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
+                        <span class="signal-badge ${isPending ? 'badge-pending' : 'badge-active'}">${isPending ? 'PENDING' : 'ACTIVE'}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
                             <span class="signal-tag">${signal.timeframe}</span>
@@ -5576,8 +5562,8 @@
 
         function renderCompletedSignalCard(signal) {
             const imageUrl = signal.original_path || '';
-            const isBullish = signal.direction === 'BULLISH';
-            
+            const isPending = signal.status === 'pending';
+
             // DEBUG: Log result_fixed status
             if (isAdmin && signal.result_fixed) {
                 console.log('🔒 Rendering FIXED signal:', signal.symbol, signal.id, 'result_fixed:', signal.result_fixed);
@@ -5635,7 +5621,7 @@
                     <div class="signal-image-container" style="position:relative;">
                         ${imageUrl ? `<img class="signal-image" src="${imageUrl}" alt="${signal.symbol}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23141414%22 width=%22400%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23444%22 font-size=%2248%22>📷</text></svg>';">` : '<div class="placeholder-image" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🔍</div>'}
                         ${fixedWatermark}
-                        <span class="signal-badge ${isBullish ? 'badge-bullish' : 'badge-bearish'}">${signal.direction}</span>
+                        <span class="signal-badge ${isPending ? 'badge-pending' : 'badge-active'}">${isPending ? 'PENDING' : 'ACTIVE'}</span>
                         <div class="signal-tags">
                             <span class="signal-tag">${signal.market}</span>
                             <span class="signal-tag">${signal.timeframe}</span>
@@ -6311,9 +6297,9 @@
                 document.getElementById('signalTimeframe').textContent = signal.timeframe || '-';
                 
                 const directionEl = document.getElementById('signalDirection');
-                const direction = signal.direction || '';
-                directionEl.textContent = direction;
-                directionEl.className = 'signal-direction ' + (direction === 'BULLISH' ? 'bullish' : 'bearish');
+                const status = signal.status || '';
+                directionEl.textContent = status === 'pending' ? 'PENDING' : 'ACTIVE';
+                directionEl.className = 'signal-direction ' + (status === 'pending' ? 'pending' : 'active');
             }
             
             // Navigation Buttons
