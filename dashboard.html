@@ -1244,14 +1244,18 @@
         });
 
         async function loadGuestPreview() {
-            // Nur 1 Trade laden für Nicht-Admin
+            // Alle Trades zählen, aber nur 1 anzeigen
             try {
-                const pos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,tp2,tp3,sl,phase,open_time&terminal_id=eq.demo&order=profit.desc&limit=1');
-                const p = (pos||[])[0];
+                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,tp2,tp3,sl,phase,open_time,status&terminal_id=eq.demo&order=profit.desc');
+                const openTrades = (allPos||[]).filter(p => p.status === 'open');
+                const totalCount = openTrades.length;
                 const c = $('overview-table');
-                if (!p) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
 
-                $('ov-cnt').textContent = '1';
+                $('ov-cnt').textContent = totalCount;
+
+                if (totalCount === 0) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
+
+                const p = openTrades[0];
                 const sym = p.symbol, name = getName(sym), dir = p.direction||'';
                 const isBuy = dir==='BUY';
                 const phase = p.phase||0;
@@ -1268,7 +1272,7 @@
                     </tr></tbody>
                 </table></div>
                 <div class="locked-cta">
-                    <p>Melde dich als Admin an, um alle Trades, P&L, History und mehr zu sehen.</p>
+                    <p>${totalCount > 1 ? totalCount + ' aktive Trades — ' : ''}Melde dich an, um alle Trades, P&L, History und mehr zu sehen.</p>
                     <a href="/#login" onclick="if(typeof showLogin==='function'){event.preventDefault();showLogin();}">Jetzt einloggen</a>
                 </div>`;
             } catch(e) {
