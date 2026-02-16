@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Dashboard - WolfeWaveSignals</title>
+    <meta name="description" content="Live Trade Dashboard — echte EA-Trades mit P&L, Account-Uebersicht und Trade-History.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0c0c0c;
+            --bg-card: #141414;
+            --bg-card-elevated: #1a1a1a;
+            --bg-hover: rgba(255, 255, 255, 0.05);
+            --accent-green: #00ff88;
+            --accent-green-dim: rgba(0, 255, 136, 0.15);
+            --accent-red: #ff4757;
+            --accent-gold: #ffd700;
+            --accent-blue: #4fc3f7;
+            --text-primary: #ffffff;
+            --text-secondary: #6b7280;
+            --text-tertiary: #4a4a4a;
+            --border-color: #1f1f1f;
+            --border-glow: rgba(0, 255, 136, 0.2);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 94px 24px 60px;
+        }
+
+        /* ========== HEADER ========== */
+        .dash-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .dash-header h1 { font-size: 28px; font-weight: 700; }
+        .dash-header h1 span { color: var(--accent-green); }
+
+        .refresh-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .refresh-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+        .refresh-cd { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-tertiary); }
+
+        /* ========== ACCOUNT STRIP ========== */
+        .account-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+        .acc-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .acc-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+        .acc-box.g::before { background:var(--accent-green); }
+        .acc-box.b::before { background:var(--accent-blue); }
+        .acc-box.y::before { background:var(--accent-gold); }
+        .acc-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-secondary); margin-bottom:4px; }
+        .acc-val { font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; }
+        .acc-sub { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-secondary); margin-top:2px; }
+        .c-green { color:var(--accent-green); }
+        .c-red { color:var(--accent-red); }
+        .c-blue { color:var(--accent-blue); }
+        .c-gold { color:var(--accent-gold); }
+
+        /* ========== SECTION / ACCORDION ========== */
+        .sec-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .accordion-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            font-size: 18px;
+            font-weight: 600;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            user-select: none;
+            transition: background .2s, border-color .2s;
+            margin-bottom: 0;
+        }
+        .accordion-head:hover { background:var(--bg-card-elevated); border-color:var(--border-glow); }
+        .accordion-head.open { border-radius:10px 10px 0 0; margin-bottom:0; border-bottom:1px solid var(--border-color); }
+        .accordion-arrow {
+            margin-left:auto; font-size:14px; color:var(--text-secondary);
+            transition:transform .3s;
+        }
+        .accordion-head.open .accordion-arrow { transform:rotate(180deg); }
+        .acc-new-dot {
+            width:9px; height:9px; border-radius:50%;
+            background:var(--accent-green);
+            box-shadow:0 0 8px var(--accent-green);
+            animation:pulse-new 1.5s ease-in-out infinite;
+            display:none; flex-shrink:0;
+        }
+        .accordion-head.has-new .acc-new-dot { display:inline-block; }
+        .accordion-head.has-new { border-color:var(--border-glow); }
+        @keyframes pulse-new { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+        .accordion-body {
+            overflow:hidden; max-height:0; transition:max-height .4s ease;
+            background:var(--bg-primary);
+            border-left:1px solid var(--border-color);
+            border-right:1px solid var(--border-color);
+            border-bottom:1px solid var(--border-color);
+            border-radius:0 0 10px 10px;
+            margin-bottom:20px;
+        }
+        .accordion-body.open { max-height:none; }
+        .accordion-body-inner { padding:16px 0 0; }
+        .sec-badge {
+            font-size:12px; font-family:'JetBrains Mono',monospace;
+            padding:2px 10px; border-radius:20px;
+        }
+        .sec-badge.g { background:var(--accent-green-dim); color:var(--accent-green); }
+        .sec-badge.b { background:rgba(79,195,247,.15); color:var(--accent-blue); }
+        .sec-badge.y { background:rgba(255,215,0,.15); color:var(--accent-gold); }
+        .sec-badge.r { background:rgba(255,71,87,.15); color:var(--accent-red); }
+
+        /* ========== TRADE CARD ========== */
+        .trades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .trade-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            transition: border-color .3s, transform .2s;
+        }
+        .trade-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+        .trade-card.closed { opacity: .92; }
+
+        /* Card Header */
+        .tc-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .tc-name {
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: color .2s;
+            line-height: 1.3;
+        }
+        .tc-name:hover { color: var(--accent-blue); }
+        .tc-name small {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .tc-badges { display:flex; gap:6px; flex-shrink:0; }
+        .badge {
+            font-size:11px; font-weight:600; padding:3px 10px;
+            border-radius:6px; text-transform:uppercase; letter-spacing:.5px;
+        }
+        .badge-buy { background:var(--accent-green-dim); color:var(--accent-green); }
+        .badge-sell { background:rgba(255,71,87,.15); color:var(--accent-red); }
+        .badge-pending { background:rgba(79,195,247,.15); color:var(--accent-blue); }
+        .badge-closed { background:rgba(255,255,255,.04); color:var(--text-secondary); }
+
+        /* Card Info Row */
+        .tc-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tc-info-item .lbl { font-size:10px; text-transform:uppercase; letter-spacing:.8px; color:var(--text-secondary); }
+        .tc-info-item .val { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600; }
+
+        /* TP/SL Breakdown */
+        .tp-list { margin-bottom: 14px; }
+        .tp-row {
+            display: grid;
+            grid-template-columns: 50px 1fr auto auto;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255,255,255,.03);
+        }
+        .tp-row:last-child { border-bottom: none; }
+        .tp-label {
+            font-family:'JetBrains Mono',monospace;
+            font-size:12px; font-weight:700;
+        }
+        .tp-label.tp1 { color: #66ffaa; }
+        .tp-label.tp2 { color: #33ff99; }
+        .tp-label.tp3 { color: var(--accent-green); }
+        .tp-label.sl { color: var(--accent-red); }
+
+        .tp-price {
+            font-family:'JetBrains Mono',monospace;
+            font-size:12px; color:var(--text-secondary);
+        }
+        .tp-status {
+            font-size:12px; font-weight:600;
+        }
+        .tp-status.hit { color:var(--accent-green); }
+        .tp-status.miss { color:var(--accent-red); }
+        .tp-status.wait { color:var(--text-tertiary); }
+
+        .tp-pnl {
+            font-family:'JetBrains Mono',monospace;
+            font-size:13px; font-weight:600;
+            text-align:right; min-width:80px;
+        }
+
+        /* Card Footer */
+        .tc-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+        .tc-total {
+            font-family:'JetBrains Mono',monospace;
+            font-size:16px; font-weight:700;
+        }
+        .tc-meta {
+            font-size:11px; color:var(--text-secondary);
+            text-align:right;
+            line-height:1.5;
+        }
+
+        /* ========== HISTORY STATS ========== */
+        .hist-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .hist-stat {
+            background:var(--bg-card); border:1px solid var(--border-color);
+            border-radius:8px; padding:14px; text-align:center;
+        }
+        .hist-stat .lbl { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-secondary); margin-bottom:4px; }
+        .hist-stat .val { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; }
+
+        /* ========== LOADING / EMPTY ========== */
+        .loading { text-align:center; padding:48px; color:var(--text-secondary); }
+        .loading::before {
+            content:''; display:inline-block; width:28px; height:28px;
+            border:3px solid var(--border-color); border-top-color:var(--accent-green);
+            border-radius:50%; animation:spin .8s linear infinite; margin-bottom:10px;
+        }
+        .empty { text-align:center; padding:40px; color:var(--text-secondary); font-size:14px; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        .fade-in { animation: fadeIn .4s ease-out; }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox-overlay {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,.92); z-index:9999;
+            justify-content:center; align-items:center;
+            padding:20px; overflow-y:auto;
+        }
+        .lightbox-overlay.active { display:flex; }
+        .lightbox-box {
+            background:var(--bg-card); border:1px solid var(--border-color);
+            border-radius:16px; max-width:1200px; width:100%; max-height:90vh;
+            overflow-y:auto; padding:28px; position:relative;
+        }
+        .lb-close {
+            position:absolute; top:14px; right:18px; background:none; border:none;
+            color:var(--text-secondary); font-size:28px; cursor:pointer; z-index:10;
+            transition:color .2s;
+        }
+        .lb-close:hover { color:var(--text-primary); }
+        .lb-title {
+            font-size:20px; font-weight:700; margin-bottom:4px;
+        }
+        .lb-subtitle {
+            font-size:13px; color:var(--text-secondary); margin-bottom:20px;
+        }
+        .lb-subtitle a {
+            color:var(--accent-blue); text-decoration:none; margin-left:10px;
+            font-size:12px;
+        }
+        .lb-subtitle a:hover { text-decoration:underline; }
+        .lb-images {
+            display:grid; grid-template-columns:1fr; gap:20px;
+        }
+        .lb-img-slot {
+            border:1px solid var(--border-color); border-radius:10px;
+            overflow:hidden; background:var(--bg-primary);
+        }
+        .lb-img-label {
+            padding:10px 16px; font-size:13px; font-weight:600;
+            background:var(--bg-card-elevated);
+            display:flex; align-items:center; gap:8px;
+        }
+        .lb-img-label .lb-phase-dot {
+            width:10px; height:10px; border-radius:50%;
+        }
+        .lb-img-label .lb-phase-dot.detect { background:var(--accent-blue); }
+        .lb-img-label .lb-phase-dot.entry { background:var(--accent-gold); }
+        .lb-img-label .lb-phase-dot.latest { background:var(--accent-green); }
+        .lb-img-slot img {
+            display:block; width:100%; height:auto;
+            cursor:zoom-in;
+        }
+        .lb-img-slot img.zoomed {
+            cursor:zoom-out;
+            transform:scale(1.5);
+            transform-origin:center center;
+        }
+        .lb-no-images {
+            text-align:center; padding:40px; color:var(--text-secondary); font-size:14px;
+        }
+
+        /* TradingView chart icon */
+        .tv-link {
+            display:inline-block; margin-left:6px; color:var(--accent-blue);
+            font-size:14px; cursor:pointer; opacity:.6; transition:opacity .2s;
+            vertical-align:middle;
+        }
+        .tv-link:hover { opacity:1; }
+
+        /* ========== OVERVIEW TABLE ========== */
+        .overview-wrap {
+            margin-bottom:32px;
+        }
+        .overview-table {
+            width:100%; border-collapse:collapse;
+            background:var(--bg-card); border:1px solid var(--border-color);
+            border-radius:12px; overflow:hidden;
+        }
+        .overview-table thead th {
+            font-size:10px; text-transform:uppercase; letter-spacing:.8px;
+            color:var(--text-secondary); padding:12px 14px; text-align:left;
+            background:var(--bg-card-elevated); border-bottom:1px solid var(--border-color);
+            white-space:nowrap;
+        }
+        .overview-table tbody tr {
+            border-bottom:1px solid rgba(255,255,255,.03);
+            transition:background .2s;
+            cursor:pointer;
+        }
+        .overview-table tbody tr:hover { background:var(--bg-hover); }
+        .overview-table tbody tr:last-child { border-bottom:none; }
+        .overview-table td {
+            padding:10px 14px; font-size:13px;
+            font-family:'JetBrains Mono',monospace;
+            white-space:nowrap;
+        }
+        .overview-table .ov-name {
+            font-family:'Space Grotesk',sans-serif;
+            font-weight:600; font-size:13px;
+        }
+        .overview-table .ov-sym {
+            font-size:10px; color:var(--text-secondary);
+            font-family:'JetBrains Mono',monospace;
+        }
+        .ov-dir { font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; }
+        .ov-dir.buy { background:var(--accent-green-dim); color:var(--accent-green); }
+        .ov-dir.sell { background:rgba(255,71,87,.15); color:var(--accent-red); }
+        .ov-phase { display:inline-flex; gap:3px; }
+        .ov-phase .dot {
+            width:8px; height:8px; border-radius:50%;
+            background:var(--border-color);
+        }
+        .ov-phase .dot.hit { background:var(--accent-green); }
+        .ov-phase .dot.sl { background:var(--accent-red); }
+
+        /* ========== GUEST / LOCKED ========== */
+        .is-guest .account-strip { display:none; }
+        .is-guest #acc-details,
+        .is-guest #acc-details + .accordion-body,
+        .is-guest #acc-history,
+        .is-guest #acc-history + .accordion-body,
+        .is-guest #acc-skipped,
+        .is-guest #acc-skipped + .accordion-body { display:none; }
+        .is-guest .refresh-bar { display:none; }
+
+        .locked-overlay {
+            position:relative;
+        }
+        .locked-overlay::after {
+            content:''; position:absolute; top:0; left:0; right:0; bottom:0;
+            background:linear-gradient(180deg, transparent 20%, var(--bg-primary) 90%);
+            pointer-events:none; z-index:2;
+        }
+        .locked-cta {
+            text-align:center; padding:40px 20px; margin-top:-40px; position:relative; z-index:3;
+        }
+        .locked-cta p {
+            font-size:15px; color:var(--text-secondary); margin-bottom:16px;
+        }
+        .locked-cta a {
+            display:inline-block; padding:12px 32px;
+            background:var(--accent-green); color:#000; font-weight:700;
+            border-radius:8px; text-decoration:none; font-size:14px;
+            transition:opacity .2s;
+        }
+        .locked-cta a:hover { opacity:.85; }
+
+        /* ========== RESPONSIVE ========== */
+        @media(max-width:1024px) {
+            .account-strip { grid-template-columns: repeat(3,1fr); }
+            .trades-grid { grid-template-columns: 1fr; }
+            .hist-stats { grid-template-columns: repeat(2,1fr); }
+            .overview-table { font-size:12px; }
+            .overview-table td, .overview-table th { padding:8px 10px; }
+        }
+        @media(max-width:768px) {
+            .dashboard-container { padding:16px 12px 60px; }
+            .dash-header { flex-direction:column; align-items:flex-start; }
+            .dash-header h1 { font-size:22px; }
+            .account-strip { grid-template-columns: repeat(2,1fr); gap:10px; }
+            .acc-box { padding:14px; }
+            .acc-val { font-size:18px; }
+            .tc-info { grid-template-columns:1fr 1fr; }
+            .lightbox-overlay { padding:10px; }
+            .lightbox-box { padding:16px; }
+            .lb-title { font-size:17px; }
+        }
+        @media(max-width:480px) {
+            .account-strip { grid-template-columns:1fr 1fr; }
+            .tp-row { grid-template-columns:40px 1fr auto; }
+            .tp-price { display:none; }
+            .overview-wrap { overflow-x:auto; }
+            .overview-table { min-width:700px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="site-header"></div>
+
+    <div class="dashboard-container">
+        <div class="dash-header">
+            <h1>Trade <span>Dashboard</span></h1>
+            <div class="refresh-bar">
+                <div class="refresh-dot"></div>
+                <span id="ref-status">Live</span>
+                <span class="refresh-cd" id="ref-cd"></span>
+            </div>
+        </div>
+
+        <!-- Account -->
+        <div class="account-strip" id="account-strip">
+            <div class="acc-box g">
+                <div class="acc-label">Balance</div>
+                <div class="acc-val c-green" id="a-bal">—</div>
+                <div class="acc-sub" id="a-cur"></div>
+            </div>
+            <div class="acc-box b">
+                <div class="acc-label">Equity</div>
+                <div class="acc-val c-blue" id="a-eq">—</div>
+                <div class="acc-sub" id="a-eq-diff"></div>
+            </div>
+            <div class="acc-box y">
+                <div class="acc-label">Floating P&L</div>
+                <div class="acc-val" id="a-float">—</div>
+                <div class="acc-sub" id="a-float-pct"></div>
+            </div>
+            <div class="acc-box g">
+                <div class="acc-label">Margin</div>
+                <div class="acc-val" id="a-margin" style="font-size:17px">—</div>
+                <div class="acc-sub" id="a-free"></div>
+            </div>
+            <div class="acc-box b">
+                <div class="acc-label">Offene Trades</div>
+                <div class="acc-val c-blue" id="a-cnt">—</div>
+                <div class="acc-sub" id="a-pend"></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Aktive Trades (default open) -->
+        <div class="accordion-head open" id="acc-active" onclick="toggleAcc(this)">
+            Aktive Trades <span class="sec-badge g" id="ov-cnt">0</span>
+            <span class="acc-new-dot"></span>
+            <span class="accordion-arrow">&#9660;</span>
+        </div>
+        <div class="accordion-body open">
+            <div class="accordion-body-inner">
+                <div id="overview-table"><div class="loading">Lade...</div></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Trade Details -->
+        <div class="accordion-head" id="acc-details" onclick="toggleAcc(this)">
+            Trade Details <span class="sec-badge g" id="open-cnt">0</span>
+            <span class="acc-new-dot"></span>
+            <span class="accordion-arrow">&#9660;</span>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-body-inner">
+                <div id="open-trades" class="trades-grid"><div class="loading">Lade...</div></div>
+                <div id="pend-head" style="display:none;padding:0 16px"><div class="sec-head">Pending Orders <span class="sec-badge b" id="pend-cnt">0</span></div></div>
+                <div id="pend-trades" class="trades-grid" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Trade History -->
+        <div class="accordion-head" id="acc-history" onclick="toggleAcc(this)">
+            Trade History <span class="sec-badge y" id="hist-cnt">0</span>
+            <span class="acc-new-dot"></span>
+            <span class="accordion-arrow">&#9660;</span>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-body-inner">
+                <div id="hist-stats"></div>
+                <div id="hist-trades" class="trades-grid"><div class="loading">Lade...</div></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Übersprungene Signale -->
+        <div class="accordion-head" id="acc-skipped" onclick="toggleAcc(this)">
+            Übersprungene Signale <span class="sec-badge r" id="skip-cnt">0</span>
+            <span class="acc-new-dot"></span>
+            <span class="accordion-arrow">&#9660;</span>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-body-inner">
+                <div id="skip-table"><div class="loading">Lade...</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-overlay" id="lightbox" onclick="if(event.target===this)closeLB()">
+        <div class="lightbox-box">
+            <button class="lb-close" onclick="closeLB()">&times;</button>
+            <div class="lb-title" id="lb-title"></div>
+            <div class="lb-subtitle" id="lb-subtitle"></div>
+            <div class="lb-images" id="lb-images"></div>
+        </div>
+    </div>
+
+    <div id="site-footer"></div>
+    <script src="/components/header.js"></script>
+    <script src="/components/footer.js"></script>
+
+    <script>
+        const SB_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
+
+        let accountData = null, positions = [], pendingOrders = [], historyDeals = [], skippedSignals = [];
+        let imageMap = {}; // wedge_id -> [{image_type, image_url}]
+        let countdown = 30, timer = null;
+        let isAdmin = false, isLoggedIn = false;
+
+        async function sb(table, q='') {
+            const r = await fetch(`${SB_URL}/rest/v1/${table}?${q}`, {
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+            });
+            if (!r.ok) throw new Error(r.status);
+            return r.json();
+        }
+
+        // ==================== SYMBOL NAMES ====================
+        const SN = {
+            'AUDCAD':'AUD/CAD','AUDCHF':'AUD/CHF','AUDJPY':'AUD/JPY','AUDNZD':'AUD/NZD','AUDUSD':'AUD/USD',
+            'CADCHF':'CAD/CHF','CADJPY':'CAD/JPY','CHFJPY':'CHF/JPY','EURCHF':'EUR/CHF','EURGBP':'EUR/GBP',
+            'EURJPY':'EUR/JPY','EURUSD':'EUR/USD','GBPCHF':'GBP/CHF','GBPJPY':'GBP/JPY','GBPUSD':'GBP/USD',
+            'NZDJPY':'NZD/JPY','NZDUSD':'NZD/USD','USDCAD':'USD/CAD','USDCHF':'USD/CHF','USDJPY':'USD/JPY',
+            'DE40.c':'DAX 40','DJ30.c':'Dow Jones 30','US500.c':'S&P 500','USTEC.c':'Nasdaq 100',
+            'UK100.c':'FTSE 100','JP225.c':'Nikkei 225','HK50.c':'Hang Seng 50',
+            'XAUUSD':'Gold (XAU/USD)','XAGUSD':'Silber (XAG/USD)','XAUEUR':'Gold (XAU/EUR)',
+            'USOIL.c':'WTI Crude Oil','UKOIL.c':'Brent Crude Oil',
+            'BTCUSD':'Bitcoin','ETHUSD':'Ethereum','SOLUSD':'Solana','ADAUSD':'Cardano','XRPUSD':'Ripple',
+            'A.OQ':'Agilent Technologies','AA.OQ':'Alcoa','AAL.OQ':'American Airlines','AAPL.OQ':'Apple Inc.','ABBV.OQ':'AbbVie','ABNB.OQ':'Airbnb','ABT.OQ':'Abbott Labs',
+            'ACN.OQ':'Accenture','ADBE.OQ':'Adobe','ADI.OQ':'Analog Devices','ADM.OQ':'Archer-Daniels-Midland','ADP.OQ':'Automatic Data Processing','ADSK.OQ':'Autodesk',
+            'AES.OQ':'AES Corp.','AFL.OQ':'Aflac','AMAT.OQ':'Applied Materials','AMC.OQ':'AMC Entertainment','AMD.OQ':'AMD','AMGN.OQ':'Amgen','AMP.OQ':'Ameriprise Financial',
+            'AMT.OQ':'American Tower','AMZN.OQ':'Amazon','ANET.OQ':'Arista Networks','ANSS.OQ':'Ansys','APD.OQ':'Air Products','APH.OQ':'Amphenol','ARM.OQ':'ARM Holdings',
+            'ASML.OQ':'ASML Holding','AVGO.OQ':'Broadcom','AXON.OQ':'Axon Enterprise','AZN.OQ':'AstraZeneca','AZO.OQ':'AutoZone',
+            'BALL.OQ':'Ball Corp.','BAX.OQ':'Baxter','BDX.OQ':'Becton Dickinson','BE.OQ':'Bloom Energy','BIDU.OQ':'Baidu','BIIB.OQ':'Biogen','BIO.OQ':'Bio-Rad',
+            'BKNG.OQ':'Booking Holdings','BKR.OQ':'Baker Hughes','BLDR.OQ':'Builders FirstSource','BMY.OQ':'Bristol-Myers Squibb','BSX.OQ':'Boston Scientific',
+            'BX.OQ':'Blackstone','BYND.OQ':'Beyond Meat',
+            'CAG.OQ':'Conagra Brands','CAH.OQ':'Cardinal Health','CARR.OQ':'Carrier Global','CB.OQ':'Chubb','CBOE.OQ':'Cboe Global Markets','CBRE.OQ':'CBRE Group',
+            'CBRL.OQ':'Cracker Barrel','CCI.OQ':'Crown Castle','CCL.OQ':'Carnival','CEG.OQ':'Constellation Energy','CF.OQ':'CF Industries',
+            'CHTR.OQ':'Charter Communications','CI.OQ':'Cigna','CL.OQ':'Colgate-Palmolive','CLX.OQ':'Clorox','CMCSA.OQ':'Comcast','CME.OQ':'CME Group','CMI.OQ':'Cummins',
+            'CMS.OQ':'CMS Energy','COF.OQ':'Capital One','COIN.OQ':'Coinbase','COST.OQ':'Costco','CPRT.OQ':'Copart','CRWD.OQ':'CrowdStrike','CSCO.OQ':'Cisco',
+            'CSGP.OQ':'CoStar Group','CSX.OQ':'CSX Corp.','CTAS.OQ':'Cintas','CTSH.OQ':'Cognizant','CTVA.OQ':'Corteva',
+            'D.OQ':'Dominion Energy','DD.OQ':'DuPont','DDOG.OQ':'Datadog','DE.OQ':'Deere & Company','DG.OQ':'Dollar General','DGX.OQ':'Quest Diagnostics',
+            'DHI.OQ':'D.R. Horton','DHR.OQ':'Danaher','DKNG.OQ':'DraftKings','DLR.OQ':'Digital Realty','DLTR.OQ':'Dollar Tree','DOCU.OQ':'DocuSign',
+            'DOV.OQ':'Dover','DOW.OQ':'Dow Inc.','DPZ.OQ':'Dominos Pizza','DRI.OQ':'Darden Restaurants','DTE.OQ':'DTE Energy','DUK.OQ':'Duke Energy','DVN.OQ':'Devon Energy',
+            'DXCM.OQ':'DexCom',
+            'EBAY.OQ':'eBay','ECL.OQ':'Ecolab','ED.OQ':'Con Edison','EFX.OQ':'Equifax','EIX.OQ':'Edison International','EL.OQ':'Estee Lauder','ELV.OQ':'Elevance Health',
+            'EMR.OQ':'Emerson Electric','ENPH.OQ':'Enphase Energy','EOG.OQ':'EOG Resources','EPAM.OQ':'EPAM Systems','EQIX.OQ':'Equinix','EQR.OQ':'Equity Residential',
+            'EQT.OQ':'EQT Corp.','ERIC.OQ':'Ericsson','ES.OQ':'Eversource','ESS.OQ':'Essex Property','ETN.OQ':'Eaton','ETR.OQ':'Entergy','ETSY.OQ':'Etsy',
+            'EW.OQ':'Edwards Lifesciences','EXAS.OQ':'Exact Sciences','EXC.OQ':'Exelon','EXPE.OQ':'Expedia','EXR.OQ':'Extra Space Storage',
+            'FANG.OQ':'Diamondback Energy','FAST.OQ':'Fastenal','FCEL.OQ':'FuelCell Energy','FCX.OQ':'Freeport-McMoRan','FDS.OQ':'FactSet','FE.OQ':'FirstEnergy',
+            'FGEN.OQ':'FibroGen','FI.OQ':'Fiserv','FICO.OQ':'Fair Isaac','FIS.OQ':'Fidelity National Info','FITB.OQ':'Fifth Third Bancorp',
+            'FLR.OQ':'Fluor','FMC.OQ':'FMC Corp.','FSLR.OQ':'First Solar','FTNT.OQ':'Fortinet','FTV.OQ':'Fortive',
+            'GD.OQ':'General Dynamics','GEHC.OQ':'GE HealthCare','GILD.OQ':'Gilead Sciences','GIS.OQ':'General Mills','GLW.OQ':'Corning','GME.OQ':'GameStop',
+            'GNRC.OQ':'Generac','GOOG.OQ':'Alphabet (C)','GOOGL.OQ':'Alphabet (Google)','GPC.OQ':'Genuine Parts','GPN.OQ':'Global Payments',
+            'GWW.OQ':'W.W. Grainger',
+            'HAL.OQ':'Halliburton','HAS.OQ':'Hasbro','HCA.OQ':'HCA Healthcare','HEI.OQ':'HEICO','HES.OQ':'Hess','HIG.OQ':'Hartford Financial',
+            'HOLX.OQ':'Hologic','HOOD.OQ':'Robinhood','HPE.OQ':'Hewlett Packard Enterprise','HSY.OQ':'Hershey','HUM.OQ':'Humana','HWM.OQ':'Howmet Aerospace',
+            'IBKR.OQ':'Interactive Brokers','ICE.OQ':'Intercontinental Exchange','IDXX.OQ':'IDEXX Labs','IFF.OQ':'Intl Flavors','ILMN.OQ':'Illumina',
+            'INCY.OQ':'Incyte','INTC.OQ':'Intel','INTU.OQ':'Intuit','IP.OQ':'International Paper','IQV.OQ':'IQVIA','IR.OQ':'Ingersoll Rand','IRM.OQ':'Iron Mountain',
+            'ISRG.OQ':'Intuitive Surgical','IT.OQ':'Gartner','ITW.OQ':'Illinois Tool Works',
+            'JBHT.OQ':'J.B. Hunt','JCI.OQ':'Johnson Controls','JD.OQ':'JD.com',
+            'KDP.OQ':'Keurig Dr Pepper','KEY.OQ':'KeyCorp','KEYS.OQ':'Keysight Technologies','KHC.OQ':'Kraft Heinz','KLAC.OQ':'KLA Corp.',
+            'KMB.OQ':'Kimberly-Clark','KMI.OQ':'Kinder Morgan','KR.OQ':'Kroger',
+            'LCID.OQ':'Lucid Group','LDOS.OQ':'Leidos','LEN.OQ':'Lennar','LH.OQ':'Labcorp','LHX.OQ':'L3Harris','LI.OQ':'Li Auto','LLY.OQ':'Eli Lilly',
+            'LOW.OQ':'Lowes','LRCX.OQ':'Lam Research','LULU.OQ':'Lululemon','LW.OQ':'Lamb Weston','LYB.OQ':'LyondellBasell','LYFT.OQ':'Lyft',
+            'M.OQ':'Macys','MAR.OQ':'Marriott','MARA.OQ':'Marathon Digital','MAS.OQ':'Masco','MAT.OQ':'Mattel','MCHP.OQ':'Microchip Tech','MCK.OQ':'McKesson',
+            'MDLZ.OQ':'Mondelez','MDT.OQ':'Medtronic','MELI.OQ':'MercadoLibre','MLM.OQ':'Martin Marietta','MMC.OQ':'Marsh & McLennan','MNST.OQ':'Monster Beverage',
+            'MOS.OQ':'Mosaic','MPC.OQ':'Marathon Petroleum','MPWR.OQ':'Monolithic Power','MRNA.OQ':'Moderna','MRVL.OQ':'Marvell Technology','MS.OQ':'Morgan Stanley',
+            'MSCI.OQ':'MSCI','MSFT.OQ':'Microsoft','MTB.OQ':'M&T Bank','MTCH.OQ':'Match Group','MU.OQ':'Micron',
+            'NCLH.OQ':'Norwegian Cruise Line','NDAQ.OQ':'Nasdaq Inc.','NEE.OQ':'NextEra Energy','NEM.OQ':'Newmont','NET.OQ':'Cloudflare','NFLX.OQ':'Netflix',
+            'NOC.OQ':'Northrop Grumman','NOW.OQ':'ServiceNow','NSC.OQ':'Norfolk Southern','NTAP.OQ':'NetApp','NUE.OQ':'Nucor',
+            'NVAX.OQ':'Novavax','NVDA.OQ':'NVIDIA','NVO.OQ':'Novo Nordisk','NXPI.OQ':'NXP Semiconductors',
+            'O.OQ':'Realty Income','ODFL.OQ':'Old Dominion Freight','OKE.OQ':'ONEOK','OKTA.OQ':'Okta','ON.OQ':'ON Semiconductor','ORLY.OQ':'OReilly Automotive',
+            'OTIS.OQ':'Otis Worldwide','OXY.OQ':'Occidental Petroleum',
+            'PANW.OQ':'Palo Alto Networks','PARA.OQ':'Paramount','PATH.OQ':'UiPath','PAYC.OQ':'Paycom','PAYX.OQ':'Paychex','PCAR.OQ':'PACCAR',
+            'PCG.OQ':'PG&E','PDD.OQ':'PDD Holdings','PGR.OQ':'Progressive','PH.OQ':'Parker-Hannifin','PHM.OQ':'PulteGroup','PLD.OQ':'Prologis',
+            'PLUG.OQ':'Plug Power','POOL.OQ':'Pool Corp.','PPG.OQ':'PPG Industries','PPL.OQ':'PPL Corp.','PRU.OQ':'Prudential Financial',
+            'PSA.OQ':'Public Storage','PSX.OQ':'Phillips 66','PTC.OQ':'PTC Inc.','PTON.OQ':'Peloton','PYPL.OQ':'PayPal',
+            'QCOM.OQ':'Qualcomm','QS.OQ':'QuantumScape',
+            'RBLX.OQ':'Roblox','RCL.OQ':'Royal Caribbean','RDDT.OQ':'Reddit','REGN.OQ':'Regeneron','RIOT.OQ':'Riot Platforms','RIVN.OQ':'Rivian',
+            'RJF.OQ':'Raymond James','RMD.OQ':'ResMed','RNG.OQ':'RingCentral','ROK.OQ':'Rockwell Automation','ROKU.OQ':'Roku','ROP.OQ':'Roper Technologies',
+            'ROST.OQ':'Ross Stores','RSG.OQ':'Republic Services','RTX.OQ':'RTX (Raytheon)',
+            'SBAC.OQ':'SBA Communications','SBUX.OQ':'Starbucks','SEDG.OQ':'SolarEdge','SHEL.OQ':'Shell','SHW.OQ':'Sherwin-Williams',
+            'SLB.OQ':'Schlumberger','SMCI.OQ':'Super Micro Computer','SNOW.OQ':'Snowflake','SNPS.OQ':'Synopsys','SO.OQ':'Southern Company',
+            'SPG.OQ':'Simon Property Group','SPGI.OQ':'S&P Global','SPOT.OQ':'Spotify','SRE.OQ':'Sempra','STE.OQ':'STERIS','STLD.OQ':'Steel Dynamics',
+            'STT.OQ':'State Street','STZ.OQ':'Constellation Brands','SWK.OQ':'Stanley Black & Decker','SWKS.OQ':'Skyworks','SYK.OQ':'Stryker','SYY.OQ':'Sysco',
+            'TDG.OQ':'TransDigm','TDOC.OQ':'Teladoc','TDY.OQ':'Teledyne','TEAM.OQ':'Atlassian','TEL.OQ':'TE Connectivity','TER.OQ':'Teradyne',
+            'TFC.OQ':'Truist Financial','TJX.OQ':'TJX Companies','TMO.OQ':'Thermo Fisher','TPR.OQ':'Tapestry','TRGP.OQ':'Targa Resources',
+            'TRMB.OQ':'Trimble','TROW.OQ':'T. Rowe Price','TRV.OQ':'Travelers','TSCO.OQ':'Tractor Supply','TSLA.OQ':'Tesla','TSN.OQ':'Tyson Foods',
+            'TT.OQ':'Trane Technologies','TTD.OQ':'The Trade Desk','TTWO.OQ':'Take-Two Interactive','TXT.OQ':'Textron','TYL.OQ':'Tyler Technologies',
+            'UHS.OQ':'Universal Health','ULTA.OQ':'Ulta Beauty','UNH.OQ':'UnitedHealth','UNP.OQ':'Union Pacific','UPS.OQ':'UPS','UPST.OQ':'Upstart',
+            'URI.OQ':'United Rentals','USB.OQ':'U.S. Bancorp',
+            'VEEV.OQ':'Veeva Systems','VFC.OQ':'V.F. Corp.','VICI.OQ':'VICI Properties','VKTX.OQ':'Viking Therapeutics','VLO.OQ':'Valero Energy',
+            'VMC.OQ':'Vulcan Materials','VRSK.OQ':'Verisk','VRSN.OQ':'VeriSign','VRTX.OQ':'Vertex Pharma',
+            'WAB.OQ':'Wabtec','WAT.OQ':'Waters Corp.','WBD.OQ':'Warner Bros. Discovery','WDC.OQ':'Western Digital','WEC.OQ':'WEC Energy','WELL.OQ':'Welltower',
+            'WFC.OQ':'Wells Fargo','WHR.OQ':'Whirlpool','WIX.OQ':'Wix.com','WM.OQ':'Waste Management','WMB.OQ':'Williams Companies',
+            'WST.OQ':'West Pharmaceutical','WTW.OQ':'Willis Towers Watson','WYNN.OQ':'Wynn Resorts',
+            'X.OQ':'United States Steel','XEL.OQ':'Xcel Energy','XYL.OQ':'Xylem',
+            'YUMC.OQ':'Yum China','ZBH.OQ':'Zimmer Biomet','ZBRA.OQ':'Zebra Technologies','ZM.OQ':'Zoom','ZS.OQ':'Zscaler','ZTS.OQ':'Zoetis',
+            // NYSE
+            'AEP.N':'American Electric Power','AIG.N':'AIG','ALL.N':'Allstate','AXP.N':'American Express','BA.N':'Boeing','BABA.N':'Alibaba',
+            'BAC.N':'Bank of America','BBY.N':'Best Buy','BLK.N':'BlackRock','BRKb.N':'Berkshire Hathaway','C.N':'Citigroup','CAT.N':'Caterpillar',
+            'CMG.N':'Chipotle','CNC.N':'Centene','COP.N':'ConocoPhillips','CRM.N':'Salesforce','CVS.N':'CVS Health','CVX.N':'Chevron',
+            'DAL.N':'Delta Air Lines','DFS.N':'Discover Financial','DIS.N':'Walt Disney','F.N':'Ford','FDX.N':'FedEx','GE.N':'General Electric',
+            'GM.N':'General Motors','GRMN.N':'Garmin','GS.N':'Goldman Sachs','HD.N':'Home Depot','HLT.N':'Hilton','HON.N':'Honeywell','HPQ.N':'HP Inc.',
+            'IBM.N':'IBM','JNJ.N':'Johnson & Johnson','JPM.N':'JPMorgan Chase','KKR.N':'KKR','KO.N':'Coca-Cola','LMT.N':'Lockheed Martin',
+            'LUV.N':'Southwest Airlines','MA.N':'Mastercard','MCD.N':'McDonalds','MCO.N':'Moodys','MET.N':'MetLife','MGM.N':'MGM Resorts',
+            'MMM.N':'3M','MO.N':'Altria','MRK.N':'Merck','MSI.N':'Motorola Solutions','MSTR.N':'MicroStrategy','NIO.N':'NIO','NKE.N':'Nike',
+            'ORCL.N':'Oracle','PEP.N':'PepsiCo','PFE.N':'Pfizer','PG.N':'Procter & Gamble','PINS.N':'Pinterest','PLTR.N':'Palantir',
+            'PM.N':'Philip Morris','PNC.N':'PNC Financial','RACE.N':'Ferrari','SCHW.N':'Charles Schwab','SHOP.N':'Shopify','SNAP.N':'Snap',
+            'SONY.N':'Sony','SQ.N':'Block (Square)','T.N':'AT&T','TGT.N':'Target','TMUS.N':'T-Mobile','TSM.N':'TSMC',
+            'UAL.N':'United Airlines','UBER.N':'Uber','V.N':'Visa','VZ.N':'Verizon','W.N':'Wayfair','WBA.N':'Walgreens','WDAY.N':'Workday',
+            'WMT.N':'Walmart','XOM.N':'Exxon Mobil','XPEV.N':'XPeng','YUM.N':'Yum! Brands',
+            'EA.O':'Electronic Arts','TXN.O':'Texas Instruments',
+            // EU
+            'ADSGn.DE':'Adidas','ALVG.DE':'Allianz','BASFn.DE':'BASF','BAYGn.DE':'Bayer','BMWG.DE':'BMW','CBKG.DE':'Commerzbank',
+            'DAIGn.DE':'Mercedes-Benz','DBKGn.DE':'Deutsche Bank','DPWGn.DE':'Deutsche Post (DHL)','EONGn.DE':'E.ON','IFXGn.DE':'Infineon Technologies',
+            'LHAG.DE':'Lufthansa','MUVGn.DE':'Munich Re','RWEG.DE':'RWE','SAPG.DE':'SAP','SIEGn.DE':'Siemens','VNAn.DE':'Vonovia','VOWG_p.DE':'Volkswagen',
+            'AIR.PA':'Airbus','BNPP.PA':'BNP Paribas','LVMH.PA':'LVMH','OREP.PA':'LOreal','TOTF.PA':'TotalEnergies',
+            'SAN.MC':'Banco Santander','IBE.MC':'Iberdrola',
+        };
+
+        function getName(sym) { return SN[sym] || sym; }
+
+        function chartUrl(sym) {
+            const map = {'.OQ':'NASDAQ','.N':'NYSE','.O':'NASDAQ','.DE':'XETR','.PA':'EURONEXT','.AS':'EURONEXT','.MC':'BME','.HK':'HKEX'};
+            for (const [sfx, ex] of Object.entries(map)) {
+                if (sym.endsWith(sfx)) {
+                    let base = sym.slice(0, -sfx.length).replace(/[a-z]$/,'').replace(/_p$/,'');
+                    return `https://www.tradingview.com/chart/?symbol=${ex}:${base}`;
+                }
+            }
+            if (sym.length === 6 && !sym.includes('.')) return `https://www.tradingview.com/chart/?symbol=FX:${sym}`;
+            return `https://www.tradingview.com/chart/?symbol=${sym}`;
+        }
+
+        // ==================== AUTH CHECK ====================
+        function getAccessToken() { return localStorage.getItem('sb_access_token') || ''; }
+
+        async function checkAuth() {
+            const token = getAccessToken();
+            if (!token) return false;
+            try {
+                const res = await fetch(`${SB_URL}/auth/v1/user`, {
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return false;
+                const user = await res.json();
+                if (!user || !user.id) return false;
+                isLoggedIn = true;
+
+                // Admin check
+                const aRes = await fetch(`${SB_URL}/rest/v1/admins?user_id=eq.${user.id}&select=*`, {
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` }
+                });
+                if (aRes.ok) {
+                    const admins = await aRes.json();
+                    isAdmin = admins.length > 0;
+                }
+                return true;
+            } catch(e) { return false; }
+        }
+
+        function applyAccessLevel() {
+            if (isAdmin) {
+                // Admin sieht alles
+                document.body.classList.add('is-admin');
+                return;
+            }
+            // Nicht-Admin: Nur 1 Trade sichtbar, Rest locked
+            document.body.classList.add('is-guest');
+        }
+
+        // ==================== LOAD DATA ====================
+        async function load() {
+            try {
+                const [acc, pos, hist, skip] = await Promise.all([
+                    sb('ea_account','select=*&terminal_id=eq.demo&limit=1'),
+                    sb('ea_positions','select=*&terminal_id=eq.demo&order=profit.desc'),
+                    sb('ea_history','select=*&terminal_id=eq.demo&order=close_time.desc&limit=500'),
+                    sb('ea_skipped_signals','select=*&terminal_id=eq.demo&order=skip_time.desc&limit=200')
+                ]);
+                accountData = acc[0] || null;
+                positions = (pos||[]).filter(p => p.status === 'open');
+                pendingOrders = (pos||[]).filter(p => p.status === 'pending');
+                historyDeals = hist || [];
+                skippedSignals = skip || [];
+
+                // Collect all wedge_ids from positions + history comments
+                const wids = new Set();
+                positions.forEach(p => { if(p.wedge_id) wids.add(p.wedge_id); });
+                pendingOrders.forEach(p => { if(p.wedge_id) wids.add(p.wedge_id); });
+                historyDeals.forEach(d => {
+                    const c = d.comment||'';
+                    if(c.includes('|')) { const w = c.split('|')[1]; if(w) wids.add(w.trim()); }
+                    if(d.wedge_id) wids.add(d.wedge_id);
+                });
+                skippedSignals.forEach(s => { if(s.wedge_id) wids.add(s.wedge_id); });
+
+                // Fetch images for all wedge_ids
+                if(wids.size > 0) {
+                    const wArr = [...wids];
+                    const imgs = await sb('signal_images',`select=wedge_id,image_type,image_url&wedge_id=in.(${wArr.join(',')})`);
+                    imageMap = {};
+                    (imgs||[]).forEach(img => {
+                        if(!imageMap[img.wedge_id]) imageMap[img.wedge_id] = [];
+                        imageMap[img.wedge_id].push(img);
+                    });
+                }
+
+                renderAccount();
+                renderOverview();
+                renderOpen();
+                renderPending();
+                renderHistory();
+                renderSkipped();
+                checkNewItems();
+                updStatus();
+            } catch(e) { console.error('Dashboard error:', e); }
+        }
+
+        // ==================== ACCOUNT ====================
+        function renderAccount() {
+            if (!accountData) return;
+            const a = accountData;
+            const bal = +a.balance||0, eq = +a.equity||0, fl = +a.floating_pl||0, mg = +a.margin_used||0, fr = +a.free_margin||0;
+
+            $('a-bal').textContent = money(bal);
+            $('a-cur').textContent = a.currency||'USD';
+            $('a-eq').textContent = money(eq);
+            const diff = eq - bal;
+            const de = $('a-eq-diff');
+            de.textContent = (diff>=0?'+':'') + money(diff);
+            de.style.color = diff>=0 ? 'var(--accent-green)' : 'var(--accent-red)';
+
+            const fe = $('a-float');
+            fe.textContent = (fl>=0?'+':'') + money(fl);
+            fe.className = 'acc-val mono ' + (fl>=0?'c-green':'c-red');
+            const pct = bal>0 ? (fl/bal*100) : 0;
+            $('a-float-pct').textContent = (pct>=0?'+':'') + pct.toFixed(2) + '%';
+
+            $('a-margin').textContent = money(mg);
+            $('a-free').textContent = 'Frei: ' + money(fr);
+            $('a-cnt').textContent = positions.length;
+            $('a-pend').textContent = pendingOrders.length > 0 ? `+ ${pendingOrders.length} pending` : '';
+        }
+
+        // ==================== OVERVIEW TABLE ====================
+        function renderOverview() {
+            const c = $('overview-table');
+            $('ov-cnt').textContent = positions.length;
+            if (!positions.length) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
+
+            const rows = positions.map(p => {
+                const sym = p.symbol, name = getName(sym), dir = p.direction, isBuy = dir==='BUY';
+                const entry = +p.open_price, cur = +p.current_price, lots = +p.lots;
+                const profit = +p.profit, swap = +p.swap, net = profit + swap;
+                const phase = p.phase || 0;
+                const tp1 = +p.tp1, tp2 = +p.tp2, tp3 = +p.tp3, sl = +p.sl;
+                const wid = p.wedge_id||'';
+                const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+                const clickAttr = hasImgs
+                    ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"`
+                    : `onclick="window.open('${chartUrl(sym)}','_blank')"`;
+
+                // Change % from entry
+                const changePct = entry ? ((isBuy ? cur-entry : entry-cur)/entry*100) : 0;
+                const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
+
+                const netCls = net >= 0 ? 'c-green' : 'c-red';
+
+                return `<tr ${clickAttr}>
+                    <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
+                    <td><span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span></td>
+                    <td>${price(entry)}</td>
+                    <td>${price(cur)}</td>
+                    <td class="${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</td>
+                    <td>${lots.toFixed(2)}</td>
+                    <td class="${netCls}" style="font-weight:700">${(net>=0?'+':'')+money(net)}</td>
+                    <td>
+                        <div class="ov-phase" title="TP1 / TP2 / TP3">
+                            <span class="dot ${phase>=1?'hit':''}"></span>
+                            <span class="dot ${phase>=2?'hit':''}"></span>
+                            <span class="dot ${phase>=3?'hit':''}"></span>
+                        </div>
+                    </td>
+                    <td style="font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</td>
+                </tr>`;
+            }).join('');
+
+            c.innerHTML = `<table class="overview-table">
+                <thead><tr>
+                    <th>Name</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
+                    <th>+/-%</th><th>Lots</th><th>P&L</th><th>TP Status</th><th>Seit</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+
+        // ==================== OPEN TRADES ====================
+        function renderOpen() {
+            const c = $('open-trades');
+            $('open-cnt').textContent = positions.length;
+            if (!positions.length) { c.innerHTML = '<div class="empty">Keine offenen Trades</div>'; return; }
+
+            c.innerHTML = positions.map(p => {
+                const sym = p.symbol, name = getName(sym), dir = p.direction;
+                const isBuy = dir === 'BUY';
+                const entry = +p.open_price, cur = +p.current_price, sl = +p.sl;
+                const tp1 = +p.tp1, tp2 = +p.tp2, tp3 = +p.tp3;
+                const lots = +p.lots, profit = +p.profit, swap = +p.swap, phase = p.phase;
+                const net = profit + swap;
+
+                // Find partial close deals for this position
+                const deals = historyDeals.filter(d => d.position_id == p.ticket).sort((a,b) => new Date(a.close_time) - new Date(b.close_time));
+
+                // TP breakdown
+                const tp1Hit = phase >= 1, tp2Hit = phase >= 2, tp3Hit = false;
+                const tp1Deal = deals[0] || null;
+                const tp2Deal = deals[1] || null;
+
+                // Distance in %
+                const tp1Pct = entry ? ((isBuy ? tp1-entry : entry-tp1)/entry*100) : 0;
+                const tp2Pct = entry ? ((isBuy ? tp2-entry : entry-tp2)/entry*100) : 0;
+                const tp3Pct = entry ? ((isBuy ? tp3-entry : entry-tp3)/entry*100) : 0;
+                const slPct  = entry ? ((isBuy ? sl-entry : entry-sl)/entry*100) : 0;
+
+                const wid = p.wedge_id||'';
+                const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+
+                return `<div class="trade-card fade-in">
+                    <div class="tc-head">
+                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
+                            ${name}
+                            <small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
+                        </div>
+                        <div class="tc-badges">
+                            <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
+                            <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
+                        </div>
+                    </div>
+                    <div class="tc-info">
+                        <div class="tc-info-item"><div class="lbl">Entry</div><div class="val">${price(entry)}</div></div>
+                        <div class="tc-info-item"><div class="lbl">Aktuell</div><div class="val">${price(cur)}</div></div>
+                        <div class="tc-info-item"><div class="lbl">Lots</div><div class="val">${lots.toFixed(2)}</div></div>
+                    </div>
+                    <div class="tp-list">
+                        ${tpRow('TP1','tp1',price(tp1),tp1Pct,tp1Hit,tp1Hit?'HIT':'—',tp1Deal? money(+tp1Deal.profit):'—',tp1Hit)}
+                        ${tpRow('TP2','tp2',price(tp2),tp2Pct,tp2Hit,tp2Hit?'HIT':'—',tp2Deal? money(+tp2Deal.profit):'—',tp2Hit)}
+                        ${tpRow('TP3','tp3',price(tp3),tp3Pct,false,'—','—',false)}
+                        ${tpRow('SL','sl',price(sl),slPct,false,'—','—',false,true)}
+                    </div>
+                    <div class="tc-foot">
+                        <div class="tc-total ${net>=0?'c-green':'c-red'}">${(net>=0?'+':'') + money(net)}</div>
+                        <div class="tc-meta">Phase ${phase}/3<br>${fmtDate(p.open_time)}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function tpRow(label, cls, priceStr, pct, isHit, statusText, pnlText, isPositive, isSL=false) {
+            const statusCls = isHit ? 'hit' : (isSL ? '' : 'wait');
+            const icon = isHit ? '&#10003;' : (isSL ? '&#9679;' : '&#9675;');
+            const pctStr = pct != null ? (pct>=0?'+':'') + pct.toFixed(2) + '%' : '';
+            const pnlCls = isHit ? (isPositive !== false ? 'c-green' : 'c-red') : (isSL ? 'c-red' : '');
+            return `<div class="tp-row">
+                <span class="tp-label ${cls}">${icon} ${label}</span>
+                <span class="tp-price">${priceStr} <span style="color:${isSL?'var(--accent-red)':'var(--accent-green)'};font-size:11px">${pctStr}</span></span>
+                <span class="tp-status ${statusCls}">${statusText}</span>
+                <span class="tp-pnl ${pnlCls}">${pnlText}</span>
+            </div>`;
+        }
+
+        // ==================== PENDING ====================
+        function renderPending() {
+            const h = $('pend-head'), c = $('pend-trades');
+            $('pend-cnt').textContent = pendingOrders.length;
+            if (!pendingOrders.length) { h.style.display='none'; c.style.display='none'; return; }
+            h.style.display='flex'; c.style.display='grid';
+            c.innerHTML = pendingOrders.map(p => {
+                const sym = p.symbol, name = getName(sym), dir = p.direction, isBuy = dir==='BUY';
+                const wid = p.wedge_id||'';
+                const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+                return `<div class="trade-card fade-in" style="border-color:rgba(79,195,247,.2)">
+                    <div class="tc-head">
+                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
+                            ${name}<small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
+                        </div>
+                        <div class="tc-badges">
+                            <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
+                            <span class="badge badge-pending">PENDING ${isBuy?'BUY':'SELL'}</span>
+                        </div>
+                    </div>
+                    <div class="tc-info">
+                        <div class="tc-info-item"><div class="lbl">Entry</div><div class="val">${price(p.open_price)}</div></div>
+                        <div class="tc-info-item"><div class="lbl">SL</div><div class="val">${price(p.sl)}</div></div>
+                        <div class="tc-info-item"><div class="lbl">TP3</div><div class="val">${price(p.tp3)}</div></div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ==================== HISTORY ====================
+        function renderHistory() {
+            const sc = $('hist-stats'), c = $('hist-trades');
+
+            // Group by position_id
+            const byPos = {};
+            historyDeals.forEach(d => {
+                const pid = d.position_id;
+                if (!byPos[pid]) byPos[pid] = [];
+                byPos[pid].push(d);
+            });
+
+            const trades = Object.entries(byPos).map(([pid, deals]) => {
+                deals.sort((a,b) => new Date(a.close_time) - new Date(b.close_time));
+                const totalProfit = deals.reduce((s,d) => s + (+d.profit||0), 0);
+                const totalSwap = deals.reduce((s,d) => s + (+d.swap||0), 0);
+                const totalComm = deals.reduce((s,d) => s + (+d.commission||0), 0);
+                const totalLots = deals.reduce((s,d) => s + (+d.lots||0), 0);
+                const last = deals[deals.length - 1];
+                const wedgeId = (last.comment||'').includes('|') ? last.comment.split('|')[1] : '';
+                return {
+                    pid, symbol: last.symbol, direction: last.direction,
+                    lots: totalLots, profit: totalProfit, swap: totalSwap, commission: totalComm,
+                    net: totalProfit + totalSwap + totalComm,
+                    close_time: last.close_time, deals, wedgeId
+                };
+            });
+            trades.sort((a,b) => new Date(b.close_time) - new Date(a.close_time));
+
+            $('hist-cnt').textContent = trades.length;
+
+            // Stats
+            const totalNet = trades.reduce((s,t) => s + t.net, 0);
+            const wins = trades.filter(t => t.net > 0).length;
+            const losses = trades.filter(t => t.net < 0).length;
+            const wr = trades.length ? ((wins/trades.length)*100).toFixed(1) : '0';
+            const best = trades.reduce((b,t) => t.net > (b?.net||-Infinity) ? t : b, null);
+            const ncl = totalNet >= 0 ? 'c-green' : 'c-red';
+
+            sc.innerHTML = `<div class="hist-stats">
+                <div class="hist-stat"><div class="lbl">Total P&L</div><div class="val mono ${ncl}">${money(totalNet)}</div></div>
+                <div class="hist-stat"><div class="lbl">Win-Rate</div><div class="val mono c-blue">${wr}%</div></div>
+                <div class="hist-stat"><div class="lbl">Wins / Losses</div><div class="val mono"><span class="c-green">${wins}</span> / <span class="c-red">${losses}</span></div></div>
+                <div class="hist-stat"><div class="lbl">Bester Trade</div><div class="val mono c-green" style="font-size:14px">${best ? getName(best.symbol)+' '+money(best.net) : '—'}</div></div>
+            </div>`;
+
+            if (!trades.length) { c.innerHTML = '<div class="empty">Keine Trade-History</div>'; return; }
+
+            c.innerHTML = trades.map(t => {
+                const sym = t.symbol, name = getName(sym), dir = t.direction, isBuy = dir==='BUY';
+                const ncl2 = t.net >= 0 ? 'c-green' : 'c-red';
+
+                // Per-deal breakdown (TP1/TP2/TP3 or SL)
+                const dealRows = t.deals.map((d, i) => {
+                    const dp = +d.profit, ds = +d.swap, dc = +d.commission, dn = dp+ds+dc;
+                    const isLoss = dp < 0;
+                    const label = t.deals.length === 1
+                        ? (isLoss ? 'SL' : 'Close')
+                        : (i === 0 ? 'TP1' : i === 1 ? 'TP2' : i === 2 ? 'TP3' : `Close ${i+1}`);
+                    const cls = isLoss ? 'sl' : (i===0?'tp1':i===1?'tp2':'tp3');
+                    const pcl = dn >= 0 ? 'c-green' : 'c-red';
+                    return `<div class="tp-row">
+                        <span class="tp-label ${cls}">&#10003; ${label}</span>
+                        <span class="tp-price">${price(d.close_price)} &middot; ${(+d.lots).toFixed(2)} lots</span>
+                        <span class="tp-status hit">${money(dp)}</span>
+                        <span class="tp-pnl ${pcl}">${money(dn)}</span>
+                    </div>`;
+                }).join('');
+
+                const wid = t.wedgeId||'';
+                const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+
+                return `<div class="trade-card closed fade-in">
+                    <div class="tc-head">
+                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
+                            ${name}<small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
+                        </div>
+                        <div class="tc-badges">
+                            <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
+                            <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
+                            <span class="badge badge-closed">CLOSED</span>
+                        </div>
+                    </div>
+                    <div class="tc-info">
+                        <div class="tc-info-item"><div class="lbl">Total Lots</div><div class="val">${t.lots.toFixed(2)}</div></div>
+                        <div class="tc-info-item"><div class="lbl">Deals</div><div class="val">${t.deals.length}</div></div>
+                        <div class="tc-info-item"><div class="lbl">Geschlossen</div><div class="val" style="font-size:12px">${fmtDate(t.close_time)}</div></div>
+                    </div>
+                    <div class="tp-list">${dealRows}</div>
+                    <div class="tc-foot">
+                        <div class="tc-total ${ncl2}">${(t.net>=0?'+':'') + money(t.net)}</div>
+                        <div class="tc-meta">Profit: ${money(t.profit)}<br>Swap: ${money(t.swap)} | Comm: ${money(t.commission)}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ==================== AUTO-REFRESH ====================
+        function startRefresh() {
+            countdown = 30; updCd();
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => { countdown--; if(countdown<=0){countdown=30;load();} updCd(); }, 1000);
+        }
+        function updCd() { $('ref-cd').textContent = `(${countdown}s)`; }
+        function updStatus() {
+            const t = new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+            $('ref-status').textContent = `Live — ${t}`;
+        }
+
+        // ==================== SKIPPED SIGNALS ====================
+        function renderSkipped() {
+            const c = $('skip-table');
+            $('skip-cnt').textContent = skippedSignals.length;
+            if (!skippedSignals.length) { c.innerHTML = '<div class="empty">Keine übersprungenen Signale</div>'; return; }
+
+            const rows = skippedSignals.map(s => {
+                const sym = s.symbol, name = getName(sym), dir = s.direction||'';
+                const isBuy = dir.toUpperCase().includes('BULL') || dir.toUpperCase().includes('BUY');
+                const wid = s.wedge_id||'';
+                const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+                const clickAttr = hasImgs
+                    ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"`
+                    : `onclick="window.open('${chartUrl(sym)}','_blank')"`;
+
+                const reasonMap = {
+                    'Signal zu alt': 'c-gold',
+                    'Ungueltige Preise': 'c-red',
+                    'Symbol nicht gefunden': 'c-red',
+                    'Kein Preis': 'c-gold',
+                    'Max Trades': 'c-blue',
+                    'Max Risiko': 'c-blue',
+                    'Spread zu hoch': 'c-gold',
+                    'Nicht genug Margin': 'c-red',
+                    'Re-Entry': 'c-blue'
+                };
+                let reasonCls = '';
+                for (const [key, cls] of Object.entries(reasonMap)) {
+                    if ((s.reason||'').includes(key)) { reasonCls = cls; break; }
+                }
+
+                return `<tr ${clickAttr}>
+                    <td style="font-size:12px;color:var(--text-secondary)">${fmtDate(s.skip_time)}</td>
+                    <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
+                    <td>${dir ? `<span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span>` : '—'}</td>
+                    <td style="font-size:12px">${s.timeframe||'—'}</td>
+                    <td class="${reasonCls}" style="font-size:12px;font-family:'Space Grotesk',sans-serif;white-space:normal">${s.reason||'—'}</td>
+                    <td>${hasImgs ? '<span style="color:var(--accent-blue);font-size:12px">Bilder</span>' : ''}</td>
+                </tr>`;
+            }).join('');
+
+            c.innerHTML = `<table class="overview-table">
+                <thead><tr>
+                    <th>Zeit</th><th>Name</th><th>Richtung</th><th>TF</th><th>Grund</th><th></th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+
+        // ==================== LIGHTBOX ====================
+        const PHASE_ORDER = ['latest','entry','detect'];
+        const PHASE_LABELS = {detect:'Erkennung (Detect)',entry:'Einstieg (Entry)',latest:'Aktuell / TP-SL (Latest)'};
+
+        function openLB(wedgeId, name, sym) {
+            const lb = $('lightbox');
+            $('lb-title').textContent = name;
+            $('lb-subtitle').innerHTML = `${sym} <a href="${chartUrl(sym)}" target="_blank">TradingView Chart &rarr;</a>`;
+
+            const imgs = imageMap[wedgeId] || [];
+            const cont = $('lb-images');
+
+            if(!imgs.length) {
+                cont.innerHTML = '<div class="lb-no-images">Keine Bilder vorhanden fuer diesen Trade</div>';
+            } else {
+                // Sort by phase order
+                imgs.sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
+                cont.innerHTML = imgs.map(img => {
+                    const t = img.image_type||'unknown';
+                    const label = PHASE_LABELS[t] || t;
+                    return `<div class="lb-img-slot">
+                        <div class="lb-img-label"><span class="lb-phase-dot ${t}"></span>${label}</div>
+                        <img src="${img.image_url}" alt="${label}" loading="lazy" onclick="this.classList.toggle('zoomed')">
+                    </div>`;
+                }).join('');
+            }
+
+            lb.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLB() {
+            $('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', e => { if(e.key==='Escape') closeLB(); });
+
+        function getWedgeId(p) {
+            if(p.wedge_id) return p.wedge_id;
+            const c = p.comment||'';
+            if(c.includes('|')) { const w = c.split('|')[1]; if(w) return w.trim(); }
+            return '';
+        }
+
+        // ==================== ACCORDION ====================
+        const prevCounts = { active:0, details:0, history:0, skipped:0 };
+        let isFirstLoad = true;
+
+        function toggleAcc(el) {
+            el.classList.toggle('open');
+            el.classList.remove('has-new');
+            const body = el.nextElementSibling;
+            body.classList.toggle('open');
+        }
+
+        function checkNewItems() {
+            if(isFirstLoad) {
+                prevCounts.active = positions.length;
+                prevCounts.details = positions.length + pendingOrders.length;
+                prevCounts.history = historyDeals.length;
+                prevCounts.skipped = skippedSignals.length;
+                isFirstLoad = false;
+                return;
+            }
+            const checks = [
+                { id:'acc-active',  now:positions.length, key:'active' },
+                { id:'acc-details', now:positions.length + pendingOrders.length, key:'details' },
+                { id:'acc-history', now:historyDeals.length, key:'history' },
+                { id:'acc-skipped', now:skippedSignals.length, key:'skipped' }
+            ];
+            checks.forEach(c => {
+                const el = $(c.id);
+                if(c.now > prevCounts[c.key] && !el.classList.contains('open')) {
+                    el.classList.add('has-new');
+                }
+                prevCounts[c.key] = c.now;
+            });
+        }
+
+        // ==================== HELPERS ====================
+        function $(id) { return document.getElementById(id); }
+        function money(v) { return (+v||0).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+        function price(v) { const n=+v; if(!n) return '—'; return n>=10?n.toFixed(2):n>=1?n.toFixed(4):n.toFixed(5); }
+        function fmtDate(s) { if(!s) return '—'; const d=new Date(s); return isNaN(d)?'—':d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'})+' '+d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}); }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            applyAccessLevel();
+            if (isAdmin) {
+                load();
+                startRefresh();
+            } else {
+                loadGuestPreview();
+            }
+        });
+
+        async function loadGuestPreview() {
+            // Nur 1 Trade laden für Nicht-Admin
+            try {
+                const pos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,tp2,tp3,sl,phase,open_time&terminal_id=eq.demo&order=profit.desc&limit=1');
+                const p = (pos||[])[0];
+                const c = $('overview-table');
+                if (!p) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
+
+                $('ov-cnt').textContent = '1';
+                const sym = p.symbol, name = getName(sym), dir = p.direction||'';
+                const isBuy = dir==='BUY';
+                const phase = p.phase||0;
+
+                c.innerHTML = `<div class="locked-overlay"><table class="overview-table">
+                    <thead><tr><th>Name</th><th>Richtung</th><th>Entry</th><th>TF</th><th>TP Status</th><th>Seit</th></tr></thead>
+                    <tbody><tr>
+                        <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
+                        <td><span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span></td>
+                        <td>${price(p.open_price)}</td>
+                        <td>—</td>
+                        <td><div class="ov-phase"><span class="dot ${phase>=1?'hit':''}"></span><span class="dot ${phase>=2?'hit':''}"></span><span class="dot ${phase>=3?'hit':''}"></span></div></td>
+                        <td style="font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</td>
+                    </tr></tbody>
+                </table></div>
+                <div class="locked-cta">
+                    <p>Melde dich als Admin an, um alle Trades, P&L, History und mehr zu sehen.</p>
+                    <a href="/#login" onclick="if(typeof showLogin==='function'){event.preventDefault();showLogin();}">Jetzt einloggen</a>
+                </div>`;
+            } catch(e) {
+                $('overview-table').innerHTML = '<div class="empty">Dashboard nicht verfügbar</div>';
+            }
+        }
+    </script>
+</body>
+</html>

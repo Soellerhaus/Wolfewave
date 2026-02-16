@@ -4437,40 +4437,45 @@
         // Neueste Bilder aus signal_images laden und Signal-Kacheln aktualisieren
         async function updateSignalImages() {
             try {
-                // Lade das neueste Bild pro wedge_id (oder display_photo falls gesetzt)
+                // 3-Slot: Lade Bilder mit image_type (latest > entry > detect)
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?select=wedge_id,image_url,is_display_photo,scanned_at&order=scanned_at.desc&limit=10000`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?select=wedge_id,image_url,image_type,is_display_photo,scanned_at&order=scanned_at.desc&limit=10000`,
                     { headers: { 'apikey': SUPABASE_KEY, 'Prefer': 'count=none' } }
                 );
                 if (!response.ok) return;
                 const allImages = await response.json();
-                
-                // Pro wedge_id: display_photo bevorzugen, sonst neuestes Bild
+
+                // Pro wedge_id: latest > entry > detect (display_photo hat weiterhin Vorrang)
+                const typePriority = { 'latest': 3, 'entry': 2, 'detect': 1 };
                 const latestByWedge = {};
+                const priorityByWedge = {};
                 allImages.forEach(img => {
                     if (!img.wedge_id) return;
-                    if (!latestByWedge[img.wedge_id]) {
+                    const prio = typePriority[img.image_type] || 0;
+                    if (!latestByWedge[img.wedge_id] || prio > (priorityByWedge[img.wedge_id] || 0)) {
                         latestByWedge[img.wedge_id] = img.image_url;
+                        priorityByWedge[img.wedge_id] = prio;
                     }
                     if (img.is_display_photo) {
                         latestByWedge[img.wedge_id] = img.image_url;
+                        priorityByWedge[img.wedge_id] = 99;
                     }
                 });
-                
+
                 // Aktive Signale aktualisieren
                 allSignals.forEach(s => {
                     if (s.wedge_id && latestByWedge[s.wedge_id]) {
                         s.image_path = latestByWedge[s.wedge_id];
                     }
                 });
-                
+
                 // Completed Signale aktualisieren
                 completedSignals.forEach(s => {
                     if (s.wedge_id && latestByWedge[s.wedge_id]) {
                         s.original_path = latestByWedge[s.wedge_id];
                     }
                 });
-                
+
                 console.log(`Updated card images for ${Object.keys(latestByWedge).length} signals`);
             } catch (e) {
                 console.error('Error updating signal images:', e);
@@ -6363,9 +6368,13 @@
         }
 
         async function loadImageHistory(wedgeId, currentImageUrl) {
+            // 3-Slot Labels
+            const typeLabels = { 'detect': 'Erkennung', 'entry': 'Einstieg', 'latest': 'Aktuell' };
+            const typeOrder = { 'detect': 0, 'entry': 1, 'latest': 2 };
+
             try {
                 const response = await fetch(
-                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=*&order=scanned_at.desc`,
+                    `${SUPABASE_URL}/rest/v1/signal_images?wedge_id=eq.${wedgeId}&select=*&order=image_type.asc`,
                     {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -6373,58 +6382,44 @@
                         }
                     }
                 );
-                
+
                 if (!response.ok) throw new Error('HTTP ' + response.status);
-                
+
                 const data = await response.json();
-                
+
                 if (data && data.length > 0) {
-                    // SUCCESS TAB: Only 1 image (latest or display photo)
+                    // SUCCESS TAB: Only 1 image (display_photo or latest)
                     if (currentTab === 'success') {
                         const displayPhoto = data.find(img => img.is_display_photo === true);
-                        
-                        if (displayPhoto) {
-                            sliderImages = [{
-                                url: displayPhoto.image_url,
-                                scanned_at: displayPhoto.scanned_at,
-                                is_display: true
-                            }];
-                        } else {
-                            // Just show the newest image
-                            sliderImages = [{
-                                url: data[0].image_url,
-                                scanned_at: data[0].scanned_at,
-                                is_display: false
-                            }];
-                        }
-                    } 
-                    // ALL SIGNALS TAB: Show up to 5 images
-                    else {
-                        if (isAdmin) {
-                            // Admin sees ALL photos, sorted by date (newest first)
-                            sliderImages = data.map(img => ({
-                                url: img.image_url,
-                                scanned_at: img.scanned_at,
-                                is_display: img.is_display_photo
-                            }));
-                        } else {
-                            // Regular users: Show up to 5 images (newest first)
-                            const imagesToShow = data.slice(0, 5);
-                            sliderImages = imagesToShow.map(img => ({
-                                url: img.image_url,
-                                scanned_at: img.scanned_at,
-                                is_display: img.is_display_photo
-                            }));
-                        }
+                        const best = displayPhoto || data.find(img => img.image_type === 'latest') || data[0];
+                        sliderImages = [{
+                            url: best.image_url,
+                            scanned_at: best.scanned_at,
+                            is_display: best.is_display_photo,
+                            image_type: best.image_type,
+                            label: typeLabels[best.image_type] || ''
+                        }];
                     }
-                    
+                    // ALL SIGNALS TAB: 3-Slot Bilder (detect → entry → latest)
+                    else {
+                        // Sortiere nach Slot-Reihenfolge
+                        const sorted = data.sort((a, b) => (typeOrder[a.image_type] || 0) - (typeOrder[b.image_type] || 0));
+                        sliderImages = sorted.map(img => ({
+                            url: img.image_url,
+                            scanned_at: img.scanned_at,
+                            is_display: img.is_display_photo,
+                            image_type: img.image_type,
+                            label: typeLabels[img.image_type] || ''
+                        }));
+                    }
+
                     sliderCurrentIndex = 0;
                     updateSliderDisplay();
                     renderThumbnails();
                 }
             } catch (err) {
                 console.log('Keine Bild-Historie gefunden:', err.message);
-                sliderImages = [{ url: currentImageUrl, scanned_at: null }];
+                sliderImages = [{ url: currentImageUrl, scanned_at: null, label: '' }];
                 sliderCurrentIndex = 0;
                 updateSliderDisplay();
             }
@@ -6440,23 +6435,23 @@
             
             // Datum anzeigen (SUCCESS FEATURE: Admin-selected and newest marked)
             const dateEl = document.getElementById('sliderDate');
+            // 3-Slot Label + Datum anzeigen
+            const slotLabel = img.label || '';
             if (img.scanned_at) {
                 const date = new Date(img.scanned_at);
-                const timeStr = date.toLocaleDateString('de-DE') + ' ' + 
+                const timeStr = date.toLocaleDateString('de-DE') + ' ' +
                                date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                
+
                 // Markiere Admin-selected display photo
                 if (img.is_display && isAdmin) {
-                    dateEl.innerHTML = `<span style="color: var(--accent-gold); font-weight: 700;">✓ ANGEZEIGT: ${timeStr}</span>`;
-                }
-                // Markiere das neueste Bild
-                else if (sliderCurrentIndex === 0) {
-                    dateEl.innerHTML = `<span style="color: var(--accent-green); font-weight: 700;">🆕 ${timeStr}</span>`;
+                    dateEl.innerHTML = `<span style="color: var(--accent-gold); font-weight: 700;">${slotLabel ? slotLabel + ' — ' : ''}${timeStr}</span>`;
                 } else {
-                    dateEl.textContent = timeStr;
+                    dateEl.innerHTML = slotLabel
+                        ? `<span style="font-weight: 600;">${slotLabel}</span> — ${timeStr}`
+                        : timeStr;
                 }
             } else {
-                dateEl.textContent = 'Aktuell';
+                dateEl.textContent = slotLabel || 'Aktuell';
             }
             
             // Admin Delete Button anzeigen
@@ -6492,19 +6487,21 @@
 
         function renderThumbnails() {
             const container = document.getElementById('sliderThumbnails');
-            
+
             // Nur bei mehr als 1 Bild anzeigen
             if (sliderImages.length <= 1) {
                 container.innerHTML = '';
                 return;
             }
-            
+
             container.innerHTML = sliderImages.map((img, i) => `
-                <img src="${img.url}" 
-                     class="slider-thumb ${i === sliderCurrentIndex ? 'active' : ''}" 
-                     onclick="goToImage(${i})"
-                     alt="Scan ${i + 1}"
-                     onerror="this.onerror=null; this.style.display='none';">
+                <div class="slider-thumb-wrapper" onclick="goToImage(${i})" style="display:inline-block;text-align:center;cursor:pointer;">
+                    <img src="${img.url}"
+                         class="slider-thumb ${i === sliderCurrentIndex ? 'active' : ''}"
+                         alt="${img.label || 'Scan ' + (i + 1)}"
+                         onerror="this.onerror=null; this.parentElement.style.display='none';">
+                    ${img.label ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${img.label}</div>` : ''}
+                </div>
             `).join('');
         }
 
