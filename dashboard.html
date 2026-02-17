@@ -416,6 +416,46 @@
         .ov-phase .dot.hit { background:var(--accent-green); }
         .ov-phase .dot.sl { background:var(--accent-red); }
 
+        /* ========== SYSTEM STATUS ========== */
+        .sys-status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            padding: 16px;
+        }
+        .sys-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            transition: border-color .3s;
+        }
+        .sys-card.status-online { border-color: rgba(0, 255, 136, 0.3); }
+        .sys-card.status-warning { border-color: rgba(255, 215, 0, 0.3); }
+        .sys-card.status-offline { border-color: rgba(255, 71, 87, 0.3); }
+        .sys-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            display: inline-block; margin-right: 6px; vertical-align: middle;
+        }
+        .sys-dot.green { background: var(--accent-green); box-shadow: 0 0 8px rgba(0,255,136,.4); }
+        .sys-dot.yellow { background: var(--accent-gold); box-shadow: 0 0 8px rgba(255,215,0,.4); }
+        .sys-dot.red { background: var(--accent-red); box-shadow: 0 0 8px rgba(255,71,87,.4); }
+        .sys-name {
+            font-size: 14px; font-weight: 600; margin-bottom: 6px;
+        }
+        .sys-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px; font-weight: 600;
+        }
+        .sys-text.green { color: var(--accent-green); }
+        .sys-text.yellow { color: var(--accent-gold); }
+        .sys-text.red { color: var(--accent-red); }
+        .sys-sub {
+            font-size: 11px; color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
         /* ========== GUEST / LOCKED ========== */
         .is-guest .account-strip { display:none; }
         .is-guest #acc-details,
@@ -423,7 +463,9 @@
         .is-guest #acc-history,
         .is-guest #acc-history + .accordion-body,
         .is-guest #acc-skipped,
-        .is-guest #acc-skipped + .accordion-body { display:none; }
+        .is-guest #acc-skipped + .accordion-body,
+        .is-guest #acc-system,
+        .is-guest #acc-system + .accordion-body { display:none; }
         .is-guest .refresh-bar { display:none; }
 
         .locked-overlay {
@@ -455,6 +497,7 @@
             .hist-stats { grid-template-columns: repeat(2,1fr); }
             .overview-table { font-size:12px; }
             .overview-table td, .overview-table th { padding:8px 10px; }
+            .sys-status-grid { grid-template-columns: repeat(2,1fr); }
         }
         @media(max-width:768px) {
             .dashboard-container { padding:16px 12px 60px; }
@@ -567,6 +610,17 @@
         <div class="accordion-body">
             <div class="accordion-body-inner">
                 <div id="skip-table"><div class="loading">Lade...</div></div>
+            </div>
+        </div>
+
+        <!-- Accordion: System Status (Admin only) -->
+        <div class="accordion-head" id="acc-system" onclick="toggleAcc(this)">
+            System Status
+            <span class="accordion-arrow">&#9660;</span>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-body-inner">
+                <div id="system-status"><div class="loading">Lade...</div></div>
             </div>
         </div>
     </div>
@@ -801,6 +855,7 @@
                 renderPending();
                 renderHistory();
                 renderSkipped();
+                renderSystemStatus();
                 checkNewItems();
                 updStatus();
             } catch(e) { console.error('Dashboard error:', e); }
@@ -1082,6 +1137,80 @@
                     </div>
                 </div>`;
             }).join('');
+        }
+
+        // ==================== SYSTEM STATUS ====================
+        function getComponentStatus(lastUpdate) {
+            if (!lastUpdate) return { status: 'offline', color: 'red', text: 'Offline', sub: 'Kein Timestamp' };
+            const diffMs = Date.now() - new Date(lastUpdate).getTime();
+            const diffMin = diffMs / 60000;
+            const sub = timeAgo(diffMs);
+            if (diffMin < 2) return { status: 'online', color: 'green', text: 'Online', sub };
+            if (diffMin < 5) return { status: 'warning', color: 'yellow', text: 'Verzoegert', sub };
+            return { status: 'offline', color: 'red', text: 'Offline', sub };
+        }
+
+        function timeAgo(diffMs) {
+            const sec = Math.floor(diffMs / 1000);
+            if (sec < 60) return `vor ${sec}s`;
+            const min = Math.floor(sec / 60);
+            if (min < 60) return `vor ${min} Min`;
+            const hrs = Math.floor(min / 60);
+            if (hrs < 24) return `vor ${hrs}h ${min % 60}m`;
+            const days = Math.floor(hrs / 24);
+            return `vor ${days}d`;
+        }
+
+        async function renderSystemStatus() {
+            const c = $('system-status');
+            try {
+                // Scanner: last signal created
+                const lastSig = await sb('signals', 'select=created_at&order=created_at.desc&limit=1');
+                const scannerTime = lastSig && lastSig[0] ? lastSig[0].created_at : null;
+
+                // Bridge + EA: from accountData (already loaded)
+                const eaTime = accountData ? accountData.updated_at : null;
+
+                const bridge = getComponentStatus(eaTime);
+                const ea = getComponentStatus(eaTime);
+                const supabase = { status: 'online', color: 'green', text: 'Erreichbar', sub: 'REST API OK' };
+
+                // Scanner: eigene Logik — kein "Offline", nur wie lange her
+                let scanner;
+                if (scannerTime) {
+                    const diffMs = Date.now() - new Date(scannerTime).getTime();
+                    const sub = 'Letzter Keil: ' + timeAgo(diffMs);
+                    const diffHrs = diffMs / 3600000;
+                    if (diffHrs < 1) scanner = { status: 'online', color: 'green', text: 'Aktiv', sub };
+                    else if (diffHrs < 6) scanner = { status: 'warning', color: 'yellow', text: 'Warte', sub };
+                    else scanner = { status: 'warning', color: 'yellow', text: 'Inaktiv', sub };
+                } else {
+                    scanner = { status: 'offline', color: 'red', text: 'Keine Daten', sub: '' };
+                }
+
+                const cards = [
+                    { name: 'Bridge', ...bridge },
+                    { name: 'TradeExecutor', ...ea },
+                    { name: 'Scanner', ...scanner },
+                    { name: 'Supabase', ...supabase }
+                ];
+
+                c.innerHTML = `<div class="sys-status-grid">${cards.map(card => `
+                    <div class="sys-card status-${card.status}">
+                        <div class="sys-name"><span class="sys-dot ${card.color}"></span>${card.name}</div>
+                        <div class="sys-text ${card.color}">${card.text}</div>
+                        <div class="sys-sub">${card.sub}</div>
+                    </div>
+                `).join('')}</div>`;
+            } catch(e) {
+                c.innerHTML = `<div class="sys-status-grid">
+                    <div class="sys-card status-offline" style="grid-column:1/-1">
+                        <div class="sys-name"><span class="sys-dot red"></span>Supabase</div>
+                        <div class="sys-text red">Nicht erreichbar</div>
+                        <div class="sys-sub">${e.message||'Verbindungsfehler'}</div>
+                    </div>
+                </div>`;
+            }
         }
 
         // ==================== AUTO-REFRESH ====================
