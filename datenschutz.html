@@ -20,12 +20,19 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --accent-green: #00ff88;
-            --text-primary: #ffffff;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-card-elevated: #f5f0eb;
+            --bg-hover: rgba(26,39,68,0.04);
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16,185,129,0.12);
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-primary: #1a2744;
             --text-secondary: #6b7280;
-            --border-color: #1f1f1f;
+            --text-tertiary: #9ca3af;
+            --border-color: #e8e4dd;
         }
         body {
             font-family: 'Space Grotesk', sans-serif;
@@ -42,7 +49,7 @@
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            background: rgba(12, 12, 12, 0.95);
+            background: rgba(250, 248, 245, 0.95);
             backdrop-filter: blur(10px);
             z-index: 100;
         }
@@ -177,9 +184,9 @@
         .nav-language-btn:hover {
             color: var(--accent-green);
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
-        
+
         .language-text {
             font-size: 12px;
             font-weight: 600;
@@ -196,7 +203,7 @@
             min-width: 180px;
             max-height: 400px;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
             z-index: 1000;
             display: none;
         }
@@ -217,7 +224,7 @@
         }
         
         .language-option:hover {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
         }
         
         /* Hide Google Translate branding - AGGRESSIVE */

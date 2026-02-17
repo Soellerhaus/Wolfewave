@@ -81,20 +81,20 @@
         }
 
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --bg-card-hover: #1a1a1a;
-            --accent-green: #00ff88;
-            --accent-green-dim: rgba(0, 255, 136, 0.1);
-            --accent-green-medium: rgba(0, 255, 136, 0.2);
-            --accent-blue: #4dabf7;
-            --accent-yellow: #ffd700;
-            --accent-red: #ff4757;
-            --text-primary: #ffffff;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f5f0eb;
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16, 185, 129, 0.1);
+            --accent-green-medium: rgba(16, 185, 129, 0.2);
+            --accent-blue: #3b82f6;
+            --accent-yellow: #f59e0b;
+            --accent-red: #dc2626;
+            --text-primary: #1a2744;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            --border-color: #1f1f1f;
-            --border-accent: #2a2a2a;
+            --border-color: #e8e4dd;
+            --border-accent: #d4d0c8;
         }
 
         html {
@@ -116,7 +116,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(12, 12, 12, 0.95);
+            background: rgba(250, 248, 245, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
             padding: 0 24px;
@@ -209,7 +209,7 @@
         .hero {
             padding: 60px 24px 40px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, transparent 100%);
         }
 
         .hero-inner {
@@ -222,7 +222,7 @@
             align-items: center;
             gap: 8px;
             background: var(--accent-green-dim);
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 0.85rem;
@@ -461,26 +461,26 @@
 
         .tag-green {
             color: var(--accent-green);
-            border-color: rgba(0, 255, 136, 0.3);
+            border-color: rgba(16, 185, 129, 0.3);
             background: var(--accent-green-dim);
         }
 
         .tag-red {
             color: var(--accent-red);
-            border-color: rgba(255, 71, 87, 0.3);
-            background: rgba(255, 71, 87, 0.1);
+            border-color: rgba(220, 38, 38, 0.3);
+            background: rgba(220, 38, 38, 0.1);
         }
 
         .tag-blue {
             color: var(--accent-blue);
-            border-color: rgba(77, 171, 247, 0.3);
-            background: rgba(77, 171, 247, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.1);
         }
 
         .tag-yellow {
             color: var(--accent-yellow);
-            border-color: rgba(255, 215, 0, 0.3);
-            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.1);
         }
 
         /* ========================================
@@ -488,7 +488,7 @@
            ======================================== */
         .info-box {
             background: var(--accent-green-dim);
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 12px;
             padding: 20px 24px;
             margin: 16px 0;
@@ -558,7 +558,7 @@
         .cta-badge {
             display: inline-block;
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             padding: 4px 12px;
             border-radius: 50px;
             font-size: 0.75rem;
@@ -582,13 +582,13 @@
 
         .btn-primary {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
         }
 
         .btn-primary:hover {
-            background: #00cc6a;
+            background: #059669;
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.25);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
         }
 
         /* ========================================
@@ -745,7 +745,7 @@
         .nav-language-btn:hover {
             color: var(--accent-green);
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
         
         .language-text {
@@ -764,7 +764,7 @@
             min-width: 180px;
             max-height: 400px;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
             z-index: 1000;
             display: none;
         }
@@ -785,7 +785,7 @@
         }
         
         .language-option:hover {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
         }
         
         /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
@@ -1228,7 +1228,7 @@
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
                         <p><strong>Ja, Trading ist riskant.</strong> Du kannst Geld verlieren – auch mehr als du einsetzt, wenn du mit Hebel tradest.</p>
-                        <div class="info-box" style="background: rgba(255, 71, 87, 0.1); border-color: rgba(255, 71, 87, 0.3);">
+                        <div class="info-box" style="background: rgba(220, 38, 38, 0.1); border-color: rgba(220, 38, 38, 0.3);">
                             <div class="info-box-header" style="color: var(--accent-red);">⚠️ Wichtig</div>
                             <p>Investiere nur Geld, dessen Verlust du dir leisten kannst. WolfeWaveSignals ist ein Hilfstool – keine Garantie für Gewinne. Du bist für deine Trading-Entscheidungen selbst verantwortlich.</p>
                         </div>

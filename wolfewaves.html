@@ -48,17 +48,22 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --accent-green: #00ff88;
-            --accent-red: #ff4757;
-            --accent-blue: #4dabf7;
-            --accent-gold: #ffd700;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-card-elevated: #f5f0eb;
+            --bg-hover: rgba(26,39,68,0.04);
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16,185,129,0.12);
+            --accent-red: #dc2626;
+            --accent-blue: #3b82f6;
+            --accent-gold: #f59e0b;
             --accent-purple: #a855f7;
             --accent-orange: #ff9f43;
-            --text-primary: #ffffff;
+            --text-primary: #1a2744;
             --text-secondary: #6b7280;
-            --border-color: #1f1f1f;
+            --text-tertiary: #9ca3af;
+            --border-color: #e8e4dd;
+            --border-glow: rgba(16,185,129,0.25);
         }
         body {
             font-family: 'Space Grotesk', sans-serif;
@@ -75,7 +80,7 @@
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            background: rgba(12, 12, 12, 0.95);
+            background: rgba(250, 248, 245, 0.95);
             backdrop-filter: blur(10px);
             z-index: 100;
         }
@@ -129,12 +134,12 @@
         }
         
         .nav-link:hover {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
             color: var(--accent-green);
         }
         
         .nav-link.active {
-            background: rgba(0, 255, 136, 0.15);
+            background: rgba(16, 185, 129, 0.15);
             color: var(--accent-green);
             font-weight: 600;
         }
@@ -158,7 +163,7 @@
             padding: 10px 20px;
             background: var(--accent-green);
             border: none;
-            color: #000;
+            color: #fff;
             border-radius: 8px;
             font-family: inherit;
             font-size: 14px;
@@ -168,7 +173,7 @@
             transition: all 0.2s;
         }
         .back-btn:hover {
-            background: #00cc6a;
+            background: #059669;
             transform: translateY(-2px);
         }
         
@@ -176,7 +181,7 @@
         .hero {
             padding: 80px 40px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 255, 136, 0.05) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
         }
         .hero h1 {
             font-size: 48px;
@@ -203,7 +208,7 @@
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(26, 39, 68, 0.08);
         }
         
         .video-wrapper {
@@ -213,7 +218,7 @@
             height: 0;
             overflow: hidden;
             border-radius: 12px;
-            background: #000;
+            background: #1a2744;
         }
         
         .video-wrapper iframe {
@@ -244,7 +249,7 @@
         }
         h2 .num {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -289,10 +294,10 @@
             padding: 28px;
             margin: 28px 0;
         }
-        .info-box.green { border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.05); }
-        .info-box.blue { border-color: rgba(77, 171, 247, 0.3); background: rgba(77, 171, 247, 0.05); }
-        .info-box.gold { border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
-        .info-box.red { border-color: rgba(255, 71, 87, 0.3); background: rgba(255, 71, 87, 0.05); }
+        .info-box.green { border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
+        .info-box.blue { border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05); }
+        .info-box.gold { border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); }
+        .info-box.red { border-color: rgba(220, 38, 38, 0.3); background: rgba(220, 38, 38, 0.05); }
         .info-box.purple { border-color: rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.05); }
         
         .info-box h4 {
@@ -353,7 +358,7 @@
         }
         .diagram-tab.active {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             border-color: var(--accent-green);
         }
         .diagram-content {
@@ -402,11 +407,11 @@
         }
         .step-card.highlight {
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
         .step-card.highlight .step-num {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
         }
         
         /* Status Flow */
@@ -435,17 +440,17 @@
             border: 1px solid var(--accent-gold);
         }
         .status-badge.active {
-            background: rgba(77, 171, 247, 0.2);
+            background: rgba(59, 130, 246, 0.2);
             color: var(--accent-blue);
             border: 1px solid var(--accent-blue);
         }
         .status-badge.success {
-            background: rgba(0, 255, 136, 0.2);
+            background: rgba(16, 185, 129, 0.2);
             color: var(--accent-green);
             border: 1px solid var(--accent-green);
         }
         .status-badge.failed {
-            background: rgba(255, 71, 87, 0.2);
+            background: rgba(220, 38, 38, 0.2);
             color: var(--accent-red);
             border: 1px solid var(--accent-red);
         }
@@ -509,7 +514,7 @@
             overflow: hidden;
         }
         .rules-table th {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
             color: var(--accent-green);
             padding: 14px 16px;
             text-align: left;
@@ -523,15 +528,15 @@
             font-size: 14px;
         }
         .rules-table tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(26, 39, 68, 0.02);
         }
         .rules-table .check { color: var(--accent-green); }
         .rules-table .cross { color: var(--accent-red); }
         
         /* CTA */
         .cta-section {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 106, 0.05));
-            border: 1px solid rgba(0, 255, 136, 0.3);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 204, 106, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 20px;
             padding: 48px;
             text-align: center;
@@ -549,7 +554,7 @@
             display: inline-block;
             padding: 16px 40px;
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             font-size: 16px;
             font-weight: 700;
             border-radius: 12px;
@@ -558,7 +563,7 @@
         }
         .cta-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
             text-decoration: none;
         }
         
@@ -645,7 +650,7 @@
         .nav-language-btn:hover {
             color: var(--accent-green);
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
         
         .language-text {
@@ -664,7 +669,7 @@
             min-width: 180px;
             max-height: 400px;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
             z-index: 1000;
             display: none;
         }
@@ -685,7 +690,7 @@
         }
         
         .language-option:hover {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
         }
         
         /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
@@ -848,84 +853,84 @@
                 <svg viewBox="0 0 650 380" width="650" height="380">
                     <defs>
                         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a1a1a" stroke-width="0.5"/>
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e8e4dd" stroke-width="0.5"/>
                         </pattern>
                     </defs>
-                    <rect width="650" height="380" fill="#0a0a0a"/>
+                    <rect width="650" height="380" fill="#f5f0eb"/>
                     <rect width="650" height="380" fill="url(#grid)"/>
                     
                     <!-- KEIL Fläche -->
                     <polygon points="50,200 120,80 280,115 340,130 340,230 200,220" 
-                             fill="rgba(255,71,87,0.1)" stroke="rgba(255,71,87,0.4)" stroke-width="1"/>
+                             fill="rgba(220,38,38,0.1)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
                     
                     <!-- 2-4 Linie (obere Keillinie) -->
-                    <line x1="120" y1="80" x2="280" y2="115" stroke="#ff4757" stroke-width="2.5"/>
-                    <line x1="280" y1="115" x2="400" y2="140" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+                    <line x1="120" y1="80" x2="280" y2="115" stroke="#dc2626" stroke-width="2.5"/>
+                    <line x1="280" y1="115" x2="400" y2="140" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
                     
                     <!-- 1-3 Linie (untere Keillinie) -->
-                    <line x1="50" y1="200" x2="550" y2="250" stroke="#ff4757" stroke-width="2.5"/>
+                    <line x1="50" y1="200" x2="550" y2="250" stroke="#dc2626" stroke-width="2.5"/>
                     
                     <!-- 1-4 Linie = TP3 (grün) -->
-                    <line x1="50" y1="200" x2="550" y2="50" stroke="#00ff88" stroke-width="2.5"/>
+                    <line x1="50" y1="200" x2="550" y2="50" stroke="#10b981" stroke-width="2.5"/>
                     
                     <!-- SWEET ZONE (außerhalb Keil, unter 1-3) -->
                     <rect x="320" y="255" width="80" height="60" rx="6" 
-                          fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="1.5" stroke-dasharray="5,3"/>
+                          fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3"/>
                     
                     <!-- Preisverlauf: P1 → P2 → P3 → P4 → P5 (weiß) -->
                     <polyline points="50,200 120,80 200,220 280,115 360,290" 
-                              fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+                              fill="none" stroke="#1a2744" stroke-width="3" stroke-linejoin="round"/>
                     
                     <!-- Rückkehr von P5 zum Entry AUF der 1-3 Linie (blau) -->
                     <polyline points="360,290 380,265 395,240" 
-                              fill="none" stroke="#4dabf7" stroke-width="3" stroke-linejoin="round"/>
+                              fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/>
                     
                     <!-- ENTRY PUNKT - genau AUF der 1-3 Linie (bei x=395, y=234.5) -->
-                    <circle cx="395" cy="235" r="7" fill="#4dabf7" stroke="#fff" stroke-width="2"/>
+                    <circle cx="395" cy="235" r="7" fill="#3b82f6" stroke="#faf8f5" stroke-width="2"/>
                     
                     <!-- Entry horizontal Linie -->
-                    <line x1="395" y1="235" x2="550" y2="235" stroke="#4dabf7" stroke-width="2"/>
+                    <line x1="395" y1="235" x2="550" y2="235" stroke="#3b82f6" stroke-width="2"/>
                     
                     <!-- SL unter Entry -->
-                    <line x1="395" y1="310" x2="550" y2="310" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    <line x1="395" y1="310" x2="550" y2="310" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,3"/>
                     
                     <!-- TP1 und TP2 -->
-                    <line x1="395" y1="175" x2="480" y2="175" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <line x1="395" y1="175" x2="480" y2="175" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <line x1="395" y1="120" x2="500" y2="120" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="4,3"/>
                     
                     <!-- PUNKTE -->
-                    <circle cx="50" cy="200" r="15" fill="#ff4757"/>
+                    <circle cx="50" cy="200" r="15" fill="#dc2626"/>
                     <text x="50" y="205" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
                     
-                    <circle cx="120" cy="80" r="15" fill="#ff4757"/>
+                    <circle cx="120" cy="80" r="15" fill="#dc2626"/>
                     <text x="120" y="85" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
                     
-                    <circle cx="200" cy="220" r="15" fill="#ff4757"/>
+                    <circle cx="200" cy="220" r="15" fill="#dc2626"/>
                     <text x="200" y="225" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
                     
-                    <circle cx="280" cy="115" r="15" fill="#ff4757"/>
+                    <circle cx="280" cy="115" r="15" fill="#dc2626"/>
                     <text x="280" y="120" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
                     
-                    <circle cx="360" cy="290" r="17" fill="#00ff88" stroke="#fff" stroke-width="2"/>
-                    <text x="360" y="296" fill="#000" font-size="13" font-weight="bold" text-anchor="middle">5</text>
+                    <circle cx="360" cy="290" r="17" fill="#10b981" stroke="#faf8f5" stroke-width="2"/>
+                    <text x="360" y="296" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">5</text>
                     
                     <!-- Beschriftungen -->
-                    <text x="30" y="195" fill="#666" font-size="9">Tief</text>
-                    <text x="120" y="65" fill="#666" font-size="9" text-anchor="middle">Hoch</text>
-                    <text x="200" y="245" fill="#666" font-size="9" text-anchor="middle">Tief</text>
-                    <text x="280" y="100" fill="#666" font-size="9" text-anchor="middle">Hoch</text>
-                    <text x="360" y="330" fill="#00ff88" font-size="12" text-anchor="middle" font-weight="bold">Sweet Zone</text>
+                    <text x="30" y="195" fill="#6b7280" font-size="9">Tief</text>
+                    <text x="120" y="65" fill="#6b7280" font-size="9" text-anchor="middle">Hoch</text>
+                    <text x="200" y="245" fill="#6b7280" font-size="9" text-anchor="middle">Tief</text>
+                    <text x="280" y="100" fill="#6b7280" font-size="9" text-anchor="middle">Hoch</text>
+                    <text x="360" y="330" fill="#10b981" font-size="12" text-anchor="middle" font-weight="bold">Sweet Zone</text>
                     
-                    <text x="555" y="240" fill="#4dabf7" font-size="11" font-weight="bold">ENTRY</text>
-                    <text x="555" y="315" fill="#ff4757" font-size="10">SL</text>
-                    <text x="485" y="173" fill="#ffd700" font-size="9">TP1</text>
+                    <text x="555" y="240" fill="#3b82f6" font-size="11" font-weight="bold">ENTRY</text>
+                    <text x="555" y="315" fill="#dc2626" font-size="10">SL</text>
+                    <text x="485" y="173" fill="#f59e0b" font-size="9">TP1</text>
                     <text x="505" y="118" fill="#ff9f43" font-size="9">TP2</text>
-                    <text x="555" y="55" fill="#00ff88" font-size="10" font-weight="bold">TP3</text>
+                    <text x="555" y="55" fill="#10b981" font-size="10" font-weight="bold">TP3</text>
                     
                     <!-- Linien-Labels -->
-                    <text x="100" y="225" fill="#ff4757" font-size="9">1-3</text>
-                    <text x="170" y="95" fill="#ff4757" font-size="9">2-4</text>
-                    <text x="140" y="165" fill="rgba(255,71,87,0.5)" font-size="11">Keil</text>
+                    <text x="100" y="225" fill="#dc2626" font-size="9">1-3</text>
+                    <text x="170" y="95" fill="#dc2626" font-size="9">2-4</text>
+                    <text x="140" y="165" fill="rgba(220,38,38,0.5)" font-size="11">Keil</text>
                 </svg>
             </div>
             
@@ -933,81 +938,81 @@
             <div id="diagram-bearish" class="diagram-content">
                 <h4>Bearish Wolfe Wave – Preis soll FALLEN</h4>
                 <svg viewBox="0 0 650 380" width="650" height="380">
-                    <rect width="650" height="380" fill="#0a0a0a"/>
+                    <rect width="650" height="380" fill="#f5f0eb"/>
                     <rect width="650" height="380" fill="url(#grid)"/>
                     
                     <!-- KEIL Fläche -->
                     <polygon points="50,180 120,300 280,265 340,250 340,150 200,160" 
-                             fill="rgba(255,71,87,0.1)" stroke="rgba(255,71,87,0.4)" stroke-width="1"/>
+                             fill="rgba(220,38,38,0.1)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
                     
                     <!-- 2-4 Linie (untere Keillinie) -->
-                    <line x1="120" y1="300" x2="280" y2="265" stroke="#ff4757" stroke-width="2.5"/>
-                    <line x1="280" y1="265" x2="400" y2="240" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+                    <line x1="120" y1="300" x2="280" y2="265" stroke="#dc2626" stroke-width="2.5"/>
+                    <line x1="280" y1="265" x2="400" y2="240" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
                     
                     <!-- 1-3 Linie (obere Keillinie) -->
-                    <line x1="50" y1="180" x2="550" y2="130" stroke="#ff4757" stroke-width="2.5"/>
+                    <line x1="50" y1="180" x2="550" y2="130" stroke="#dc2626" stroke-width="2.5"/>
                     
                     <!-- 1-4 Linie = TP3 (grün) -->
-                    <line x1="50" y1="180" x2="550" y2="330" stroke="#00ff88" stroke-width="2.5"/>
+                    <line x1="50" y1="180" x2="550" y2="330" stroke="#10b981" stroke-width="2.5"/>
                     
                     <!-- SWEET ZONE (außerhalb Keil, über 1-3) -->
                     <rect x="320" y="60" width="80" height="60" rx="6" 
-                          fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="1.5" stroke-dasharray="5,3"/>
+                          fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3"/>
                     
                     <!-- Preisverlauf: P1 → P2 → P3 → P4 → P5 (weiß) -->
                     <polyline points="50,180 120,300 200,160 280,265 360,90" 
-                              fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+                              fill="none" stroke="#1a2744" stroke-width="3" stroke-linejoin="round"/>
                     
                     <!-- Rückkehr von P5 zum Entry AUF der 1-3 Linie (blau) -->
                     <polyline points="360,90 380,115 395,145" 
-                              fill="none" stroke="#4dabf7" stroke-width="3" stroke-linejoin="round"/>
+                              fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/>
                     
                     <!-- ENTRY PUNKT - genau AUF der 1-3 Linie -->
-                    <circle cx="395" cy="145" r="7" fill="#4dabf7" stroke="#fff" stroke-width="2"/>
+                    <circle cx="395" cy="145" r="7" fill="#3b82f6" stroke="#faf8f5" stroke-width="2"/>
                     
                     <!-- Entry horizontal Linie -->
-                    <line x1="395" y1="145" x2="550" y2="145" stroke="#4dabf7" stroke-width="2"/>
+                    <line x1="395" y1="145" x2="550" y2="145" stroke="#3b82f6" stroke-width="2"/>
                     
                     <!-- SL über Entry -->
-                    <line x1="395" y1="70" x2="550" y2="70" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="5,3"/>
+                    <line x1="395" y1="70" x2="550" y2="70" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,3"/>
                     
                     <!-- TP1 und TP2 (unter Entry) -->
-                    <line x1="395" y1="205" x2="480" y2="205" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <line x1="395" y1="205" x2="480" y2="205" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <line x1="395" y1="260" x2="500" y2="260" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="4,3"/>
                     
                     <!-- PUNKTE -->
-                    <circle cx="50" cy="180" r="15" fill="#ff4757"/>
+                    <circle cx="50" cy="180" r="15" fill="#dc2626"/>
                     <text x="50" y="185" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
                     
-                    <circle cx="120" cy="300" r="15" fill="#ff4757"/>
+                    <circle cx="120" cy="300" r="15" fill="#dc2626"/>
                     <text x="120" y="305" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
                     
-                    <circle cx="200" cy="160" r="15" fill="#ff4757"/>
+                    <circle cx="200" cy="160" r="15" fill="#dc2626"/>
                     <text x="200" y="165" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
                     
-                    <circle cx="280" cy="265" r="15" fill="#ff4757"/>
+                    <circle cx="280" cy="265" r="15" fill="#dc2626"/>
                     <text x="280" y="270" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
                     
-                    <circle cx="360" cy="90" r="17" fill="#00ff88" stroke="#fff" stroke-width="2"/>
-                    <text x="360" y="96" fill="#000" font-size="13" font-weight="bold" text-anchor="middle">5</text>
+                    <circle cx="360" cy="90" r="17" fill="#10b981" stroke="#faf8f5" stroke-width="2"/>
+                    <text x="360" y="96" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">5</text>
                     
                     <!-- Beschriftungen -->
-                    <text x="30" y="185" fill="#666" font-size="9">Hoch</text>
-                    <text x="120" y="325" fill="#666" font-size="9" text-anchor="middle">Tief</text>
-                    <text x="200" y="145" fill="#666" font-size="9" text-anchor="middle">Hoch</text>
-                    <text x="280" y="290" fill="#666" font-size="9" text-anchor="middle">Tief</text>
-                    <text x="360" y="55" fill="#00ff88" font-size="12" text-anchor="middle" font-weight="bold">Sweet Zone</text>
+                    <text x="30" y="185" fill="#6b7280" font-size="9">Hoch</text>
+                    <text x="120" y="325" fill="#6b7280" font-size="9" text-anchor="middle">Tief</text>
+                    <text x="200" y="145" fill="#6b7280" font-size="9" text-anchor="middle">Hoch</text>
+                    <text x="280" y="290" fill="#6b7280" font-size="9" text-anchor="middle">Tief</text>
+                    <text x="360" y="55" fill="#10b981" font-size="12" text-anchor="middle" font-weight="bold">Sweet Zone</text>
                     
-                    <text x="555" y="150" fill="#4dabf7" font-size="11" font-weight="bold">ENTRY</text>
-                    <text x="555" y="75" fill="#ff4757" font-size="10">SL</text>
-                    <text x="485" y="203" fill="#ffd700" font-size="9">TP1</text>
+                    <text x="555" y="150" fill="#3b82f6" font-size="11" font-weight="bold">ENTRY</text>
+                    <text x="555" y="75" fill="#dc2626" font-size="10">SL</text>
+                    <text x="485" y="203" fill="#f59e0b" font-size="9">TP1</text>
                     <text x="505" y="258" fill="#ff9f43" font-size="9">TP2</text>
-                    <text x="555" y="325" fill="#00ff88" font-size="10" font-weight="bold">TP3</text>
+                    <text x="555" y="325" fill="#10b981" font-size="10" font-weight="bold">TP3</text>
                     
                     <!-- Linien-Labels -->
-                    <text x="100" y="165" fill="#ff4757" font-size="9">1-3</text>
-                    <text x="170" y="290" fill="#ff4757" font-size="9">2-4</text>
-                    <text x="140" y="220" fill="rgba(255,71,87,0.5)" font-size="11">Keil</text>
+                    <text x="100" y="165" fill="#dc2626" font-size="9">1-3</text>
+                    <text x="170" y="290" fill="#dc2626" font-size="9">2-4</text>
+                    <text x="140" y="220" fill="rgba(220,38,38,0.5)" font-size="11">Keil</text>
                 </svg>
             </div>
             

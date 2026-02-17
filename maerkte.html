@@ -29,18 +29,18 @@
         }
 
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --bg-hover: #1a1a1a;
-            --accent-green: #00ff88;
-            --accent-red: #ff4757;
-            --accent-gold: #ffd700;
-            --accent-blue: #4dabf7;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-hover: rgba(26,39,68,0.04);
+            --accent-green: #10b981;
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
             --accent-purple: #a855f7;
             --accent-orange: #f97316;
-            --text-primary: #ffffff;
+            --text-primary: #1a2744;
             --text-secondary: #6b7280;
-            --border-color: #1f1f1f;
+            --border-color: #e8e4dd;
         }
 
         body {
@@ -60,7 +60,7 @@
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            background: rgba(12, 12, 12, 0.95);
+            background: rgba(250, 248, 245, 0.95);
             backdrop-filter: blur(10px);
             z-index: 100;
         }
@@ -125,21 +125,21 @@
             transition: all 0.2s;
             border: none;
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             text-decoration: none;
         }
 
         .btn-primary:hover {
-            background: #00cc6a;
+            background: #059669;
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
         }
 
         /* Hero Section */
         .hero {
             padding: 60px 40px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, transparent 100%);
         }
 
         .hero h1 {
@@ -225,7 +225,7 @@
         .search-input:focus {
             outline: none;
             border-color: var(--accent-green);
-            box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
         .search-results-count {
@@ -270,7 +270,7 @@
 
         .market-badge {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             font-size: 11px;
             font-weight: 700;
             padding: 4px 12px;
@@ -309,12 +309,12 @@
         .instrument-card:hover {
             border-color: var(--accent-green);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(26, 39, 68, 0.08);
         }
 
         .instrument-card.highlight {
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
 
         .instrument-symbol {
@@ -378,8 +378,8 @@
 
         /* Info Box */
         .info-box {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
-            border: 1px solid rgba(0, 255, 136, 0.3);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 16px;
             padding: 30px;
             margin-bottom: 50px;
@@ -498,9 +498,9 @@
         .nav-language-btn:hover {
             color: var(--accent-green);
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
-        
+
         .language-text {
             font-size: 12px;
             font-weight: 600;
@@ -517,7 +517,7 @@
             min-width: 180px;
             max-height: 400px;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
             z-index: 1000;
             display: none;
         }
@@ -538,9 +538,9 @@
         }
         
         .language-option:hover {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
         }
-        
+
         /* Hide Google Translate branding - AGGRESSIVE */
         .goog-te-banner-frame,
         .goog-te-balloon-frame {
@@ -718,7 +718,7 @@
             <div class="stat-item">
                 <div class="stat-number">24/5</div>
                 <div class="stat-label">Scanning</div>
-                <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:2px">Krypto 24/7</div>
+                <div style="font-size:0.65rem;color:rgba(26,39,68,0.5);margin-top:2px">Krypto 24/7</div>
             </div>
         </div>
     </section>

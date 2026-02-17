@@ -65,9 +65,9 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(10, 10, 10, 0.95);
+            background: #1a2744;
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             padding: 0 24px;
             height: 70px;
             display: flex;
@@ -91,7 +91,7 @@
         }
 
         .header-logo .text-green {
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
         }
 
         /* Navigation */
@@ -102,7 +102,7 @@
         }
 
         .nav-link {
-            color: rgba(255,255,255,0.7);
+            color: #cbd5e1;
             text-decoration: none;
             padding: 10px 16px;
             border-radius: 8px;
@@ -117,7 +117,7 @@
         }
 
         .nav-link.active {
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
         }
 
         /* Dropdown */
@@ -130,7 +130,7 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
-            color: rgba(255,255,255,0.7);
+            color: #cbd5e1;
             padding: 10px 16px;
             border-radius: 8px;
             font-size: 14px;
@@ -160,15 +160,15 @@
             top: 100%;
             left: 0;
             min-width: 180px;
-            background: rgba(20, 20, 20, 0.98);
-            border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            background: #1e2d4a;
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
             padding: 8px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(10px);
             transition: all 0.2s;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
         .nav-dropdown:hover .nav-dropdown-menu {
@@ -186,12 +186,13 @@
 
         .nav-dropdown-item {
             display: block;
-            color: rgba(255,255,255,0.7);
+            color: #cbd5e1;
             text-decoration: none;
             padding: 10px 14px;
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .nav-dropdown-item:hover {
@@ -200,7 +201,7 @@
         }
 
         .nav-dropdown-item.active {
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
         }
 
         /* Header Actions */
@@ -223,7 +224,7 @@
 
         .header-btn-outline {
             background: transparent;
-            border: 1px solid var(--border-color, rgba(255,255,255,0.2));
+            border: 1px solid rgba(255,255,255,0.25);
             color: #fff;
         }
 
@@ -232,12 +233,12 @@
         }
 
         .header-btn-primary {
-            background: var(--accent-green, #00ff88);
-            color: #000;
+            background: #f59e0b;
+            color: #1a2744;
         }
 
         .header-btn-primary:hover {
-            background: #00cc6a;
+            background: #d97706;
             transform: translateY(-1px);
         }
 
@@ -264,11 +265,11 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: var(--accent-green, #00ff88);
+            background: #f59e0b;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #000;
+            color: #1a2744;
             font-weight: 700;
             font-size: 14px;
         }
@@ -289,7 +290,7 @@
 
         .header-user-badge {
             font-size: 10px;
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
             text-transform: uppercase;
             font-weight: 600;
         }
@@ -300,8 +301,8 @@
             top: 100%;
             right: 0;
             min-width: 220px;
-            background: rgba(20, 20, 20, 0.98);
-            border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            background: #1e2d4a;
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
             padding: 8px;
             margin-top: 8px;
@@ -309,7 +310,7 @@
             visibility: hidden;
             transform: translateY(10px);
             transition: all 0.2s;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             z-index: 1001;
         }
 
@@ -324,7 +325,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: rgba(255,255,255,0.8);
+            color: #cbd5e1;
             text-decoration: none;
             padding: 12px 14px;
             border-radius: 8px;
@@ -380,7 +381,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(10, 10, 10, 0.98);
+            background: #1a2744;
             padding: 20px;
             z-index: 1001;
             overflow-y: auto;
@@ -393,7 +394,7 @@
 
         .wws-mobile-nav-link {
             display: block;
-            color: rgba(255,255,255,0.8);
+            color: #cbd5e1;
             text-decoration: none;
             padding: 16px 20px;
             font-size: 16px;
@@ -402,11 +403,11 @@
 
         .wws-mobile-nav-link:hover,
         .wws-mobile-nav-link.active {
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
         }
 
         .wws-mobile-nav-section {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.6);
             font-size: 12px;
             text-transform: uppercase;
             padding: 20px 20px 10px;
@@ -551,7 +552,7 @@
             <a href="faq.html" class="wws-mobile-nav-link ${isActive('faq.html')}">❓ FAQ</a>
 
             <div class="wws-mobile-nav-section">🌐 Sprache / Language</div>
-            <select id="mobileLangSelector" onchange="selectLanguageFromMobile(this)" style="width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 8px; color: #fff; font-size: 14px;">
+            <select id="mobileLangSelector" onchange="selectLanguageFromMobile(this)" style="width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 14px;">
                 <option value="de" data-label="DE">🇩🇪 Deutsch</option>
                 <option value="en" data-label="EN">🇬🇧 English</option>
                 <option value="es" data-label="ES">🇪🇸 Español</option>
@@ -639,12 +640,12 @@
         
         // Mobile
         const mobileUserHTML = `
-            <div style="padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 12px;">
+            <div style="padding: 16px; background: rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 12px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-green); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000;">${initial}</div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #f59e0b; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1a2744;">${initial}</div>
                     <div>
                         <div style="font-size: 14px; color: #fff;">${user.email}</div>
-                        <div style="font-size: 12px; color: var(--accent-green); margin-top: 2px;">${badge}</div>
+                        <div style="font-size: 12px; color: #f59e0b; margin-top: 2px;">${badge}</div>
                     </div>
                 </div>
             </div>

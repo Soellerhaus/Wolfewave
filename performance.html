@@ -16,20 +16,20 @@
         }
 
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --bg-card-elevated: #1a1a1a;
-            --bg-hover: rgba(255, 255, 255, 0.05);
-            --accent-green: #00ff88;
-            --accent-green-dim: rgba(0, 255, 136, 0.15);
-            --accent-red: #ff4757;
-            --accent-gold: #ffd700;
-            --accent-blue: #4fc3f7;
-            --text-primary: #ffffff;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-card-elevated: #f5f0eb;
+            --bg-hover: rgba(26,39,68,0.04);
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16,185,129,0.12);
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-primary: #1a2744;
             --text-secondary: #6b7280;
-            --text-tertiary: #4a4a4a;
-            --border-color: #1f1f1f;
-            --border-glow: rgba(0, 255, 136, 0.2);
+            --text-tertiary: #9ca3af;
+            --border-color: #e8e4dd;
+            --border-glow: rgba(16,185,129,0.25);
         }
 
         body {
@@ -56,7 +56,7 @@
             transform: translateX(-50%);
             width: 800px;
             height: 600px;
-            background: radial-gradient(ellipse, rgba(0,255,136,0.06) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(16,185,129,0.04) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -65,8 +65,8 @@
             align-items: center;
             gap: 8px;
             padding: 8px 20px;
-            background: rgba(0, 255, 136, 0.08);
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 100px;
             font-size: 13px;
             font-weight: 600;
@@ -216,8 +216,8 @@
         }
 
         .premium-cta-inner {
-            background: linear-gradient(135deg, rgba(0,255,136,0.06) 0%, rgba(0,255,136,0.02) 50%, rgba(255,215,0,0.04) 100%);
-            border: 1px solid rgba(0, 255, 136, 0.15);
+            background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(16,185,129,0.02) 50%, rgba(245,158,11,0.04) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.15);
             border-radius: 20px;
             padding: 40px 48px;
             display: flex;
@@ -235,7 +235,7 @@
             right: -10%;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -292,7 +292,7 @@
             gap: 10px;
             padding: 16px 36px;
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             border: none;
             border-radius: 12px;
             font-size: 16px;
@@ -306,7 +306,7 @@
 
         .btn-premium:hover {
             transform: scale(1.03);
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
         }
 
         .btn-premium-sub {
@@ -359,7 +359,7 @@
         .filter-btn.active {
             background: var(--accent-green);
             border-color: var(--accent-green);
-            color: #000;
+            color: #fff;
         }
 
         /* ========== DISCLAIMER ========== */
@@ -458,27 +458,27 @@
 
         .highlight-card.tp3 {
             flex: 0 0 450px;
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
         }
 
         .highlight-card:hover {
             transform: translateY(-6px);
             border-color: var(--accent-green);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 32px rgba(26, 39, 68, 0.08);
         }
 
         .highlight-card.tp3:hover {
             border-color: var(--accent-gold);
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2);
         }
 
         .highlight-card.tp2 {
-            border-color: rgba(0, 255, 136, 0.25);
+            border-color: rgba(16, 185, 129, 0.25);
         }
 
         .highlight-card.tp1 {
-            border-color: rgba(0, 255, 136, 0.15);
+            border-color: rgba(16, 185, 129, 0.15);
         }
 
         .highlight-image {
@@ -515,18 +515,18 @@
         }
 
         .highlight-badge.tp3 {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
             color: var(--accent-gold);
             border: 1px solid var(--accent-gold);
         }
 
         .highlight-badge.tp2 {
-            background: rgba(0, 255, 136, 0.15);
+            background: rgba(16, 185, 129, 0.15);
             color: var(--accent-green);
         }
 
         .highlight-badge.tp1 {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
             color: var(--accent-green);
         }
 
@@ -576,7 +576,7 @@
         }
 
         .performance-table thead {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(26, 39, 68, 0.03);
         }
 
         .performance-table th {
@@ -644,22 +644,22 @@
 
         .avg-result.tp3 {
             background: linear-gradient(135deg, var(--accent-gold), #ffa500);
-            color: #000;
+            color: #fff;
         }
 
         .avg-result.tp2 {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
         }
 
         .avg-result.tp1 {
-            background: rgba(0, 255, 136, 0.2);
+            background: rgba(16, 185, 129, 0.2);
             color: var(--accent-green);
             border: 1px solid var(--accent-green);
         }
 
         .avg-result.sl {
-            background: rgba(255, 71, 87, 0.2);
+            background: rgba(220, 38, 38, 0.2);
             color: var(--accent-red);
             border: 1px solid var(--accent-red);
         }
@@ -699,7 +699,7 @@
             transform: translateX(-50%);
             width: 500px;
             height: 300px;
-            background: radial-gradient(ellipse, rgba(0,255,136,0.05) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(16,185,129,0.05) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -741,9 +741,9 @@
             gap: 14px;
             align-items: flex-start;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(26, 39, 68, 0.02);
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(26, 39, 68, 0.04);
         }
 
         .pf-icon {
@@ -779,7 +779,7 @@
             gap: 12px;
             padding: 18px 48px;
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             border: none;
             border-radius: 14px;
             font-size: 18px;
@@ -792,7 +792,7 @@
 
         .btn-premium-large:hover {
             transform: scale(1.04);
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.35);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.35);
         }
 
         .premium-bottom-sub {
@@ -2498,10 +2498,10 @@
         // ==================== LIGHTBOX & MODALS ====================
         function showImageLightbox(imageSrc, signal) {
             const lightboxHtml = `
-                <div id="imageLightbox" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;" onclick="closeLightbox()">
+                <div id="imageLightbox" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,39,68,0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;" onclick="closeLightbox()">
                     <div style="position: relative; max-width: 1200px; width: 100%; max-height: 90vh; display: flex; flex-direction: column;">
                         <button onclick="closeLightbox()" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; z-index: 10001; padding: 10px;">×</button>
-                        <img src="${imageSrc}" alt="${signal.symbol}" style="width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 0 50px rgba(0,255,136,0.3);">
+                        <img src="${imageSrc}" alt="${signal.symbol}" style="width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 0 50px rgba(16,185,129,0.3);">
                         <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                                 <div>
@@ -2509,10 +2509,10 @@
                                     <p style="color: var(--text-secondary); font-size: 14px;">${signal.timeframe} • ${signal.direction} • ${formatDate(signal.created_at)}</p>
                                 </div>
                                 <div style="display: flex; gap: 12px; align-items: center;">
-                                    ${signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(255,215,0,0.1); color: var(--accent-gold); border-radius: 6px; font-weight: 600;">🏆 TP3</span>' : ''}
-                                    ${signal.tp2_hit && !signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(0,255,136,0.1); color: var(--accent-green); border-radius: 6px; font-weight: 600;">✅ TP2</span>' : ''}
-                                    ${signal.tp1_hit && !signal.tp2_hit && !signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(0,255,136,0.1); color: var(--accent-green); border-radius: 6px; font-weight: 600;">✅ TP1</span>' : ''}
-                                    ${signal.sl_hit ? '<span style="padding: 6px 12px; background: rgba(255,71,87,0.1); color: var(--accent-red); border-radius: 6px; font-weight: 600;">❌ SL</span>' : ''}
+                                    ${signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(245,158,11,0.1); color: var(--accent-gold); border-radius: 6px; font-weight: 600;">🏆 TP3</span>' : ''}
+                                    ${signal.tp2_hit && !signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(16,185,129,0.1); color: var(--accent-green); border-radius: 6px; font-weight: 600;">✅ TP2</span>' : ''}
+                                    ${signal.tp1_hit && !signal.tp2_hit && !signal.tp3_hit ? '<span style="padding: 6px 12px; background: rgba(16,185,129,0.1); color: var(--accent-green); border-radius: 6px; font-weight: 600;">✅ TP1</span>' : ''}
+                                    ${signal.sl_hit ? '<span style="padding: 6px 12px; background: rgba(220,38,38,0.1); color: var(--accent-red); border-radius: 6px; font-weight: 600;">❌ SL</span>' : ''}
                                 </div>
                             </div>
                         </div>
@@ -2529,7 +2529,7 @@
 
         function showPremiumModal() {
             const modalHtml = `
-                <div id="premiumModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;">
+                <div id="premiumModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,39,68,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;">
                     <div style="background: var(--bg-card); border: 2px solid var(--accent-green); border-radius: 20px; max-width: 520px; width: 100%; padding: 44px; position: relative; animation: slideUp 0.3s;">
                         <button onclick="closePremiumModal()" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">×</button>
                         
@@ -2541,7 +2541,7 @@
                             </p>
                         </div>
 
-                        <div style="background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 14px; padding: 24px; margin-bottom: 24px;">
+                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 14px; padding: 24px; margin-bottom: 24px;">
                             <div style="font-weight: 600; margin-bottom: 14px; color: var(--accent-green); font-size: 15px;">Als Premium-Mitglied erhältst du:</div>
                             <ul style="list-style: none; padding: 0; margin: 0;">
                                 <li style="padding: 7px 0; color: var(--text-primary); font-size: 14px;">📱 Live Telegram-Signale in Echtzeit</li>
@@ -2554,7 +2554,7 @@
                         </div>
 
                         <div style="display: grid; gap: 12px;">
-                            <a href="/" style="display: block; padding: 16px; background: var(--accent-green); color: #000; text-align: center; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 0 30px rgba(0,255,136,0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+                            <a href="/" style="display: block; padding: 16px; background: var(--accent-green); color: #fff; text-align: center; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 0 30px rgba(16,185,129,0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
                                 🚀 Jetzt Premium werden
                             </a>
                         </div>
@@ -2869,7 +2869,7 @@
             const symbolName = getSymbolName(signal.symbol);
 
             card.innerHTML = `
-                <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px);">
+                <div style="position: absolute; top: 12px; right: 12px; background: rgba(26,39,68,0.7); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px);">
                     ${isPremium ? '👑 PREMIUM' : '🔒 VORSCHAU'}
                 </div>
                 <img class="highlight-image" src="${signal.original_path || '/images/placeholder.png'}" alt="${symbolName}" loading="lazy" style="pointer-events: none;">
@@ -3028,7 +3028,7 @@
             card.onmouseover = () => {
                 card.style.transform = 'translateY(-4px)';
                 card.style.borderColor = 'var(--accent-green)';
-                card.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
+                card.style.boxShadow = '0 8px 24px rgba(26,39,68,0.08)';
             };
             card.onmouseout = () => {
                 card.style.transform = 'translateY(0)';
@@ -3040,14 +3040,14 @@
             const symbolFullName = getSymbolName(signal.symbol);
             
             card.innerHTML = `
-                <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
+                <div style="position: absolute; top: 8px; right: 8px; background: rgba(26,39,68,0.7); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--accent-green); backdrop-filter: blur(10px); z-index: 10;">
                     ${premiumBadge}
                 </div>
                 <img src="${signal.original_path || '/images/placeholder.png'}" alt="${symbolFullName}" loading="lazy" style="width: 100%; height: 160px; object-fit: cover; display: block;">
                 <div style="padding: 14px;">
                     <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${symbolFullName}">${symbolFullName}</div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(0, 255, 136, 0.1); color: var(--accent-green);">${resultBadge}</span>
+                        <span style="padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">${resultBadge}</span>
                         ${pnl ? `<span style="font-weight: 700; font-size: 13px; font-family: 'JetBrains Mono', monospace; color: ${pnl.startsWith('+') ? 'var(--accent-green)' : 'var(--accent-red)'};">${pnl}</span>` : ''}
                     </div>
                     <div style="display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 12px;">

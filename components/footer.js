@@ -8,8 +8,8 @@
         <style>
         /* ==================== FOOTER STYLES ==================== */
         .site-footer {
-            background: var(--bg-card, #141414);
-            border-top: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            background: #1a2744;
+            border-top: 1px solid rgba(255,255,255,0.08);
             padding: 60px 24px 30px;
             margin-top: 60px;
         }
@@ -43,18 +43,18 @@
         }
 
         .footer-logo .text-green {
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
         }
 
         .footer-description {
-            color: var(--text-secondary, rgba(255,255,255,0.6));
+            color: #94a3b8;
             font-size: 14px;
             line-height: 1.6;
             max-width: 300px;
         }
 
         .footer-section h4 {
-            color: #fff;
+            color: #e2e8f0;
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 16px;
@@ -69,32 +69,32 @@
         }
 
         .footer-link {
-            color: var(--text-secondary, rgba(255,255,255,0.6));
+            color: #94a3b8;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.2s;
         }
 
         .footer-link:hover {
-            color: var(--accent-green, #00ff88);
+            color: #f59e0b;
         }
 
         .footer-bottom {
             max-width: 1200px;
             margin: 40px auto 0;
             padding-top: 30px;
-            border-top: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .footer-copyright {
-            color: var(--text-secondary, rgba(255,255,255,0.5));
+            color: #94a3b8;
             font-size: 13px;
             text-align: center;
             margin-bottom: 16px;
         }
 
         .footer-disclaimer {
-            color: var(--text-secondary, rgba(255,255,255,0.4));
+            color: #64748b;
             font-size: 12px;
             text-align: center;
             line-height: 1.6;

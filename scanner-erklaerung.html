@@ -18,20 +18,26 @@
         }
 
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --bg-card-hover: #1a1a1a;
-            --accent-green: #00ff88;
-            --accent-green-dim: rgba(0, 255, 136, 0.1);
-            --accent-green-medium: rgba(0, 255, 136, 0.2);
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-card-hover: rgba(26,39,68,0.04);
+            --bg-card-elevated: #f5f0eb;
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16, 185, 129, 0.12);
+            --accent-green-medium: rgba(16, 185, 129, 0.2);
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-primary: #1a2744;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
             --text-muted: #6b7280;
-            --border-color: #1f1f1f;
-            --border-accent: #2a2a2a;
-            --warning-bg: rgba(255, 193, 7, 0.1);
-            --warning-border: rgba(255, 193, 7, 0.3);
-            --warning-text: #ffc107;
+            --border-color: #e8e4dd;
+            --border-accent: #d4d0c8;
+            --border-glow: rgba(16,185,129,0.25);
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --warning-border: rgba(245, 158, 11, 0.3);
+            --warning-text: #f59e0b;
         }
 
         html {
@@ -53,7 +59,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(12, 12, 12, 0.95);
+            background: rgba(250, 248, 245, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
             padding: 0 24px;
@@ -151,7 +157,7 @@
         .hero {
             padding: 80px 24px 60px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 255, 136, 0.03) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, transparent 100%);
         }
 
         .hero-inner {
@@ -164,7 +170,7 @@
             align-items: center;
             gap: 8px;
             background: var(--accent-green-dim);
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 0.85rem;
@@ -246,13 +252,13 @@
 
         .btn-primary {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
         }
 
         .btn-primary:hover {
-            background: #00cc6a;
+            background: #059669;
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.25);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
         }
 
         .btn-secondary {
@@ -434,7 +440,7 @@
 
         .pattern-badge {
             background: var(--accent-green);
-            color: #000;
+            color: #fff;
             padding: 6px 14px;
             border-radius: 6px;
             font-size: 0.8rem;
@@ -538,7 +544,7 @@
         .disclaimer-icon {
             width: 48px;
             height: 48px;
-            background: rgba(255, 193, 7, 0.2);
+            background: rgba(245, 158, 11, 0.2);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -854,7 +860,7 @@
         .nav-language-btn:hover {
             color: var(--accent-green);
             border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(16, 185, 129, 0.05);
         }
         
         .language-text {
@@ -873,7 +879,7 @@
             min-width: 180px;
             max-height: 400px;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
             z-index: 1000;
             display: none;
         }
@@ -894,7 +900,7 @@
         }
         
         .language-option:hover {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(16, 185, 129, 0.1);
         }
         
         /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
