@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design-Vorschlaege — WolfeWaveSignals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-top {
+            background: #1e293b;
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+        .page-top h1 { font-size: 28px; margin-bottom: 8px; }
+        .page-top p { font-size: 15px; color: #94a3b8; max-width: 600px; margin: 0 auto; }
+
+        /* ===== VARIANT SECTION ===== */
+        .variant {
+            max-width: 1200px;
+            margin: 30px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,.1);
+        }
+        .variant-header {
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .variant-header h2 { font-size: 22px; }
+        .variant-tag {
+            font-size: 12px; font-weight: 600; padding: 4px 14px;
+            border-radius: 20px; text-transform: uppercase; letter-spacing: .5px;
+        }
+        .variant-desc {
+            padding: 0 28px 16px;
+            font-size: 14px; line-height: 1.6;
+        }
+
+        .variant-content {
+            padding: 24px 28px 32px;
+        }
+
+        /* ===== SHARED DEMO LAYOUT ===== */
+        .demo-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .demo-nav .logo { font-size: 18px; font-weight: 700; }
+        .demo-nav .nav-links { display: flex; gap: 24px; font-size: 14px; font-weight: 500; }
+        .demo-nav .nav-links a { text-decoration: none; transition: opacity .2s; }
+        .demo-nav .nav-links a:hover { opacity: .7; }
+        .demo-nav .nav-btn {
+            font-size: 13px; font-weight: 600; padding: 8px 20px;
+            border-radius: 8px; border: none; cursor: pointer;
+            transition: transform .2s;
+        }
+        .demo-nav .nav-btn:hover { transform: translateY(-1px); }
+
+        .demo-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .demo-card {
+            padding: 20px;
+            border-radius: 12px;
+            transition: transform .2s;
+        }
+        .demo-card:hover { transform: translateY(-3px); }
+        .demo-card .card-symbol { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .demo-card .card-name { font-size: 12px; margin-bottom: 12px; }
+        .demo-card .card-dir {
+            display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 10px; border-radius: 4px; text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .demo-card .card-prices {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            font-size: 12px; margin-bottom: 12px;
+        }
+        .demo-card .card-prices .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; }
+        .demo-card .card-prices .val { font-size: 14px; font-weight: 600; }
+        .demo-card .card-tp {
+            display: flex; gap: 4px; align-items: center;
+            font-size: 11px;
+        }
+        .demo-card .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        .demo-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .demo-stat {
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .demo-stat .stat-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
+        .demo-stat .stat-val { font-size: 20px; font-weight: 700; }
+
+        /* ============================================= */
+        /* VARIANTE A: Clean Light (Emerald)             */
+        /* ============================================= */
+        .va { background: #fff; }
+        .va .variant-header { background: #fff; color: #1e293b; border-bottom: 1px solid #e5e7eb; }
+        .va .variant-tag { background: #d1fae5; color: #065f46; }
+        .va .variant-desc { color: #64748b; background: #fff; }
+        .va .variant-content { background: #f8fafb; }
+
+        .va .demo-nav {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
+        }
+        .va .demo-nav .logo { color: #1e293b; }
+        .va .demo-nav .logo span { color: #10b981; }
+        .va .demo-nav .nav-links a { color: #64748b; }
+        .va .demo-nav .nav-btn { background: #10b981; color: #fff; }
+
+        .va .demo-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 4px rgba(0,0,0,.04);
+        }
+        .va .demo-card .card-symbol { color: #1e293b; }
+        .va .demo-card .card-name { color: #94a3b8; }
+        .va .demo-card .card-dir.buy { background: #d1fae5; color: #065f46; }
+        .va .demo-card .card-dir.sell { background: #fee2e2; color: #991b1b; }
+        .va .demo-card .card-prices .lbl { color: #94a3b8; }
+        .va .demo-card .card-prices .val { color: #1e293b; }
+        .va .demo-card .dot { background: #e5e7eb; }
+        .va .demo-card .dot.hit { background: #10b981; }
+        .va .demo-card .card-tp { color: #94a3b8; }
+        .va .c-green { color: #10b981; }
+        .va .c-red { color: #ef4444; }
+
+        .va .demo-stat {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+        }
+        .va .demo-stat .stat-lbl { color: #94a3b8; }
+        .va .demo-stat .stat-val { color: #1e293b; }
+
+        /* ============================================= */
+        /* VARIANTE B: Warm Professional (Navy/Gold)     */
+        /* ============================================= */
+        .vb { background: #fefdfb; }
+        .vb .variant-header { background: #fefdfb; color: #1a2744; border-bottom: 1px solid #e8e4dd; }
+        .vb .variant-tag { background: #fef3c7; color: #92400e; }
+        .vb .variant-desc { color: #6b7280; background: #fefdfb; }
+        .vb .variant-content { background: #faf8f5; }
+
+        .vb .demo-nav {
+            background: #1a2744;
+            border: none;
+        }
+        .vb .demo-nav .logo { color: #fff; }
+        .vb .demo-nav .logo span { color: #f59e0b; }
+        .vb .demo-nav .nav-links a { color: #cbd5e1; }
+        .vb .demo-nav .nav-btn { background: #f59e0b; color: #1a2744; }
+
+        .vb .demo-card {
+            background: #fff;
+            border: 1px solid #e8e4dd;
+            box-shadow: 0 2px 8px rgba(26,39,68,.06);
+        }
+        .vb .demo-card .card-symbol { color: #1a2744; }
+        .vb .demo-card .card-name { color: #9ca3af; }
+        .vb .demo-card .card-dir.buy { background: #d1fae5; color: #065f46; }
+        .vb .demo-card .card-dir.sell { background: #fee2e2; color: #991b1b; }
+        .vb .demo-card .card-prices .lbl { color: #9ca3af; }
+        .vb .demo-card .card-prices .val { color: #1a2744; }
+        .vb .demo-card .dot { background: #e5e7eb; }
+        .vb .demo-card .dot.hit { background: #10b981; }
+        .vb .demo-card .card-tp { color: #9ca3af; }
+        .vb .c-green { color: #10b981; }
+        .vb .c-red { color: #dc2626; }
+
+        .vb .demo-stat {
+            background: #fff;
+            border: 1px solid #e8e4dd;
+        }
+        .vb .demo-stat .stat-lbl { color: #9ca3af; }
+        .vb .demo-stat .stat-val { color: #1a2744; }
+
+        /* ============================================= */
+        /* VARIANTE C: Modern Gradient (Violet/Blue)     */
+        /* ============================================= */
+        .vc { background: #fafafe; }
+        .vc .variant-header { background: #fafafe; color: #1e1b4b; border-bottom: 1px solid #e5e5f0; }
+        .vc .variant-tag { background: #ede9fe; color: #5b21b6; }
+        .vc .variant-desc { color: #6b7280; background: #fafafe; }
+        .vc .variant-content { background: linear-gradient(180deg, #f5f3ff 0%, #fafafe 100%); }
+
+        .vc .demo-nav {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+        }
+        .vc .demo-nav .logo { color: #fff; }
+        .vc .demo-nav .logo span { color: #c4b5fd; }
+        .vc .demo-nav .nav-links a { color: #e0e7ff; }
+        .vc .demo-nav .nav-btn { background: #fff; color: #4f46e5; }
+
+        .vc .demo-card {
+            background: #fff;
+            border: 1px solid #e5e5f0;
+            box-shadow: 0 2px 12px rgba(79,70,229,.06);
+        }
+        .vc .demo-card .card-symbol { color: #1e1b4b; }
+        .vc .demo-card .card-name { color: #a1a1aa; }
+        .vc .demo-card .card-dir.buy { background: #d1fae5; color: #065f46; }
+        .vc .demo-card .card-dir.sell { background: #fee2e2; color: #991b1b; }
+        .vc .demo-card .card-prices .lbl { color: #a1a1aa; }
+        .vc .demo-card .card-prices .val { color: #1e1b4b; }
+        .vc .demo-card .dot { background: #e5e7eb; }
+        .vc .demo-card .dot.hit { background: #10b981; }
+        .vc .demo-card .card-tp { color: #a1a1aa; }
+        .vc .c-green { color: #10b981; }
+        .vc .c-red { color: #ef4444; }
+
+        .vc .demo-stat {
+            background: #fff;
+            border: 1px solid #e5e5f0;
+        }
+        .vc .demo-stat .stat-lbl { color: #a1a1aa; }
+        .vc .demo-stat .stat-val { color: #1e1b4b; }
+
+        /* ============================================= */
+        /* VARIANTE D: Dark Refined (Softer Dark)        */
+        /* ============================================= */
+        .vd { background: #13151a; }
+        .vd .variant-header { background: #13151a; color: #e2e8f0; border-bottom: 1px solid #2a2d36; }
+        .vd .variant-tag { background: rgba(99,102,241,.2); color: #818cf8; }
+        .vd .variant-desc { color: #94a3b8; background: #13151a; }
+        .vd .variant-content { background: #1a1c23; }
+
+        .vd .demo-nav {
+            background: #1e2028;
+            border: 1px solid #2a2d36;
+        }
+        .vd .demo-nav .logo { color: #e2e8f0; }
+        .vd .demo-nav .logo span { color: #34d399; }
+        .vd .demo-nav .nav-links a { color: #94a3b8; }
+        .vd .demo-nav .nav-btn { background: #34d399; color: #13151a; }
+
+        .vd .demo-card {
+            background: #1e2028;
+            border: 1px solid #2a2d36;
+        }
+        .vd .demo-card:hover { border-color: #3f4350; }
+        .vd .demo-card .card-symbol { color: #e2e8f0; }
+        .vd .demo-card .card-name { color: #64748b; }
+        .vd .demo-card .card-dir.buy { background: rgba(52,211,153,.15); color: #34d399; }
+        .vd .demo-card .card-dir.sell { background: rgba(248,113,113,.15); color: #f87171; }
+        .vd .demo-card .card-prices .lbl { color: #64748b; }
+        .vd .demo-card .card-prices .val { color: #e2e8f0; }
+        .vd .demo-card .dot { background: #2a2d36; }
+        .vd .demo-card .dot.hit { background: #34d399; }
+        .vd .demo-card .card-tp { color: #64748b; }
+        .vd .c-green { color: #34d399; }
+        .vd .c-red { color: #f87171; }
+
+        .vd .demo-stat {
+            background: #1e2028;
+            border: 1px solid #2a2d36;
+        }
+        .vd .demo-stat .stat-lbl { color: #64748b; }
+        .vd .demo-stat .stat-val { color: #e2e8f0; }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:900px) {
+            .demo-cards { grid-template-columns: 1fr; }
+            .demo-stats { grid-template-columns: repeat(2, 1fr); }
+            .demo-nav .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-top">
+    <h1>Design-Vorschlaege</h1>
+    <p>4 Varianten fuer die neue WolfeWaveSignals Homepage. Gleiche Inhalte, unterschiedlicher Look.</p>
+</div>
+
+<!-- ============== VARIANTE A ============== -->
+<div class="variant va">
+    <div class="variant-header">
+        <h2>A — Clean Light</h2>
+        <span class="variant-tag">Empfohlen</span>
+    </div>
+    <div class="variant-desc">
+        Hell, sauber, vertrauenswuerdig. Aehnlich wie Scalable Capital oder Trade Republic.
+        Gruene Akzente fuer Finanzen, weisse Karten mit dezenten Schatten. Wirkt serioes und professionell.
+    </div>
+    <div class="variant-content">
+        <div class="demo-nav">
+            <div class="logo">Wolfe<span>Wave</span></div>
+            <div class="nav-links">
+                <a href="#">Signale</a>
+                <a href="#">Performance</a>
+                <a href="#">Maerkte</a>
+                <a href="#">FAQ</a>
+            </div>
+            <button class="nav-btn">Login</button>
+        </div>
+        <div class="demo-cards">
+            <div class="demo-card">
+                <div class="card-symbol">AAPL.OQ</div>
+                <div class="card-name">Apple Inc.</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">189.42</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">204.80</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot hit"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">EURUSD</div>
+                <div class="card-name">EUR/USD</div>
+                <span class="card-dir sell">SELL</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">1.08542</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-red">1.07120</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">XAUUSD</div>
+                <div class="card-name">Gold (XAU/USD)</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">2.024.50</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">2.089.00</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+        </div>
+        <div class="demo-stats">
+            <div class="demo-stat"><div class="stat-lbl">Win-Rate</div><div class="stat-val c-green">72.4%</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Aktive Signale</div><div class="stat-val">18</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Total Trades</div><div class="stat-val">243</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Avg. R:R</div><div class="stat-val">2.1x</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== VARIANTE B ============== -->
+<div class="variant vb">
+    <div class="variant-header">
+        <h2>B — Warm Professional</h2>
+        <span class="variant-tag">Klassisch</span>
+    </div>
+    <div class="variant-desc">
+        Warme Toene, dunkle Navy-Navigation. Wirkt wie eine etablierte Finanzplattform oder Bank.
+        Gold-Akzente statt Neon. Vertrauen durch Serioesitaet.
+    </div>
+    <div class="variant-content">
+        <div class="demo-nav">
+            <div class="logo">Wolfe<span>Wave</span></div>
+            <div class="nav-links">
+                <a href="#">Signale</a>
+                <a href="#">Performance</a>
+                <a href="#">Maerkte</a>
+                <a href="#">FAQ</a>
+            </div>
+            <button class="nav-btn">Login</button>
+        </div>
+        <div class="demo-cards">
+            <div class="demo-card">
+                <div class="card-symbol">AAPL.OQ</div>
+                <div class="card-name">Apple Inc.</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">189.42</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">204.80</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot hit"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">EURUSD</div>
+                <div class="card-name">EUR/USD</div>
+                <span class="card-dir sell">SELL</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">1.08542</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-red">1.07120</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">XAUUSD</div>
+                <div class="card-name">Gold (XAU/USD)</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">2.024.50</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">2.089.00</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+        </div>
+        <div class="demo-stats">
+            <div class="demo-stat"><div class="stat-lbl">Win-Rate</div><div class="stat-val c-green">72.4%</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Aktive Signale</div><div class="stat-val">18</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Total Trades</div><div class="stat-val">243</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Avg. R:R</div><div class="stat-val">2.1x</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== VARIANTE C ============== -->
+<div class="variant vc">
+    <div class="variant-header">
+        <h2>C — Modern Gradient</h2>
+        <span class="variant-tag">Trendy</span>
+    </div>
+    <div class="variant-desc">
+        Violett/Blau Akzente mit leichten Gradienten. Aehnlich wie Stripe oder Linear.
+        Modern und tech-forward, trotzdem hell und einladend. Spricht juengeres Publikum an.
+    </div>
+    <div class="variant-content">
+        <div class="demo-nav">
+            <div class="logo">Wolfe<span>Wave</span></div>
+            <div class="nav-links">
+                <a href="#">Signale</a>
+                <a href="#">Performance</a>
+                <a href="#">Maerkte</a>
+                <a href="#">FAQ</a>
+            </div>
+            <button class="nav-btn">Login</button>
+        </div>
+        <div class="demo-cards">
+            <div class="demo-card">
+                <div class="card-symbol">AAPL.OQ</div>
+                <div class="card-name">Apple Inc.</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">189.42</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">204.80</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot hit"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">EURUSD</div>
+                <div class="card-name">EUR/USD</div>
+                <span class="card-dir sell">SELL</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">1.08542</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-red">1.07120</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">XAUUSD</div>
+                <div class="card-name">Gold (XAU/USD)</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">2.024.50</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">2.089.00</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+        </div>
+        <div class="demo-stats">
+            <div class="demo-stat"><div class="stat-lbl">Win-Rate</div><div class="stat-val c-green">72.4%</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Aktive Signale</div><div class="stat-val">18</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Total Trades</div><div class="stat-val">243</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Avg. R:R</div><div class="stat-val">2.1x</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== VARIANTE D ============== -->
+<div class="variant vd">
+    <div class="variant-header">
+        <h2>D — Dark Refined</h2>
+        <span class="variant-tag">Aktuell aehnlich</span>
+    </div>
+    <div class="variant-desc">
+        Bleibt dunkel, aber weicher und weniger aggressiv. Kein Neon-Gruen, kein Glow.
+        Sanftere Farben, bessere Lesbarkeit. Wie Bloomberg oder TradingView Dark Mode.
+    </div>
+    <div class="variant-content">
+        <div class="demo-nav">
+            <div class="logo">Wolfe<span>Wave</span></div>
+            <div class="nav-links">
+                <a href="#">Signale</a>
+                <a href="#">Performance</a>
+                <a href="#">Maerkte</a>
+                <a href="#">FAQ</a>
+            </div>
+            <button class="nav-btn">Login</button>
+        </div>
+        <div class="demo-cards">
+            <div class="demo-card">
+                <div class="card-symbol">AAPL.OQ</div>
+                <div class="card-name">Apple Inc.</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">189.42</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">204.80</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot hit"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">EURUSD</div>
+                <div class="card-name">EUR/USD</div>
+                <span class="card-dir sell">SELL</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">1.08542</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-red">1.07120</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot hit"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+            <div class="demo-card">
+                <div class="card-symbol">XAUUSD</div>
+                <div class="card-name">Gold (XAU/USD)</div>
+                <span class="card-dir buy">BUY</span>
+                <div class="card-prices">
+                    <div><div class="lbl">Entry</div><div class="val">2.024.50</div></div>
+                    <div><div class="lbl">TP3</div><div class="val c-green">2.089.00</div></div>
+                </div>
+                <div class="card-tp">TP: <span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+        </div>
+        <div class="demo-stats">
+            <div class="demo-stat"><div class="stat-lbl">Win-Rate</div><div class="stat-val c-green">72.4%</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Aktive Signale</div><div class="stat-val">18</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Total Trades</div><div class="stat-val">243</div></div>
+            <div class="demo-stat"><div class="stat-lbl">Avg. R:R</div><div class="stat-val">2.1x</div></div>
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center; padding:40px; color:#999; font-size:13px;">
+    Diese Seite ist nur ein Vorschau-Mockup — nicht live geschaltet.
+</div>
+
+</body>
+</html>
