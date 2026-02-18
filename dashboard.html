@@ -1185,7 +1185,23 @@
 
                 const bridge = getComponentStatus(eaTime);
                 const ea = getComponentStatus(eaTime);
-                const supabaseStatus = { status: 'online', color: 'green', text: 'Erreichbar', sub: 'REST API OK' };
+                // Supabase: storage stats via RPC (POST)
+                let storageSub = 'REST API OK';
+                try {
+                    const stRes = await fetch(`${SB_URL}/rest/v1/rpc/get_storage_stats`, {
+                        method: 'POST',
+                        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+                        body: '{}'
+                    });
+                    if (stRes.ok) {
+                        const stats = await stRes.json();
+                        if (stats && stats.total_bytes != null) {
+                            const mb = (stats.total_bytes / 1024 / 1024).toFixed(1);
+                            storageSub = `Storage: ${mb} MB (${stats.file_count} Dateien)`;
+                        }
+                    }
+                } catch(stErr) {}
+                const supabaseStatus = { status: 'online', color: 'green', text: 'Erreichbar', sub: storageSub };
 
                 // Scanner: eigene Logik — kein "Offline", nur wie lange her
                 let scanner;
