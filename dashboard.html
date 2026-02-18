@@ -12,20 +12,20 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg-primary: #0c0c0c;
-            --bg-card: #141414;
-            --bg-card-elevated: #1a1a1a;
-            --bg-hover: rgba(255, 255, 255, 0.05);
-            --accent-green: #00ff88;
-            --accent-green-dim: rgba(0, 255, 136, 0.15);
-            --accent-red: #ff4757;
-            --accent-gold: #ffd700;
-            --accent-blue: #4fc3f7;
-            --text-primary: #ffffff;
+            --bg-primary: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-card-elevated: #f5f3f0;
+            --bg-hover: rgba(26, 39, 68, 0.04);
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16, 185, 129, 0.15);
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-primary: #1a2744;
             --text-secondary: #6b7280;
-            --text-tertiary: #4a4a4a;
-            --border-color: #1f1f1f;
-            --border-glow: rgba(0, 255, 136, 0.2);
+            --text-tertiary: #9ca3af;
+            --border-color: #e8e4dd;
+            --border-glow: rgba(16, 185, 129, 0.3);
         }
 
         body {
@@ -85,6 +85,7 @@
             padding: 18px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
         }
         .acc-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
         .acc-box.g::before { background:var(--accent-green); }
@@ -132,7 +133,7 @@
         .acc-new-dot {
             width:9px; height:9px; border-radius:50%;
             background:var(--accent-green);
-            box-shadow:0 0 8px var(--accent-green);
+            box-shadow:0 0 8px rgba(16,185,129,.5);
             animation:pulse-new 1.5s ease-in-out infinite;
             display:none; flex-shrink:0;
         }
@@ -155,9 +156,9 @@
             padding:2px 10px; border-radius:20px;
         }
         .sec-badge.g { background:var(--accent-green-dim); color:var(--accent-green); }
-        .sec-badge.b { background:rgba(79,195,247,.15); color:var(--accent-blue); }
-        .sec-badge.y { background:rgba(255,215,0,.15); color:var(--accent-gold); }
-        .sec-badge.r { background:rgba(255,71,87,.15); color:var(--accent-red); }
+        .sec-badge.b { background:rgba(59,130,246,.1); color:var(--accent-blue); }
+        .sec-badge.y { background:rgba(245,158,11,.12); color:var(--accent-gold); }
+        .sec-badge.r { background:rgba(220,38,38,.1); color:var(--accent-red); }
 
         /* ========== TRADE CARD ========== */
         .trades-grid {
@@ -171,9 +172,10 @@
             border: 1px solid var(--border-color);
             border-radius: 14px;
             padding: 22px;
-            transition: border-color .3s, transform .2s;
+            transition: border-color .3s, transform .2s, box-shadow .3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
         }
-        .trade-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+        .trade-card:hover { border-color: var(--border-glow); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
         .trade-card.closed { opacity: .92; }
 
         /* Card Header */
@@ -204,9 +206,9 @@
             border-radius:6px; text-transform:uppercase; letter-spacing:.5px;
         }
         .badge-buy { background:var(--accent-green-dim); color:var(--accent-green); }
-        .badge-sell { background:rgba(255,71,87,.15); color:var(--accent-red); }
-        .badge-pending { background:rgba(79,195,247,.15); color:var(--accent-blue); }
-        .badge-closed { background:rgba(255,255,255,.04); color:var(--text-secondary); }
+        .badge-sell { background:rgba(220,38,38,.1); color:var(--accent-red); }
+        .badge-pending { background:rgba(59,130,246,.1); color:var(--accent-blue); }
+        .badge-closed { background:rgba(0,0,0,.05); color:var(--text-secondary); }
 
         /* Card Info Row */
         .tc-info {
@@ -228,15 +230,15 @@
             align-items: center;
             gap: 8px;
             padding: 7px 0;
-            border-bottom: 1px solid rgba(255,255,255,.03);
+            border-bottom: 1px solid rgba(0,0,0,.06);
         }
         .tp-row:last-child { border-bottom: none; }
         .tp-label {
             font-family:'JetBrains Mono',monospace;
             font-size:12px; font-weight:700;
         }
-        .tp-label.tp1 { color: #66ffaa; }
-        .tp-label.tp2 { color: #33ff99; }
+        .tp-label.tp1 { color: #059669; }
+        .tp-label.tp2 { color: #047857; }
         .tp-label.tp3 { color: var(--accent-green); }
         .tp-label.sl { color: var(--accent-red); }
 
@@ -304,7 +306,7 @@
         /* ========== LIGHTBOX ========== */
         .lightbox-overlay {
             display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-            background:rgba(0,0,0,.92); z-index:9999;
+            background:rgba(0,0,0,.6); z-index:9999;
             justify-content:center; align-items:center;
             padding:20px; overflow-y:auto;
         }
@@ -386,7 +388,7 @@
             white-space:nowrap;
         }
         .overview-table tbody tr {
-            border-bottom:1px solid rgba(255,255,255,.03);
+            border-bottom:1px solid rgba(0,0,0,.06);
             transition:background .2s;
             cursor:pointer;
         }
@@ -407,7 +409,7 @@
         }
         .ov-dir { font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; }
         .ov-dir.buy { background:var(--accent-green-dim); color:var(--accent-green); }
-        .ov-dir.sell { background:rgba(255,71,87,.15); color:var(--accent-red); }
+        .ov-dir.sell { background:rgba(220,38,38,.1); color:var(--accent-red); }
         .ov-phase { display:inline-flex; gap:3px; }
         .ov-phase .dot {
             width:8px; height:8px; border-radius:50%;
@@ -419,7 +421,7 @@
         /* ========== SYSTEM STATUS ========== */
         .sys-status-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 14px;
             padding: 16px;
         }
@@ -431,16 +433,16 @@
             text-align: center;
             transition: border-color .3s;
         }
-        .sys-card.status-online { border-color: rgba(0, 255, 136, 0.3); }
-        .sys-card.status-warning { border-color: rgba(255, 215, 0, 0.3); }
-        .sys-card.status-offline { border-color: rgba(255, 71, 87, 0.3); }
+        .sys-card.status-online { border-color: rgba(16, 185, 129, 0.3); }
+        .sys-card.status-warning { border-color: rgba(245, 158, 11, 0.3); }
+        .sys-card.status-offline { border-color: rgba(220, 38, 38, 0.3); }
         .sys-dot {
             width: 12px; height: 12px; border-radius: 50%;
             display: inline-block; margin-right: 6px; vertical-align: middle;
         }
-        .sys-dot.green { background: var(--accent-green); box-shadow: 0 0 8px rgba(0,255,136,.4); }
-        .sys-dot.yellow { background: var(--accent-gold); box-shadow: 0 0 8px rgba(255,215,0,.4); }
-        .sys-dot.red { background: var(--accent-red); box-shadow: 0 0 8px rgba(255,71,87,.4); }
+        .sys-dot.green { background: var(--accent-green); box-shadow: 0 0 8px rgba(16,185,129,.4); }
+        .sys-dot.yellow { background: var(--accent-gold); box-shadow: 0 0 8px rgba(245,158,11,.4); }
+        .sys-dot.red { background: var(--accent-red); box-shadow: 0 0 8px rgba(220,38,38,.4); }
         .sys-name {
             font-size: 14px; font-weight: 600; margin-bottom: 6px;
         }
@@ -473,7 +475,7 @@
         }
         .locked-overlay::after {
             content:''; position:absolute; top:0; left:0; right:0; bottom:0;
-            background:linear-gradient(180deg, transparent 20%, var(--bg-primary) 90%);
+            background:linear-gradient(180deg, transparent 20%, #faf8f5 90%);
             pointer-events:none; z-index:2;
         }
         .locked-cta {
@@ -484,7 +486,7 @@
         }
         .locked-cta a {
             display:inline-block; padding:12px 32px;
-            background:var(--accent-green); color:#000; font-weight:700;
+            background:var(--accent-green); color:#fff; font-weight:700;
             border-radius:8px; text-decoration:none; font-size:14px;
             transition:opacity .2s;
         }
@@ -1023,7 +1025,7 @@
                 const sym = p.symbol, name = getName(sym), dir = p.direction, isBuy = dir==='BUY';
                 const wid = p.wedge_id||'';
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
-                return `<div class="trade-card fade-in" style="border-color:rgba(79,195,247,.2)">
+                return `<div class="trade-card fade-in" style="border-color:rgba(59,130,246,.2)">
                     <div class="tc-head">
                         <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
                             ${name}<small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
@@ -1161,6 +1163,16 @@
             return `vor ${days}d`;
         }
 
+        function getBotStatus(heartbeat) {
+            if (!heartbeat) return { status: 'offline', color: 'red', text: 'Offline', sub: 'Kein Heartbeat' };
+            const diffMs = Date.now() - new Date(heartbeat.last_heartbeat).getTime();
+            const diffMin = diffMs / 60000;
+            const sub = timeAgo(diffMs) + (heartbeat.version ? ` (${heartbeat.version})` : '');
+            if (diffMin < 2) return { status: 'online', color: 'green', text: 'Online', sub };
+            if (diffMin < 5) return { status: 'warning', color: 'yellow', text: 'Verzoegert', sub };
+            return { status: 'offline', color: 'red', text: 'Offline', sub };
+        }
+
         async function renderSystemStatus() {
             const c = $('system-status');
             try {
@@ -1173,7 +1185,7 @@
 
                 const bridge = getComponentStatus(eaTime);
                 const ea = getComponentStatus(eaTime);
-                const supabase = { status: 'online', color: 'green', text: 'Erreichbar', sub: 'REST API OK' };
+                const supabaseStatus = { status: 'online', color: 'green', text: 'Erreichbar', sub: 'REST API OK' };
 
                 // Scanner: eigene Logik — kein "Offline", nur wie lange her
                 let scanner;
@@ -1188,11 +1200,28 @@
                     scanner = { status: 'offline', color: 'red', text: 'Keine Daten', sub: '' };
                 }
 
+                // Bot heartbeats: Telegram + X
+                let telegramBot = { status: 'offline', color: 'red', text: 'Offline', sub: 'Kein Heartbeat' };
+                let xBot = { status: 'offline', color: 'red', text: 'Offline', sub: 'Kein Heartbeat' };
+                try {
+                    const heartbeats = await sb('bot_heartbeats', 'select=*');
+                    if (heartbeats) {
+                        for (const hb of heartbeats) {
+                            if (hb.bot_name === 'telegram_bot') telegramBot = getBotStatus(hb);
+                            if (hb.bot_name === 'x_bot') xBot = getBotStatus(hb);
+                        }
+                    }
+                } catch(hbErr) {
+                    // Table might not exist yet — keep defaults
+                }
+
                 const cards = [
                     { name: 'Bridge', ...bridge },
                     { name: 'TradeExecutor', ...ea },
                     { name: 'Scanner', ...scanner },
-                    { name: 'Supabase', ...supabase }
+                    { name: 'Telegram Bot', ...telegramBot },
+                    { name: 'X Bot', ...xBot },
+                    { name: 'Supabase', ...supabaseStatus }
                 ];
 
                 c.innerHTML = `<div class="sys-status-grid">${cards.map(card => `
