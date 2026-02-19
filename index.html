@@ -1707,6 +1707,54 @@
             color: var(--accent-green);
         }
 
+        /* Chart External Links (TradingView, Stock3) */
+        .chart-links {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chart-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .chart-link-tv {
+            color: #2962FF;
+            background: rgba(41, 98, 255, 0.08);
+            border-color: rgba(41, 98, 255, 0.15);
+        }
+
+        .chart-link-tv:hover {
+            background: rgba(41, 98, 255, 0.18);
+            border-color: rgba(41, 98, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .chart-link-s3 {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.15);
+        }
+
+        .chart-link-s3:hover {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .chart-link svg {
+            flex-shrink: 0;
+        }
+
         /* Premium Section / Paywall */
         .premium-section {
             position: relative;
@@ -4566,6 +4614,83 @@
             return cleanSymbol;
         }
 
+        // === TradingView & Stock3 Chart-Link Helpers ===
+        function getTradingViewSymbol(symbol, market) {
+            if (!symbol) return null;
+            // Suffix-zu-Exchange Mapping
+            const suffixMap = {
+                '.OQ': 'NASDAQ', '.N': 'NYSE', '.DE': 'XETR',
+                '.L': 'LSE', '.PA': 'EURONEXT', '.AS': 'EURONEXT',
+                '.SW': 'SIX', '.MC': 'BME', '.MI': 'MIL',
+                '.AX': 'ASX', '.HK': 'HKEX', '.T': 'TSE',
+                '.SS': 'SSE', '.SZ': 'SZSE', '.F': 'FWB'
+            };
+            // Forex
+            if (symbol.length === 6 && /^[A-Z]+$/.test(symbol)) {
+                return 'FX:' + symbol;
+            }
+            // Crypto (enthält USD/BTC etc.)
+            if (market === 'CRYPTO' || /USD$/.test(symbol) && !/^[A-Z]{6}$/.test(symbol)) {
+                let clean = symbol.replace(/USD$/, '');
+                return 'CRYPTO:' + clean + 'USD';
+            }
+            // Commodities
+            if (market === 'COMMODITIES') {
+                const commodityMap = { 'XAUUSD': 'OANDA:XAUUSD', 'XAGUSD': 'OANDA:XAGUSD', 'WTICOUSD': 'TVC:USOIL', 'USOILcash': 'TVC:USOIL', 'UKOILcash': 'TVC:UKOIL' };
+                if (commodityMap[symbol]) return commodityMap[symbol];
+            }
+            // Aktien mit Suffix
+            for (const [suffix, exchange] of Object.entries(suffixMap)) {
+                if (symbol.endsWith(suffix)) {
+                    return exchange + ':' + symbol.replace(suffix, '');
+                }
+            }
+            // Suffix mit Sonderzeichen (z.B. _pDE, GnDE)
+            let clean = symbol.replace(/[_.]?(OQ|N|DE|L|PA|AS|SW|MC|MI|AX|HK|T|SS|SZ|F)$/i, '');
+            if (clean !== symbol) {
+                const sfx = symbol.replace(clean, '').replace(/^[_.]/, '');
+                const ex = suffixMap['.' + sfx.toUpperCase()];
+                if (ex) return ex + ':' + clean;
+            }
+            // Fallback
+            return symbol;
+        }
+
+        function getTradingViewUrl(symbol, market, timeframe) {
+            const tvSymbol = getTradingViewSymbol(symbol, market);
+            if (!tvSymbol) return null;
+            // Timeframe mapping: M5→5, M15→15, H1→60, H4→240, D1→D, W1→W
+            const tfMap = { 'M1': '1', 'M5': '5', 'M15': '15', 'M30': '30', 'H1': '60', 'H4': '240', 'D1': 'D', 'W1': 'W', 'MN': 'M' };
+            const tvTf = tfMap[timeframe] || '60';
+            return `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol)}&interval=${tvTf}`;
+        }
+
+        function getStock3Url(symbol, market) {
+            if (!symbol) return null;
+            // Stock3 hat keine direkte Ticker-URL - nutze Suchseite
+            let searchTerm = symbol.replace(/\.(OQ|N|DE|L|PA|AS|SW|MC|MI|AX|HK|T|SS|SZ|F)$/i, '');
+            // Sonderzeichen entfernen
+            searchTerm = searchTerm.replace(/[_]/g, ' ');
+            return `https://stock3.com/aktien?search=${encodeURIComponent(searchTerm)}`;
+        }
+
+        function renderChartLinks(signal) {
+            const tvUrl = getTradingViewUrl(signal.symbol, signal.market, signal.timeframe);
+            const s3Url = getStock3Url(signal.symbol, signal.market);
+            return `
+                <div class="chart-links">
+                    <a href="${tvUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="chart-link chart-link-tv" title="TradingView Chart öffnen">
+                        <svg width="14" height="14" viewBox="0 0 36 28" fill="currentColor"><path d="M14 22H7V11h7v11zm11 0h-7V6h7v16zm11 0h-7V0h7v22zm3 6H0v-2h39v2z"/></svg>
+                        <span>TradingView</span>
+                    </a>
+                    <a href="${s3Url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="chart-link chart-link-s3" title="Stock3 Chart öffnen">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+                        <span>Stock3</span>
+                    </a>
+                </div>
+            `;
+        }
+
         // ==================== FEATURED SIGNALS SYSTEM ====================
         async function fetchFeaturedSignals() {
             try {
@@ -5560,6 +5685,7 @@
                             <div class="price-item item-tp3"><div class="price-label">TP3</div><div class="price-value price-tp3">${formatPrice(signal.tp3)}</div></div>
                         </div>
                         <div class="rr-badge">R/R <span>1:${signal.rr?.toFixed(1) || '—'}</span></div>
+                        ${renderChartLinks(signal)}
                     </div>
                 </div>
             `;
@@ -5672,6 +5798,7 @@
                         <div class="rr-badge" style="background: ${signal.result_folder === 'success' ? 'rgba(16,185,129,0.1)' : 'rgba(220,38,38,0.1)'}">
                             Ergebnis: <span style="color: ${signal.result_folder === 'success' ? 'var(--accent-green)' : 'var(--accent-red)'}">${signal.result_folder === 'success' ? 'Gewinn' : 'Verlust'}</span>
                         </div>
+                        ${renderChartLinks(signal)}
                     </div>
                 </div>
             `;
