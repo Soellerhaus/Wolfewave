@@ -4667,11 +4667,9 @@
 
         function getStock3Url(symbol, market) {
             if (!symbol) return null;
-            // Stock3 hat keine direkte Ticker-URL - nutze Suchseite
-            let searchTerm = symbol.replace(/\.(OQ|N|DE|L|PA|AS|SW|MC|MI|AX|HK|T|SS|SZ|F)$/i, '');
-            // Sonderzeichen entfernen
-            searchTerm = searchTerm.replace(/[_]/g, ' ');
-            return `https://stock3.com/aktien?search=${encodeURIComponent(searchTerm)}`;
+            // Stock3 Terminal - direkt öffnen (kein Deep-Link verfügbar)
+            // Nutze terminal.stock3.com - User kann dort das Symbol suchen
+            return `https://terminal.stock3.com`;
         }
 
         function renderChartLinks(signal) {
@@ -4683,9 +4681,9 @@
                         <svg width="14" height="14" viewBox="0 0 36 28" fill="currentColor"><path d="M14 22H7V11h7v11zm11 0h-7V6h7v16zm11 0h-7V0h7v22zm3 6H0v-2h39v2z"/></svg>
                         <span>TradingView</span>
                     </a>
-                    <a href="${s3Url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="chart-link chart-link-s3" title="Stock3 Chart öffnen">
+                    <a href="${s3Url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="chart-link chart-link-s3" title="Stock3 Terminal öffnen">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
-                        <span>Stock3</span>
+                        <span>Stock3 Terminal</span>
                     </a>
                 </div>
             `;
