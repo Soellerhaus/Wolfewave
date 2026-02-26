@@ -475,6 +475,11 @@
         <div id="signals-grid" class="signals-grid">
             <div class="loading"><div class="spinner"></div>Signale werden geladen...</div>
         </div>
+        <div id="load-more-wrap" style="text-align:center; margin-top:24px; display:none;">
+            <button id="load-more-btn" style="font-size:15px; padding:12px 40px; background:var(--accent); color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:600; transition:opacity 0.2s;">
+                Mehr Signale laden <span id="load-more-count"></span>
+            </button>
+        </div>
     </div>
 </section>
 
@@ -498,6 +503,11 @@
         <h3 style="margin-bottom: 16px; font-size: 18px;">Letzte abgeschlossene Signale</h3>
         <div id="completed-grid" class="signals-grid">
             <div class="loading"><div class="spinner"></div>Lade Performance-Daten...</div>
+        </div>
+        <div id="load-more-completed-wrap" style="text-align:center; margin-top:24px; display:none;">
+            <button id="load-more-completed-btn" style="font-size:15px; padding:12px 40px; background:var(--accent); color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:600; transition:opacity 0.2s;">
+                Mehr Ergebnisse laden <span id="load-more-completed-count"></span>
+            </button>
         </div>
     </div>
 </section>
@@ -1061,25 +1071,65 @@ function renderCompletedCard(s) {
     </div>`;
 }
 
-// ===== RENDER SIGNALS SECTION =====
+// ===== PAGINATION =====
+const SIGNALS_PER_PAGE = 12;
+let visibleCount = SIGNALS_PER_PAGE;
+let visibleCompletedCount = SIGNALS_PER_PAGE;
+
 function renderSignals() {
     const grid = $('signals-grid');
+    const wrap = $('load-more-wrap');
+    const btn = $('load-more-btn');
+    const countSpan = $('load-more-count');
+
     if (currentTab === 'success') {
         const signals = getFilteredCompleted();
         if (!signals.length) {
             grid.innerHTML = '<div class="empty-state">Keine abgeschlossenen Signale gefunden.</div>';
+            wrap.style.display = 'none';
             return;
         }
-        grid.innerHTML = signals.slice(0, 50).map(renderCompletedCard).join('');
+        const shown = signals.slice(0, visibleCount);
+        grid.innerHTML = shown.map(renderCompletedCard).join('');
+        const remaining = signals.length - shown.length;
+        if (remaining > 0) {
+            wrap.style.display = 'block';
+            countSpan.textContent = `(${remaining} weitere)`;
+        } else {
+            wrap.style.display = 'none';
+        }
     } else {
         const signals = getFilteredSignals();
         if (!signals.length) {
             grid.innerHTML = '<div class="empty-state">Keine Signale gefunden.</div>';
+            wrap.style.display = 'none';
             return;
         }
-        grid.innerHTML = signals.map(renderSignalCard).join('');
+        const shown = signals.slice(0, visibleCount);
+        grid.innerHTML = shown.map(renderSignalCard).join('');
+        const remaining = signals.length - shown.length;
+        if (remaining > 0) {
+            wrap.style.display = 'block';
+            countSpan.textContent = `(${remaining} weitere)`;
+        } else {
+            wrap.style.display = 'none';
+        }
     }
 }
+
+// "Mehr laden" Buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = $('load-more-btn');
+    if (btn) btn.addEventListener('click', () => {
+        visibleCount += SIGNALS_PER_PAGE;
+        renderSignals();
+    });
+    const cBtn = $('load-more-completed-btn');
+    if (cBtn) cBtn.addEventListener('click', () => {
+        visibleCompletedCount += SIGNALS_PER_PAGE;
+        updatePerformance();
+    });
+});
 
 // ===== UPDATE STATS =====
 function updateStats() {
@@ -1113,13 +1163,23 @@ function updateStats() {
     $('perf-tp1').textContent = tp1;
     $('perf-sl').textContent = sl;
 
-    // Recent completed
-    const recent = completedSignals.slice(0, 12);
+    // Recent completed (with pagination)
     const cGrid = $('completed-grid');
+    const cWrap = $('load-more-completed-wrap');
+    const cCountSpan = $('load-more-completed-count');
+    const recent = completedSignals.slice(0, visibleCompletedCount);
     if (recent.length) {
         cGrid.innerHTML = recent.map(renderCompletedCard).join('');
+        const remaining = completedSignals.length - recent.length;
+        if (remaining > 0) {
+            cWrap.style.display = 'block';
+            cCountSpan.textContent = `(${remaining} weitere)`;
+        } else {
+            cWrap.style.display = 'none';
+        }
     } else {
         cGrid.innerHTML = '<div class="empty-state">Noch keine abgeschlossenen Signale.</div>';
+        cWrap.style.display = 'none';
     }
 }
 
@@ -1258,6 +1318,7 @@ function setupEvents() {
             document.querySelectorAll('#signal-tabs .tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             currentTab = tab.dataset.tab;
+            visibleCount = SIGNALS_PER_PAGE;
             renderSignals();
         });
     });
@@ -1268,6 +1329,7 @@ function setupEvents() {
             document.querySelectorAll('#signal-filters .filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentMarket = btn.dataset.market;
+            visibleCount = SIGNALS_PER_PAGE;
             renderSignals();
         });
     });
@@ -1278,6 +1340,7 @@ function setupEvents() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             searchTerm = e.target.value.trim();
+            visibleCount = SIGNALS_PER_PAGE;
             renderSignals();
         }, 300);
     });

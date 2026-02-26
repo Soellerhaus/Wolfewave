@@ -804,6 +804,77 @@ string CreateActiveTradeImage(ActiveTrade &trade)
 }
 
 //+------------------------------------------------------------------+
+// Zeitfibonacci: P1(0%) bis Kreuzung horizontale P2 / EPA-Linie (100%)
+//+------------------------------------------------------------------+
+void DrawTimeFibonacci(long chartId, string prefix,
+                        datetime p1Time, double p1Price,
+                        double p2Price,
+                        datetime p4Time, double p4Price,
+                        double labelPrice)
+{
+   // EPA-Linie Steigung (P1 -> P4)
+   double slope14 = (p4Price - p1Price) / (double)(p4Time - p1Time);
+
+   // Sicherheitscheck: slope ~ 0 = keine Kreuzung moeglich
+   if(MathAbs(slope14) < 1e-12) return;
+
+   // Kreuzungspunkt: p2Price = p1Price + slope14 * (tCross - p1Time)
+   // tCross = p1Time + (p2Price - p1Price) / slope14
+   double timeDiff = (p2Price - p1Price) / slope14;
+   datetime tCross = p1Time + (datetime)timeDiff;
+
+   // Kreuzung muss in der Zukunft von P1 liegen
+   if(tCross <= p1Time) return;
+
+   // Zeitspanne fuer Fibonacci
+   double span = (double)(tCross - p1Time);
+
+   // --- Horizontale P2-Linie (gruen, von P1-Zeit bis Kreuzungspunkt) ---
+   ObjectCreate(chartId, prefix+"HorizP2", OBJ_TREND, 0, p1Time, p2Price, tCross, p2Price);
+   ObjectSetInteger(chartId, prefix+"HorizP2", OBJPROP_COLOR, clrLimeGreen);
+   ObjectSetInteger(chartId, prefix+"HorizP2", OBJPROP_WIDTH, 2);
+   ObjectSetInteger(chartId, prefix+"HorizP2", OBJPROP_STYLE, STYLE_SOLID);
+   ObjectSetInteger(chartId, prefix+"HorizP2", OBJPROP_RAY_RIGHT, false);
+   ObjectSetInteger(chartId, prefix+"HorizP2", OBJPROP_BACK, true);
+
+   // --- Kreise bei 0% (P1) und 100% (Kreuzung) ---
+   ObjectCreate(chartId, prefix+"TFibC0", OBJ_ARROW, 0, p1Time, p1Price);
+   ObjectSetInteger(chartId, prefix+"TFibC0", OBJPROP_ARROWCODE, 159);
+   ObjectSetInteger(chartId, prefix+"TFibC0", OBJPROP_COLOR, clrDodgerBlue);
+   ObjectSetInteger(chartId, prefix+"TFibC0", OBJPROP_WIDTH, 2);
+
+   ObjectCreate(chartId, prefix+"TFibC100", OBJ_ARROW, 0, tCross, p2Price);
+   ObjectSetInteger(chartId, prefix+"TFibC100", OBJPROP_ARROWCODE, 159);
+   ObjectSetInteger(chartId, prefix+"TFibC100", OBJPROP_COLOR, clrDodgerBlue);
+   ObjectSetInteger(chartId, prefix+"TFibC100", OBJPROP_WIDTH, 2);
+
+   // --- Fibonacci Levels als vertikale Linien ---
+   double fiboLevels[]  = {0.0, 0.382, 0.5, 0.618, 1.0};
+   string fiboLabels[]  = {"0.00%", "38.2%", "50.0%", "61.8%", "100.00%"};
+
+   for(int i = 0; i < 5; i++)
+   {
+      datetime levelTime = p1Time + (datetime)(fiboLevels[i] * span);
+      string vName = prefix + "TFib" + IntegerToString(i);
+
+      // Vertikale Linie
+      ObjectCreate(chartId, vName, OBJ_VLINE, 0, levelTime, 0);
+      ObjectSetInteger(chartId, vName, OBJPROP_COLOR, (i == 0 || i == 4) ? clrDodgerBlue : clrSilver);
+      ObjectSetInteger(chartId, vName, OBJPROP_WIDTH, 1);
+      ObjectSetInteger(chartId, vName, OBJPROP_STYLE, STYLE_DOT);
+      ObjectSetInteger(chartId, vName, OBJPROP_BACK, true);
+
+      // Prozentwert-Label am unteren Chart-Rand
+      string lblName = prefix + "TFibL" + IntegerToString(i);
+      ObjectCreate(chartId, lblName, OBJ_TEXT, 0, levelTime, labelPrice);
+      ObjectSetString(chartId, lblName, OBJPROP_TEXT, " " + fiboLabels[i]);
+      ObjectSetInteger(chartId, lblName, OBJPROP_COLOR, (i == 0 || i == 4) ? clrDodgerBlue : clrSilver);
+      ObjectSetInteger(chartId, lblName, OBJPROP_FONTSIZE, 9);
+      ObjectSetInteger(chartId, lblName, OBJPROP_ANCHOR, ANCHOR_LEFT_UPPER);
+   }
+}
+
+//+------------------------------------------------------------------+
 // Pattern MIT TPs zeichnen (fuer aktive Trades)
 //+------------------------------------------------------------------+
 void DrawPatternWithTPs(long chartId, ActiveTrade &trade)
@@ -963,6 +1034,11 @@ void DrawPatternWithTPs(long chartId, ActiveTrade &trade)
    ObjectSetString(chartId, prefix+"TP3Label", OBJPROP_TEXT, " TP3 (EPA Line)");
    ObjectSetInteger(chartId, prefix+"TP3Label", OBJPROP_COLOR, clrDarkGreen);
    ObjectSetInteger(chartId, prefix+"TP3Label", OBJPROP_FONTSIZE, 10);
+
+   // === ZEITFIBONACCI: P1(0%) bis Kreuzung horizontale P2 / EPA-Linie (100%) ===
+   double lowestPrice = MathMin(MathMin(MathMin(trade.p1.price, trade.p2.price), MathMin(trade.p3.price, trade.p4.price)), trade.p5.price);
+   lowestPrice = MathMin(lowestPrice, trade.slPrice);
+   DrawTimeFibonacci(chartId, prefix, trade.p1.time, trade.p1.price, trade.p2.price, trade.p4.time, trade.p4.price, lowestPrice);
 }
 
 //+------------------------------------------------------------------+
@@ -1074,6 +1150,10 @@ void DrawPatternPendingOnly(long chartId, WolfeWave &wave)
    ObjectSetInteger(chartId, prefix+"P5TimeLabel", OBJPROP_COLOR, clrOrange);
    ObjectSetInteger(chartId, prefix+"P5TimeLabel", OBJPROP_FONTSIZE, 10);
    
+   // === ZEITFIBONACCI: P1(0%) bis Kreuzung horizontale P2 / EPA-Linie (100%) ===
+   double lowestPrice = MathMin(MathMin(MathMin(wave.p1.price, wave.p2.price), MathMin(wave.p3.price, wave.p4.price)), wave.p5.price);
+   DrawTimeFibonacci(chartId, prefix, wave.p1.time, wave.p1.price, wave.p2.price, wave.p4.time, wave.p4.price, lowestPrice);
+
    // KEINE Entry, SL, TP Linien!
 }
 
