@@ -45,11 +45,11 @@
       <div class="footer-section">
         <h4>Navigation</h4>
         <div class="footer-links">
-          <a href="#signale">Signale</a>
-          <a href="#performance">Performance</a>
-          <a href="#dashboard">Dashboard</a>
-          <a href="#lernen">Wolfe Waves lernen</a>
-          <a href="#about">Ueber mich</a>
+          <a href="/signale.html">Signale</a>
+          <a href="/performance.html">Performance</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/wolfewaves.html">Wolfe Waves lernen</a>
+          <a href="/about.html">Ueber mich</a>
         </div>
       </div>
       <div class="footer-section">

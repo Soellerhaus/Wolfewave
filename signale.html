@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alle Signale | WolfeWaveSignals</title>
+    <meta name="description" content="Alle aktiven und abgeschlossenen Wolfe Wave Signale. Filtern nach Markt, Status und Symbol. Entry, Stop-Loss und Take-Profit Levels.">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/shared.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section>
+    <div class="container">
+        <p class="section-label">Live Signale</p>
+        <h2 class="section-title">Aktuelle Wolfe Wave Signale</h2>
+        <p class="section-desc">Alle erkannten Patterns mit Entry, Stop-Loss und drei Take-Profit Levels.</p>
+
+        <!-- Tabs -->
+        <div class="tab-bar" id="signal-tabs">
+            <button class="tab active" data-tab="all">Alle <span class="count" id="cnt-all">0</span></button>
+            <button class="tab" data-tab="active">Active <span class="count" id="cnt-active">0</span></button>
+            <button class="tab" data-tab="pending">Pending <span class="count" id="cnt-pending">0</span></button>
+            <button class="tab" data-tab="success">Abgeschlossen <span class="count" id="cnt-success">0</span></button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar" id="signal-filters">
+            <button class="filter-btn active" data-market="">Alle Maerkte</button>
+            <button class="filter-btn" data-market="DAX">DAX</button>
+            <button class="filter-btn" data-market="NASDAQ">NASDAQ</button>
+            <button class="filter-btn" data-market="NYSE">NYSE</button>
+            <button class="filter-btn" data-market="FOREX">Forex</button>
+            <button class="filter-btn" data-market="CRYPTO">Krypto</button>
+            <input type="text" class="search-input" id="signal-search" placeholder="Symbol suchen...">
+        </div>
+
+        <!-- Grid -->
+        <div id="signals-grid" class="signals-grid">
+            <div class="loading"><div class="spinner"></div>Signale werden geladen...</div>
+        </div>
+        <div id="load-more-wrap" style="text-align:center; margin-top:24px; display:none;">
+            <button id="load-more-btn" class="btn-primary">
+                Mehr Signale laden <span id="load-more-count"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img id="lightbox-img" src="" alt="Signal Chart">
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/components/header.js"></script>
+<script src="/components/footer.js"></script>
+<script src="/js/shared.js"></script>
+<script src="/components/image-carousel.js"></script>
+
+<script>
+// ===== STATE =====
+let allSignals = [];
+let completedSignals = [];
+let imageMap = {};
+let currentTab = 'all';
+let currentMarket = '';
+let searchTerm = '';
+const SIGNALS_PER_PAGE = 12;
+let visibleCount = SIGNALS_PER_PAGE;
+
+// ===== DATA LOADING =====
+async function fetchSignals() {
+    try {
+        allSignals = await sb('signals', 'select=*&status=in.(pending,active)&order=created_at.desc&limit=10000');
+    } catch(e) { console.error('Signals:', e); allSignals = []; }
+}
+
+async function fetchCompleted() {
+    try {
+        completedSignals = await sb('completed_signals', 'select=*&order=created_at.desc&limit=10000');
+    } catch(e) { console.error('Completed:', e); completedSignals = []; }
+}
+
+// ===== FILTERING =====
+function getFilteredSignals() {
+    let filtered = [...allSignals];
+    if (currentTab === 'active') filtered = filtered.filter(s => s.status === 'active');
+    if (currentTab === 'pending') filtered = filtered.filter(s => s.status === 'pending');
+    if (currentMarket) filtered = filtered.filter(s => s.market === currentMarket);
+    if (searchTerm) {
+        const q = searchTerm.toLowerCase();
+        filtered = filtered.filter(s =>
+            s.symbol.toLowerCase().includes(q) ||
+            getSymbolName(s.symbol, s).toLowerCase().includes(q)
+        );
+    }
+    return filtered;
+}
+
+function getFilteredCompleted() {
+    let filtered = [...completedSignals];
+    if (currentMarket) filtered = filtered.filter(s => s.market === currentMarket);
+    if (searchTerm) {
+        const q = searchTerm.toLowerCase();
+        filtered = filtered.filter(s => s.symbol.toLowerCase().includes(q));
+    }
+    return filtered;
+}
+
+// ===== RENDERING =====
+function renderSignals() {
+    const grid = $('signals-grid');
+    const wrap = $('load-more-wrap');
+    const countSpan = $('load-more-count');
+
+    if (currentTab === 'success') {
+        const signals = getFilteredCompleted();
+        if (!signals.length) {
+            grid.innerHTML = '<div class="empty-state">Keine abgeschlossenen Signale gefunden.</div>';
+            wrap.style.display = 'none';
+            return;
+        }
+        const shown = signals.slice(0, visibleCount);
+        grid.innerHTML = shown.map(s => renderCompletedCard(s, imageMap)).join('');
+        const remaining = signals.length - shown.length;
+        wrap.style.display = remaining > 0 ? 'block' : 'none';
+        if (remaining > 0) countSpan.textContent = `(${remaining} weitere)`;
+    } else {
+        const signals = getFilteredSignals();
+        if (!signals.length) {
+            grid.innerHTML = '<div class="empty-state">Keine Signale gefunden.</div>';
+            wrap.style.display = 'none';
+            return;
+        }
+        const shown = signals.slice(0, visibleCount);
+        grid.innerHTML = shown.map(s => renderSignalCard(s, imageMap)).join('');
+        const remaining = signals.length - shown.length;
+        wrap.style.display = remaining > 0 ? 'block' : 'none';
+        if (remaining > 0) countSpan.textContent = `(${remaining} weitere)`;
+    }
+}
+
+function updateCounts() {
+    const active = allSignals.filter(s => s.status === 'active').length;
+    const pending = allSignals.filter(s => s.status === 'pending').length;
+    $('cnt-all').textContent = allSignals.length;
+    $('cnt-active').textContent = active;
+    $('cnt-pending').textContent = pending;
+    $('cnt-success').textContent = completedSignals.length;
+}
+
+// ===== EVENTS =====
+function setupEvents() {
+    document.querySelectorAll('#signal-tabs .tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('#signal-tabs .tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentTab = tab.dataset.tab;
+            visibleCount = SIGNALS_PER_PAGE;
+            renderSignals();
+        });
+    });
+
+    document.querySelectorAll('#signal-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#signal-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentMarket = btn.dataset.market;
+            visibleCount = SIGNALS_PER_PAGE;
+            renderSignals();
+        });
+    });
+
+    let searchTimeout;
+    $('signal-search')?.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            searchTerm = e.target.value.trim();
+            visibleCount = SIGNALS_PER_PAGE;
+            renderSignals();
+        }, 300);
+    });
+
+    $('load-more-btn')?.addEventListener('click', () => {
+        visibleCount += SIGNALS_PER_PAGE;
+        renderSignals();
+    });
+}
+
+// ===== INIT =====
+async function init() {
+    setupEvents();
+    await loadSymbolNames();
+    await Promise.all([fetchSignals(), fetchCompleted()]);
+    imageMap = await loadAllSignalImages();
+    window._carouselImageMap = imageMap;
+    updateCounts();
+    renderSignals();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>

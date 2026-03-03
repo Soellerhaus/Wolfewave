@@ -1,1370 +1,459 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Was sind Wolfe Waves? - Trading-Strategie erklärt | WolfeWaveSignals</title>
-    <meta name="description" content="Lerne was Wolfe Waves sind und wie du sie tradest. Komplette Anleitung mit Entry, Stop-Loss und Take-Profit Regeln für erfolgreiches Trading.">
-    <meta name="author" content="WolfeWaveSignals">
+    <title>Was sind Wolfe Waves? | WolfeWaveSignals</title>
+    <meta name="description" content="Lerne was Wolfe Waves sind: 5-Punkte-Chartmuster, Signal-Lebenszyklus, Entry, Stop-Loss und Take-Profit Erklaerung. Komplette Anleitung fuer Einsteiger.">
     <meta name="robots" content="index, follow">
-    <!-- Fonts: Self-hosted für DSGVO-Konformität -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/shared.css">
     <style>
-        @font-face {
-            font-family: 'Space Grotesk';
-            src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
-            font-weight: 400 700;
-            font-display: swap;
-        }
-    </style>
-    <link rel="canonical" href="https://www.wolfewavesignals.com/wolfewaves.html">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Was sind Wolfe Waves? - Trading-Strategie erklärt">
-    <meta property="og:description" content="Lerne was Wolfe Waves sind und wie du sie tradest. Komplette Anleitung für erfolgreiches Trading.">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://wolfewavesignals.com/wolfewaves.html">
-    <meta property="og:image" content="https://wolfewavesignals.com/og-image.png">
-    
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "Was sind Wolfe Waves? - Die komplette Trading-Anleitung",
-        "description": "Lerne was Wolfe Waves sind und wie du sie erfolgreich tradest.",
-        "author": {
-            "@type": "Organization",
-            "name": "WolfeWaveSignals"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "WolfeWaveSignals",
-            "url": "https://wolfewavesignals.com"
-        }
+    /* ===== WOLFE WAVES PAGE ===== */
+    .page-hero {
+        padding: 80px 0 40px;
+        text-align: center;
     }
-    </script>
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #faf8f5;
-            --bg-card: #ffffff;
-            --bg-card-elevated: #f5f0eb;
-            --bg-hover: rgba(26,39,68,0.04);
-            --accent-green: #10b981;
-            --accent-green-dim: rgba(16,185,129,0.12);
-            --accent-red: #dc2626;
-            --accent-blue: #3b82f6;
-            --accent-gold: #f59e0b;
-            --accent-purple: #a855f7;
-            --accent-orange: #ff9f43;
-            --text-primary: #1a2744;
-            --text-secondary: #6b7280;
-            --text-tertiary: #9ca3af;
-            --border-color: #e8e4dd;
-            --border-glow: rgba(16,185,129,0.25);
-        }
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.7;
-        }
-        .header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: rgba(250, 248, 245, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 22px;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .logo-icon img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-        .logo span { color: var(--accent-green); }
-        
-        /* Modern Navigation */
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            justify-content: center;
-            margin: 0 20px;
-        }
-        
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        
-        .nav-link:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
-        }
-        
-        .nav-link.active {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--accent-green);
-            font-weight: 600;
-        }
-        
-        .nav-link .nav-icon {
-            font-size: 16px;
-            line-height: 1;
-        }
-        
-        .nav-link .nav-text {
-            font-size: 14px;
-        }
-        
-        @media (max-width: 968px) {
-            .header-nav {
-                display: none;
-            }
-        }
-        
-        .back-btn {
-            padding: 10px 20px;
-            background: var(--accent-green);
-            border: none;
-            color: #fff;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .back-btn:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-        
-        /* Hero */
-        .hero {
-            padding: 80px 40px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
-        }
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        .hero h1 span { color: var(--accent-green); }
-        .hero p {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        /* Video Section */
-        .video-section {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 60px 40px 40px;
-        }
-        
-        .video-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(26, 39, 68, 0.08);
-        }
-        
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            background: #1a2744;
-        }
-        
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-        }
-        
-        /* Content */
-        .content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 60px 40px;
-        }
-        
-        h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-top: 60px;
-            margin-bottom: 24px;
-            color: var(--accent-green);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        h2 .num {
-            background: var(--accent-green);
-            color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-        
-        h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-top: 32px;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-        }
-        
-        p {
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-            font-size: 16px;
-        }
-        
-        ul, ol {
-            color: var(--text-secondary);
-            margin-left: 24px;
-            margin-bottom: 20px;
-        }
-        li { margin-bottom: 12px; }
-        
-        strong { color: var(--text-primary); }
-        
-        a { color: var(--accent-green); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        
-        /* Info Boxes */
-        .info-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 28px;
-            margin: 28px 0;
-        }
-        .info-box.green { border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
-        .info-box.blue { border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05); }
-        .info-box.gold { border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); }
-        .info-box.red { border-color: rgba(220, 38, 38, 0.3); background: rgba(220, 38, 38, 0.05); }
-        .info-box.purple { border-color: rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.05); }
-        
-        .info-box h4 {
-            font-size: 18px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .info-box.green h4 { color: var(--accent-green); }
-        .info-box.blue h4 { color: var(--accent-blue); }
-        .info-box.gold h4 { color: var(--accent-gold); }
-        .info-box.red h4 { color: var(--accent-red); }
-        .info-box.purple h4 { color: var(--accent-purple); }
-        
-        /* SVG Diagram Container */
-        .diagram-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-            margin: 40px 0;
-            overflow-x: auto;
-        }
-        .diagram-container h4 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--accent-gold);
-            font-size: 18px;
-        }
-        .diagram-container svg {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
-        }
-        .diagram-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .diagram-tab {
-            padding: 10px 24px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .diagram-tab:hover {
-            border-color: var(--accent-green);
-            color: var(--text-primary);
-        }
-        .diagram-tab.active {
-            background: var(--accent-green);
-            color: #fff;
-            border-color: var(--accent-green);
-        }
-        .diagram-content {
-            display: none;
-        }
-        .diagram-content.active {
-            display: block;
-        }
-        
-        /* Step Cards */
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 14px;
-            margin: 32px 0;
-        }
-        .step-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-        }
-        .step-card .step-num {
-            background: var(--accent-red);
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 16px;
-            margin: 0 auto 10px;
-        }
-        .step-card h4 {
-            font-size: 13px;
-            margin-bottom: 6px;
-            color: var(--text-primary);
-        }
-        .step-card p {
-            font-size: 12px;
-            margin-bottom: 0;
-            line-height: 1.4;
-        }
-        .step-card.highlight {
-            border-color: var(--accent-green);
-            background: rgba(16, 185, 129, 0.05);
-        }
-        .step-card.highlight .step-num {
-            background: var(--accent-green);
-            color: #fff;
-        }
-        
-        /* Status Flow */
-        .status-flow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 32px 0;
-            padding: 30px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-        }
-        .status-badge {
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            text-align: center;
-        }
-        .status-badge.pending {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--accent-gold);
-            border: 1px solid var(--accent-gold);
-        }
-        .status-badge.active {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--accent-blue);
-            border: 1px solid var(--accent-blue);
-        }
-        .status-badge.success {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-green);
-            border: 1px solid var(--accent-green);
-        }
-        .status-badge.failed {
-            background: rgba(220, 38, 38, 0.2);
-            color: var(--accent-red);
-            border: 1px solid var(--accent-red);
-        }
-        .status-badge.inactive {
-            background: rgba(107, 114, 128, 0.2);
-            color: var(--text-secondary);
-            border: 1px solid var(--text-secondary);
-        }
-        .status-arrow {
-            color: var(--text-secondary);
-            font-size: 20px;
-        }
-        
-        /* Price Levels */
-        .price-levels {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin: 24px 0;
-        }
-        .level-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
-        .level-card.entry { border: 2px solid var(--accent-blue); }
-        .level-card.sl { border: 2px solid var(--accent-red); }
-        .level-card.tp1 { border: 2px solid var(--accent-gold); }
-        .level-card.tp2 { border: 2px solid var(--accent-orange); }
-        .level-card.tp3 { border: 2px solid var(--accent-green); }
-        .level-card .label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-        .level-card .value {
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .level-card.entry .value { color: var(--accent-blue); }
-        .level-card.sl .value { color: var(--accent-red); }
-        .level-card.tp1 .value { color: var(--accent-gold); }
-        .level-card.tp2 .value { color: var(--accent-orange); }
-        .level-card.tp3 .value { color: var(--accent-green); }
-        .level-card .desc {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        
-        /* Rules Table */
-        .rules-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 24px 0;
-            background: var(--bg-card);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .rules-table th {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
-            padding: 14px 16px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .rules-table td {
-            padding: 14px 16px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        .rules-table tr:hover td {
-            background: rgba(26, 39, 68, 0.02);
-        }
-        .rules-table .check { color: var(--accent-green); }
-        .rules-table .cross { color: var(--accent-red); }
-        
-        /* CTA */
-        .cta-section {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 204, 106, 0.05));
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 20px;
-            padding: 48px;
-            text-align: center;
-            margin: 60px 0;
-        }
-        .cta-section h2 {
-            justify-content: center;
-            margin-top: 0;
-        }
-        .cta-section p {
-            font-size: 18px;
-            margin-bottom: 28px;
-        }
-        .cta-btn {
-            display: inline-block;
-            padding: 16px 40px;
-            background: var(--accent-green);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-            text-decoration: none;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            font-size: 12px;
-            border-top: 1px solid var(--border-color);
-        }
-        .footer a {
-            color: var(--text-secondary);
-            margin: 0 12px;
-        }
-        .footer a:hover { color: var(--accent-green); }
-        
-        /* Legend */
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .legend-line {
-            width: 30px;
-            height: 3px;
-            border-radius: 2px;
-        }
-        .legend-line.red { background: var(--accent-red); }
-        .legend-line.green { background: var(--accent-green); }
-        .legend-line.blue { background: var(--accent-blue); }
-        .legend-line.gold { background: var(--accent-gold); }
-        .legend-line.dashed {
-            background: repeating-linear-gradient(90deg, var(--accent-red), var(--accent-red) 4px, transparent 4px, transparent 8px);
-        }
-        
-        @media (max-width: 768px) {
-            .header { padding: 16px 20px; }
-            .hero { padding: 50px 20px; }
-            .hero h1 { font-size: 32px; }
-            .content { padding: 40px 20px; }
-            h2 { font-size: 22px; }
-            .diagram-container { padding: 15px; }
-            .status-flow { flex-direction: column; }
-            .status-arrow { transform: rotate(90deg); }
-            
-            .video-section { padding: 40px 20px 20px; }
-            .video-container { padding: 24px; }
-        }
-    
-        /* Language Selector in Navigation */
-        .nav-language-container {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .nav-language-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-family: inherit;
-        }
-        
-        .nav-language-btn:hover {
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-            background: rgba(16, 185, 129, 0.05);
-        }
-        
-        .language-text {
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .language-dropdown {
-            position: absolute;
-            top: 45px;
-            left: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 8px 0;
-            min-width: 180px;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
-            z-index: 1000;
-            display: none;
-        }
-        
-        .language-dropdown.active {
-            display: block;
-        }
-        
-        .language-option {
-            padding: 10px 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-primary);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .language-option:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-        
-        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
-        body > .skiptranslate > iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        body {
-            top: 0px !important;
-        }
-    </style>
+    .page-hero h1 {
+        font-size: clamp(28px, 5vw, 44px);
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p {
+        font-size: clamp(15px, 2vw, 18px);
+        color: var(--text-secondary);
+        max-width: 640px;
+        margin: 0 auto;
+    }
 
-    <!-- Google Translate Widget -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'de',
-                includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false,
-                multilanguagePage: true
-            }, 'google_translate_element');
-            
-            // Minimize top banner displacement
-            setTimeout(function() {
-                document.body.style.top = '0';
-            }, 100);
-            
-            // AUTO-DETECT and translate on first visit
-            setTimeout(function() {
-                autoTranslateToUserLanguage();
-            }, 1000);
-        }
-        
-        function autoTranslateToUserLanguage() {
-            if (document.cookie.indexOf('googtrans') !== -1) {
-                return;
-            }
-            
-            var userLang = navigator.language || navigator.userLanguage;
-            userLang = userLang.split('-')[0];
-            
-            if (userLang === 'de') {
-                return;
-            }
-            
-            var supportedLangs = ['en','es','fr','it','pt','ru','zh','ja','ko','ar','tr','pl','nl','sv','da','no','fi','cs','hu','ro','el','he','id','th','vi','uk','bg','hr','sk','sl'];
-            
-            if (supportedLangs.indexOf(userLang) !== -1) {
-                if (userLang === 'zh') {
-                    userLang = 'zh-CN';
-                }
-                
-                var googleTransCookie = '/de/' + userLang;
-                document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
-                document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
-                
-                window.location.reload();
-            }
-        }
-        
-        function toggleLanguageMenu() {
-            const dropdown = document.getElementById('languageDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
-            }
-        }
-        
-        function changeLanguage(langCode) {
-            const dropdown = document.getElementById('languageDropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
-            }
-            
-            var googleTransCookie = '/de/' + langCode;
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
-            
-            const langMap = {
-                'de': 'DE', 'en': 'EN', 'es': 'ES', 'fr': 'FR', 'it': 'IT', 
-                'pt': 'PT', 'ru': 'RU', 'zh-CN': 'CN', 'ja': 'JP', 'ko': 'KR',
-                'ar': 'AR', 'tr': 'TR', 'pl': 'PL', 'nl': 'NL'
-            };
-            
-            const langBtn = document.querySelector('.language-text');
-            if (langBtn && langMap[langCode]) {
-                langBtn.textContent = langMap[langCode];
-            }
-            
-            window.location.reload();
-        }
-        
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('languageDropdown');
-            const langBtn = document.querySelector('.nav-language-btn');
-            
-            if (dropdown && langBtn && !dropdown.contains(e.target) && !langBtn.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    .content-section { padding: 40px 0; }
+    .content-section h2 {
+        font-size: clamp(20px, 3vw, 28px);
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .content-section h2 .num {
+        background: var(--accent);
+        color: #fff;
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px; flex-shrink: 0;
+    }
+    .content-section h3 {
+        font-size: 18px; font-weight: 600;
+        margin: 24px 0 12px;
+    }
+    .content-section p {
+        color: var(--text-secondary);
+        font-size: 15px; line-height: 1.8;
+        margin-bottom: 16px;
+    }
+    .content-section ul, .content-section ol {
+        color: var(--text-secondary);
+        margin-left: 24px; margin-bottom: 20px;
+        font-size: 15px;
+    }
+    .content-section li { margin-bottom: 10px; }
+    .content-section strong { color: var(--text); }
+
+    .content-wrap { max-width: 900px; margin: 0 auto; }
+
+    /* Info Boxes */
+    .info-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+        margin: 24px 0;
+    }
+    .info-box h4 {
+        font-size: 16px;
+        margin-bottom: 12px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .info-box.green { border-color: rgba(16,185,129,0.3); }
+    .info-box.green h4 { color: var(--accent); }
+    .info-box.blue { border-color: rgba(59,130,246,0.3); }
+    .info-box.blue h4 { color: var(--blue); }
+    .info-box.gold { border-color: rgba(245,158,11,0.3); }
+    .info-box.gold h4 { color: var(--gold); }
+    .info-box.red { border-color: rgba(239,68,68,0.3); }
+    .info-box.red h4 { color: var(--red); }
+
+    /* Steps Grid */
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 14px; margin: 28px 0;
+    }
+    .step-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px; text-align: center;
+    }
+    .step-card .step-num {
+        background: var(--red);
+        color: #fff;
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 15px;
+        margin: 0 auto 10px;
+    }
+    .step-card h4 { font-size: 14px; margin-bottom: 6px; }
+    .step-card p { font-size: 12px; margin-bottom: 0; line-height: 1.5; }
+    .step-card.highlight {
+        border-color: var(--accent);
+    }
+    .step-card.highlight .step-num {
+        background: var(--accent);
+    }
+
+    /* Status Flow */
+    .status-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 28px 0;
+        padding: 28px;
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+    }
+    .status-badge {
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+    }
+    .status-badge.pending {
+        background: rgba(245,158,11,0.15);
+        color: var(--gold);
+        border: 1px solid var(--gold);
+    }
+    .status-badge.active {
+        background: rgba(59,130,246,0.15);
+        color: var(--blue);
+        border: 1px solid var(--blue);
+    }
+    .status-badge.success {
+        background: rgba(16,185,129,0.15);
+        color: var(--accent);
+        border: 1px solid var(--accent);
+    }
+    .status-arrow { color: var(--text-muted); font-size: 20px; }
+
+    /* Price Levels */
+    .price-levels {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px; margin: 20px 0;
+    }
+    .level-card {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 14px; text-align: center;
+    }
+    .level-card.entry { border: 2px solid var(--blue); }
+    .level-card.sl { border: 2px solid var(--red); }
+    .level-card.tp1 { border: 2px solid var(--gold); }
+    .level-card.tp2 { border: 2px solid #ff9f43; }
+    .level-card.tp3 { border: 2px solid var(--accent); }
+    .level-card .label {
+        font-size: 11px; color: var(--text-muted);
+        text-transform: uppercase; letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+    .level-card .value { font-size: 16px; font-weight: 700; }
+    .level-card.entry .value { color: var(--blue); }
+    .level-card.sl .value { color: var(--red); }
+    .level-card.tp1 .value { color: var(--gold); }
+    .level-card.tp2 .value { color: #ff9f43; }
+    .level-card.tp3 .value { color: var(--accent); }
+    .level-card .desc {
+        font-size: 11px; color: var(--text-muted); margin-top: 4px;
+    }
+
+    /* Rules Table */
+    .rules-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: var(--bg-card);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .rules-table th {
+        background: rgba(16,185,129,0.1);
+        color: var(--accent);
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 600; font-size: 13px;
+    }
+    .rules-table td {
+        padding: 12px 16px;
+        border-top: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: 13px;
+    }
+
+    /* CTA */
+    .cta-section {
+        background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08));
+        border: 1px solid rgba(16,185,129,0.2);
+        border-radius: 20px;
+        padding: 48px; text-align: center;
+        margin: 48px 0;
+    }
+    .cta-section h2 {
+        justify-content: center;
+        margin-top: 0;
+    }
+    .cta-section p {
+        font-size: 17px;
+        margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+        .page-hero { padding: 60px 0 20px; }
+        .status-flow { flex-direction: column; }
+        .status-arrow { transform: rotate(90deg); }
+    }
+    </style>
 </head>
 <body>
-    <!-- Modularer Header -->
-    <div id="site-header"></div>
-    <script src="/components/header.js"></script>
 
-    <section class="hero">
+<div id="site-header"></div>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container">
+        <p class="section-label">Wissen</p>
         <h1>Was sind <span>Wolfe Waves</span>?</h1>
-        <p>Lerne die mächtige Trading-Strategie und verstehe genau, wie unser Scanner funktioniert – von der Erkennung bis zum Trade-Abschluss.</p>
-    </section>
+        <p>Lerne die Trading-Strategie und verstehe genau, wie unser Scanner funktioniert &ndash; von der Erkennung bis zum Trade-Abschluss.</p>
+    </div>
+</section>
 
-    <!-- YouTube Video Section -->
-    <section class="video-section">
-        <div class="video-container">
-            <h2 style="text-align: center; margin-bottom: 24px;">
-                <span style="color: var(--accent-green);">📺 Video-Tutorial</span>
-            </h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px;">
-                Lerne Wolfe Waves visuell – komplette Erklärung mit praktischen Beispielen
-            </p>
-            <div class="video-wrapper">
-                <iframe 
-                    width="100%" 
-                    height="100%" 
-                    src="https://www.youtube.com/embed/wWi1ypuRjPI?start=437" 
-                    title="Wolfe Wave Trading Strategy" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-    </section>
+<!-- CONTENT -->
+<div class="container">
+    <div class="content-wrap">
 
-    <main class="content">
-        
-        <h2><span class="num">1</span> Die Grundlagen</h2>
-        
-        <p>Die <strong>Wolfe Wave</strong> ist ein natürlich vorkommendes Chartmuster, das in allen Märkten und Zeitrahmen auftritt. Sie wurde von Bill Wolfe entdeckt und basiert auf dem physikalischen Prinzip von Newtons drittem Gesetz: <em>"Für jede Aktion gibt es eine gleiche und entgegengesetzte Reaktion."</em></p>
-        
-        <div class="info-box green">
-            <h4>💡 Kernidee</h4>
-            <p>Wolfe Waves identifizieren Punkte, an denen der Markt sein natürliches Gleichgewicht wiederherstellen wird. Das Besondere: Sie bieten ein <strong>mathematisch berechenbares Kursziel</strong> – die EPA-Linie (Estimated Price at Arrival), die durch die Punkte 1 und 4 verläuft.</p>
-        </div>
-        
-        <h2><span class="num">2</span> Die 5 Punkte des Keils</h2>
-        
-        <p>Eine gültige Wolfe Wave besteht aus genau <strong>5 Punkten</strong>, die ein keilförmiges Muster bilden. Die beiden Keillinien (1-3 und 2-4) müssen aufeinander zulaufen (konvergieren).</p>
-        
-        <div class="diagram-container">
-            <div class="diagram-tabs">
-                <button class="diagram-tab active" onclick="showDiagram('bullish')">📈 Bullish (Long)</button>
-                <button class="diagram-tab" onclick="showDiagram('bearish')">📉 Bearish (Short)</button>
+        <!-- 1. DIE 5 PUNKTE -->
+        <section class="content-section">
+            <h2><span class="num">1</span> Die 5 Punkte des Keils</h2>
+
+            <p>Die <strong>Wolfe Wave</strong> ist ein natuerlich vorkommendes Chartmuster, das in allen Maerkten und Zeitrahmen auftritt. Sie wurde von Bill Wolfe entdeckt und basiert auf dem physikalischen Prinzip von Newtons drittem Gesetz: Fuer jede Aktion gibt es eine gleiche und entgegengesetzte Reaktion.</p>
+
+            <div class="info-box green">
+                <h4>Kernidee</h4>
+                <p style="margin-bottom:0;">Wolfe Waves identifizieren Punkte, an denen der Markt sein natuerliches Gleichgewicht wiederherstellen wird. Das Besondere: Sie bieten ein <strong>mathematisch berechenbares Kursziel</strong> &ndash; die EPA-Linie (Estimated Price at Arrival), die durch die Punkte 1 und 4 verlaeuft.</p>
             </div>
-            
-            <!-- BULLISH DIAGRAM -->
-            <div id="diagram-bullish" class="diagram-content active">
-                <h4>Bullish Wolfe Wave – Preis soll STEIGEN</h4>
-                <svg viewBox="0 0 650 380" width="650" height="380">
-                    <defs>
-                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e8e4dd" stroke-width="0.5"/>
-                        </pattern>
-                    </defs>
-                    <rect width="650" height="380" fill="#f5f0eb"/>
-                    <rect width="650" height="380" fill="url(#grid)"/>
-                    
-                    <!-- KEIL Fläche -->
-                    <polygon points="50,200 120,80 280,115 340,130 340,230 200,220" 
-                             fill="rgba(220,38,38,0.1)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
-                    
-                    <!-- 2-4 Linie (obere Keillinie) -->
-                    <line x1="120" y1="80" x2="280" y2="115" stroke="#dc2626" stroke-width="2.5"/>
-                    <line x1="280" y1="115" x2="400" y2="140" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
-                    
-                    <!-- 1-3 Linie (untere Keillinie) -->
-                    <line x1="50" y1="200" x2="550" y2="250" stroke="#dc2626" stroke-width="2.5"/>
-                    
-                    <!-- 1-4 Linie = TP3 (grün) -->
-                    <line x1="50" y1="200" x2="550" y2="50" stroke="#10b981" stroke-width="2.5"/>
-                    
-                    <!-- SWEET ZONE (außerhalb Keil, unter 1-3) -->
-                    <rect x="320" y="255" width="80" height="60" rx="6" 
-                          fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3"/>
-                    
-                    <!-- Preisverlauf: P1 → P2 → P3 → P4 → P5 (weiß) -->
-                    <polyline points="50,200 120,80 200,220 280,115 360,290" 
-                              fill="none" stroke="#1a2744" stroke-width="3" stroke-linejoin="round"/>
-                    
-                    <!-- Rückkehr von P5 zum Entry AUF der 1-3 Linie (blau) -->
-                    <polyline points="360,290 380,265 395,240" 
-                              fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/>
-                    
-                    <!-- ENTRY PUNKT - genau AUF der 1-3 Linie (bei x=395, y=234.5) -->
-                    <circle cx="395" cy="235" r="7" fill="#3b82f6" stroke="#faf8f5" stroke-width="2"/>
-                    
-                    <!-- Entry horizontal Linie -->
-                    <line x1="395" y1="235" x2="550" y2="235" stroke="#3b82f6" stroke-width="2"/>
-                    
-                    <!-- SL unter Entry -->
-                    <line x1="395" y1="310" x2="550" y2="310" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,3"/>
-                    
-                    <!-- TP1 und TP2 -->
-                    <line x1="395" y1="175" x2="480" y2="175" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
-                    <line x1="395" y1="120" x2="500" y2="120" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="4,3"/>
-                    
-                    <!-- PUNKTE -->
-                    <circle cx="50" cy="200" r="15" fill="#dc2626"/>
-                    <text x="50" y="205" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
-                    
-                    <circle cx="120" cy="80" r="15" fill="#dc2626"/>
-                    <text x="120" y="85" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
-                    
-                    <circle cx="200" cy="220" r="15" fill="#dc2626"/>
-                    <text x="200" y="225" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
-                    
-                    <circle cx="280" cy="115" r="15" fill="#dc2626"/>
-                    <text x="280" y="120" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
-                    
-                    <circle cx="360" cy="290" r="17" fill="#10b981" stroke="#faf8f5" stroke-width="2"/>
-                    <text x="360" y="296" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">5</text>
-                    
-                    <!-- Beschriftungen -->
-                    <text x="30" y="195" fill="#6b7280" font-size="9">Tief</text>
-                    <text x="120" y="65" fill="#6b7280" font-size="9" text-anchor="middle">Hoch</text>
-                    <text x="200" y="245" fill="#6b7280" font-size="9" text-anchor="middle">Tief</text>
-                    <text x="280" y="100" fill="#6b7280" font-size="9" text-anchor="middle">Hoch</text>
-                    <text x="360" y="330" fill="#10b981" font-size="12" text-anchor="middle" font-weight="bold">Sweet Zone</text>
-                    
-                    <text x="555" y="240" fill="#3b82f6" font-size="11" font-weight="bold">ENTRY</text>
-                    <text x="555" y="315" fill="#dc2626" font-size="10">SL</text>
-                    <text x="485" y="173" fill="#f59e0b" font-size="9">TP1</text>
-                    <text x="505" y="118" fill="#ff9f43" font-size="9">TP2</text>
-                    <text x="555" y="55" fill="#10b981" font-size="10" font-weight="bold">TP3</text>
-                    
-                    <!-- Linien-Labels -->
-                    <text x="100" y="225" fill="#dc2626" font-size="9">1-3</text>
-                    <text x="170" y="95" fill="#dc2626" font-size="9">2-4</text>
-                    <text x="140" y="165" fill="rgba(220,38,38,0.5)" font-size="11">Keil</text>
-                </svg>
-            </div>
-            
-            <!-- BEARISH DIAGRAM -->
-            <div id="diagram-bearish" class="diagram-content">
-                <h4>Bearish Wolfe Wave – Preis soll FALLEN</h4>
-                <svg viewBox="0 0 650 380" width="650" height="380">
-                    <rect width="650" height="380" fill="#f5f0eb"/>
-                    <rect width="650" height="380" fill="url(#grid)"/>
-                    
-                    <!-- KEIL Fläche -->
-                    <polygon points="50,180 120,300 280,265 340,250 340,150 200,160" 
-                             fill="rgba(220,38,38,0.1)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
-                    
-                    <!-- 2-4 Linie (untere Keillinie) -->
-                    <line x1="120" y1="300" x2="280" y2="265" stroke="#dc2626" stroke-width="2.5"/>
-                    <line x1="280" y1="265" x2="400" y2="240" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
-                    
-                    <!-- 1-3 Linie (obere Keillinie) -->
-                    <line x1="50" y1="180" x2="550" y2="130" stroke="#dc2626" stroke-width="2.5"/>
-                    
-                    <!-- 1-4 Linie = TP3 (grün) -->
-                    <line x1="50" y1="180" x2="550" y2="330" stroke="#10b981" stroke-width="2.5"/>
-                    
-                    <!-- SWEET ZONE (außerhalb Keil, über 1-3) -->
-                    <rect x="320" y="60" width="80" height="60" rx="6" 
-                          fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3"/>
-                    
-                    <!-- Preisverlauf: P1 → P2 → P3 → P4 → P5 (weiß) -->
-                    <polyline points="50,180 120,300 200,160 280,265 360,90" 
-                              fill="none" stroke="#1a2744" stroke-width="3" stroke-linejoin="round"/>
-                    
-                    <!-- Rückkehr von P5 zum Entry AUF der 1-3 Linie (blau) -->
-                    <polyline points="360,90 380,115 395,145" 
-                              fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/>
-                    
-                    <!-- ENTRY PUNKT - genau AUF der 1-3 Linie -->
-                    <circle cx="395" cy="145" r="7" fill="#3b82f6" stroke="#faf8f5" stroke-width="2"/>
-                    
-                    <!-- Entry horizontal Linie -->
-                    <line x1="395" y1="145" x2="550" y2="145" stroke="#3b82f6" stroke-width="2"/>
-                    
-                    <!-- SL über Entry -->
-                    <line x1="395" y1="70" x2="550" y2="70" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,3"/>
-                    
-                    <!-- TP1 und TP2 (unter Entry) -->
-                    <line x1="395" y1="205" x2="480" y2="205" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
-                    <line x1="395" y1="260" x2="500" y2="260" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="4,3"/>
-                    
-                    <!-- PUNKTE -->
-                    <circle cx="50" cy="180" r="15" fill="#dc2626"/>
-                    <text x="50" y="185" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
-                    
-                    <circle cx="120" cy="300" r="15" fill="#dc2626"/>
-                    <text x="120" y="305" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
-                    
-                    <circle cx="200" cy="160" r="15" fill="#dc2626"/>
-                    <text x="200" y="165" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
-                    
-                    <circle cx="280" cy="265" r="15" fill="#dc2626"/>
-                    <text x="280" y="270" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
-                    
-                    <circle cx="360" cy="90" r="17" fill="#10b981" stroke="#faf8f5" stroke-width="2"/>
-                    <text x="360" y="96" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">5</text>
-                    
-                    <!-- Beschriftungen -->
-                    <text x="30" y="185" fill="#6b7280" font-size="9">Hoch</text>
-                    <text x="120" y="325" fill="#6b7280" font-size="9" text-anchor="middle">Tief</text>
-                    <text x="200" y="145" fill="#6b7280" font-size="9" text-anchor="middle">Hoch</text>
-                    <text x="280" y="290" fill="#6b7280" font-size="9" text-anchor="middle">Tief</text>
-                    <text x="360" y="55" fill="#10b981" font-size="12" text-anchor="middle" font-weight="bold">Sweet Zone</text>
-                    
-                    <text x="555" y="150" fill="#3b82f6" font-size="11" font-weight="bold">ENTRY</text>
-                    <text x="555" y="75" fill="#dc2626" font-size="10">SL</text>
-                    <text x="485" y="203" fill="#f59e0b" font-size="9">TP1</text>
-                    <text x="505" y="258" fill="#ff9f43" font-size="9">TP2</text>
-                    <text x="555" y="325" fill="#10b981" font-size="10" font-weight="bold">TP3</text>
-                    
-                    <!-- Linien-Labels -->
-                    <text x="100" y="165" fill="#dc2626" font-size="9">1-3</text>
-                    <text x="170" y="290" fill="#dc2626" font-size="9">2-4</text>
-                    <text x="140" y="220" fill="rgba(220,38,38,0.5)" font-size="11">Keil</text>
-                </svg>
-            </div>
-            
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-line red"></div>
-                    <span>Keillinien (1-3 & 2-4)</span>
+
+            <p>Eine gueltige Wolfe Wave besteht aus genau <strong>5 Punkten</strong>, die ein keilfoermiges Muster bilden. Die beiden Keillinien (1-3 und 2-4) muessen aufeinander zulaufen (konvergieren).</p>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <h4>Punkt 1</h4>
+                    <p>Startpunkt &ndash; signifikantes Tief (bullish) oder Hoch (bearish)</p>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-line green"></div>
-                    <span>EPA/TP3 Linie (1-4)</span>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <h4>Punkt 2</h4>
+                    <p>Erste Gegenbewegung &ndash; Hoch (bullish) oder Tief (bearish)</p>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-line blue"></div>
-                    <span>Entry</span>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <h4>Punkt 3</h4>
+                    <p><strong>Muss ueber/unter P1 liegen!</strong> Definiert die 1-3 Linie</p>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-line dashed"></div>
-                    <span>Stop-Loss</span>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <h4>Punkt 4</h4>
+                    <p>Zwischen P1 und P2 &ndash; definiert die 2-4 und 1-4 Linie</p>
+                </div>
+                <div class="step-card highlight">
+                    <div class="step-num">5</div>
+                    <h4>Punkt 5</h4>
+                    <p><strong>Sweet Zone!</strong> Liegt AUSSERHALB des Keils, jenseits der 1-3 Linie</p>
                 </div>
             </div>
-        </div>
-        
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-num">1</div>
-                <h4>Punkt 1</h4>
-                <p>Startpunkt – signifikantes Tief (bullish) oder Hoch (bearish)</p>
+        </section>
+
+        <!-- 2. SIGNAL-LEBENSZYKLUS -->
+        <section class="content-section">
+            <h2><span class="num">2</span> Der Signal-Lebenszyklus</h2>
+
+            <p>Unser Scanner durchlaeuft mehrere Phasen von der Erkennung bis zum Abschluss:</p>
+
+            <div class="status-flow">
+                <div class="status-badge pending">PENDING<br><small>Keil erkannt</small></div>
+                <div class="status-arrow">&rarr;</div>
+                <div class="status-badge active">ACTIVE<br><small>Breakout!</small></div>
+                <div class="status-arrow">&rarr;</div>
+                <div class="status-badge success">SUCCESS<br><small>TP erreicht</small></div>
             </div>
-            <div class="step-card">
-                <div class="step-num">2</div>
-                <h4>Punkt 2</h4>
-                <p>Erste Gegenbewegung – Hoch (bullish) oder Tief (bearish)</p>
+
+            <div class="info-box blue">
+                <h4>Status-Erklaerung</h4>
+                <ul style="margin-bottom:0;">
+                    <li><strong style="color:var(--gold);">PENDING:</strong> Keil wurde erkannt, Preis ist in der Sweet Zone nahe der 1-3 Linie. Warten auf Breakout.</li>
+                    <li><strong style="color:var(--blue);">ACTIVE:</strong> Breakout durch die 1-3 Linie ist passiert! Entry, SL und TPs sind berechnet. Tracking laeuft.</li>
+                    <li><strong style="color:var(--accent);">SUCCESS:</strong> TP3 (oder TP1/TP2 vor SL) wurde erreicht. Trade war erfolgreich!</li>
+                    <li><strong style="color:var(--red);">FAILED:</strong> Stop-Loss wurde erreicht bevor ein TP getroffen wurde.</li>
+                    <li><strong>INACTIVE:</strong> Keil ist ungueltig geworden &ndash; Preis hat Sweet Zone verlassen ohne Breakout.</li>
+                </ul>
             </div>
-            <div class="step-card">
-                <div class="step-num">3</div>
-                <h4>Punkt 3</h4>
-                <p><strong>Muss über/unter P1 liegen!</strong> Definiert die 1-3 Linie</p>
+        </section>
+
+        <!-- 3. ENTRY & TARGETS -->
+        <section class="content-section">
+            <h2><span class="num">3</span> Entry &amp; Targets (TP1/TP2/TP3)</h2>
+
+            <h3>Wann wird der Entry ausgeloest?</h3>
+            <p>Der Entry folgt einem speziellen Ablauf:</p>
+
+            <div class="info-box blue">
+                <h4>Entry-Regel (2 Schritte)</h4>
+                <ol style="margin-bottom:0;">
+                    <li><strong>Sweet Zone (P5):</strong> Der Preis durchbricht die 1-3 Linie und geht DARUEBER HINAUS in die Sweet Zone. Das ist Punkt 5 &ndash; er liegt meistens AUSSERHALB des Keils!</li>
+                    <li><strong>Rueckkehr = ENTRY:</strong> Der Preis dreht um und kommt ZURUECK durch die 1-3 Linie. Genau HIER ist der Entry!</li>
+                </ol>
             </div>
-            <div class="step-card">
-                <div class="step-num">4</div>
-                <h4>Punkt 4</h4>
-                <p>Zwischen P1 und P2 – definiert die 2-4 und 1-4 Linie</p>
+
+            <h3>Stop-Loss Berechnung</h3>
+            <p>Der Stop-Loss wird automatisch berechnet als <strong>5% vom Entry-Preis</strong>:</p>
+
+            <div class="price-levels">
+                <div class="level-card entry">
+                    <div class="label">Entry</div>
+                    <div class="value">100.00</div>
+                    <div class="desc">Breakout-Preis</div>
+                </div>
+                <div class="level-card sl">
+                    <div class="label">SL Bullish</div>
+                    <div class="value">95.00</div>
+                    <div class="desc">Entry - 5%</div>
+                </div>
+                <div class="level-card sl">
+                    <div class="label">SL Bearish</div>
+                    <div class="value">105.00</div>
+                    <div class="desc">Entry + 5%</div>
+                </div>
             </div>
-            <div class="step-card highlight">
-                <div class="step-num">5</div>
-                <h4>Punkt 5 ⭐</h4>
-                <p><strong>Sweet Zone!</strong> Liegt AUSSERHALB des Keils, jenseits der 1-3 Linie</p>
+
+            <h3>Take-Profit Berechnung</h3>
+            <p>Die TPs basieren auf der <strong>1-4 Linie (EPA = Estimated Price at Arrival)</strong>:</p>
+
+            <div class="info-box gold">
+                <h4>TP-Berechnung</h4>
+                <ol style="margin-bottom:0;">
+                    <li><strong>TP3:</strong> Punkt auf der 1-4 Linie, projiziert um die "Keildauer" nach P5 &rarr; 100% des Moves</li>
+                    <li><strong>TP2:</strong> 66% des Weges von Entry zu TP3</li>
+                    <li><strong>TP1:</strong> 33% des Weges von Entry zu TP3</li>
+                </ol>
             </div>
-        </div>
-        
-        <h2><span class="num">3</span> Der Signal-Lebenszyklus</h2>
-        
-        <p>Unser Scanner durchläuft mehrere Phasen von der Erkennung bis zum Abschluss:</p>
-        
-        <div class="status-flow">
-            <div class="status-badge pending">🔍 PENDING<br><small>Keil erkannt</small></div>
-            <div class="status-arrow">→</div>
-            <div class="status-badge active">⚡ ACTIVE<br><small>Breakout!</small></div>
-            <div class="status-arrow">→</div>
-            <div class="status-badge success">✅ SUCCESS<br><small>TP erreicht</small></div>
-        </div>
-        
-        <div class="info-box purple">
-            <h4>📊 Status-Erklärung</h4>
-            <table class="rules-table" style="margin: 0;">
+
+            <div class="price-levels">
+                <div class="level-card entry">
+                    <div class="label">Entry</div>
+                    <div class="value">100.00</div>
+                </div>
+                <div class="level-card tp1">
+                    <div class="label">TP1</div>
+                    <div class="value">+33%</div>
+                    <div class="desc">Erster Teilgewinn</div>
+                </div>
+                <div class="level-card tp2">
+                    <div class="label">TP2</div>
+                    <div class="value">+66%</div>
+                    <div class="desc">Zweiter Teilgewinn</div>
+                </div>
+                <div class="level-card tp3">
+                    <div class="label">TP3</div>
+                    <div class="value">+100%</div>
+                    <div class="desc">EPA-Linie (Volles Ziel)</div>
+                </div>
+            </div>
+
+            <div class="info-box green">
+                <h4>Wichtig: Richtung der TPs</h4>
+                <ul style="margin-bottom:0;">
+                    <li><strong>BULLISH:</strong> TPs liegen <strong>UEBER</strong> dem Entry, SL liegt <strong>UNTER</strong> dem Entry</li>
+                    <li><strong>BEARISH:</strong> TPs liegen <strong>UNTER</strong> dem Entry, SL liegt <strong>UEBER</strong> dem Entry</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. BESTE TIMEFRAMES -->
+        <section class="content-section">
+            <h2><span class="num">4</span> Beste Maerkte &amp; Zeitrahmen</h2>
+
+            <p>Wolfe Waves funktionieren in <strong>allen Maerkten</strong>. Unser Scanner ueberwacht DAX, NASDAQ, NYSE, Forex, Krypto und mehr. Die besten Ergebnisse gibt es auf <strong>hoeheren Zeitrahmen</strong>:</p>
+
+            <table class="rules-table">
                 <tr>
-                    <td><strong style="color: var(--accent-gold);">PENDING</strong></td>
-                    <td>Keil wurde erkannt, Preis ist in der Sweet Zone nahe der 1-3 Linie. Warten auf Breakout.</td>
+                    <th>Zeitrahmen</th>
+                    <th>Beschreibung</th>
+                    <th>Zuverlaessigkeit</th>
                 </tr>
                 <tr>
-                    <td><strong style="color: var(--accent-blue);">ACTIVE</strong></td>
-                    <td>Breakout durch die 1-3 Linie ist passiert! Entry, SL und TPs sind berechnet. Tracking läuft.</td>
+                    <td><strong>M5</strong></td>
+                    <td>Scalping (schnell, mehr Rauschen)</td>
+                    <td>Niedrig</td>
                 </tr>
                 <tr>
-                    <td><strong style="color: var(--accent-green);">SUCCESS</strong></td>
-                    <td>TP3 (oder TP1/TP2 vor SL) wurde erreicht. Trade war erfolgreich!</td>
+                    <td><strong>M15</strong></td>
+                    <td>Intraday</td>
+                    <td>Mittel</td>
                 </tr>
                 <tr>
-                    <td><strong style="color: var(--accent-red);">FAILED</strong></td>
-                    <td>Stop-Loss wurde erreicht bevor ein TP getroffen wurde.</td>
+                    <td><strong>H1</strong></td>
+                    <td>Intraday/Swing</td>
+                    <td>Hoch</td>
                 </tr>
                 <tr>
-                    <td><strong style="color: var(--text-secondary);">INACTIVE</strong></td>
-                    <td>Keil ist ungültig geworden – Preis hat Sweet Zone verlassen ohne Breakout.</td>
+                    <td><strong>H4</strong></td>
+                    <td>Swing Trading (empfohlen)</td>
+                    <td>Sehr hoch</td>
+                </tr>
+                <tr>
+                    <td><strong>D1</strong></td>
+                    <td>Position Trading</td>
+                    <td>Sehr hoch</td>
+                </tr>
+                <tr>
+                    <td><strong>W1</strong></td>
+                    <td>Langfristige Positionen</td>
+                    <td>Sehr hoch</td>
                 </tr>
             </table>
-        </div>
-        
-        <h2><span class="num">4</span> Entry, Stop-Loss & Take-Profits</h2>
-        
-        <h3>🎯 Wann wird der Entry ausgelöst?</h3>
-        <p>Der Entry folgt einem speziellen Ablauf:</p>
-        
-        <div class="info-box blue">
-            <h4>📍 Entry-Regel (2 Schritte)</h4>
-            <ol style="margin-bottom: 0;">
-                <li><strong>Sweet Zone (P5):</strong> Der Preis durchbricht die 1-3 Linie und geht DARÜBER HINAUS in die Sweet Zone. Das ist Punkt 5 – er liegt meistens AUSSERHALB des Keils!</li>
-                <li><strong>Rückkehr = ENTRY:</strong> Der Preis dreht um und kommt ZURÜCK durch die 1-3 Linie. Genau HIER ist der Entry!</li>
-            </ol>
-            <p style="margin-top: 12px; margin-bottom: 0;">
-                <strong>Bullish:</strong> P5 unterschreitet die 1-3 Linie → Rückkehr ÜBER die Linie = Long Entry<br/>
-                <strong>Bearish:</strong> P5 überschreitet die 1-3 Linie → Rückkehr UNTER die Linie = Short Entry
-            </p>
-        </div>
-        
-        <h3>🛑 Stop-Loss Berechnung</h3>
-        <p>Der Stop-Loss wird automatisch berechnet als <strong>5% vom Entry-Preis</strong>:</p>
-        
-        <div class="price-levels">
-            <div class="level-card entry">
-                <div class="label">Entry</div>
-                <div class="value">100.00</div>
-                <div class="desc">Breakout-Preis</div>
-            </div>
-            <div class="level-card sl">
-                <div class="label">SL Bullish</div>
-                <div class="value">95.00</div>
-                <div class="desc">Entry - 5%</div>
-            </div>
-            <div class="level-card sl">
-                <div class="label">SL Bearish</div>
-                <div class="value">105.00</div>
-                <div class="desc">Entry + 5%</div>
-            </div>
-        </div>
-        
-        <h3>🎯 Take-Profit Berechnung</h3>
-        <p>Die TPs basieren auf der <strong>1-4 Linie (EPA = Estimated Price at Arrival)</strong>:</p>
-        
-        <div class="info-box gold">
-            <h4>📐 TP-Berechnung</h4>
-            <ol style="margin-bottom: 0;">
-                <li><strong>TP3:</strong> Punkt auf der 1-4 Linie, projiziert um die "Keildauer" nach P5 → 100% des Moves</li>
-                <li><strong>TP2:</strong> 66% des Weges von Entry zu TP3</li>
-                <li><strong>TP1:</strong> 33% des Weges von Entry zu TP3</li>
-            </ol>
-        </div>
-        
-        <div class="price-levels">
-            <div class="level-card entry">
-                <div class="label">Entry</div>
-                <div class="value">100.00</div>
-            </div>
-            <div class="level-card tp1">
-                <div class="label">TP1</div>
-                <div class="value">+33%</div>
-                <div class="desc">Erster Teilgewinn</div>
-            </div>
-            <div class="level-card tp2">
-                <div class="label">TP2</div>
-                <div class="value">+66%</div>
-                <div class="desc">Zweiter Teilgewinn</div>
-            </div>
-            <div class="level-card tp3">
-                <div class="label">TP3</div>
-                <div class="value">+100%</div>
-                <div class="desc">EPA-Linie (Volles Ziel)</div>
-            </div>
-        </div>
-        
-        <div class="info-box green">
-            <h4>🏆 Wichtig: Richtung der TPs</h4>
-            <ul style="margin-bottom: 0;">
-                <li><strong>BULLISH:</strong> TPs liegen <strong>ÜBER</strong> dem Entry, SL liegt <strong>UNTER</strong> dem Entry</li>
-                <li><strong>BEARISH:</strong> TPs liegen <strong>UNTER</strong> dem Entry, SL liegt <strong>ÜBER</strong> dem Entry</li>
-            </ul>
-        </div>
-        
-        <h2><span class="num">5</span> Wann ist ein Keil gültig/ungültig?</h2>
-        
-        <h3>✅ Gültiger Keil (PENDING → ACTIVE)</h3>
-        <table class="rules-table">
-            <tr>
-                <th>Regel</th>
-                <th>Bullish</th>
-                <th>Bearish</th>
-            </tr>
-            <tr>
-                <td>Punkt 3 Position</td>
-                <td>Muss <strong>UNTER</strong> Punkt 1 liegen</td>
-                <td>Muss <strong>ÜBER</strong> Punkt 1 liegen</td>
-            </tr>
-            <tr>
-                <td>Punkt 4 Position</td>
-                <td>Zwischen Punkt 1 und 2</td>
-                <td>Zwischen Punkt 1 und 2</td>
-            </tr>
-            <tr>
-                <td>Linien 1-3 & 2-4</td>
-                <td colspan="2">Müssen konvergieren (aufeinander zulaufen)</td>
-            </tr>
-            <tr>
-                <td>Punkt 5 / Sweet Zone</td>
-                <td colspan="2">Preis muss die 1-3 Linie berühren oder in der Nähe sein</td>
-            </tr>
-            <tr>
-                <td>Breakout für ACTIVE</td>
-                <td>Kerze schließt <strong>ÜBER</strong> 1-3 Linie</td>
-                <td>Kerze schließt <strong>UNTER</strong> 1-3 Linie</td>
-            </tr>
-        </table>
-        
-        <h3>❌ Ungültiger Keil (→ INACTIVE)</h3>
-        <p>Ein Keil wird <strong>ungültig</strong> und auf INACTIVE gesetzt, wenn:</p>
-        
-        <div class="info-box red">
-            <h4>⚠️ Der Keil wird ungültig wenn:</h4>
-            <ul style="margin-bottom: 0;">
-                <li>Der Preis die <strong>Sweet Zone verlässt</strong> in die falsche Richtung ohne zu breaken</li>
-                <li><strong>Bullish:</strong> Preis fällt signifikant unter P3/P5</li>
-                <li><strong>Bearish:</strong> Preis steigt signifikant über P3/P5</li>
-                <li>Der Preis <strong>durch die 2-4 Linie bricht</strong> in die falsche Richtung</li>
-                <li>Zu viel <strong>Zeit vergeht</strong> ohne Breakout (Keil "verfällt")</li>
-            </ul>
-        </div>
-        
-        <h2><span class="num">6</span> Das Tracking nach dem Entry</h2>
-        
-        <p>Nach dem Breakout überwacht unser System automatisch jeden Trade:</p>
-        
-        <div class="info-box green">
-            <h4>🔄 Tracking-Regeln</h4>
-            <ol style="margin-bottom: 0;">
-                <li>Es werden <strong>nur Kerzen NACH dem Entry</strong> geprüft (nie davor!)</li>
-                <li>Bei jeder neuen Kerze: Hat High/Low ein TP oder SL erreicht?</li>
-                <li>Die <strong>Reihenfolge zählt</strong>: Wenn TP1 vor SL erreicht wird → Partial Success</li>
-                <li>TP3 erreicht vor SL = Voller Erfolg</li>
-            </ol>
-        </div>
-        
-        <h3>Mögliche Ergebnisse</h3>
-        <table class="rules-table">
-            <tr>
-                <th>Ergebnis</th>
-                <th>Bedingung</th>
-                <th>Bewertung</th>
-            </tr>
-            <tr>
-                <td><strong style="color: var(--accent-green);">TP3_HIT</strong></td>
-                <td>TP3 erreicht (vor SL)</td>
-                <td class="check">✅ Voller Erfolg</td>
-            </tr>
-            <tr>
-                <td><strong style="color: var(--accent-gold);">PARTIAL</strong></td>
-                <td>TP1 oder TP2 vor SL erreicht</td>
-                <td class="check">✅ Teilerfolg</td>
-            </tr>
-            <tr>
-                <td><strong style="color: var(--accent-red);">SL_HIT</strong></td>
-                <td>SL erreicht vor jedem TP</td>
-                <td class="cross">❌ Verlust</td>
-            </tr>
-            <tr>
-                <td><strong style="color: var(--text-secondary);">EXPIRED</strong></td>
-                <td>Timeout (zu viele Kerzen ohne Ergebnis)</td>
-                <td>⏱️ Abgelaufen</td>
-            </tr>
-        </table>
-        
-        <h2><span class="num">7</span> Beste Märkte & Zeitrahmen</h2>
-        
-        <p>Wolfe Waves funktionieren in <strong>allen Märkten</strong>. Unser Scanner überwacht:</p>
-        
-        <ul>
-            <li><strong>DAX:</strong> Deutsche Blue Chips</li>
-            <li><strong>NASDAQ / NYSE:</strong> US-Aktien</li>
-            <li><strong>FOREX:</strong> Währungspaare (EUR/USD, GBP/USD, etc.)</li>
-            <li><strong>CRYPTO:</strong> Bitcoin, Ethereum & mehr</li>
-        </ul>
-        
-        <p>Die besten Ergebnisse gibt es auf <strong>höheren Zeitrahmen</strong>:</p>
-        
-        <table class="rules-table">
-            <tr>
-                <th>Zeitrahmen</th>
-                <th>Beschreibung</th>
-                <th>Zuverlässigkeit</th>
-            </tr>
-            <tr>
-                <td><strong>M5</strong></td>
-                <td>Scalping (schnell, mehr Rauschen)</td>
-                <td>⭐⭐</td>
-            </tr>
-            <tr>
-                <td><strong>M15</strong></td>
-                <td>Intraday</td>
-                <td>⭐⭐⭐</td>
-            </tr>
-            <tr>
-                <td><strong>H1</strong></td>
-                <td>Intraday/Swing</td>
-                <td>⭐⭐⭐⭐</td>
-            </tr>
-            <tr>
-                <td><strong>H4</strong></td>
-                <td>Swing Trading (empfohlen)</td>
-                <td>⭐⭐⭐⭐⭐</td>
-            </tr>
-            <tr>
-                <td><strong>D1</strong></td>
-                <td>Position Trading</td>
-                <td>⭐⭐⭐⭐⭐</td>
-            </tr>
-            <tr>
-                <td><strong>W1</strong></td>
-                <td>Langfristige Positionen</td>
-                <td>⭐⭐⭐⭐⭐</td>
-            </tr>
-        </table>
-        
-        <div class="cta-section">
-            <h2>🐺 Bereit zum Handeln?</h2>
-            <p>Erhalte automatisch erkannte Wolfe Wave Signale mit präzisen Entry-, Stop-Loss- und Take-Profit-Levels.</p>
-            <a href="index.html" class="cta-btn">Jetzt Signale ansehen →</a>
-        </div>
-        
-        <h2><span class="num">8</span> FAQ - Häufige Fragen</h2>
-        
-        <h3>Wann sollte ich einsteigen?</h3>
-        <p>Bei <strong>ACTIVE</strong> Signalen ist der Breakout bereits passiert. Du kannst zum aktuellen Kurs einsteigen oder auf einen Pullback zum Entry-Level warten. Bei <strong>PENDING</strong> Signalen wartest du auf den Breakout.</p>
-        
-        <h3>Was bedeutet die Sweet Zone?</h3>
-        <p>Die Sweet Zone ist der Bereich nahe Punkt 5, wo der Preis die 1-3 Linie berührt. Hier ist das Risiko-Rendite-Verhältnis optimal. Ein Signal ist PENDING solange der Preis in dieser Zone ist und auf den Breakout wartet.</p>
-        
-        <h3>Warum wurde mein Signal INACTIVE?</h3>
-        <p>Der Keil wurde ungültig, weil der Preis die Sweet Zone in die falsche Richtung verlassen hat, ohne durch die 1-3 Linie zu brechen. Das Muster hat sich aufgelöst.</p>
-        
-        <h3>Muss ich alle 3 TPs nutzen?</h3>
-        <p>Nein! Du kannst bei TP1 komplett aussteigen (sicherste Variante) oder gestaffelt: ⅓ bei TP1, ⅓ bei TP2, ⅓ bei TP3. Nach TP1 empfiehlt es sich, den SL auf Break-Even zu setzen.</p>
-        
-        <h3>Wie zuverlässig sind die Signale?</h3>
-        <p>Bei korrekter Identifikation haben Wolfe Waves eine Erfolgsquote von etwa 60-75%. Unser Scanner filtert nur die besten Setups. Die Ergebnisstatistik wird transparent in der App angezeigt.</p>
-        
-    </main>
+        </section>
 
-    <!-- Modularer Footer -->
-    <div id="site-footer"></div>
-    <script src="/components/footer.js"></script>
-    
-    <script>
-        function showDiagram(type) {
-            // Hide all diagrams
-            document.querySelectorAll('.diagram-content').forEach(d => d.classList.remove('active'));
-            // Deactivate all tabs
-            document.querySelectorAll('.diagram-tab').forEach(t => t.classList.remove('active'));
-            
-            // Show selected diagram
-            document.getElementById('diagram-' + type).classList.add('active');
-            // Activate selected tab
-            event.target.classList.add('active');
-        }
-    </script>
+        <!-- CTA -->
+        <div class="cta-section">
+            <h2>Bereit zum Handeln?</h2>
+            <p>Erhalte automatisch erkannte Wolfe Wave Signale mit praezisen Entry-, Stop-Loss- und Take-Profit-Levels.</p>
+            <a href="/signale.html" class="btn-primary">Jetzt Signale ansehen &rarr;</a>
+        </div>
+
+    </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="/components/header.js"></script>
+<script src="/components/footer.js"></script>
 </body>
 </html>

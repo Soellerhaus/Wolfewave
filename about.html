@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ueber mich | WolfeWaveSignals</title>
+    <meta name="description" content="Lerne den Entwickler hinter WolfeWaveSignals kennen. Warum Wolfe Waves, wie der Scanner entstanden ist und was den Dienst antreibt.">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/shared.css">
+    <style>
+    /* ===== ABOUT PAGE ===== */
+    .page-hero {
+        padding: 80px 0 40px;
+        text-align: center;
+    }
+    .page-hero h1 {
+        font-size: clamp(28px, 5vw, 44px);
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p {
+        font-size: clamp(15px, 2vw, 18px);
+        color: var(--text-secondary);
+        max-width: 640px;
+        margin: 0 auto;
+    }
+
+    .contact-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 28px;
+        margin-top: 32px;
+    }
+    .contact-box h3 {
+        font-size: 18px;
+        margin-bottom: 16px;
+        color: var(--accent);
+    }
+    .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-secondary);
+        font-size: 15px;
+        margin-bottom: 10px;
+        text-decoration: none;
+    }
+    .contact-link:hover { color: var(--accent); }
+    .contact-link strong { color: var(--text); }
+    </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container">
+        <p class="section-label">Ueber mich</p>
+        <h1>Wer steckt hinter <span>WolfeWaveSignals</span>?</h1>
+        <p>Ein Solo-Projekt aus Leidenschaft fuer Maerkte, Chartmuster und ehrliches Trading.</p>
+    </div>
+</section>
+
+<!-- ABOUT CONTENT -->
+<section style="padding: 0 0 80px;">
+    <div class="container">
+        <div class="about-content">
+
+            <p>Hallo, ich bin <strong>Claudio</strong> &ndash; Schweizer, lebe in Oesterreich. WolfeWaveSignals ist mein persoenliches Projekt. Kein Team, kein Investor, kein Marketing-Budget. Nur ein Entwickler, der sich in ein Chartmuster verliebt hat.</p>
+
+            <h3>Warum Wolfe Waves?</h3>
+            <p>Ich habe ueber die Jahre viele Trading-Strategien ausprobiert &ndash; von Indikatoren ueber Elliott Waves bis hin zu rein diskretionaeren Ansaetzen. Als ich auf Wolfe Waves gestossen bin, hat mich die Klarheit dieses Musters sofort ueberzeugt: 5 Punkte, ein mathematisch berechenbares Kursziel, klare Entry- und Exit-Regeln.</p>
+            <p>Das Problem: Wolfe Waves manuell zu suchen ist extrem zeitaufwaendig. Man muss hunderte Charts durchgehen, verschiedene Zeitrahmen pruefen, und die meisten Muster die man findet sind qualitativ nicht gut genug. Da dachte ich mir: Das muss doch auch automatisch gehen.</p>
+
+            <h3>Vom manuellen Suchen zum Scanner</h3>
+            <p>Was als kleines Skript anfing, wurde ueber Monate zu einem vollstaendigen Scanner-System. Der Algorithmus analysiert heute ueber 700 Instrumente in 6 Zeitrahmen &ndash; rund um die Uhr. Er erkennt die 5-Punkte-Struktur, prueft Qualitaetskriterien, berechnet Entry, Stop-Loss und Take-Profit und veroeffentlicht das Signal automatisch.</p>
+            <p>Das Ziel war nie, ein teures Abo-Produkt zu bauen. Ich wollte ein Tool das ich selbst nutze &ndash; und das ich mit anderen teilen kann, die sich fuer dieses faszinierende Chartmuster interessieren.</p>
+
+            <!-- VALUE CARDS -->
+            <div class="value-grid">
+                <div class="value-card">
+                    <h4>Transparenz</h4>
+                    <p>Alle Signale sind offen sichtbar. Die Performance-Statistik basiert auf echten, ueberpreuefbaren Daten. Kein Cherry-Picking, keine geschoenten Zahlen.</p>
+                </div>
+                <div class="value-card">
+                    <h4>Algorithmus</h4>
+                    <p>Der Scanner laeuft automatisch und ohne menschliches Eingreifen. Keine subjektiven Entscheidungen &ndash; nur klare, regelbasierte Pattern-Erkennung.</p>
+                </div>
+                <div class="value-card">
+                    <h4>Ehrlichkeit</h4>
+                    <p>Trading ist riskant. Nicht jedes Signal funktioniert. Ich verspreche keine Gewinne &ndash; aber ein sauber entwickeltes Tool und maximale Transparenz.</p>
+                </div>
+            </div>
+
+            <!-- CONTACT -->
+            <div class="contact-box">
+                <h3>Kontakt</h3>
+                <a href="mailto:mail@wolfewavesignals.com" class="contact-link">
+                    <strong>E-Mail:</strong> mail@wolfewavesignals.com
+                </a>
+                <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="contact-link">
+                    <strong>Telegram:</strong> t.me/wolfewavesignals
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/components/header.js"></script>
+<script src="/components/footer.js"></script>
+</body>
+</html>

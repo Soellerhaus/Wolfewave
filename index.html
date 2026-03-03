@@ -29,78 +29,10 @@
     <!-- Fonts -->
     <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
 
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="/css/shared.css">
+
     <style>
-    /* ===== FONTS ===== */
-    @font-face {
-        font-family: 'Space Grotesk';
-        src: url('/fonts/SpaceGrotesk-Variable.woff2') format('woff2');
-        font-weight: 400 700;
-        font-display: swap;
-    }
-
-    /* ===== RESET ===== */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    /* ===== THEME VARIABLES ===== */
-    :root, [data-theme="dark"] {
-        --bg: #0f172a;
-        --bg-card: #1e293b;
-        --bg-card-hover: #263548;
-        --text: #f1f5f9;
-        --text-secondary: #94a3b8;
-        --text-muted: #64748b;
-        --border: rgba(255,255,255,0.06);
-        --accent: #10b981;
-        --accent-dim: rgba(16,185,129,0.12);
-        --red: #ef4444;
-        --red-dim: rgba(239,68,68,0.12);
-        --blue: #3b82f6;
-        --gold: #f59e0b;
-        --header-bg: rgba(15, 23, 42, 0.95);
-        --header-border: rgba(255,255,255,0.06);
-        --nav-text: #94a3b8;
-        --nav-active: #10b981;
-        --nav-hover: #f1f5f9;
-    }
-    [data-theme="light"] {
-        --bg: #f8fafc;
-        --bg-card: #ffffff;
-        --bg-card-hover: #f1f5f9;
-        --text: #1e293b;
-        --text-secondary: #64748b;
-        --text-muted: #94a3b8;
-        --border: rgba(0,0,0,0.08);
-        --accent: #10b981;
-        --accent-dim: rgba(16,185,129,0.08);
-        --red: #dc2626;
-        --red-dim: rgba(220,38,38,0.08);
-        --blue: #3b82f6;
-        --gold: #f59e0b;
-        --header-bg: rgba(255, 255, 255, 0.95);
-        --header-border: rgba(0,0,0,0.08);
-        --nav-text: #64748b;
-        --nav-hover: #1e293b;
-    }
-
-    /* ===== BASE ===== */
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-    body {
-        font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-        background: var(--bg); color: var(--text);
-        line-height: 1.6; min-height: 100vh;
-        padding-top: 64px;
-    }
-
-    /* ===== LAYOUT ===== */
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 80px 0; }
-    .section-label {
-        color: var(--accent); font-size: 13px; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
-    }
-    .section-title { font-size: clamp(24px, 4vw, 36px); font-weight: 700; margin-bottom: 16px; }
-    .section-desc { color: var(--text-secondary); font-size: 16px; max-width: 600px; margin-bottom: 40px; }
-
     /* ===== HERO ===== */
     #hero {
         padding: 100px 0 80px;
@@ -123,293 +55,38 @@
         font-variant-numeric: tabular-nums;
     }
     .hero-stat .label { color: var(--text-muted); font-size: 14px; }
-    .hero-cta {
-        display: inline-flex; align-items: center; gap: 8px;
-        margin-top: 40px; padding: 14px 32px; border-radius: 12px;
-        background: var(--accent); color: #fff; font-weight: 600; font-size: 16px;
-        text-decoration: none; transition: all 0.2s;
-    }
-    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(16,185,129,0.3); }
 
-    /* ===== FILTERS ===== */
-    .filter-bar {
-        display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+    /* ===== TELEGRAM CTA ===== */
+    .telegram-cta {
+        background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08));
+        border: 1px solid rgba(16,185,129,0.2);
+        border-radius: 20px; padding: 40px; text-align: center;
+        margin: -20px 0 40px;
     }
-    .filter-btn {
-        padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
-        background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border);
-        cursor: pointer; transition: all 0.2s; font-family: inherit;
+    .telegram-cta h3 { font-size: 22px; margin-bottom: 8px; }
+    .telegram-cta p { color: var(--text-secondary); margin-bottom: 20px; font-size: 15px; }
+    .telegram-btn {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 14px 32px; border-radius: 12px;
+        background: #0088cc; color: #fff; font-weight: 600; font-size: 16px;
+        text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
     }
-    .filter-btn:hover { color: var(--text); border-color: var(--text-muted); }
-    .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .search-input {
-        padding: 8px 14px; border-radius: 8px; font-size: 14px; font-family: inherit;
-        background: var(--bg-card); color: var(--text); border: 1px solid var(--border);
-        outline: none; width: 200px; transition: border-color 0.2s;
-    }
-    .search-input:focus { border-color: var(--accent); }
-    .search-input::placeholder { color: var(--text-muted); }
+    .telegram-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,136,204,0.3); background: #0099dd; }
+    .telegram-btn svg { width: 22px; height: 22px; }
 
-    /* ===== TAB BAR ===== */
-    .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; }
-    .tab {
-        padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
-        background: none; color: var(--text-muted); border: none;
-        cursor: pointer; transition: all 0.2s; font-family: inherit;
+    /* ===== TEASER SECTIONS ===== */
+    .teaser-section { padding: 60px 0; }
+    .teaser-header {
+        display: flex; justify-content: space-between; align-items: flex-end;
+        margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
     }
-    .tab:hover { color: var(--text); }
-    .tab.active { background: var(--accent-dim); color: var(--accent); }
-    .tab .count {
-        display: inline-flex; align-items: center; justify-content: center;
-        min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px;
-        font-size: 11px; font-weight: 600; margin-left: 6px;
-        background: var(--border); color: var(--text-muted);
-    }
-    .tab.active .count { background: var(--accent-dim); color: var(--accent); }
-
-    /* ===== SIGNAL CARDS ===== */
-    .signals-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-    }
-    .signal-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 16px; overflow: hidden; transition: all 0.25s;
-        cursor: pointer;
-    }
-    .signal-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-    .signal-img {
-        width: 100%; height: 180px; object-fit: cover; display: block;
-        background: var(--bg-card-hover);
-    }
-    .signal-body { padding: 16px; }
-    .signal-head {
-        display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 12px;
-    }
-    .signal-symbol { font-size: 15px; font-weight: 600; }
-    .signal-name { font-size: 12px; color: var(--text-muted); }
-    .signal-badges { display: flex; gap: 6px; }
-    .badge {
-        padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
-        text-transform: uppercase;
-    }
-    .badge-pending { background: var(--accent-dim); color: var(--accent); }
-    .badge-active { background: rgba(59,130,246,0.12); color: var(--blue); }
-    .badge-buy, .badge-bullish { background: rgba(16,185,129,0.12); color: var(--accent); }
-    .badge-sell, .badge-bearish { background: var(--red-dim); color: var(--red); }
-    .signal-prices {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-    }
-    .signal-price { text-align: center; }
-    .signal-price .lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
-    .signal-price .val { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
-    .price-entry .val { color: var(--blue); }
-    .price-sl .val { color: var(--red); }
-    .price-tp .val { color: var(--accent); }
-    .signal-meta {
-        display: flex; justify-content: space-between; align-items: center;
-        margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);
-        font-size: 12px; color: var(--text-muted);
-    }
-    .signal-rr { font-weight: 600; color: var(--gold); }
-
-    /* ===== COMPLETED SIGNAL CARDS ===== */
-    .result-badge {
-        position: absolute; top: 12px; right: 12px; padding: 4px 10px;
-        border-radius: 8px; font-size: 12px; font-weight: 700; z-index: 2;
-    }
-    .result-tp3 { background: rgba(16,185,129,0.9); color: #fff; }
-    .result-tp2 { background: rgba(59,130,246,0.9); color: #fff; }
-    .result-tp1 { background: rgba(245,158,11,0.9); color: #fff; }
-    .result-sl { background: rgba(239,68,68,0.9); color: #fff; }
-
-    /* ===== STATS GRID ===== */
-    .stats-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 16px; margin-bottom: 40px;
-    }
-    .stat-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 12px; padding: 20px; text-align: center;
-    }
-    .stat-card .num {
-        font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums;
-    }
-    .stat-card .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-    .c-green { color: var(--accent); }
-    .c-red { color: var(--red); }
-    .c-blue { color: var(--blue); }
-    .c-gold { color: var(--gold); }
-
-    /* ===== DASHBOARD ===== */
-    .dash-header {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px; margin-bottom: 32px;
-    }
-    .dash-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 12px; padding: 20px;
-    }
-    .dash-card .lbl { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-    .dash-card .val { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .trades-list { display: flex; flex-direction: column; gap: 12px; }
-    .trade-item {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 12px; padding: 16px;
-    }
-    .trade-head {
-        display: flex; justify-content: space-between; align-items: center;
-        margin-bottom: 8px;
-    }
-    .trade-sym { font-weight: 600; font-size: 15px; }
-    .trade-pnl { font-weight: 700; font-variant-numeric: tabular-nums; }
-    .trade-detail {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 8px; font-size: 13px; color: var(--text-secondary);
-    }
-    .trade-detail .lbl { font-size: 11px; color: var(--text-muted); }
-
-    /* ===== LEARN SECTION ===== */
-    .learn-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px; margin-bottom: 40px;
-    }
-    .learn-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 16px; padding: 28px;
-        transition: all 0.2s;
-    }
-    .learn-card:hover { border-color: var(--accent); }
-    .learn-card h3 { font-size: 18px; margin-bottom: 12px; }
-    .learn-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
-    .learn-card ul { color: var(--text-secondary); font-size: 14px; padding-left: 20px; margin-top: 12px; }
-    .learn-card li { margin-bottom: 6px; }
-
-    .point-list { list-style: none; padding: 0; margin: 16px 0; }
-    .point-list li {
-        display: flex; gap: 12px; align-items: flex-start;
-        padding: 12px 0; border-bottom: 1px solid var(--border);
-        font-size: 14px; color: var(--text-secondary);
-    }
-    .point-list li:last-child { border-bottom: none; }
-    .point-num {
-        width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 13px; font-weight: 700; background: var(--accent-dim); color: var(--accent);
-    }
-
-    /* ===== FAQ ===== */
-    .faq-list { max-width: 800px; }
-    .faq-item {
-        border-bottom: 1px solid var(--border);
-    }
-    .faq-q {
-        display: flex; justify-content: space-between; align-items: center;
-        width: 100%; padding: 20px 0; font-size: 15px; font-weight: 600;
-        background: none; border: none; color: var(--text); cursor: pointer;
-        text-align: left; font-family: inherit;
-    }
-    .faq-q:hover { color: var(--accent); }
-    .faq-q svg { flex-shrink: 0; transition: transform 0.3s; width: 20px; height: 20px; color: var(--text-muted); }
-    .faq-item.open .faq-q svg { transform: rotate(180deg); }
-    .faq-a {
-        max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
-        color: var(--text-secondary); font-size: 14px; line-height: 1.7;
-    }
-    .faq-item.open .faq-a { max-height: 500px; }
-    .faq-a-inner { padding: 0 0 20px; }
-
-    /* ===== ABOUT ===== */
-    .about-content {
-        max-width: 700px;
-    }
-    .about-content p {
-        color: var(--text-secondary); font-size: 15px; line-height: 1.8;
-        margin-bottom: 16px;
-    }
-    .about-content h3 {
-        font-size: 20px; margin: 32px 0 12px;
-    }
-    .value-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 16px; margin: 24px 0;
-    }
-    .value-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 12px; padding: 20px;
-    }
-    .value-card h4 { font-size: 16px; margin-bottom: 8px; }
-    .value-card p { color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin: 0; }
-
-    /* ===== MARKETS ===== */
-    .markets-stats {
-        display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 32px;
-    }
-    .markets-stats .ms { text-align: center; }
-    .markets-stats .ms .n { font-size: 28px; font-weight: 700; color: var(--accent); }
-    .markets-stats .ms .l { font-size: 13px; color: var(--text-muted); }
-    .market-cats {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 16px;
-    }
-    .market-cat {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 12px; padding: 20px;
-    }
-    .market-cat h4 { font-size: 16px; margin-bottom: 8px; }
-    .market-cat .cnt { color: var(--accent); font-weight: 600; font-size: 14px; }
-    .market-cat p { color: var(--text-secondary); font-size: 13px; margin-top: 8px; }
-
-    /* ===== LIGHTBOX ===== */
-    .lightbox {
-        display: none; position: fixed; inset: 0; z-index: 9999;
-        background: rgba(0,0,0,0.85); align-items: center; justify-content: center;
-        padding: 24px;
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img {
-        max-width: 95vw; max-height: 90vh; border-radius: 12px;
-        object-fit: contain;
-    }
-    .lightbox-close {
-        position: absolute; top: 20px; right: 20px;
-        width: 40px; height: 40px; border-radius: 50%;
-        background: rgba(255,255,255,0.15); border: none;
-        color: #fff; font-size: 20px; cursor: pointer;
-        display: flex; align-items: center; justify-content: center;
-    }
-
-    /* ===== LOADING ===== */
-    .loading {
-        text-align: center; padding: 60px 20px;
-        color: var(--text-muted); font-size: 14px;
-    }
-    .spinner {
-        width: 32px; height: 32px; border: 3px solid var(--border);
-        border-top-color: var(--accent); border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin: 0 auto 12px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .empty-state {
-        text-align: center; padding: 40px; color: var(--text-muted);
-        font-size: 14px;
-    }
+    .teaser-header .section-desc { margin-bottom: 0; }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-        section { padding: 60px 0; }
         .hero-stats { gap: 24px; }
         .hero-stat .num { font-size: 28px; }
-        .signals-grid { grid-template-columns: 1fr; }
-        .dash-header { grid-template-columns: 1fr 1fr; }
-        .stats-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 480px) {
-        .container { padding: 0 16px; }
-        .dash-header { grid-template-columns: 1fr; }
+        .telegram-cta { padding: 28px 20px; }
     }
     </style>
 </head>
@@ -441,55 +118,54 @@
                 <div class="label">Instrumente</div>
             </div>
         </div>
-        <a href="#signale" class="hero-cta">Signale ansehen &darr;</a>
     </div>
 </section>
 
-<!-- ===== SIGNALE ===== -->
-<section id="signale">
+<!-- ===== TELEGRAM CTA ===== -->
+<section style="padding: 0;">
     <div class="container">
-        <p class="section-label">Live Signale</p>
-        <h2 class="section-title">Aktuelle Wolfe Wave Signale</h2>
-        <p class="section-desc">Alle erkannten Patterns mit Entry, Stop-Loss und drei Take-Profit Levels.</p>
-
-        <!-- Tabs -->
-        <div class="tab-bar" id="signal-tabs">
-            <button class="tab active" data-tab="all">Alle <span class="count" id="cnt-all">0</span></button>
-            <button class="tab" data-tab="active">Active <span class="count" id="cnt-active">0</span></button>
-            <button class="tab" data-tab="pending">Pending <span class="count" id="cnt-pending">0</span></button>
-            <button class="tab" data-tab="success">Abgeschlossen <span class="count" id="cnt-success">0</span></button>
+        <div class="telegram-cta">
+            <h3>Alle Signale kostenlos per Telegram</h3>
+            <p>Erhalte jeden neuen Trade-Alert direkt auf dein Handy &ndash; in Echtzeit, ohne Verzoegerung.</p>
+            <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" class="telegram-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                Telegram Kanal beitreten
+            </a>
         </div>
+    </div>
+</section>
 
-        <!-- Filters -->
-        <div class="filter-bar" id="signal-filters">
-            <button class="filter-btn active" data-market="">Alle Maerkte</button>
-            <button class="filter-btn" data-market="DAX">DAX</button>
-            <button class="filter-btn" data-market="NASDAQ">NASDAQ</button>
-            <button class="filter-btn" data-market="NYSE">NYSE</button>
-            <button class="filter-btn" data-market="FOREX">Forex</button>
-            <button class="filter-btn" data-market="CRYPTO">Krypto</button>
-            <input type="text" class="search-input" id="signal-search" placeholder="Symbol suchen...">
+<!-- ===== SIGNALE TEASER ===== -->
+<section class="teaser-section" id="signale">
+    <div class="container">
+        <div class="teaser-header">
+            <div>
+                <p class="section-label">Live Signale</p>
+                <h2 class="section-title">Aktuelle Wolfe Wave Signale</h2>
+                <p class="section-desc">Die neuesten erkannten Patterns mit Entry, Stop-Loss und Take-Profit.</p>
+            </div>
+            <a href="/signale.html" class="btn-primary">Alle Signale ansehen &rarr;</a>
         </div>
-
-        <!-- Grid -->
         <div id="signals-grid" class="signals-grid">
             <div class="loading"><div class="spinner"></div>Signale werden geladen...</div>
         </div>
-        <div id="load-more-wrap" style="text-align:center; margin-top:24px; display:none;">
-            <button id="load-more-btn" style="font-size:15px; padding:12px 40px; background:var(--accent); color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:600; transition:opacity 0.2s;">
-                Mehr Signale laden <span id="load-more-count"></span>
-            </button>
+        <div style="text-align:center; margin-top:24px;">
+            <a href="/signale.html" class="btn-outline">Alle Signale mit Filter &amp; Suche &rarr;</a>
         </div>
     </div>
 </section>
 
-<!-- ===== PERFORMANCE ===== -->
-<section id="performance">
+<!-- ===== PERFORMANCE TEASER ===== -->
+<section class="teaser-section" id="performance">
     <div class="container">
-        <p class="section-label">Ergebnisse</p>
-        <h2 class="section-title">Performance</h2>
-        <p class="section-desc">Transparente Ergebnisse aller abgeschlossenen Signale.</p>
-
+        <div class="teaser-header">
+            <div>
+                <p class="section-label">Ergebnisse</p>
+                <h2 class="section-title">Performance</h2>
+                <p class="section-desc">Transparente Ergebnisse aller abgeschlossenen Signale.</p>
+            </div>
+            <a href="/performance.html" class="btn-primary">Alle Details &rarr;</a>
+        </div>
         <div class="stats-grid" id="perf-stats">
             <div class="stat-card"><div class="num c-green" id="perf-winrate">--%</div><div class="label">Win-Rate</div></div>
             <div class="stat-card"><div class="num" id="perf-total">--</div><div class="label">Signale gesamt</div></div>
@@ -498,205 +174,66 @@
             <div class="stat-card"><div class="num c-gold" id="perf-tp1">--</div><div class="label">TP1 erreicht</div></div>
             <div class="stat-card"><div class="num c-red" id="perf-sl">--</div><div class="label">SL getroffen</div></div>
         </div>
-
-        <!-- Recent completed signals -->
-        <h3 style="margin-bottom: 16px; font-size: 18px;">Letzte abgeschlossene Signale</h3>
-        <div id="completed-grid" class="signals-grid">
-            <div class="loading"><div class="spinner"></div>Lade Performance-Daten...</div>
-        </div>
-        <div id="load-more-completed-wrap" style="text-align:center; margin-top:24px; display:none;">
-            <button id="load-more-completed-btn" style="font-size:15px; padding:12px 40px; background:var(--accent); color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:600; transition:opacity 0.2s;">
-                Mehr Ergebnisse laden <span id="load-more-completed-count"></span>
-            </button>
-        </div>
     </div>
 </section>
 
-<!-- ===== DASHBOARD ===== -->
-<section id="dashboard">
+<!-- ===== DASHBOARD TEASER ===== -->
+<section class="teaser-section" id="dashboard">
     <div class="container">
-        <p class="section-label">Live Trading</p>
-        <h2 class="section-title">Trade Dashboard</h2>
-        <p class="section-desc">Live-Daten des automatischen Trade-Executors auf dem Demo-Konto.</p>
-
-        <!-- Account overview -->
+        <div class="teaser-header">
+            <div>
+                <p class="section-label">Live Trading</p>
+                <h2 class="section-title">Trade Dashboard</h2>
+                <p class="section-desc">Live-Daten des automatischen Trade-Executors.</p>
+            </div>
+            <a href="/dashboard.html" class="btn-primary">Live Dashboard &rarr;</a>
+        </div>
         <div class="dash-header" id="dash-account">
             <div class="dash-card"><div class="lbl">Balance</div><div class="val" id="dash-bal">--</div></div>
             <div class="dash-card"><div class="lbl">Equity</div><div class="val" id="dash-eq">--</div></div>
             <div class="dash-card"><div class="lbl">Floating P&L</div><div class="val" id="dash-float">--</div></div>
             <div class="dash-card"><div class="lbl">Offene Trades</div><div class="val" id="dash-cnt">--</div></div>
         </div>
-
-        <!-- Open trades -->
-        <h3 style="margin-bottom: 16px; font-size: 18px;">Offene Positionen</h3>
-        <div id="dash-positions" class="trades-list">
-            <div class="loading"><div class="spinner"></div>Lade Dashboard...</div>
-        </div>
-
-        <!-- History -->
-        <h3 style="margin: 32px 0 16px; font-size: 18px;">Trade-History</h3>
-        <div id="dash-history" class="trades-list">
-        </div>
     </div>
 </section>
 
-<!-- ===== LERNEN ===== -->
-<section id="lernen">
+<!-- ===== LERNEN TEASER ===== -->
+<section class="teaser-section">
     <div class="container">
-        <p class="section-label">Tutorial</p>
-        <h2 class="section-title">Was sind Wolfe Waves?</h2>
-        <p class="section-desc">Ein natuerlich vorkommendes Chartmuster, entdeckt von Bill Wolfe. Basiert auf Newtons drittem Gesetz: Auf jede Aktion folgt eine gleich grosse Reaktion.</p>
+        <p class="section-label">Wissen</p>
+        <h2 class="section-title">Wolfe Waves verstehen</h2>
+        <p class="section-desc">Lerne das Chartmuster kennen, das hinter allen Signalen steckt.</p>
 
         <div class="learn-grid">
-            <div class="learn-card">
-                <h3>Die 5 Punkte</h3>
-                <p>Jede Wolfe Wave besteht aus 5 Preispunkten, die einen konvergierenden Keil bilden:</p>
-                <ul class="point-list">
-                    <li><span class="point-num">1</span><span>Signifikantes Tief (bullisch) oder Hoch (baerisch)</span></li>
-                    <li><span class="point-num">2</span><span>Erste Gegenbewegung</span></li>
-                    <li><span class="point-num">3</span><span>Muss ueber/unter P1 liegen - definiert die 1-3 Linie</span></li>
-                    <li><span class="point-num">4</span><span>Zwischen P1 und P2 - definiert die 2-4 und 1-4 Linien</span></li>
-                    <li><span class="point-num">5</span><span>Die "Sweet Zone" - AUSSERHALB des Keils, jenseits der 1-3 Linie</span></li>
-                </ul>
-            </div>
-
-            <div class="learn-card">
-                <h3>Signal-Lebenszyklus</h3>
-                <p>Jedes Signal durchlaeuft 3 Phasen:</p>
-                <ul class="point-list">
-                    <li><span class="point-num" style="background: var(--accent-dim); color: var(--accent);">P</span><span><strong>PENDING:</strong> Keil erkannt, Preis in der Sweet Zone nahe der 1-3 Linie. Warte auf Breakout.</span></li>
-                    <li><span class="point-num" style="background: rgba(59,130,246,0.12); color: var(--blue);">A</span><span><strong>ACTIVE:</strong> Breakout! Entry, SL und TPs berechnet. Trade kann eroeffnet werden.</span></li>
-                    <li><span class="point-num" style="background: rgba(245,158,11,0.12); color: var(--gold);">S</span><span><strong>SUCCESS:</strong> TP3 (oder TP1/TP2 vor SL) erreicht. Signal abgeschlossen.</span></li>
-                </ul>
-            </div>
-
-            <div class="learn-card">
-                <h3>Entry & Targets</h3>
-                <p><strong>Entry:</strong> Wenn der Preis nach dem P5-Ueberschuss durch die 1-3 Linie zurueckkehrt.</p>
-                <p style="margin-top: 12px;"><strong>Stop-Loss:</strong> 5% vom Entry entfernt (unter Entry bei bullisch, ueber bei baerisch).</p>
-                <p style="margin-top: 12px;"><strong>Take-Profits</strong> basieren auf der 1-4 EPA-Linie:</p>
-                <ul>
-                    <li><strong>TP1:</strong> 33% der Strecke Entry → TP3</li>
-                    <li><strong>TP2:</strong> 66% der Strecke Entry → TP3</li>
-                    <li><strong>TP3:</strong> 100% - Projected Arrival auf 1-4 Linie</li>
-                </ul>
-            </div>
-
-            <div class="learn-card">
-                <h3>Beste Timeframes</h3>
-                <p>Wolfe Waves funktionieren in allen Timeframes, aber mit unterschiedlicher Zuverlaessigkeit:</p>
-                <ul>
-                    <li><strong>M5:</strong> Scalping - haeufig, aber weniger zuverlaessig</li>
-                    <li><strong>M15:</strong> Intraday - guter Kompromiss</li>
-                    <li><strong>H1:</strong> Intraday/Swing - empfohlen</li>
-                    <li><strong>H4:</strong> Swing Trading - beste Ergebnisse</li>
-                    <li><strong>D1/W1:</strong> Position Trading - sehr zuverlaessig</li>
-                </ul>
-            </div>
+            <a href="/wolfewaves.html" class="learn-card" style="text-decoration:none;color:inherit;">
+                <h3>Was sind Wolfe Waves?</h3>
+                <p>Ein natuerlich vorkommendes 5-Punkte-Chartmuster. Basiert auf Newtons drittem Gesetz der Physik.</p>
+                <div style="margin-top:16px;color:var(--accent);font-weight:600;font-size:14px;">Mehr erfahren &rarr;</div>
+            </a>
+            <a href="/scanner-erklaerung.html" class="learn-card" style="text-decoration:none;color:inherit;">
+                <h3>So funktioniert der Scanner</h3>
+                <p>Automatische Analyse von 700+ Instrumenten in 6 Timeframes. 24/7 fuer Krypto, 24/5 fuer den Rest.</p>
+                <div style="margin-top:16px;color:var(--accent);font-weight:600;font-size:14px;">Scanner verstehen &rarr;</div>
+            </a>
+            <a href="/maerkte.html" class="learn-card" style="text-decoration:none;color:inherit;">
+                <h3>Scanner Universum</h3>
+                <p>DAX, NASDAQ, NYSE, Forex, Krypto, Rohstoffe und mehr. Alle gescannten Maerkte im Ueberblick.</p>
+                <div style="margin-top:16px;color:var(--accent);font-weight:600;font-size:14px;">Alle Maerkte &rarr;</div>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- ===== SCANNER ===== -->
-<section id="scanner">
+<!-- ===== FAQ TEASER ===== -->
+<section class="teaser-section">
     <div class="container">
-        <p class="section-label">Technologie</p>
-        <h2 class="section-title">So funktioniert der Scanner</h2>
-        <p class="section-desc">Unser automatisierter Scanner durchsucht kontinuierlich alle Instrumente auf allen Timeframes.</p>
-
-        <div class="learn-grid">
-            <div class="learn-card">
-                <h3>1. Maerkte scannen</h3>
-                <p>Der Scanner laeuft automatisch und analysiert Waehrungspaare, Indizes und Krypto in 6 Timeframes (M5 bis W1). Krypto wird 24/7 gescannt, alle anderen 24/5.</p>
+        <div class="teaser-header">
+            <div>
+                <p class="section-label">Hilfe</p>
+                <h2 class="section-title">Haeufige Fragen</h2>
             </div>
-            <div class="learn-card">
-                <h3>2. Muster erkennen</h3>
-                <p>Wenn Preispunkte sich in einer typischen Wolfe Wave Formation anordnen, erkennt der Scanner die Moeglichkeit eines validen Keils.</p>
-            </div>
-            <div class="learn-card">
-                <h3>3. Qualitaet pruefen</h3>
-                <p>Mehrere Filter pruefen die Pattern-Qualitaet: EPA-Winkel, Risk/Reward, P5-Ueberschuss, Konvergenz. Nur gute Patterns bestehen den Test.</p>
-            </div>
-            <div class="learn-card">
-                <h3>4. Signal veroeffentlichen</h3>
-                <p>Bestaetigte Patterns werden mit Entry, Stop-Loss und drei Take-Profit Levels in Echtzeit auf dieser Seite veroeffentlicht.</p>
-            </div>
+            <a href="/faq.html" class="btn-outline">Alle FAQs &rarr;</a>
         </div>
-
-        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-top: 20px;">
-            <h3 style="margin-bottom: 12px; font-size: 18px;">Wichtiger Hinweis</h3>
-            <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.7;">
-                Der Scanner ist ein Werkzeug - kein Garantiegeber. Er erkennt geometrische Muster nach festen Regeln, gibt aber keine Kauf- oder Verkaufsempfehlungen. Nicht jede Marktphase produziert gute Patterns. Die Filter sind bewusst streng: weniger Signale, aber hoehere Qualitaet.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- ===== MAERKTE ===== -->
-<section id="maerkte">
-    <div class="container">
-        <p class="section-label">Universum</p>
-        <h2 class="section-title">Scanner Universum</h2>
-        <p class="section-desc">Alle Maerkte und Instrumente, die unser Scanner kontinuierlich analysiert.</p>
-
-        <div class="markets-stats">
-            <div class="ms"><div class="n">700+</div><div class="l">Instrumente</div></div>
-            <div class="ms"><div class="n">6</div><div class="l">Timeframes</div></div>
-            <div class="ms"><div class="n">11</div><div class="l">Maerkte</div></div>
-            <div class="ms"><div class="n">24/5</div><div class="l">Scanning</div></div>
-        </div>
-
-        <div class="market-cats">
-            <div class="market-cat">
-                <h4>DAX / XETRA</h4>
-                <div class="cnt">40 Instrumente</div>
-                <p>Deutsche Blue Chips: Adidas, Allianz, BASF, BMW, Deutsche Bank, SAP, Siemens, Volkswagen u.v.m.</p>
-            </div>
-            <div class="market-cat">
-                <h4>NASDAQ</h4>
-                <div class="cnt">200+ Instrumente</div>
-                <p>US Tech: Apple, Microsoft, Google, Amazon, Tesla, NVIDIA, Meta, AMD, Intel, Netflix u.v.m.</p>
-            </div>
-            <div class="market-cat">
-                <h4>NYSE</h4>
-                <div class="cnt">200+ Instrumente</div>
-                <p>US Diversified: Boeing, Goldman Sachs, JPMorgan, Disney, Coca-Cola, Walmart u.v.m.</p>
-            </div>
-            <div class="market-cat">
-                <h4>Forex</h4>
-                <div class="cnt">60+ Paare</div>
-                <p>Wichtige Waehrungspaare: EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CHF u.v.m.</p>
-            </div>
-            <div class="market-cat">
-                <h4>Krypto</h4>
-                <div class="cnt">50+ Coins</div>
-                <p>24/7 gescannt: Bitcoin, Ethereum, Solana, Cardano, Polkadot, Chainlink u.v.m.</p>
-            </div>
-            <div class="market-cat">
-                <h4>Indices & Rohstoffe</h4>
-                <div class="cnt">30+ CFDs</div>
-                <p>DAX, S&P 500, FTSE 100, Gold, Silber, Oel, Erdgas u.v.m.</p>
-            </div>
-            <div class="market-cat">
-                <h4>Hong Kong</h4>
-                <div class="cnt">40+ Instrumente</div>
-                <p>Hang Seng Index Aktien und ausgewaehlte chinesische Werte.</p>
-            </div>
-            <div class="market-cat">
-                <h4>Europa</h4>
-                <div class="cnt">80+ Instrumente</div>
-                <p>Euronext Paris (CAC), Amsterdam, Madrid und weitere europaeische Boersen.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== FAQ ===== -->
-<section id="faq">
-    <div class="container">
-        <p class="section-label">Hilfe</p>
-        <h2 class="section-title">Haeufig gestellte Fragen</h2>
-
         <div class="faq-list">
             <div class="faq-item">
                 <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
@@ -704,124 +241,28 @@
                     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
                 <div class="faq-a"><div class="faq-a-inner">
-                    Eine kostenlose Trading-Signale-Plattform spezialisiert auf Wolfe Wave Patterns. Unser Scanner laeuft rund um die Uhr, erkennt Chartmuster automatisch und liefert Signale mit Entry, Stop-Loss und drei Take-Profit Levels. Alle Signale sind frei zugaenglich.
+                    Eine kostenlose Trading-Signale-Plattform spezialisiert auf Wolfe Wave Patterns. Der Scanner erkennt Chartmuster automatisch und liefert Signale mit Entry, Stop-Loss und drei Take-Profit Levels.
                 </div></div>
             </div>
-
-            <div class="faq-item">
-                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    Welche Maerkte werden gescannt?
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                <div class="faq-a"><div class="faq-a-inner">
-                    Der Scanner analysiert ueber 700 Instrumente: DAX, NASDAQ, NYSE Aktien, Forex-Paare, Kryptowaehrungen, Indizes, Rohstoffe und mehr. Krypto wird 24/7 gescannt, alle anderen Maerkte 24/5 waehrend der Handelszeiten.
-                </div></div>
-            </div>
-
             <div class="faq-item">
                 <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                     Was bedeuten PENDING, ACTIVE, SUCCESS?
                     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
                 <div class="faq-a"><div class="faq-a-inner">
-                    <strong>PENDING:</strong> Pattern erkannt, Entry noch nicht erreicht. Der Preis ist in der Sweet Zone.<br>
-                    <strong>ACTIVE:</strong> Entry getriggert, der Trade laeuft. TP und SL Levels werden beobachtet.<br>
-                    <strong>SUCCESS:</strong> Signal abgeschlossen - entweder wurde ein TP erreicht oder der SL ausgeloest.
+                    <strong>PENDING:</strong> Pattern erkannt, Entry noch nicht erreicht.<br>
+                    <strong>ACTIVE:</strong> Entry getriggert, der Trade laeuft.<br>
+                    <strong>SUCCESS:</strong> Signal abgeschlossen - TP erreicht oder SL ausgeloest.
                 </div></div>
             </div>
-
             <div class="faq-item">
                 <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    Was sind TP1, TP2, TP3?
+                    Ist das wirklich kostenlos?
                     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
                 <div class="faq-a"><div class="faq-a-inner">
-                    Drei Take-Profit Ziele basierend auf der Wolfe Wave Geometrie:<br>
-                    <strong>TP1:</strong> Konservatives Ziel (33% der Strecke) - haeufigster Erfolg.<br>
-                    <strong>TP2:</strong> Mittleres Ziel (66% der Strecke).<br>
-                    <strong>TP3:</strong> Ambitioniertes Ziel (100%) - die volle Wolfe Wave Projektion auf der 1-4 Linie.
+                    Ja, 100% kostenlos. Kein Login, kein Abo, keine versteckten Kosten. Alle Signale sind frei zugaenglich. Auch der Telegram-Kanal ist gratis.
                 </div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    Was ist die Win-Rate?
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                <div class="faq-a"><div class="faq-a-inner">
-                    Die Win-Rate zeigt den Prozentsatz der Signale, die mindestens TP1 erreicht haben, bevor der SL ausgeloest wurde. Sie wird live aus allen abgeschlossenen Signalen berechnet und transparent angezeigt.
-                </div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    Kann ich die Signale 1:1 traden?
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                <div class="faq-a"><div class="faq-a-inner">
-                    Die Signale sind Setup-Ideen, keine Handelsanweisungen. Wir empfehlen: Mit eigener Analyse kombinieren, pruefen ob es zum eigenen Trading-Stil passt, eigenes Risikomanagement anwenden und erst im Demokonto testen.
-                </div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    Wie oft kommen neue Signale?
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                <div class="faq-a"><div class="faq-a-inner">
-                    Das haengt von der Marktlage ab. Der Scanner laeuft 24/7, liefert aber nur Signale wenn die Qualitaetskriterien erfuellt sind. In aktiven Maerkten koennen es mehrere pro Tag sein, in ruhigen Phasen weniger. Qualitaet vor Quantitaet.
-                </div></div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                    Ist Trading nicht riskant?
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                <div class="faq-a"><div class="faq-a-inner">
-                    Ja - Trading ist riskant. Du kannst Geld verlieren, auch mehr als eingesetzt bei Hebelproduktion. Investiere nur Kapital, dessen Verlust du dir leisten kannst. WolfeWaveSignals ist ein Hilfstool und keine Gewinngarantie. Kein System hat eine 100% Trefferquote.
-                </div></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== ABOUT ===== -->
-<section id="about">
-    <div class="container">
-        <p class="section-label">Hintergrund</p>
-        <h2 class="section-title">Ueber mich</h2>
-
-        <div class="about-content">
-            <p>Ich bin Claudio &ndash; Schweizer, lebe in Oesterreich. WolfeWaveSignals ist kein Fintech-Startup mit 20 Leuten, sondern ein Solo-Projekt, das aus jahrelanger Trading-Erfahrung und einer Faszination fuer ein einziges Chartmuster entstanden ist.</p>
-
-            <h3>Warum Wolfe Waves?</h3>
-            <p>Was mich an Wolfe Waves sofort gepackt hat: der Keil. Dieses konvergierende Muster aus fuenf Punkten - man kann es selbst suchen, und man findet es ueberall. In jedem Timeframe, in jedem Markt. Und das Beste: Wenn Punkt 5 den Ueberschuss macht und dann dreht, hat man ein klares Ziel.</p>
-            <p>Im Gegensatz zu News-Trading oder reinem Bauchgefuehl hat Wolfe Wave klare geometrische Regeln. Und Regeln lassen sich programmieren.</p>
-
-            <h3>Vom manuellen Suchen zum Scanner</h3>
-            <p>Wolfe Waves manuell zu suchen ist zeitaufwendig. Also habe ich angefangen, den Prozess zu automatisieren. Irgendwann dachte ich mir: Wenn der Scanner fuer mich funktioniert, kann ich ihn auch anderen zur Verfuegung stellen.</p>
-            <p>Ich trade selbst ausschliesslich Wolfe Waves. Ich sehe dieselben Signale wie du. Kein Geheimwissen, kein Informationsvorsprung - nur das gleiche Tool.</p>
-
-            <div class="value-grid">
-                <div class="value-card">
-                    <h4>Transparenz</h4>
-                    <p>Jedes Signal wird dokumentiert - ob Gewinn oder Verlust. Die Performance-Daten sind ungefiltert und fuer jeden sichtbar.</p>
-                </div>
-                <div class="value-card">
-                    <h4>Algorithmus</h4>
-                    <p>Der Scanner hat keine Meinung. Er erkennt geometrische Muster nach festen Regeln. Kein Guru-Auftreten, nur Daten.</p>
-                </div>
-                <div class="value-card">
-                    <h4>Ehrlichkeit</h4>
-                    <p>Trading ist riskant. Manche Signale scheitern. Der Scanner ist ein Werkzeug - keine Gewinngarantie.</p>
-                </div>
-            </div>
-
-            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-top: 32px;">
-                <h4 style="margin-bottom: 8px;">Kontakt</h4>
-                <p style="margin: 0;"><strong>E-Mail:</strong> <a href="mailto:mail@wolfewavesignals.com" style="color: var(--accent);">mail@wolfewavesignals.com</a></p>
-                <p style="margin: 4px 0 0;"><strong>Telegram:</strong> <a href="https://t.me/wolfewavesignals" target="_blank" rel="noopener" style="color: var(--accent);">t.me/wolfewavesignals</a></p>
             </div>
         </div>
     </div>
@@ -839,522 +280,97 @@
 <!-- ===== SCRIPTS ===== -->
 <script src="/components/header.js"></script>
 <script src="/components/footer.js"></script>
+<script src="/js/shared.js"></script>
+<script src="/components/image-carousel.js"></script>
 
 <script>
-// ===== CONFIG =====
-const SB_URL = 'https://ufqglmqiuyasszieprsr.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWdsbXFpdXlhc3N6aWVwcnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzODAzNDQsImV4cCI6MjA4Mzk1NjM0NH0.F2pfyfNNSr8hqZYowjDIbXmek-GvmpyZRwIEUaC3h-4';
-const STORAGE_URL = `${SB_URL}/storage/v1/object/public/signals`;
-
-// ===== STATE =====
+// ===== HOMEPAGE INIT =====
 let allSignals = [];
 let completedSignals = [];
-let symbolNames = {};
 let imageMap = {};
-let currentTab = 'all';
-let currentMarket = '';
-let searchTerm = '';
-
-// ===== HELPERS =====
-function $(id) { return document.getElementById(id); }
-
-function money(v) {
-    return (+v||0).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function price(v) {
-    const n = +v;
-    if (!n) return '--';
-    return n >= 100 ? n.toFixed(2) : n >= 1 ? n.toFixed(4) : n.toFixed(5);
-}
-
-function fmtDate(s) {
-    if (!s) return '--';
-    const d = new Date(s);
-    if (isNaN(d)) return '--';
-    return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' +
-           d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-}
-
-function getSymbolName(symbol, signal) {
-    if (!symbol) return 'Unbekannt';
-    if (symbolNames[symbol]) return symbolNames[symbol];
-    if (signal?.symbol_name && signal.symbol_name !== symbol) return signal.symbol_name;
-    let s = symbol.replace(/\.(OQ|N|DE|L|PA|AS|SW|MC|MI|AX|HK|T|SS|SZ|F)$/i, '');
-    if (s.length === 6 && /^[A-Z]+$/.test(s)) {
-        const b = s.substring(0,3), q = s.substring(3,6);
-        const fx = ['USD','EUR','GBP','JPY','CHF','AUD','NZD','CAD','HKD','SGD','MXN','SEK','NOK','TRY','ZAR','PLN','CZK','HUF'];
-        if (fx.includes(b) && fx.includes(q)) return `${b}/${q}`;
-    }
-    return s;
-}
-
-function getImageUrl(signal) {
-    const path = signal.image_path || signal.original_path;
-    if (!path) return '';
-    if (path.startsWith('http')) return path;
-    return `${STORAGE_URL}/${path}`;
-}
-
-function getTradingViewUrl(sym) {
-    const map = {'.OQ':'NASDAQ','.N':'NYSE','.DE':'XETR','.PA':'EURONEXT','.HK':'HKEX'};
-    for (const [sfx, ex] of Object.entries(map)) {
-        if (sym.endsWith(sfx)) {
-            let base = sym.slice(0, -sfx.length).replace(/[a-z]$/,'');
-            return `https://www.tradingview.com/chart/?symbol=${ex}:${base}`;
-        }
-    }
-    if (sym.length === 6 && !sym.includes('.')) return `https://www.tradingview.com/chart/?symbol=FX:${sym}`;
-    return `https://www.tradingview.com/chart/?symbol=${sym}`;
-}
-
-// ===== SUPABASE FETCH =====
-async function sb(table, query) {
-    const r = await fetch(`${SB_URL}/rest/v1/${table}?${query}`, {
-        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Prefer': 'count=none' }
-    });
-    if (!r.ok) throw new Error(`${table}: ${r.status}`);
-    return r.json();
-}
-
-// ===== LOAD DATA =====
-async function loadSymbolNames() {
-    try {
-        let offset = 0, all = [];
-        while (true) {
-            const data = await sb('symbol_markets', `select=symbol,name&name=not.is.null&limit=1000&offset=${offset}`);
-            all = all.concat(data);
-            if (data.length < 1000) break;
-            offset += 1000;
-        }
-        all.forEach(d => { if (d.symbol && d.name) symbolNames[d.symbol] = d.name; });
-    } catch(e) { console.warn('Symbol names:', e); }
-}
-
-async function loadSignalImages() {
-    try {
-        const imgs = await sb('signal_images', 'select=wedge_id,image_url,image_type,is_display_photo,scanned_at&order=scanned_at.desc&limit=10000');
-        const byWedge = {};
-        const prio = { 'display_photo': 99, 'latest': 3, 'entry': 2, 'detect': 1 };
-        imgs.forEach(img => {
-            const p = img.is_display_photo ? 99 : (prio[img.image_type] || 0);
-            if (!byWedge[img.wedge_id] || p > byWedge[img.wedge_id].prio) {
-                byWedge[img.wedge_id] = { url: img.image_url, prio: p };
-            }
-        });
-        // Update signals
-        allSignals.forEach(s => {
-            if (byWedge[s.wedge_id]) s.image_path = byWedge[s.wedge_id].url;
-        });
-        completedSignals.forEach(s => {
-            if (byWedge[s.wedge_id]) s.original_path = byWedge[s.wedge_id].url;
-        });
-    } catch(e) { console.warn('Images:', e); }
-}
 
 async function fetchSignals() {
     try {
         allSignals = await sb('signals', 'select=*&status=in.(pending,active)&order=created_at.desc&limit=10000');
-    } catch(e) {
-        console.error('Signals fetch:', e);
-        allSignals = [];
-    }
+    } catch(e) { console.error('Signals:', e); allSignals = []; }
 }
 
-async function fetchCompletedSignals() {
+async function fetchCompleted() {
     try {
         completedSignals = await sb('completed_signals', 'select=*&order=created_at.desc&limit=10000');
-    } catch(e) {
-        console.error('Completed fetch:', e);
-        completedSignals = [];
-    }
+    } catch(e) { console.error('Completed:', e); completedSignals = []; }
 }
 
-// ===== FILTERING =====
-function getFilteredSignals() {
-    let filtered = [...allSignals];
-    if (currentTab === 'active') filtered = filtered.filter(s => s.status === 'active');
-    if (currentTab === 'pending') filtered = filtered.filter(s => s.status === 'pending');
-    if (currentMarket) filtered = filtered.filter(s => s.market === currentMarket);
-    if (searchTerm) {
-        const q = searchTerm.toLowerCase();
-        filtered = filtered.filter(s =>
-            s.symbol.toLowerCase().includes(q) ||
-            getSymbolName(s.symbol, s).toLowerCase().includes(q)
-        );
-    }
-    return filtered;
-}
-
-function getFilteredCompleted() {
-    let filtered = [...completedSignals];
-    if (currentMarket) filtered = filtered.filter(s => s.market === currentMarket);
-    if (searchTerm) {
-        const q = searchTerm.toLowerCase();
-        filtered = filtered.filter(s => s.symbol.toLowerCase().includes(q));
-    }
-    return filtered;
-}
-
-// ===== RENDERING: SIGNAL CARDS =====
-function renderSignalCard(s) {
-    const imgUrl = getImageUrl(s);
-    const name = getSymbolName(s.symbol, s);
-    const dir = s.direction || '';
-    const isBull = dir.toUpperCase().includes('BULL') || dir.toUpperCase() === 'BUY';
-    const statusCls = s.status === 'active' ? 'badge-active' : 'badge-pending';
-
-    return `<div class="signal-card" onclick="openLightbox('${imgUrl}')">
-        ${imgUrl ? `<img class="signal-img" src="${imgUrl}" alt="${name}" loading="lazy" onerror="this.style.display='none'">` :
-            '<div class="signal-img" style="display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;">Kein Bild</div>'}
-        <div class="signal-body">
-            <div class="signal-head">
-                <div>
-                    <div class="signal-symbol">${name}</div>
-                    <div class="signal-name">${s.symbol} &middot; ${s.timeframe || '--'}</div>
-                </div>
-                <div class="signal-badges">
-                    <span class="badge ${statusCls}">${s.status}</span>
-                    <span class="badge ${isBull ? 'badge-bullish' : 'badge-bearish'}">${isBull ? 'BULL' : 'BEAR'}</span>
-                </div>
-            </div>
-            <div class="signal-prices">
-                <div class="signal-price price-entry"><div class="lbl">Entry</div><div class="val">${price(s.entry)}</div></div>
-                <div class="signal-price price-sl"><div class="lbl">SL</div><div class="val">${price(s.sl)}</div></div>
-                <div class="signal-price price-tp"><div class="lbl">TP1</div><div class="val">${price(s.tp1)}</div></div>
-            </div>
-            <div class="signal-prices" style="margin-top: 6px;">
-                <div class="signal-price price-tp"><div class="lbl">TP2</div><div class="val">${price(s.tp2)}</div></div>
-                <div class="signal-price price-tp"><div class="lbl">TP3</div><div class="val">${price(s.tp3)}</div></div>
-                <div class="signal-price"><div class="lbl">R:R</div><div class="val signal-rr">${s.rr ? (+s.rr).toFixed(1) : '--'}</div></div>
-            </div>
-            <div class="signal-meta">
-                <span>${s.market || '--'}</span>
-                <a href="${getTradingViewUrl(s.symbol)}" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;" onclick="event.stopPropagation()">TradingView &rarr;</a>
-                <span>${fmtDate(s.created_at)}</span>
-            </div>
-        </div>
-    </div>`;
-}
-
-function renderCompletedCard(s) {
-    const imgUrl = getImageUrl(s);
-    const name = getSymbolName(s.symbol, s);
-    let resultText, resultCls;
-    if (s.tp3_hit) { resultText = 'TP3'; resultCls = 'result-tp3'; }
-    else if (s.tp2_hit) { resultText = 'TP2'; resultCls = 'result-tp2'; }
-    else if (s.tp1_hit) { resultText = 'TP1'; resultCls = 'result-tp1'; }
-    else { resultText = 'SL'; resultCls = 'result-sl'; }
-
-    return `<div class="signal-card" onclick="openLightbox('${imgUrl}')" style="position:relative;">
-        <span class="result-badge ${resultCls}">${resultText}</span>
-        ${imgUrl ? `<img class="signal-img" src="${imgUrl}" alt="${name}" loading="lazy" onerror="this.style.display='none'">` :
-            '<div class="signal-img" style="display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;">Kein Bild</div>'}
-        <div class="signal-body">
-            <div class="signal-head">
-                <div>
-                    <div class="signal-symbol">${name}</div>
-                    <div class="signal-name">${s.symbol} &middot; ${s.timeframe || '--'}</div>
-                </div>
-                <span class="badge ${s.direction === 'BULLISH' ? 'badge-bullish' : 'badge-bearish'}">${s.direction || '--'}</span>
-            </div>
-            <div class="signal-prices">
-                <div class="signal-price price-entry"><div class="lbl">Entry</div><div class="val">${price(s.entry)}</div></div>
-                <div class="signal-price price-sl"><div class="lbl">SL</div><div class="val">${price(s.sl)}</div></div>
-                <div class="signal-price price-tp"><div class="lbl">TP1</div><div class="val">${price(s.tp1)}</div></div>
-            </div>
-            <div class="signal-meta">
-                <span>${s.market || '--'}</span>
-                <span>${fmtDate(s.created_at)}</span>
-            </div>
-        </div>
-    </div>`;
-}
-
-// ===== PAGINATION =====
-const SIGNALS_PER_PAGE = 12;
-let visibleCount = SIGNALS_PER_PAGE;
-let visibleCompletedCount = SIGNALS_PER_PAGE;
-
-function renderSignals() {
-    const grid = $('signals-grid');
-    const wrap = $('load-more-wrap');
-    const btn = $('load-more-btn');
-    const countSpan = $('load-more-count');
-
-    if (currentTab === 'success') {
-        const signals = getFilteredCompleted();
-        if (!signals.length) {
-            grid.innerHTML = '<div class="empty-state">Keine abgeschlossenen Signale gefunden.</div>';
-            wrap.style.display = 'none';
-            return;
-        }
-        const shown = signals.slice(0, visibleCount);
-        grid.innerHTML = shown.map(renderCompletedCard).join('');
-        const remaining = signals.length - shown.length;
-        if (remaining > 0) {
-            wrap.style.display = 'block';
-            countSpan.textContent = `(${remaining} weitere)`;
-        } else {
-            wrap.style.display = 'none';
-        }
-    } else {
-        const signals = getFilteredSignals();
-        if (!signals.length) {
-            grid.innerHTML = '<div class="empty-state">Keine Signale gefunden.</div>';
-            wrap.style.display = 'none';
-            return;
-        }
-        const shown = signals.slice(0, visibleCount);
-        grid.innerHTML = shown.map(renderSignalCard).join('');
-        const remaining = signals.length - shown.length;
-        if (remaining > 0) {
-            wrap.style.display = 'block';
-            countSpan.textContent = `(${remaining} weitere)`;
-        } else {
-            wrap.style.display = 'none';
-        }
-    }
-}
-
-// "Mehr laden" Buttons
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = $('load-more-btn');
-    if (btn) btn.addEventListener('click', () => {
-        visibleCount += SIGNALS_PER_PAGE;
-        renderSignals();
-    });
-    const cBtn = $('load-more-completed-btn');
-    if (cBtn) cBtn.addEventListener('click', () => {
-        visibleCompletedCount += SIGNALS_PER_PAGE;
-        updatePerformance();
-    });
-});
-
-// ===== UPDATE STATS =====
-function updateStats() {
-    const active = allSignals.filter(s => s.status === 'active').length;
-    const pending = allSignals.filter(s => s.status === 'pending').length;
+function updateHero() {
     const total = completedSignals.length;
     const wins = completedSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
     const winRate = total > 0 ? ((wins / total) * 100).toFixed(1) : '0';
 
-    // Hero stats
     $('stat-total').textContent = allSignals.length;
     $('stat-completed').textContent = total;
     $('stat-winrate').textContent = winRate + '%';
+}
 
-    // Tab counts
-    $('cnt-all').textContent = allSignals.length;
-    $('cnt-active').textContent = active;
-    $('cnt-pending').textContent = pending;
-    $('cnt-success').textContent = total;
-
-    // Performance stats
-    const tp3 = completedSignals.filter(s => s.tp3_hit).length;
-    const tp2 = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
-    const tp1 = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
-    const sl = completedSignals.filter(s => s.sl_hit && !s.tp1_hit).length;
+function updatePerformance() {
+    const total = completedSignals.length;
+    const wins = completedSignals.filter(s => s.tp1_hit || s.tp2_hit || s.tp3_hit).length;
+    const winRate = total > 0 ? ((wins / total) * 100).toFixed(1) : '0';
 
     $('perf-winrate').textContent = winRate + '%';
     $('perf-total').textContent = total;
-    $('perf-tp3').textContent = tp3;
-    $('perf-tp2').textContent = tp2;
-    $('perf-tp1').textContent = tp1;
-    $('perf-sl').textContent = sl;
-
-    // Recent completed (with pagination)
-    const cGrid = $('completed-grid');
-    const cWrap = $('load-more-completed-wrap');
-    const cCountSpan = $('load-more-completed-count');
-    const recent = completedSignals.slice(0, visibleCompletedCount);
-    if (recent.length) {
-        cGrid.innerHTML = recent.map(renderCompletedCard).join('');
-        const remaining = completedSignals.length - recent.length;
-        if (remaining > 0) {
-            cWrap.style.display = 'block';
-            cCountSpan.textContent = `(${remaining} weitere)`;
-        } else {
-            cWrap.style.display = 'none';
-        }
-    } else {
-        cGrid.innerHTML = '<div class="empty-state">Noch keine abgeschlossenen Signale.</div>';
-        cWrap.style.display = 'none';
-    }
+    $('perf-tp3').textContent = completedSignals.filter(s => s.tp3_hit).length;
+    $('perf-tp2').textContent = completedSignals.filter(s => s.tp2_hit && !s.tp3_hit).length;
+    $('perf-tp1').textContent = completedSignals.filter(s => s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
+    $('perf-sl').textContent = completedSignals.filter(s => s.sl_hit && !s.tp1_hit).length;
 }
 
-// ===== DASHBOARD =====
-async function loadDashboard() {
-    try {
-        const [acc, pos, hist] = await Promise.all([
-            sb('ea_account', 'select=*&terminal_id=eq.demo&limit=1'),
-            sb('ea_positions', 'select=*&terminal_id=eq.demo&order=profit.desc'),
-            sb('ea_history', 'select=*&terminal_id=eq.demo&order=close_time.desc&limit=100')
-        ]);
+function renderSignalTeaser() {
+    const grid = $('signals-grid');
+    const shown = allSignals.slice(0, 6);
+    if (!shown.length) {
+        grid.innerHTML = '<div class="empty-state">Keine aktiven Signale.</div>';
+        return;
+    }
+    grid.innerHTML = shown.map(s => renderSignalCard(s, imageMap)).join('');
+}
 
-        // Account
+async function loadDashboardTeaser() {
+    try {
+        const [acc, pos] = await Promise.all([
+            sb('ea_account', 'select=*&terminal_id=eq.demo&limit=1'),
+            sb('ea_positions', 'select=*&terminal_id=eq.demo&status=eq.open')
+        ]);
         const a = acc[0];
         if (a) {
-            const bal = +a.balance || 0, eq = +a.equity || 0, fl = +a.floating_pl || 0;
-            $('dash-bal').textContent = money(bal) + ' ' + (a.currency || 'USD');
-            $('dash-eq').textContent = money(eq);
+            $('dash-bal').textContent = money(+a.balance || 0) + ' ' + (a.currency || 'USD');
+            $('dash-eq').textContent = money(+a.equity || 0);
+            const fl = +a.floating_pl || 0;
             const floatEl = $('dash-float');
             floatEl.textContent = (fl >= 0 ? '+' : '') + money(fl);
             floatEl.className = 'val ' + (fl >= 0 ? 'c-green' : 'c-red');
         }
-
-        // Open positions
-        const open = (pos || []).filter(p => p.status === 'open');
-        $('dash-cnt').textContent = open.length;
-
-        const posEl = $('dash-positions');
-        if (open.length) {
-            posEl.innerHTML = open.map(p => {
-                const sym = p.symbol, name = getSymbolName(sym);
-                const dir = p.direction, isBuy = dir === 'BUY';
-                const profit = +p.profit, swap = +p.swap, net = profit + swap;
-                const phase = p.phase || 0;
-                return `<div class="trade-item">
-                    <div class="trade-head">
-                        <div>
-                            <span class="trade-sym">${name}</span>
-                            <span style="color:var(--text-muted);font-size:12px;margin-left:8px;">${sym}</span>
-                            <span class="badge ${isBuy?'badge-buy':'badge-sell'}" style="margin-left:8px;">${dir}</span>
-                        </div>
-                        <span class="trade-pnl ${net>=0?'c-green':'c-red'}">${(net>=0?'+':'')+money(net)}</span>
-                    </div>
-                    <div class="trade-detail">
-                        <div><div class="lbl">Entry</div>${price(p.open_price)}</div>
-                        <div><div class="lbl">Aktuell</div>${price(p.current_price)}</div>
-                        <div><div class="lbl">Lots</div>${(+p.lots).toFixed(2)}</div>
-                        <div><div class="lbl">Phase</div>${phase}/3</div>
-                        <div><div class="lbl">SL</div>${price(p.sl)}</div>
-                        <div><div class="lbl">TP1</div>${price(p.tp1)}</div>
-                    </div>
-                </div>`;
-            }).join('');
-        } else {
-            posEl.innerHTML = '<div class="empty-state">Keine offenen Trades.</div>';
-        }
-
-        // History
-        const histEl = $('dash-history');
-        if (hist && hist.length) {
-            // Group by position_id
-            const byPos = {};
-            hist.forEach(d => {
-                const pid = d.position_id;
-                if (!byPos[pid]) byPos[pid] = [];
-                byPos[pid].push(d);
-            });
-            const trades = Object.entries(byPos).map(([pid, deals]) => {
-                deals.sort((a,b) => new Date(a.close_time) - new Date(b.close_time));
-                const totalProfit = deals.reduce((s,d) => s + (+d.profit||0), 0);
-                const totalSwap = deals.reduce((s,d) => s + (+d.swap||0), 0);
-                const totalComm = deals.reduce((s,d) => s + (+d.commission||0), 0);
-                const last = deals[deals.length - 1];
-                return {
-                    symbol: last.symbol, direction: last.direction,
-                    net: totalProfit + totalSwap + totalComm,
-                    profit: totalProfit, swap: totalSwap, commission: totalComm,
-                    lots: deals.reduce((s,d) => s + (+d.lots||0), 0),
-                    close_time: last.close_time, deals
-                };
-            });
-            trades.sort((a,b) => new Date(b.close_time) - new Date(a.close_time));
-
-            histEl.innerHTML = trades.slice(0, 20).map(t => {
-                const name = getSymbolName(t.symbol);
-                const isBuy = t.direction === 'BUY';
-                return `<div class="trade-item">
-                    <div class="trade-head">
-                        <div>
-                            <span class="trade-sym">${name}</span>
-                            <span style="color:var(--text-muted);font-size:12px;margin-left:8px;">${t.symbol}</span>
-                            <span class="badge ${isBuy?'badge-buy':'badge-sell'}" style="margin-left:8px;">${t.direction}</span>
-                            <span class="badge" style="background:var(--border);margin-left:4px;">CLOSED</span>
-                        </div>
-                        <span class="trade-pnl ${t.net>=0?'c-green':'c-red'}">${(t.net>=0?'+':'')+money(t.net)}</span>
-                    </div>
-                    <div class="trade-detail">
-                        <div><div class="lbl">Deals</div>${t.deals.length}</div>
-                        <div><div class="lbl">Lots</div>${t.lots.toFixed(2)}</div>
-                        <div><div class="lbl">Geschlossen</div>${fmtDate(t.close_time)}</div>
-                    </div>
-                </div>`;
-            }).join('');
-        } else {
-            histEl.innerHTML = '<div class="empty-state">Keine Trade-History vorhanden.</div>';
-        }
-
-    } catch(e) {
-        console.error('Dashboard error:', e);
-        $('dash-positions').innerHTML = '<div class="empty-state">Dashboard konnte nicht geladen werden.</div>';
-    }
+        $('dash-cnt').textContent = (pos || []).length;
+    } catch(e) { console.error('Dashboard:', e); }
 }
 
-// ===== LIGHTBOX =====
-function openLightbox(url) {
-    if (!url) return;
-    $('lightbox-img').src = url;
-    $('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    $('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
-});
-
-// ===== EVENT SETUP =====
-function setupEvents() {
-    // Tabs
-    document.querySelectorAll('#signal-tabs .tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('#signal-tabs .tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            currentTab = tab.dataset.tab;
-            visibleCount = SIGNALS_PER_PAGE;
-            renderSignals();
-        });
-    });
-
-    // Market filters
-    document.querySelectorAll('#signal-filters .filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('#signal-filters .filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentMarket = btn.dataset.market;
-            visibleCount = SIGNALS_PER_PAGE;
-            renderSignals();
-        });
-    });
-
-    // Search
-    let searchTimeout;
-    $('signal-search').addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            searchTerm = e.target.value.trim();
-            visibleCount = SIGNALS_PER_PAGE;
-            renderSignals();
-        }, 300);
-    });
-}
-
-// ===== INIT =====
 async function init() {
-    setupEvents();
     await loadSymbolNames();
-    await Promise.all([fetchSignals(), fetchCompletedSignals()]);
-    await loadSignalImages();
-    updateStats();
-    renderSignals();
-    loadDashboard();
+    await Promise.all([fetchSignals(), fetchCompleted()]);
+    imageMap = await loadAllSignalImages();
+    window._carouselImageMap = imageMap;
+
+    // Apply images to signals
+    allSignals.forEach(s => {
+        if (imageMap[s.wedge_id]) {
+            const best = imageMap[s.wedge_id].find(i => i.type === 'display_photo') || imageMap[s.wedge_id][imageMap[s.wedge_id].length - 1];
+            if (best) s.image_path = best.url;
+        }
+    });
+
+    updateHero();
+    updatePerformance();
+    renderSignalTeaser();
+    loadDashboardTeaser();
 }
 
 document.addEventListener('DOMContentLoaded', init);

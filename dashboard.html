@@ -465,10 +465,26 @@
         .is-guest #acc-history,
         .is-guest #acc-history + .accordion-body,
         .is-guest #acc-skipped,
-        .is-guest #acc-skipped + .accordion-body,
-        .is-guest #acc-system,
-        .is-guest #acc-system + .accordion-body { display:none; }
+        .is-guest #acc-skipped + .accordion-body { display:none; }
         .is-guest .refresh-bar { display:none; }
+
+        /* Chart Thumbnails on trade cards */
+        .tc-thumb {
+            width:100%; height:140px; object-fit:cover;
+            border-radius:10px 10px 0 0; margin:-22px -22px 16px -22px;
+            width:calc(100% + 44px); cursor:pointer;
+        }
+        .tc-thumb:hover { opacity:0.9; }
+
+        /* Close Reason Badge */
+        .close-reason {
+            display:inline-flex; align-items:center; gap:5px;
+            padding:3px 10px; border-radius:6px; font-size:11px; font-weight:600;
+        }
+        .close-reason.reason-tp { background:var(--accent-green-dim); color:var(--accent-green); }
+        .close-reason.reason-sl { background:rgba(220,38,38,.1); color:var(--accent-red); }
+        .close-reason.reason-timeout { background:rgba(245,158,11,.12); color:var(--accent-gold); }
+        .close-reason.reason-manual { background:rgba(59,130,246,.1); color:var(--accent-blue); }
 
         .locked-overlay {
             position:relative;
@@ -806,11 +822,10 @@
 
         function applyAccessLevel() {
             if (isAdmin) {
-                // Admin sieht alles
                 document.body.classList.add('is-admin');
                 return;
             }
-            // Nicht-Admin: Nur 1 Trade sichtbar, Rest locked
+            // Guest: Overview + System Status sichtbar, Details/History/Skipped versteckt
             document.body.classList.add('is-guest');
         }
 
@@ -972,8 +987,11 @@
                 const wid = p.wedge_id||'';
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
 
+                const thumbUrl = getThumbUrl(wid);
+
                 return `<div class="trade-card fade-in">
-                    <div class="tc-head">
+                    ${thumbUrl ? `<img class="tc-thumb" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.style.display='none'" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : ''}>` : ''}
+                    <div class="tc-head" ${!thumbUrl ? 'style="margin-top:0"' : ''}>
                         <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
                             ${name}
                             <small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
@@ -1116,7 +1134,11 @@
                 const wid = t.wedgeId||'';
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
 
+                const thumbUrl2 = getThumbUrl(wid);
+                const closeReason = deriveCloseReason(t);
+
                 return `<div class="trade-card closed fade-in">
+                    ${thumbUrl2 ? `<img class="tc-thumb" src="${thumbUrl2}" alt="${name}" loading="lazy" onerror="this.style.display='none'" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : ''}>` : ''}
                     <div class="tc-head">
                         <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
                             ${name}<small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
@@ -1124,7 +1146,7 @@
                         <div class="tc-badges">
                             <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
                             <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
-                            <span class="badge badge-closed">CLOSED</span>
+                            <span class="close-reason ${closeReason.cls}">${closeReason.text}</span>
                         </div>
                     </div>
                     <div class="tc-info">
@@ -1365,6 +1387,44 @@
             return '';
         }
 
+        // ==================== CLOSE REASON ====================
+        function deriveCloseReason(trade) {
+            // Check comments of all deals for clues
+            const comments = trade.deals.map(d => (d.comment||'').toLowerCase()).join(' ');
+            if (comments.includes('epa_target') || comments.includes('epa target') || comments.includes('epa-ziel')) {
+                return { text: 'EPA-Ziel erreicht', cls: 'reason-tp' };
+            }
+            if (comments.includes('tp3') || comments.includes('take profit 3')) {
+                return { text: 'TP3 erreicht', cls: 'reason-tp' };
+            }
+            if (comments.includes('apex') || comments.includes('timeout') || comments.includes('zeit')) {
+                return { text: 'Apex Timeout', cls: 'reason-timeout' };
+            }
+            if (comments.includes('sl') || comments.includes('stop loss') || comments.includes('stop-loss')) {
+                return { text: 'Stop-Loss', cls: 'reason-sl' };
+            }
+            // Fallback: check P&L
+            if (trade.net >= 0) {
+                if (trade.deals.length >= 3) return { text: 'TP3 erreicht', cls: 'reason-tp' };
+                if (trade.deals.length >= 2) return { text: 'Teilweise TP', cls: 'reason-tp' };
+                return { text: 'Gewinn', cls: 'reason-tp' };
+            } else {
+                return { text: 'Stop-Loss', cls: 'reason-sl' };
+            }
+        }
+
+        function getThumbUrl(wedgeId) {
+            const imgs = imageMap[wedgeId];
+            if (!imgs || !imgs.length) return '';
+            // Priority: latest > entry > detect
+            const prio = { 'latest': 3, 'entry': 2, 'detect': 1 };
+            let best = imgs[0];
+            imgs.forEach(img => {
+                if ((prio[img.image_type] || 0) > (prio[best.image_type] || 0)) best = img;
+            });
+            return best.image_url || '';
+        }
+
         // ==================== ACCORDION ====================
         const prevCounts = { active:0, details:0, history:0, skipped:0 };
         let isFirstLoad = true;
@@ -1414,43 +1474,61 @@
                 startRefresh();
             } else {
                 loadGuestPreview();
+                // Open system status accordion for guests
+                const sysHead = $('acc-system');
+                const sysBody = sysHead?.nextElementSibling;
+                if (sysHead && sysBody) {
+                    sysHead.classList.add('open');
+                    sysBody.classList.add('open');
+                }
             }
         });
 
         async function loadGuestPreview() {
-            // Alle Trades zählen, aber nur 1 anzeigen
             try {
-                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,tp2,tp3,sl,phase,open_time,status&terminal_id=eq.demo&order=profit.desc');
+                // Load overview trades (without P&L details)
+                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,tp2,tp3,sl,phase,open_time,status&terminal_id=eq.demo&order=open_time.desc');
                 const openTrades = (allPos||[]).filter(p => p.status === 'open');
                 const totalCount = openTrades.length;
                 const c = $('overview-table');
 
                 $('ov-cnt').textContent = totalCount;
 
-                if (totalCount === 0) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
+                if (totalCount === 0) {
+                    c.innerHTML = '<div class="empty">Keine aktiven Trades</div>';
+                } else {
+                    // Show all trades but without P&L/Lots columns
+                    const rows = openTrades.map(p => {
+                        const sym = p.symbol, name = getName(sym), dir = p.direction||'';
+                        const isBuy = dir==='BUY';
+                        const phase = p.phase||0;
+                        return `<tr onclick="window.open('${chartUrl(sym)}','_blank')">
+                            <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
+                            <td><span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span></td>
+                            <td>${price(p.open_price)}</td>
+                            <td><div class="ov-phase" title="TP1 / TP2 / TP3">
+                                <span class="dot ${phase>=1?'hit':''}"></span>
+                                <span class="dot ${phase>=2?'hit':''}"></span>
+                                <span class="dot ${phase>=3?'hit':''}"></span>
+                            </div></td>
+                            <td style="font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</td>
+                        </tr>`;
+                    }).join('');
 
-                const p = openTrades[0];
-                const sym = p.symbol, name = getName(sym), dir = p.direction||'';
-                const isBuy = dir==='BUY';
-                const phase = p.phase||0;
+                    c.innerHTML = `<table class="overview-table">
+                        <thead><tr><th>Name</th><th>Richtung</th><th>Entry</th><th>TP Status</th><th>Seit</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>`;
+                }
 
-                c.innerHTML = `<div class="locked-overlay"><table class="overview-table">
-                    <thead><tr><th>Name</th><th>Richtung</th><th>Entry</th><th>TF</th><th>TP Status</th><th>Seit</th></tr></thead>
-                    <tbody><tr>
-                        <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
-                        <td><span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span></td>
-                        <td>${price(p.open_price)}</td>
-                        <td>—</td>
-                        <td><div class="ov-phase"><span class="dot ${phase>=1?'hit':''}"></span><span class="dot ${phase>=2?'hit':''}"></span><span class="dot ${phase>=3?'hit':''}"></span></div></td>
-                        <td style="font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</td>
-                    </tr></tbody>
-                </table></div>
-                <div class="locked-cta">
-                    <p>${totalCount > 1 ? totalCount + ' aktive Trades — ' : ''}Melde dich an, um alle Trades, P&L, History und mehr zu sehen.</p>
-                    <a href="/#login" onclick="if(typeof showLogin==='function'){event.preventDefault();showLogin();}">Jetzt einloggen</a>
-                </div>`;
+                // Also load account data for system status
+                const acc = await sb('ea_account','select=*&terminal_id=eq.demo&limit=1');
+                accountData = acc[0] || null;
+
+                // Load and show system status for all visitors
+                renderSystemStatus();
             } catch(e) {
-                $('overview-table').innerHTML = '<div class="empty">Dashboard nicht verfügbar</div>';
+                $('overview-table').innerHTML = '<div class="empty">Dashboard nicht verfuegbar</div>';
             }
         }
     </script>

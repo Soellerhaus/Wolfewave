@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Häufige Fragen | WolfeWaveSignals</title>
-    <meta name="description" content="Häufig gestellte Fragen zu WolfeWaveSignals. Erfahre alles über unsere Trading Signale, den Scanner und Premium-Features.">
+    <title>FAQ - Haeufige Fragen | WolfeWaveSignals</title>
+    <meta name="description" content="Haeufig gestellte Fragen zu WolfeWaveSignals. Alles ueber Wolfe Wave Signale, den Scanner, Maerkte, Win-Rate und Trading-Risiken.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://www.wolfewavesignals.com/faq.html">
-    
-    <!-- FAQPage Schema.org für Google Rich Results -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/shared.css">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -19,39 +19,31 @@
                 "name": "Was ist WolfeWaveSignals?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "WolfeWaveSignals ist eine Trading-Signale-Plattform, die sich auf Wolfe Wave Patterns spezialisiert hat. Unser Scanner läuft 24/7 und erkennt diese Chartmuster automatisch in verschiedenen Märkten. Als Abonnent erhältst du die erkannten Signale in Echtzeit – mit Entry, Stop-Loss und Take-Profit Levels."
+                    "text": "Eine kostenlose Trading-Signale-Plattform spezialisiert auf Wolfe Wave Patterns. Der Scanner erkennt Chartmuster automatisch und liefert Signale mit Entry, Stop-Loss und drei Take-Profit Levels."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Was kostet das Premium-Abo?",
+                "name": "Welche Maerkte werden gescannt?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Der aktuelle Einführungspreis beträgt 9,99€ pro Monat (inkl. MwSt.). Das Abo verlängert sich monatlich und kann jederzeit gekündigt werden."
+                    "text": "Unser Scanner analysiert 700+ Instrumente: DAX/XETRA, NASDAQ, NYSE, Forex, Krypto, Indices, Rohstoffe, Hong Kong und europaeische Aktien."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Welche Märkte werden gescannt?",
+                "name": "Was bedeuten PENDING, ACTIVE, SUCCESS?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Unser Scanner analysiert drei große Marktkategorien: Forex (wichtige Währungspaare), Stocks (Aktienindizes und Einzelaktien) und Crypto (Kryptowährungen wie BTC, ETH)."
+                    "text": "PENDING: Pattern erkannt, Entry noch nicht erreicht. ACTIVE: Entry getriggert, der Trade laeuft. SUCCESS: Signal abgeschlossen, TP erreicht oder SL ausgeloest."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Was bedeuten PENDING, ACTIVE und SUCCESS?",
+                "name": "Was sind TP1, TP2, TP3?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "PENDING bedeutet, das Pattern wurde erkannt, aber der Entry noch nicht erreicht. ACTIVE heißt, der Entry wurde getriggert und der Trade läuft. SUCCESS bedeutet, der Trade ist abgeschlossen (TP erreicht oder SL ausgelöst)."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Kann ich die Signale 1:1 traden?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Die Signale sind Setup-Ideen und Orientierungshilfen, keine Handelsanweisungen. Wir empfehlen, Signale mit deiner eigenen Analyse zu kombinieren und eigenes Risikomanagement anzuwenden."
+                    "text": "Drei gestaffelte Take-Profit Levels basierend auf der EPA-Linie. TP1 bei 33%, TP2 bei 66%, TP3 bei 100% des berechneten Kursziels."
                 }
             },
             {
@@ -59,1255 +51,151 @@
                 "name": "Ist Trading nicht riskant?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Ja, Trading ist riskant. Du kannst Geld verlieren – auch mehr als du einsetzt, wenn du mit Hebel tradest. Investiere nur Geld, dessen Verlust du dir leisten kannst. WolfeWaveSignals ist ein Hilfstool, keine Garantie für Gewinne."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Wie kann ich mein Abo kündigen?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Du kannst dein Abo jederzeit kündigen. Nach der Kündigung behältst du den Zugang bis zum Ende des bezahlten Zeitraums. Die Kündigung erfolgt über dein Account-Dashboard oder per E-Mail."
+                    "text": "Ja, Trading ist riskant. Du kannst Geld verlieren, auch mehr als du einsetzt wenn du mit Hebel tradest. Investiere nur Geld, dessen Verlust du dir leisten kannst."
                 }
             }
         ]
     }
     </script>
     <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #faf8f5;
-            --bg-card: #ffffff;
-            --bg-card-hover: #f5f0eb;
-            --accent-green: #10b981;
-            --accent-green-dim: rgba(16, 185, 129, 0.1);
-            --accent-green-medium: rgba(16, 185, 129, 0.2);
-            --accent-blue: #3b82f6;
-            --accent-yellow: #f59e0b;
-            --accent-red: #dc2626;
-            --text-primary: #1a2744;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --border-color: #e8e4dd;
-            --border-accent: #d4d0c8;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.7;
-            min-height: 100vh;
-        }
-
-        /* ========================================
-           HEADER
-           ======================================== */
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(250, 248, 245, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 24px;
-        }
-
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 72px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 1.25rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
-
-        .logo-text .green {
-            color: var(--accent-green);
-        }
-
-        .nav {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .nav a:hover {
-            color: var(--text-primary);
-            background: var(--bg-card);
-        }
-
-        .nav a.active {
-            color: var(--accent-green);
-            background: var(--accent-green-dim);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: var(--accent-green-dim);
-            border: 2px solid var(--accent-green);
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--accent-green);
-            border-radius: 2px;
-        }
-
-        /* ========================================
-           HERO
-           ======================================== */
-        .hero {
-            padding: 60px 24px 40px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, transparent 100%);
-        }
-
-        .hero-inner {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--accent-green-dim);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            color: var(--accent-green);
-            margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 16px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* ========================================
-           QUICK LINKS
-           ======================================== */
-        .quick-links {
-            padding: 40px 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .quick-links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-        }
-
-        .quick-link-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .quick-link-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-2px);
-        }
-
-        .quick-link-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--accent-green-dim);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
-
-        .quick-link-content h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .quick-link-content p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* ========================================
-           FAQ SECTIONS
-           ======================================== */
-        .faq-section {
-            padding: 60px 24px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .faq-category {
-            margin-bottom: 48px;
-        }
-
-        .faq-category:last-child {
-            margin-bottom: 0;
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .category-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--accent-green-dim);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .category-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .faq-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
-
-        .faq-question {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-weight: 600;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            gap: 16px;
-        }
-
-        .faq-question:hover {
-            background: var(--bg-card-hover);
-        }
-
-        .faq-icon {
-            width: 28px;
-            height: 28px;
-            background: var(--accent-green-dim);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-green);
-            font-size: 1.2rem;
-            font-weight: 400;
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .faq-item.open .faq-icon {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 1000px;
-        }
-
-        .faq-answer-inner {
-            padding: 0 24px 24px;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.8;
-        }
-
-        .faq-answer-inner p {
-            margin-bottom: 12px;
-        }
-
-        .faq-answer-inner p:last-child {
-            margin-bottom: 0;
-        }
-
-        .faq-answer-inner ul {
-            list-style: none;
-            margin: 16px 0;
-        }
-
-        .faq-answer-inner li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .faq-answer-inner li::before {
-            content: "✓";
-            color: var(--accent-green);
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .faq-answer-inner a {
-            color: var(--accent-green);
-            text-decoration: none;
-        }
-
-        .faq-answer-inner a:hover {
-            text-decoration: underline;
-        }
-
-        .faq-answer-inner strong {
-            color: var(--text-primary);
-        }
-
-        .inline-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-family: monospace;
-        }
-
-        .tag-green {
-            color: var(--accent-green);
-            border-color: rgba(16, 185, 129, 0.3);
-            background: var(--accent-green-dim);
-        }
-
-        .tag-red {
-            color: var(--accent-red);
-            border-color: rgba(220, 38, 38, 0.3);
-            background: rgba(220, 38, 38, 0.1);
-        }
-
-        .tag-blue {
-            color: var(--accent-blue);
-            border-color: rgba(59, 130, 246, 0.3);
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .tag-yellow {
-            color: var(--accent-yellow);
-            border-color: rgba(245, 158, 11, 0.3);
-            background: rgba(245, 158, 11, 0.1);
-        }
-
-        /* ========================================
-           INFO BOX
-           ======================================== */
-        .info-box {
-            background: var(--accent-green-dim);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin: 16px 0;
-        }
-
-        .info-box-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            color: var(--accent-green);
-        }
-
-        .info-box p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ========================================
-           CTA SECTION
-           ======================================== */
-        .cta-section {
-            padding: 60px 24px;
-            text-align: center;
-        }
-
-        .cta-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 48px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta-box h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .cta-box p {
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        .cta-price {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .cta-price .amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .cta-price .period {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-
-        .cta-badge {
-            display: inline-block;
-            background: var(--accent-green);
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 24px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 32px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--accent-green);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
-        }
-
-        /* ========================================
-           FOOTER
-           ======================================== */
-        .footer {
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 40px 24px;
-            margin-top: 40px;
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .footer-brand-icon {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-brand-icon img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-        }
-
-        .footer-brand span {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--text-primary);
-        }
-
-        /* ========================================
-           RESPONSIVE
-           ======================================== */
-        @media (max-width: 768px) {
-            .nav {
-                display: none;
-                position: absolute;
-                top: 72px;
-                left: 0;
-                right: 0;
-                background: var(--bg-card);
-                border-bottom: 1px solid var(--border-color);
-                flex-direction: column;
-                padding: 16px;
-            }
-
-            .nav.active {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-
-            .hero {
-                padding: 40px 20px 30px;
-            }
-
-            .quick-links {
-                padding: 30px 20px;
-            }
-
-            .quick-links-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .faq-section {
-                padding: 40px 20px;
-            }
-
-            .faq-question {
-                padding: 16px 20px;
-                font-size: 0.95rem;
-            }
-
-            .faq-answer-inner {
-                padding: 0 20px 20px;
-            }
-
-            .cta-box {
-                padding: 32px 24px;
-            }
-
-            .cta-price .amount {
-                font-size: 2rem;
-            }
-
-            .footer-inner {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    
-        /* Language Selector in Navigation */
-        .nav-language-container {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .nav-language-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-family: inherit;
-        }
-        
-        .nav-language-btn:hover {
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-            background: rgba(16, 185, 129, 0.05);
-        }
-        
-        .language-text {
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .language-dropdown {
-            position: absolute;
-            top: 45px;
-            left: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 8px 0;
-            min-width: 180px;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(26, 39, 68, 0.08);
-            z-index: 1000;
-            display: none;
-        }
-        
-        .language-dropdown.active {
-            display: block;
-        }
-        
-        .language-option {
-            padding: 10px 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-primary);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .language-option:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-        
-        /* Google Translate - Minimal styling (Branding beibehalten gemäß ToS) */
-        body > .skiptranslate > iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        body {
-            top: 0px !important;
-        }
+    /* ===== FAQ PAGE ===== */
+    .page-hero {
+        padding: 80px 0 40px;
+        text-align: center;
+    }
+    .page-hero h1 {
+        font-size: clamp(28px, 5vw, 44px);
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p {
+        font-size: clamp(15px, 2vw, 18px);
+        color: var(--text-secondary);
+        max-width: 640px;
+        margin: 0 auto;
+    }
     </style>
-
-    <!-- Google Translate Widget -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'de',
-                includedLanguages: 'en,es,fr,it,pt,ru,zh-CN,ja,ko,ar,tr,pl,nl,sv,da,no,fi,cs,hu,ro,el,he,id,th,vi,uk,bg,hr,sk,sl',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false,
-                multilanguagePage: true
-            }, 'google_translate_element');
-            
-            // Minimize top banner displacement
-            setTimeout(function() {
-                document.body.style.top = '0';
-            }, 100);
-            
-            // AUTO-DETECT and translate on first visit
-            setTimeout(function() {
-                autoTranslateToUserLanguage();
-            }, 1000);
-        }
-        
-        function autoTranslateToUserLanguage() {
-            if (document.cookie.indexOf('googtrans') !== -1) {
-                return;
-            }
-            
-            var userLang = navigator.language || navigator.userLanguage;
-            userLang = userLang.split('-')[0];
-            
-            if (userLang === 'de') {
-                return;
-            }
-            
-            var supportedLangs = ['en','es','fr','it','pt','ru','zh','ja','ko','ar','tr','pl','nl','sv','da','no','fi','cs','hu','ro','el','he','id','th','vi','uk','bg','hr','sk','sl'];
-            
-            if (supportedLangs.indexOf(userLang) !== -1) {
-                if (userLang === 'zh') {
-                    userLang = 'zh-CN';
-                }
-                
-                var googleTransCookie = '/de/' + userLang;
-                document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
-                document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
-                
-                window.location.reload();
-            }
-        }
-        
-        function toggleLanguageMenu() {
-            const dropdown = document.getElementById('languageDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
-            }
-        }
-        
-        function changeLanguage(langCode) {
-            const dropdown = document.getElementById('languageDropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
-            }
-            
-            var googleTransCookie = '/de/' + langCode;
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/';
-            document.cookie = 'googtrans=' + googleTransCookie + '; path=/; domain=' + window.location.hostname;
-            
-            const langMap = {
-                'de': 'DE', 'en': 'EN', 'es': 'ES', 'fr': 'FR', 'it': 'IT', 
-                'pt': 'PT', 'ru': 'RU', 'zh-CN': 'CN', 'ja': 'JP', 'ko': 'KR',
-                'ar': 'AR', 'tr': 'TR', 'pl': 'PL', 'nl': 'NL'
-            };
-            
-            const langBtn = document.querySelector('.language-text');
-            if (langBtn && langMap[langCode]) {
-                langBtn.textContent = langMap[langCode];
-            }
-            
-            window.location.reload();
-        }
-        
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('languageDropdown');
-            const langBtn = document.querySelector('.nav-language-btn');
-            
-            if (dropdown && langBtn && !dropdown.contains(e.target) && !langBtn.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
-    <!-- Modularer Header -->
-    <div id="site-header"></div>
-    <script src="/components/header.js"></script>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-badge">❓ Hilfe & Support</div>
-            <h1>Häufig gestellte Fragen</h1>
-            <p class="hero-subtitle">
-                Hier findest du Antworten auf die wichtigsten Fragen rund um WolfeWaveSignals, 
-                unsere Signale und Premium-Features.
-            </p>
-        </div>
-    </section>
+<div id="site-header"></div>
 
-    <!-- QUICK LINKS -->
-    <section class="quick-links">
-        <div class="quick-links-grid">
-            <a href="https://www.wolfewavesignals.com/wolfewaves.html" class="quick-link-card">
-                <div class="quick-link-icon">📖</div>
-                <div class="quick-link-content">
-                    <h3>Tutorial</h3>
-                    <p>Was sind Wolfe Waves?</p>
-                </div>
-            </a>
-            <a href="https://www.wolfewavesignals.com/scanner-erklaerung.html" class="quick-link-card">
-                <div class="quick-link-icon">🔍</div>
-                <div class="quick-link-content">
-                    <h3>Scanner</h3>
-                    <p>So funktioniert der Scanner</p>
-                </div>
-            </a>
-            <a href="https://www.wolfewavesignals.com/maerkte.html" class="quick-link-card">
-                <div class="quick-link-icon">🌍</div>
-                <div class="quick-link-content">
-                    <h3>Märkte</h3>
-                    <p>Welche Märkte werden gescannt?</p>
-                </div>
-            </a>
-        </div>
-    </section>
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container">
+        <p class="section-label">Hilfe</p>
+        <h1>Haeufige <span>Fragen</span></h1>
+        <p>Alles was du ueber WolfeWaveSignals, den Scanner und die Signale wissen musst.</p>
+    </div>
+</section>
 
-    <!-- FAQ SECTIONS -->
-    <section class="faq-section">
-        
-        <!-- ALLGEMEIN -->
-        <div class="faq-category">
-            <div class="category-header">
-                <div class="category-icon">🏠</div>
-                <h2>Allgemeine Fragen</h2>
-            </div>
+<!-- FAQ LIST -->
+<section style="padding: 0 0 80px;">
+    <div class="container">
+        <div class="faq-list">
 
+            <!-- FAQ 1 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                     Was ist WolfeWaveSignals?
-                    <span class="faq-icon">+</span>
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>WolfeWaveSignals ist eine Trading-Signale-Plattform, die sich auf <strong>Wolfe Wave Patterns</strong> spezialisiert hat. Unser Scanner läuft <strong>24/7</strong> und erkennt diese Chartmuster automatisch in verschiedenen Märkten.</p>
-                        <p>Als Abonnent erhältst du die erkannten Signale in Echtzeit – mit Entry, Stop-Loss und Take-Profit Levels. Du entscheidest selbst, ob und wie du sie in dein Trading einbaust.</p>
-                        <p>Mehr über das Muster erfährst du in unserem <a href="https://www.wolfewavesignals.com/wolfewaves.html">Tutorial</a>.</p>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Eine kostenlose Trading-Signale-Plattform spezialisiert auf Wolfe Wave Patterns. Der Scanner erkennt Chartmuster automatisch und liefert Signale mit Entry, Stop-Loss und drei Take-Profit Levels. Alle Signale sind offen sichtbar &ndash; kein Login, kein Abo noetig.
+                </div></div>
             </div>
 
+            <!-- FAQ 2 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Was kostet das Premium-Abo?
-                    <span class="faq-icon">+</span>
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Welche Maerkte werden gescannt?
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Unser aktueller <strong>Einführungspreis</strong> beträgt:</p>
-                        <p style="font-size: 1.5rem; color: var(--accent-green); font-weight: 700; margin: 16px 0;">9,99€ / Monat <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 400;">(inkl. MwSt.)</span></p>
-                        <p>Das Abo verlängert sich monatlich und kann jederzeit gekündigt werden. Du behältst den Zugang bis zum Ende der bezahlten Periode.</p>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Unser Scanner analysiert ueber 700 Instrumente aus 11 Maerkten: DAX/XETRA (40), NASDAQ (200+), NYSE (200+), Forex (60+), Krypto (50+), Indices &amp; Rohstoffe (30+), Hong Kong (40+) und europaeische Aktien (80+). Gescannt wird in 6 Zeitrahmen: M5, M15, H1, H4, D1, W1.
+                </div></div>
             </div>
 
+            <!-- FAQ 3 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Welche Märkte werden gescannt?
-                    <span class="faq-icon">+</span>
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Was bedeuten PENDING, ACTIVE, SUCCESS?
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Unser Scanner analysiert drei große Marktkategorien:</p>
-                        <ul>
-                            <li><strong>Forex</strong> – Wichtige Währungspaare (EUR/USD, GBP/USD, etc.)</li>
-                            <li><strong>Stocks</strong> – Aktienindizes und Einzelaktien (DAX, NASDAQ, NYSE)</li>
-                            <li><strong>Crypto</strong> – Kryptowährungen (BTC, ETH, etc.)</li>
-                        </ul>
-                        <p>Die komplette Liste findest du auf unserer <a href="https://www.wolfewavesignals.com/maerkte.html">Märkte-Seite</a>.</p>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    <strong>PENDING:</strong> Pattern erkannt, Entry noch nicht erreicht. Der Keil wurde identifiziert und der Scanner wartet auf den Breakout.<br><br>
+                    <strong>ACTIVE:</strong> Entry getriggert, der Trade laeuft. Der Preis hat die 1-3 Linie durchbrochen und die Ziele werden getrackt.<br><br>
+                    <strong>SUCCESS:</strong> Signal abgeschlossen &ndash; mindestens ein Take-Profit wurde erreicht oder der Stop-Loss wurde ausgeloest.
+                </div></div>
             </div>
 
+            <!-- FAQ 4 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Welche Timeframes werden analysiert?
-                    <span class="faq-icon">+</span>
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Was sind TP1, TP2, TP3?
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Der Scanner analysiert mehrere Zeiteinheiten, um Patterns in verschiedenen Trading-Stilen zu finden:</p>
-                        <ul>
-                            <li><strong>M5 / M15</strong> – Für kurzfristiges Trading</li>
-                            <li><strong>H1 / H4</strong> – Für Intraday und Swing Trading</li>
-                            <li><strong>D1 / W1</strong> – Für längerfristige Setups</li>
-                        </ul>
-                        <p>Jedes Signal zeigt den jeweiligen Timeframe an, damit du weißt, wie langfristig das Setup ist.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SIGNALE -->
-        <div class="faq-category">
-            <div class="category-header">
-                <div class="category-icon">📊</div>
-                <h2>Signale verstehen</h2>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Drei gestaffelte Take-Profit Levels basierend auf der EPA-Linie (Estimated Price at Arrival):<br><br>
+                    <strong>TP1 (33%):</strong> Erster Teilgewinn &ndash; ein Drittel des berechneten Kursziels. Die sicherste Variante.<br>
+                    <strong>TP2 (66%):</strong> Zweiter Teilgewinn &ndash; zwei Drittel des Kursziels.<br>
+                    <strong>TP3 (100%):</strong> Volles Kursziel auf der EPA-Linie (1-4 Linie). Der volle Erfolg.<br><br>
+                    Du kannst bei TP1 komplett aussteigen oder gestaffelt: 1/3 bei TP1, 1/3 bei TP2, 1/3 bei TP3.
+                </div></div>
             </div>
 
+            <!-- FAQ 5 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Was zeigt eine Signal-Karte?
-                    <span class="faq-icon">+</span>
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Was ist die Win-Rate?
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Jede Signal-Karte enthält alle wichtigen Informationen:</p>
-                        <ul>
-                            <li><strong>Symbol</strong> – z.B. EUR/USD, AAPL, BTC</li>
-                            <li><strong>Direction</strong> – <span class="inline-tag tag-green">BULLISH</span> oder <span class="inline-tag tag-red">BEARISH</span></li>
-                            <li><strong>Market</strong> – Forex, Stocks oder Crypto</li>
-                            <li><strong>Timeframe</strong> – z.B. H1, H4, D1</li>
-                            <li><strong>Entry</strong> – Der Einstiegspreis</li>
-                            <li><strong>TP1, TP2, TP3</strong> – Drei Take-Profit Ziele</li>
-                            <li><strong>SL</strong> – Stop-Loss Level</li>
-                            <li><strong>Chart-Bild</strong> – Screenshot des erkannten Patterns</li>
-                        </ul>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Die Win-Rate zeigt den Prozentsatz der abgeschlossenen Signale, bei denen mindestens TP1 erreicht wurde, bevor der Stop-Loss getroffen wurde. Die aktuelle Win-Rate wird transparent auf der Startseite und der Performance-Seite angezeigt &ndash; basierend auf echten, ueberpreuefbaren Daten.
+                </div></div>
             </div>
 
+            <!-- FAQ 6 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Was bedeuten PENDING, ACTIVE und SUCCESS?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Die Signale durchlaufen verschiedene Phasen:</p>
-                        <ul>
-                            <li><span class="inline-tag tag-yellow">PENDING</span> – Das Pattern wurde erkannt, aber der Preis hat den Entry noch nicht erreicht. Das Signal wartet auf Aktivierung.</li>
-                            <li><span class="inline-tag tag-green">ACTIVE</span> – Der Entry wurde getriggert. Das Signal ist jetzt ein laufender Trade mit aktiven TP/SL Levels.</li>
-                            <li><span class="inline-tag tag-blue">SUCCESS</span> – Der Trade ist abgeschlossen (TP erreicht oder SL ausgelöst). Hier siehst du das Ergebnis.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Was sind TP1, TP2 und TP3?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Das sind <strong>drei Take-Profit Ziele</strong> mit steigender Distanz vom Entry:</p>
-                        <ul>
-                            <li><strong>TP1</strong> – Das konservative Ziel (wird am häufigsten erreicht)</li>
-                            <li><strong>TP2</strong> – Das mittlere Ziel</li>
-                            <li><strong>TP3</strong> – Das ambitionierte Ziel (basiert auf der Wolfe Wave Projektion)</li>
-                        </ul>
-                        <p>Du kannst selbst entscheiden, welches Ziel du anvisierst oder ob du Teilpositionen bei verschiedenen Levels schließt.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Wie oft kommen neue Signale?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Das hängt von der Marktlage ab. Der Scanner läuft <strong>rund um die Uhr</strong> und liefert Signale, wenn die Qualitätskriterien erfüllt sind.</p>
-                        <p>Manchmal gibt es mehrere Signale am Tag, manchmal weniger. Wir setzen auf <strong>Qualität statt Quantität</strong> – unsere Filter sind streng, damit nur saubere Patterns durchkommen.</p>
-                        <p>Mehr dazu auf unserer <a href="https://www.wolfewavesignals.com/scanner-erklaerung.html">Scanner-Seite</a>.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Was ist die Success Rate?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Die <strong>Success Rate</strong> zeigt den Prozentsatz der Signale, die mindestens TP1 erreicht haben, bevor sie ausgestoppt wurden.</p>
-                        <p>Diese Zahl wird live berechnet und basiert auf allen abgeschlossenen Signalen. Du siehst sie im Header der Website.</p>
-                        <div class="info-box">
-                            <div class="info-box-header">💡 Wichtig</div>
-                            <p>Die Success Rate ist ein Indikator, aber keine Garantie. Vergangene Ergebnisse sagen nichts über zukünftige Performance aus.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FEATURES -->
-        <div class="faq-category">
-            <div class="category-header">
-                <div class="category-icon">⚡</div>
-                <h2>Features & Bedienung</h2>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Wie funktioniert die Chart-Ansicht?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Klicke auf eine Signal-Karte, um das <strong>Chart-Bild in Großansicht</strong> zu öffnen. Im Modal hast du folgende Möglichkeiten:</p>
-                        <ul>
-                            <li><strong>Bild-Historie</strong> – Pfeile links/rechts zeigen frühere Scans desselben Signals</li>
-                            <li><strong>Thumbnails</strong> – Unten kannst du schnell zwischen Scans springen</li>
-                            <li><strong>Signal-Navigation</strong> – Pfeile oben wechseln zwischen verschiedenen Signalen</li>
-                            <li><strong>Datum/Uhrzeit</strong> – Jeder Scan zeigt, wann er erstellt wurde</li>
-                        </ul>
-                        <p>Auf <strong>Mobile</strong> kannst du auch per Swipe-Geste navigieren.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Wie kann ich Signale filtern?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Auf der Hauptseite gibt es verschiedene Filter-Optionen:</p>
-                        <ul>
-                            <li><strong>Status-Tabs</strong> – Alle Signale, Pending, Active, Success</li>
-                            <li><strong>Richtung</strong> – Bullish oder Bearish</li>
-                            <li><strong>Märkte</strong> – Forex, Stocks, Crypto</li>
-                            <li><strong>Timeframes</strong> – M5 bis W1</li>
-                            <li><strong>Suche</strong> – Nach Symbol suchen (z.B. "EUR" oder "Apple")</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Funktioniert die Seite auf dem Handy?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Ja! WolfeWaveSignals ist <strong>vollständig responsive</strong> und funktioniert auf Smartphone, Tablet und Desktop.</p>
-                        <p>Auf Mobile gibt es zusätzlich <strong>Swipe-Gesten</strong> für die Navigation in der Chart-Ansicht.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TRADING -->
-        <div class="faq-category">
-            <div class="category-header">
-                <div class="category-icon">💹</div>
-                <h2>Trading & Risiko</h2>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                     Kann ich die Signale 1:1 traden?
-                    <span class="faq-icon">+</span>
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Die Signale sind <strong>Setup-Ideen und Orientierungshilfen</strong> – keine Handelsanweisungen.</p>
-                        <p>Wir empfehlen:</p>
-                        <ul>
-                            <li>Signale mit deiner eigenen Analyse kombinieren</li>
-                            <li>Prüfen, ob das Signal zu deinem Trading-Stil passt</li>
-                            <li>Eigenes Risikomanagement anwenden</li>
-                            <li>Erst im Demokonto testen</li>
-                        </ul>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Die Signale sind Setup-Ideen und Orientierungshilfen &ndash; keine Handelsanweisungen. Wir empfehlen, sie immer mit deiner eigenen Analyse zu kombinieren. Pruefe, ob das Signal zu deinem Trading-Stil, Timeframe und Risikomanagement passt. Teste neue Strategien zuerst im Demokonto.
+                </div></div>
             </div>
 
+            <!-- FAQ 7 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Was wenn ein Signal fehlschlägt?
-                    <span class="faq-icon">+</span>
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Wie oft kommen neue Signale?
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Das gehört zum Trading dazu. <strong>Kein System hat 100% Trefferquote.</strong></p>
-                        <p>Deswegen hat jedes Signal einen Stop-Loss. Der begrenzt den möglichen Verlust pro Trade. Entscheidend ist nicht das einzelne Signal, sondern die <strong>langfristige Balance</strong> zwischen Gewinnen und Verlusten.</p>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Das haengt von der Marktlage ab. Manchmal gibt es mehrere Signale am Tag, manchmal weniger. Der Scanner laeuft rund um die Uhr (24/7 fuer Krypto, 24/5 fuer den Rest), aber er liefert nur wenn die Qualitaetskriterien erfuellt sind &ndash; nicht kuenstlich auf Masse. Ueber den Telegram-Kanal bekommst du jeden Alert in Echtzeit.
+                </div></div>
             </div>
 
+            <!-- FAQ 8 -->
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Ist das für Anfänger geeignet?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Der Scanner kann auch für Einsteiger interessant sein – aber er <strong>ersetzt nicht das Lernen der Grundlagen</strong>.</p>
-                        <p>Verstehe zuerst:</p>
-                        <ul>
-                            <li>Was Trading bedeutet</li>
-                            <li>Wie Risikomanagement funktioniert</li>
-                            <li>Was Wolfe Waves sind (<a href="https://www.wolfewavesignals.com/wolfewaves.html">→ Tutorial</a>)</li>
-                        </ul>
-                        <p>Dann übe im <strong>Demokonto</strong>, bevor du echtes Geld einsetzt.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
                     Ist Trading nicht riskant?
-                    <span class="faq-icon">+</span>
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
                 </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p><strong>Ja, Trading ist riskant.</strong> Du kannst Geld verlieren – auch mehr als du einsetzt, wenn du mit Hebel tradest.</p>
-                        <div class="info-box" style="background: rgba(220, 38, 38, 0.1); border-color: rgba(220, 38, 38, 0.3);">
-                            <div class="info-box-header" style="color: var(--accent-red);">⚠️ Wichtig</div>
-                            <p>Investiere nur Geld, dessen Verlust du dir leisten kannst. WolfeWaveSignals ist ein Hilfstool – keine Garantie für Gewinne. Du bist für deine Trading-Entscheidungen selbst verantwortlich.</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="faq-a"><div class="faq-a-inner">
+                    Ja, Trading ist riskant. Du kannst Geld verlieren &ndash; auch mehr als du einsetzt, wenn du mit Hebel tradest. Kein System der Welt kann Gewinne garantieren. WolfeWaveSignals ist ein Hilfstool, keine Garantie fuer Gewinne. Investiere nur Geld, dessen Verlust du dir leisten kannst. Wir empfehlen, immer mit einem Demokonto zu starten.
+                </div></div>
             </div>
+
         </div>
+    </div>
+</section>
 
-        <!-- ACCOUNT -->
-        <div class="faq-category">
-            <div class="category-header">
-                <div class="category-icon">👤</div>
-                <h2>Account & Abo</h2>
-            </div>
+<div id="site-footer"></div>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Wie kann ich mich registrieren?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Klicke auf <strong>"Jetzt Premium werden"</strong> oder den <strong>Login-Button</strong>. Du kannst dich mit E-Mail registrieren und anschließend das Premium-Abo abschließen.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Wie kann ich mein Abo kündigen?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Du kannst dein Abo jederzeit kündigen. Nach der Kündigung behältst du den Zugang <strong>bis zum Ende des bezahlten Zeitraums</strong>.</p>
-                        <p>Die Kündigung erfolgt über dein Account-Dashboard oder per E-Mail an unseren Support.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Passwort vergessen – was tun?
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <div class="faq-answer-inner">
-                        <p>Klicke beim Login auf <strong>"Passwort vergessen"</strong>. Du erhältst eine E-Mail mit einem Link zum Zurücksetzen deines Passworts.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- Modularer Footer -->
-    <div id="site-footer"></div>
-    <script src="/components/footer.js"></script>
-
-    <script>
-        function toggleFaq(element) {
-            const faqItem = element.parentElement;
-            const wasOpen = faqItem.classList.contains('open');
-            
-            // Alle schließen
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('open');
-            });
-            
-            // Geklicktes öffnen (wenn es nicht schon offen war)
-            if (!wasOpen) {
-                faqItem.classList.add('open');
-            }
-        }
-
-        function toggleMobileMenu() {
-            const nav = document.getElementById('mainNav');
-            nav.classList.toggle('active');
-        }
-    </script>
+<script src="/components/header.js"></script>
+<script src="/components/footer.js"></script>
 </body>
 </html>

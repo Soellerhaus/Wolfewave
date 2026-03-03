@@ -80,19 +80,24 @@
   .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
   .burger.open span:nth-child(2) { opacity: 0; }
   .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+  body.mobile-nav-open { overflow: hidden; }
   @media (max-width: 768px) {
     .burger { display: flex; }
     .nav-links {
       display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
       flex-direction: column; background: var(--header-bg);
-      padding: 24px; gap: 4px; overflow-y: auto;
+      padding: 24px; gap: 4px; overflow-y: auto; z-index: 999;
     }
     .nav-links.open { display: flex; }
+    .nav-link { padding: 12px 16px; font-size: 16px; width: 100%; }
+    .nav-dropdown { width: 100%; }
+    .nav-dropdown-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; }
     .nav-dropdown-menu {
       position: static; box-shadow: none; border: none;
       padding: 0 0 0 16px; display: none;
     }
     .nav-dropdown.mobile-open .nav-dropdown-menu { display: block; }
+    .dropdown-item { padding: 12px 16px; font-size: 15px; }
   }
   </style>
   <header class="site-header">
@@ -102,21 +107,21 @@
         <span class="logo-text">Wolfe<span class="logo-highlight">Wave</span>Signals</span>
       </a>
       <nav class="nav-links" id="nav-links">
-        <a href="#signale" class="nav-link">Signale</a>
-        <a href="#performance" class="nav-link">Performance</a>
-        <a href="#dashboard" class="nav-link">Dashboard</a>
+        <a href="/signale.html" class="nav-link">Signale</a>
+        <a href="/performance.html" class="nav-link">Performance</a>
+        <a href="/dashboard.html" class="nav-link">Dashboard</a>
         <div class="nav-dropdown">
           <button class="nav-link nav-dropdown-btn" onclick="this.parentElement.classList.toggle('mobile-open')">Lernen
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5L6 8L9 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>
           <div class="nav-dropdown-menu">
-            <a href="#lernen" class="dropdown-item">Was sind Wolfe Waves?</a>
-            <a href="#scanner" class="dropdown-item">So funktioniert der Scanner</a>
-            <a href="#maerkte" class="dropdown-item">Scanner Universum</a>
-            <a href="#faq" class="dropdown-item">FAQ</a>
+            <a href="/wolfewaves.html" class="dropdown-item">Was sind Wolfe Waves?</a>
+            <a href="/scanner-erklaerung.html" class="dropdown-item">So funktioniert der Scanner</a>
+            <a href="/maerkte.html" class="dropdown-item">Scanner Universum</a>
+            <a href="/faq.html" class="dropdown-item">FAQ</a>
           </div>
         </div>
-        <a href="#about" class="nav-link">Ueber mich</a>
+        <a href="/about.html" class="nav-link">Ueber mich</a>
       </nav>
       <div class="header-actions">
         <button class="theme-toggle" id="theme-toggle" title="Dark/Light Mode">
@@ -145,32 +150,30 @@
 
   // Burger menu
   document.getElementById('burger')?.addEventListener('click', function() {
-    document.getElementById('nav-links')?.classList.toggle('open');
+    const nav = document.getElementById('nav-links');
+    if (nav) nav.classList.toggle('open');
     this.classList.toggle('open');
+    document.body.classList.toggle('mobile-nav-open');
   });
 
   // Close mobile nav on link click
+  function closeMobileNav() {
+    document.getElementById('nav-links')?.classList.remove('open');
+    document.getElementById('burger')?.classList.remove('open');
+    document.body.classList.remove('mobile-nav-open');
+  }
   document.querySelectorAll('#nav-links a').forEach(a => {
-    a.addEventListener('click', () => {
-      document.getElementById('nav-links')?.classList.remove('open');
-      document.getElementById('burger')?.classList.remove('open');
-    });
+    a.addEventListener('click', closeMobileNav);
   });
 
-  // Scroll spy
-  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        const match = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
-        if (match) match.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
-
-  // Observe after DOM ready
-  setTimeout(() => {
-    document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
-  }, 100);
+  // Active page detection
+  const path = window.location.pathname;
+  document.querySelectorAll('.nav-link[href], .dropdown-item[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href === '/' && (path === '/' || path === '/index.html')) {
+      link.classList.add('active');
+    } else if (href !== '/' && path.includes(href.replace('.html', ''))) {
+      link.classList.add('active');
+    }
+  });
 })();
