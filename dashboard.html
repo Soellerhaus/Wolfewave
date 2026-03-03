@@ -237,9 +237,9 @@
             font-family:'JetBrains Mono',monospace;
             font-size:12px; font-weight:700;
         }
-        .tp-label.tp1 { color: #059669; }
+        .tp-label.tp1, .tp-label.epa { color: #059669; }
         .tp-label.tp2 { color: #047857; }
-        .tp-label.tp3 { color: var(--accent-green); }
+        .tp-label.tp3, .tp-label.l24 { color: var(--accent-green); }
         .tp-label.sl { color: var(--accent-red); }
 
         .tp-price {
@@ -475,6 +475,46 @@
             width:calc(100% + 44px); cursor:pointer;
         }
         .tc-thumb:hover { opacity:0.9; }
+
+        /* Overview Trade Cards (active trades grid) */
+        .ov-grid {
+            display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+            gap:16px;
+        }
+        .ov-card {
+            background:var(--bg-card); border:1px solid var(--border-color);
+            border-radius:12px; overflow:hidden; cursor:pointer;
+            transition:transform .2s, box-shadow .2s;
+        }
+        .ov-card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.15); }
+        .ov-card-img {
+            width:100%; height:130px; object-fit:cover;
+            border-bottom:1px solid var(--border-color);
+        }
+        .ov-card-noimg {
+            width:100%; height:80px; display:flex; align-items:center; justify-content:center;
+            background:var(--bg-card-elevated); color:var(--text-secondary); font-size:12px;
+            border-bottom:1px solid var(--border-color);
+        }
+        .ov-card-body { padding:14px 16px; }
+        .ov-card-head {
+            display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;
+        }
+        .ov-card-name { font-weight:700; font-size:14px; }
+        .ov-card-sym { font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono',monospace; }
+        .ov-card-row {
+            display:flex; justify-content:space-between; gap:8px;
+            font-size:12px; font-family:'JetBrains Mono',monospace;
+            padding:4px 0; border-top:1px solid rgba(0,0,0,.05);
+        }
+        .ov-card-row .lbl { color:var(--text-secondary); font-size:11px; }
+        .ov-card-row .val { font-weight:600; }
+        .ov-card-stats {
+            display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:8px;
+        }
+        .ov-card-stat { text-align:center; }
+        .ov-card-stat .lbl { font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; }
+        .ov-card-stat .val { font-size:13px; font-weight:700; font-family:'JetBrains Mono',monospace; }
 
         /* Close Reason Badge */
         .close-reason {
@@ -904,56 +944,55 @@
             $('a-pend').textContent = pendingOrders.length > 0 ? `+ ${pendingOrders.length} pending` : '';
         }
 
-        // ==================== OVERVIEW TABLE ====================
+        // ==================== OVERVIEW (Card Grid with Charts) ====================
         function renderOverview() {
             const c = $('overview-table');
             $('ov-cnt').textContent = positions.length;
             if (!positions.length) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
 
-            const rows = positions.map(p => {
+            c.innerHTML = '<div class="ov-grid">' + positions.map(p => {
                 const sym = p.symbol, name = getName(sym), dir = p.direction, isBuy = dir==='BUY';
                 const entry = +p.open_price, cur = +p.current_price, lots = +p.lots;
                 const profit = +p.profit, swap = +p.swap, net = profit + swap;
                 const phase = p.phase || 0;
-                const tp1 = +p.tp1, tp2 = +p.tp2, tp3 = +p.tp3, sl = +p.sl;
+                const epaTarget = +p.tp1, sl = +p.sl;
                 const wid = p.wedge_id||'';
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
-                const clickAttr = hasImgs
-                    ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"`
-                    : `onclick="window.open('${chartUrl(sym)}','_blank')"`;
+                const thumbUrl = getThumbUrl(wid);
+                const clickFn = hasImgs
+                    ? `openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')`
+                    : `window.open('${chartUrl(sym)}','_blank')`;
 
-                // Change % from entry
                 const changePct = entry ? ((isBuy ? cur-entry : entry-cur)/entry*100) : 0;
                 const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
-
                 const netCls = net >= 0 ? 'c-green' : 'c-red';
 
-                return `<tr ${clickAttr}>
-                    <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
-                    <td><span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span></td>
-                    <td>${price(entry)}</td>
-                    <td>${price(cur)}</td>
-                    <td class="${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</td>
-                    <td>${lots.toFixed(2)}</td>
-                    <td class="${netCls}" style="font-weight:700">${(net>=0?'+':'')+money(net)}</td>
-                    <td>
-                        <div class="ov-phase" title="TP1 / TP2 / TP3">
-                            <span class="dot ${phase>=1?'hit':''}"></span>
-                            <span class="dot ${phase>=2?'hit':''}"></span>
-                            <span class="dot ${phase>=3?'hit':''}"></span>
+                return `<div class="ov-card" onclick="${clickFn}">
+                    ${thumbUrl
+                        ? `<img class="ov-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.outerHTML='<div class=ov-card-noimg>Chart nicht verfuegbar</div>'">`
+                        : `<div class="ov-card-noimg">Kein Chart</div>`}
+                    <div class="ov-card-body">
+                        <div class="ov-card-head">
+                            <div>
+                                <div class="ov-card-name">${name}</div>
+                                <div class="ov-card-sym">${sym}</div>
+                            </div>
+                            <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
                         </div>
-                    </td>
-                    <td style="font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</td>
-                </tr>`;
-            }).join('');
-
-            c.innerHTML = `<table class="overview-table">
-                <thead><tr>
-                    <th>Name</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
-                    <th>+/-%</th><th>Lots</th><th>P&L</th><th>TP Status</th><th>Seit</th>
-                </tr></thead>
-                <tbody>${rows}</tbody>
-            </table>`;
+                        <div class="ov-card-stats">
+                            <div class="ov-card-stat"><div class="lbl">Entry</div><div class="val">${price(entry)}</div></div>
+                            <div class="ov-card-stat"><div class="lbl">Aktuell</div><div class="val">${price(cur)}</div></div>
+                            <div class="ov-card-stat"><div class="lbl">+/-%</div><div class="val ${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</div></div>
+                        </div>
+                        <div class="ov-card-stats" style="margin-top:6px;">
+                            <div class="ov-card-stat"><div class="lbl">Lots</div><div class="val">${lots.toFixed(2)}</div></div>
+                            <div class="ov-card-stat"><div class="lbl">P&L</div><div class="val ${netCls}">${(net>=0?'+':'')+money(net)}</div></div>
+                            <div class="ov-card-stat"><div class="lbl">Phase</div><div class="val">${phase}</div></div>
+                        </div>
+                        <div style="text-align:right;margin-top:8px;font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</div>
+                    </div>
+                </div>`;
+            }).join('') + '</div>';
         }
 
         // ==================== OPEN TRADES ====================
@@ -966,22 +1005,21 @@
                 const sym = p.symbol, name = getName(sym), dir = p.direction;
                 const isBuy = dir === 'BUY';
                 const entry = +p.open_price, cur = +p.current_price, sl = +p.sl;
-                const tp1 = +p.tp1, tp2 = +p.tp2, tp3 = +p.tp3;
+                // v21: tp1=epa_target (Preisziel), tp2=0 (epa_time nicht gespeichert), tp3=l24par
+                const epaTarget = +p.tp1, l24par = +p.tp3;
                 const lots = +p.lots, profit = +p.profit, swap = +p.swap, phase = p.phase;
                 const net = profit + swap;
 
                 // Find partial close deals for this position
                 const deals = historyDeals.filter(d => d.position_id == p.ticket).sort((a,b) => new Date(a.close_time) - new Date(b.close_time));
 
-                // TP breakdown
-                const tp1Hit = phase >= 1, tp2Hit = phase >= 2, tp3Hit = false;
-                const tp1Deal = deals[0] || null;
-                const tp2Deal = deals[1] || null;
+                // EPA system: single target, no partial closes
+                const epaHit = phase >= 1;
+                const epaDeal = deals[0] || null;
 
                 // Distance in %
-                const tp1Pct = entry ? ((isBuy ? tp1-entry : entry-tp1)/entry*100) : 0;
-                const tp2Pct = entry ? ((isBuy ? tp2-entry : entry-tp2)/entry*100) : 0;
-                const tp3Pct = entry ? ((isBuy ? tp3-entry : entry-tp3)/entry*100) : 0;
+                const epaPct = entry ? ((isBuy ? epaTarget-entry : entry-epaTarget)/entry*100) : 0;
+                const l24Pct = entry ? ((isBuy ? l24par-entry : entry-l24par)/entry*100) : 0;
                 const slPct  = entry ? ((isBuy ? sl-entry : entry-sl)/entry*100) : 0;
 
                 const wid = p.wedge_id||'';
@@ -1007,14 +1045,13 @@
                         <div class="tc-info-item"><div class="lbl">Lots</div><div class="val">${lots.toFixed(2)}</div></div>
                     </div>
                     <div class="tp-list">
-                        ${tpRow('TP1','tp1',price(tp1),tp1Pct,tp1Hit,tp1Hit?'HIT':'—',tp1Deal? money(+tp1Deal.profit):'—',tp1Hit)}
-                        ${tpRow('TP2','tp2',price(tp2),tp2Pct,tp2Hit,tp2Hit?'HIT':'—',tp2Deal? money(+tp2Deal.profit):'—',tp2Hit)}
-                        ${tpRow('TP3','tp3',price(tp3),tp3Pct,false,'—','—',false)}
+                        ${tpRow('EPA Ziel','epa',price(epaTarget),epaPct,epaHit,epaHit?'HIT':'—',epaDeal? money(+epaDeal.profit):'—',epaHit)}
+                        ${l24par ? tpRow('L24par','l24',price(l24par),l24Pct,false,'—','—',false) : ''}
                         ${tpRow('SL','sl',price(sl),slPct,false,'—','—',false,true)}
                     </div>
                     <div class="tc-foot">
                         <div class="tc-total ${net>=0?'c-green':'c-red'}">${(net>=0?'+':'') + money(net)}</div>
-                        <div class="tc-meta">Phase ${phase}/3<br>${fmtDate(p.open_time)}</div>
+                        <div class="tc-meta">Phase ${phase}<br>${fmtDate(p.open_time)}</div>
                     </div>
                 </div>`;
             }).join('');
@@ -1056,7 +1093,7 @@
                     <div class="tc-info">
                         <div class="tc-info-item"><div class="lbl">Entry</div><div class="val">${price(p.open_price)}</div></div>
                         <div class="tc-info-item"><div class="lbl">SL</div><div class="val">${price(p.sl)}</div></div>
-                        <div class="tc-info-item"><div class="lbl">TP3</div><div class="val">${price(p.tp3)}</div></div>
+                        <div class="tc-info-item"><div class="lbl">EPA Ziel</div><div class="val">${price(p.tp1)}</div></div>
                     </div>
                 </div>`;
             }).join('');
@@ -1114,14 +1151,14 @@
                 const sym = t.symbol, name = getName(sym), dir = t.direction, isBuy = dir==='BUY';
                 const ncl2 = t.net >= 0 ? 'c-green' : 'c-red';
 
-                // Per-deal breakdown (TP1/TP2/TP3 or SL)
+                // Per-deal breakdown
                 const dealRows = t.deals.map((d, i) => {
                     const dp = +d.profit, ds = +d.swap, dc = +d.commission, dn = dp+ds+dc;
                     const isLoss = dp < 0;
                     const label = t.deals.length === 1
                         ? (isLoss ? 'SL' : 'Close')
-                        : (i === 0 ? 'TP1' : i === 1 ? 'TP2' : i === 2 ? 'TP3' : `Close ${i+1}`);
-                    const cls = isLoss ? 'sl' : (i===0?'tp1':i===1?'tp2':'tp3');
+                        : `Close ${i+1}`;
+                    const cls = isLoss ? 'sl' : 'epa';
                     const pcl = dn >= 0 ? 'c-green' : 'c-red';
                     return `<div class="tp-row">
                         <span class="tp-label ${cls}">&#10003; ${label}</span>
@@ -1487,38 +1524,63 @@
         async function loadGuestPreview() {
             try {
                 // Load overview trades (without P&L details)
-                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,tp2,tp3,sl,phase,open_time,status&terminal_id=eq.demo&order=open_time.desc');
+                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,sl,phase,open_time,status&terminal_id=eq.demo&order=open_time.desc');
                 const openTrades = (allPos||[]).filter(p => p.status === 'open');
                 const totalCount = openTrades.length;
                 const c = $('overview-table');
 
                 $('ov-cnt').textContent = totalCount;
 
+                // Load images for trade charts
+                const wids = new Set();
+                openTrades.forEach(p => { if(p.wedge_id) wids.add(p.wedge_id); });
+                if(wids.size > 0) {
+                    const wArr = [...wids];
+                    const imgs = await sb('signal_images',`select=wedge_id,image_type,image_url&wedge_id=in.(${wArr.join(',')})`);
+                    imageMap = {};
+                    (imgs||[]).forEach(img => {
+                        if(!imageMap[img.wedge_id]) imageMap[img.wedge_id] = [];
+                        imageMap[img.wedge_id].push(img);
+                    });
+                }
+
                 if (totalCount === 0) {
                     c.innerHTML = '<div class="empty">Keine aktiven Trades</div>';
                 } else {
-                    // Show all trades but without P&L/Lots columns
-                    const rows = openTrades.map(p => {
+                    c.innerHTML = '<div class="ov-grid">' + openTrades.map(p => {
                         const sym = p.symbol, name = getName(sym), dir = p.direction||'';
                         const isBuy = dir==='BUY';
                         const phase = p.phase||0;
-                        return `<tr onclick="window.open('${chartUrl(sym)}','_blank')">
-                            <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
-                            <td><span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span></td>
-                            <td>${price(p.open_price)}</td>
-                            <td><div class="ov-phase" title="TP1 / TP2 / TP3">
-                                <span class="dot ${phase>=1?'hit':''}"></span>
-                                <span class="dot ${phase>=2?'hit':''}"></span>
-                                <span class="dot ${phase>=3?'hit':''}"></span>
-                            </div></td>
-                            <td style="font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</td>
-                        </tr>`;
-                    }).join('');
+                        const entry = +p.open_price;
+                        const epaTarget = +p.tp1;
+                        const wid = p.wedge_id||'';
+                        const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+                        const thumbUrl = getThumbUrl(wid);
+                        const clickFn = hasImgs
+                            ? `openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')`
+                            : `window.open('${chartUrl(sym)}','_blank')`;
 
-                    c.innerHTML = `<table class="overview-table">
-                        <thead><tr><th>Name</th><th>Richtung</th><th>Entry</th><th>TP Status</th><th>Seit</th></tr></thead>
-                        <tbody>${rows}</tbody>
-                    </table>`;
+                        return `<div class="ov-card" onclick="${clickFn}">
+                            ${thumbUrl
+                                ? `<img class="ov-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.outerHTML='<div class=ov-card-noimg>Chart nicht verfuegbar</div>'">`
+                                : `<div class="ov-card-noimg">Kein Chart</div>`}
+                            <div class="ov-card-body">
+                                <div class="ov-card-head">
+                                    <div>
+                                        <div class="ov-card-name">${name}</div>
+                                        <div class="ov-card-sym">${sym}</div>
+                                    </div>
+                                    <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
+                                </div>
+                                <div class="ov-card-stats">
+                                    <div class="ov-card-stat"><div class="lbl">Entry</div><div class="val">${price(entry)}</div></div>
+                                    <div class="ov-card-stat"><div class="lbl">EPA Ziel</div><div class="val">${epaTarget ? price(epaTarget) : '--'}</div></div>
+                                    <div class="ov-card-stat"><div class="lbl">Phase</div><div class="val">${phase}</div></div>
+                                </div>
+                                <div style="text-align:right;margin-top:8px;font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</div>
+                            </div>
+                        </div>`;
+                    }).join('') + '</div>';
                 }
 
                 // Also load account data for system status
