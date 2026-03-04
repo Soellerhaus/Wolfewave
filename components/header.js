@@ -29,9 +29,9 @@
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 24px; height: 64px;
   }
-  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .logo img { width: 32px; height: 32px; }
-  .logo-text { font-size: 18px; font-weight: 700; color: var(--nav-hover); letter-spacing: -0.3px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+  .logo img { width: 32px; height: 32px; flex-shrink: 0; }
+  .logo-text { font-size: 18px; font-weight: 700; color: var(--nav-hover); letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .logo-highlight { color: var(--nav-active); }
   .nav-links { display: flex; align-items: center; gap: 8px; }
   .nav-link {
@@ -57,7 +57,7 @@
   }
   .dropdown-item:hover { color: var(--nav-hover); background: rgba(255,255,255,0.05); }
   [data-theme="light"] .dropdown-item:hover { background: rgba(0,0,0,0.04); }
-  .header-actions { display: flex; align-items: center; gap: 8px; }
+  .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .theme-toggle {
     width: 40px; height: 40px; border-radius: 10px;
     background: none; border: 1px solid var(--header-border);
@@ -82,11 +82,13 @@
   .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
   body.mobile-nav-open { overflow: hidden; }
   @media (max-width: 768px) {
+    .header-inner { padding: 0 12px; }
+    .logo-text { font-size: 16px; }
     .burger { display: flex; }
     .nav-links {
       display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
       flex-direction: column; background: var(--header-bg);
-      padding: 24px; gap: 4px; overflow-y: auto; z-index: 999;
+      padding: 24px; gap: 4px; overflow-y: auto; z-index: 9998;
     }
     .nav-links.open { display: flex; }
     .nav-link { padding: 12px 16px; font-size: 16px; width: 100%; }
@@ -98,6 +100,12 @@
     }
     .nav-dropdown.mobile-open .nav-dropdown-menu { display: block; }
     .dropdown-item { padding: 12px 16px; font-size: 15px; }
+  }
+  @media (max-width: 400px) {
+    .header-inner { padding: 0 8px; }
+    .logo img { width: 28px; height: 28px; }
+    .logo-text { font-size: 14px; }
+    .theme-toggle, .burger { width: 36px; height: 36px; }
   }
   </style>
   <header class="site-header">
