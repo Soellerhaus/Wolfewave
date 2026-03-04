@@ -7,7 +7,8 @@
     <meta name="description" content="Detaillierte Performance-Statistiken und Win-Rates für alle Wolfe Wave Trading-Signale nach Symbol, Markt und Zeitrahmen.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <script>document.documentElement.dataset.theme=localStorage.getItem('wws-theme')||'dark'</script>
+
     <style>
         * {
             margin: 0;
@@ -15,7 +16,7 @@
             box-sizing: border-box;
         }
 
-        :root {
+        :root, [data-theme="light"] {
             --bg-primary: #faf8f5;
             --bg-card: #ffffff;
             --bg-card-elevated: #f5f0eb;
@@ -30,6 +31,22 @@
             --text-tertiary: #9ca3af;
             --border-color: #e8e4dd;
             --border-glow: rgba(16,185,129,0.25);
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-elevated: #263548;
+            --bg-hover: rgba(255,255,255,0.04);
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16,185,129,0.15);
+            --accent-red: #ef4444;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            --border-color: rgba(255,255,255,0.08);
+            --border-glow: rgba(16,185,129,0.3);
         }
 
         body {
@@ -2743,12 +2760,15 @@
                 };
             });
 
+            // Ranking: TP-Score (TP3=3 > TP2=2 > TP1=1 > SL=0), dann WinRate
             performanceData.sort((a, b) => {
                 if (a.total >= 2 && b.total >= 2) {
+                    if (b.avgResultScore !== a.avgResultScore) return b.avgResultScore - a.avgResultScore;
                     return b.winRate - a.winRate;
                 }
                 if (a.total >= 2) return -1;
                 if (b.total >= 2) return 1;
+                if (b.avgResultScore !== a.avgResultScore) return b.avgResultScore - a.avgResultScore;
                 return b.winRate - a.winRate;
             });
         }

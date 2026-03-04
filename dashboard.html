@@ -476,45 +476,58 @@
         }
         .tc-thumb:hover { opacity:0.9; }
 
-        /* Overview Trade Cards (active trades grid) */
-        .ov-grid {
-            display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
-            gap:16px;
+        /* Overview Trade Table */
+        .ov-table {
+            width:100%; border-collapse:collapse; background:var(--bg-card);
+            border:1px solid var(--border-color); border-radius:10px; overflow:hidden;
         }
-        .ov-card {
-            background:var(--bg-card); border:1px solid var(--border-color);
-            border-radius:12px; overflow:hidden; cursor:pointer;
-            transition:transform .2s, box-shadow .2s;
+        .ov-table th {
+            text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:1px;
+            color:var(--text-secondary); padding:10px 12px; border-bottom:2px solid var(--border-color);
+            background:var(--bg-card-elevated); font-weight:600;
         }
-        .ov-card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.15); }
-        .ov-card-img {
-            width:100%; height:130px; object-fit:cover;
-            border-bottom:1px solid var(--border-color);
+        .ov-table td {
+            padding:10px 12px; border-bottom:1px solid var(--border-color);
+            font-size:13px; font-family:'JetBrains Mono',monospace; vertical-align:middle;
         }
-        .ov-card-noimg {
-            width:100%; height:130px; display:flex; align-items:center; justify-content:center;
-            background:var(--bg-card-elevated); color:var(--text-secondary); font-size:12px;
-            border-bottom:1px solid var(--border-color);
+        .ov-row { cursor:pointer; transition:background .2s; }
+        .ov-row:hover { background:var(--bg-card-elevated); }
+        .ov-row td:first-child { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; }
+        .ov-row td:first-child .ov-sym { font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono',monospace; font-weight:400; display:block; }
+        .ov-row .ov-arrow { font-size:12px; color:var(--text-tertiary); transition:transform .3s; display:inline-block; margin-right:6px; }
+        .ov-row.open .ov-arrow { transform:rotate(180deg); }
+        /* Accordion row for charts */
+        .ov-acc-row { display:none; }
+        .ov-acc-row.open { display:table-row; }
+        .ov-acc-content {
+            padding:16px; background:var(--bg-card-elevated);
         }
-        .ov-card-body { padding:14px 16px; }
-        .ov-card-head {
-            display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;
+        .ov-acc-imgs {
+            display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;
         }
-        .ov-card-name { font-weight:700; font-size:14px; }
-        .ov-card-sym { font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono',monospace; }
-        .ov-card-row {
-            display:flex; justify-content:space-between; gap:8px;
-            font-size:12px; font-family:'JetBrains Mono',monospace;
-            padding:4px 0; border-top:1px solid rgba(0,0,0,.05);
+        .ov-acc-img-slot {
+            border:1px solid var(--border-color); border-radius:8px; overflow:hidden; background:var(--bg-card);
         }
-        .ov-card-row .lbl { color:var(--text-secondary); font-size:11px; }
-        .ov-card-row .val { font-weight:600; }
-        .ov-card-stats {
-            display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:8px;
+        .ov-acc-img-slot img {
+            width:100%; display:block; cursor:pointer; transition:opacity .2s;
         }
-        .ov-card-stat { text-align:center; }
-        .ov-card-stat .lbl { font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; }
-        .ov-card-stat .val { font-size:13px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+        .ov-acc-img-slot img:hover { opacity:.85; }
+        .ov-acc-img-label {
+            padding:6px 10px; font-size:11px; font-weight:600; color:var(--text-secondary);
+            background:var(--bg-card-elevated); text-transform:uppercase; letter-spacing:.5px;
+        }
+        .ov-acc-noimg {
+            padding:24px; text-align:center; color:var(--text-secondary); font-size:13px;
+        }
+        .ov-acc-noimg a { color:var(--accent-green); text-decoration:none; }
+        .ov-acc-noimg a:hover { text-decoration:underline; }
+        /* Mobile: responsive table */
+        @media(max-width:768px) {
+            .ov-table { font-size:12px; }
+            .ov-table th, .ov-table td { padding:8px 6px; }
+            .ov-table .hide-mobile { display:none; }
+            .ov-acc-imgs { grid-template-columns:1fr; }
+        }
 
         /* Close Reason Badge */
         .close-reason {
@@ -944,55 +957,76 @@
             $('a-pend').textContent = pendingOrders.length > 0 ? `+ ${pendingOrders.length} pending` : '';
         }
 
-        // ==================== OVERVIEW (Card Grid with Charts) ====================
+        // ==================== OVERVIEW (Trade Table with Accordion) ====================
         function renderOverview() {
             const c = $('overview-table');
             $('ov-cnt').textContent = positions.length;
             if (!positions.length) { c.innerHTML = '<div class="empty">Keine aktiven Trades</div>'; return; }
 
-            c.innerHTML = '<div class="ov-grid">' + positions.map(p => {
+            const PHASE_LABELS = { detect:'Erkennung', entry:'Einstieg', latest:'Aktuell' };
+            const PHASE_ORDER = ['latest','entry','detect'];
+
+            let html = `<table class="ov-table">
+                <thead><tr>
+                    <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
+                    <th>+/-%</th><th class="hide-mobile">Lots</th><th>P&L</th><th class="hide-mobile">Phase</th>
+                </tr></thead><tbody>`;
+
+            positions.forEach((p, idx) => {
                 const sym = p.symbol, name = getName(sym), dir = p.direction, isBuy = dir==='BUY';
                 const entry = +p.open_price, cur = +p.current_price, lots = +p.lots;
                 const profit = +p.profit, swap = +p.swap, net = profit + swap;
                 const phase = p.phase || 0;
-                const epaTarget = +p.tp1, sl = +p.sl;
                 const wid = p.wedge_id||'';
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
-                const thumbUrl = getThumbUrl(wid);
-                const clickFn = hasImgs
-                    ? `openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')`
-                    : `window.open('${chartUrl(sym)}','_blank')`;
 
                 const changePct = entry ? ((isBuy ? cur-entry : entry-cur)/entry*100) : 0;
                 const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
                 const netCls = net >= 0 ? 'c-green' : 'c-red';
 
-                return `<div class="ov-card" onclick="${clickFn}">
-                    ${thumbUrl
-                        ? `<img class="ov-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.outerHTML='<div class=ov-card-noimg>Chart nicht verfuegbar</div>'">`
-                        : `<div class="ov-card-noimg">Kein Chart</div>`}
-                    <div class="ov-card-body">
-                        <div class="ov-card-head">
-                            <div>
-                                <div class="ov-card-name">${name}</div>
-                                <div class="ov-card-sym">${sym}</div>
-                            </div>
-                            <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
-                        </div>
-                        <div class="ov-card-stats">
-                            <div class="ov-card-stat"><div class="lbl">Entry</div><div class="val">${price(entry)}</div></div>
-                            <div class="ov-card-stat"><div class="lbl">Aktuell</div><div class="val">${price(cur)}</div></div>
-                            <div class="ov-card-stat"><div class="lbl">+/-%</div><div class="val ${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</div></div>
-                        </div>
-                        <div class="ov-card-stats" style="margin-top:6px;">
-                            <div class="ov-card-stat"><div class="lbl">Lots</div><div class="val">${lots.toFixed(2)}</div></div>
-                            <div class="ov-card-stat"><div class="lbl">P&L</div><div class="val ${netCls}">${(net>=0?'+':'')+money(net)}</div></div>
-                            <div class="ov-card-stat"><div class="lbl">Phase</div><div class="val">${phase}</div></div>
-                        </div>
-                        <div style="text-align:right;margin-top:8px;font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</div>
-                    </div>
-                </div>`;
-            }).join('') + '</div>';
+                html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
+                    <td><span class="ov-arrow">&#9660;</span></td>
+                    <td>${name}<span class="ov-sym">${sym}</span></td>
+                    <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
+                    <td>${price(entry)}</td>
+                    <td>${price(cur)}</td>
+                    <td class="${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</td>
+                    <td class="hide-mobile">${lots.toFixed(2)}</td>
+                    <td class="${netCls}" style="font-weight:700">${(net>=0?'+':'')+money(net)}</td>
+                    <td class="hide-mobile">${phase}</td>
+                </tr>`;
+
+                // Accordion row with chart images
+                html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="9"><div class="ov-acc-content">`;
+                if (hasImgs) {
+                    const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
+                    html += `<div class="ov-acc-imgs">`;
+                    imgs.forEach(img => {
+                        const lbl = PHASE_LABELS[img.image_type] || img.image_type;
+                        const escapedName = name.replace(/'/g,"\\'");
+                        html += `<div class="ov-acc-img-slot">
+                            <div class="ov-acc-img-label">${lbl}</div>
+                            <img src="${img.image_url}" alt="${lbl}" loading="lazy"
+                                onclick="event.stopPropagation();openLB('${wid}','${escapedName}','${sym}')"
+                                onerror="this.parentElement.style.display='none'">
+                        </div>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<div class="ov-acc-noimg">Kein Chart verfuegbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView oeffnen</a></div>`;
+                }
+                html += `</div></td></tr>`;
+            });
+
+            html += '</tbody></table>';
+            c.innerHTML = html;
+        }
+
+        function toggleTradeAcc(idx) {
+            const row = document.getElementById('acc-' + idx);
+            const mainRow = row.previousElementSibling;
+            row.classList.toggle('open');
+            mainRow.classList.toggle('open');
         }
 
         // ==================== OPEN TRADES ====================
@@ -1547,7 +1581,16 @@
                 if (totalCount === 0) {
                     c.innerHTML = '<div class="empty">Keine aktiven Trades</div>';
                 } else {
-                    c.innerHTML = '<div class="ov-grid">' + openTrades.map(p => {
+                    const PHASE_LABELS = { detect:'Erkennung', entry:'Einstieg', latest:'Aktuell' };
+                    const PHASE_ORDER = ['latest','entry','detect'];
+
+                    let html = `<table class="ov-table">
+                        <thead><tr>
+                            <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th>
+                            <th>EPA Ziel</th><th class="hide-mobile">Phase</th>
+                        </tr></thead><tbody>`;
+
+                    openTrades.forEach((p, idx) => {
                         const sym = p.symbol, name = getName(sym), dir = p.direction||'';
                         const isBuy = dir==='BUY';
                         const phase = p.phase||0;
@@ -1555,32 +1598,40 @@
                         const epaTarget = +p.tp1;
                         const wid = p.wedge_id||'';
                         const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
-                        const thumbUrl = getThumbUrl(wid);
-                        const clickFn = hasImgs
-                            ? `openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')`
-                            : `window.open('${chartUrl(sym)}','_blank')`;
 
-                        return `<div class="ov-card" onclick="${clickFn}">
-                            ${thumbUrl
-                                ? `<img class="ov-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.outerHTML='<div class=ov-card-noimg>Chart nicht verfuegbar</div>'">`
-                                : `<div class="ov-card-noimg">Kein Chart</div>`}
-                            <div class="ov-card-body">
-                                <div class="ov-card-head">
-                                    <div>
-                                        <div class="ov-card-name">${name}</div>
-                                        <div class="ov-card-sym">${sym}</div>
-                                    </div>
-                                    <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
-                                </div>
-                                <div class="ov-card-stats">
-                                    <div class="ov-card-stat"><div class="lbl">Entry</div><div class="val">${price(entry)}</div></div>
-                                    <div class="ov-card-stat"><div class="lbl">EPA Ziel</div><div class="val">${epaTarget ? price(epaTarget) : '--'}</div></div>
-                                    <div class="ov-card-stat"><div class="lbl">Phase</div><div class="val">${phase}</div></div>
-                                </div>
-                                <div style="text-align:right;margin-top:8px;font-size:11px;color:var(--text-secondary)">${fmtDate(p.open_time)}</div>
-                            </div>
-                        </div>`;
-                    }).join('') + '</div>';
+                        html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
+                            <td><span class="ov-arrow">&#9660;</span></td>
+                            <td>${name}<span class="ov-sym">${sym}</span></td>
+                            <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
+                            <td>${price(entry)}</td>
+                            <td>${epaTarget ? price(epaTarget) : '--'}</td>
+                            <td class="hide-mobile">${phase}</td>
+                        </tr>`;
+
+                        // Accordion row with chart images
+                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="6"><div class="ov-acc-content">`;
+                        if (hasImgs) {
+                            const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
+                            html += `<div class="ov-acc-imgs">`;
+                            imgs.forEach(img => {
+                                const lbl = PHASE_LABELS[img.image_type] || img.image_type;
+                                const escapedName = name.replace(/'/g,"\\'");
+                                html += `<div class="ov-acc-img-slot">
+                                    <div class="ov-acc-img-label">${lbl}</div>
+                                    <img src="${img.image_url}" alt="${lbl}" loading="lazy"
+                                        onclick="event.stopPropagation();openLB('${wid}','${escapedName}','${sym}')"
+                                        onerror="this.parentElement.style.display='none'">
+                                </div>`;
+                            });
+                            html += `</div>`;
+                        } else {
+                            html += `<div class="ov-acc-noimg">Kein Chart verfuegbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView oeffnen</a></div>`;
+                        }
+                        html += `</div></td></tr>`;
+                    });
+
+                    html += '</tbody></table>';
+                    c.innerHTML = html;
                 }
 
                 // Also load account data for system status
