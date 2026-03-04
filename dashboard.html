@@ -1030,6 +1030,15 @@
                 html += `</div></td></tr>`;
             });
 
+            // Gesamt-P&L Summe
+            let totalNet = 0;
+            positions.forEach(p => { totalNet += (+p.profit||0) + (+p.swap||0); });
+            const totalCls = totalNet >= 0 ? 'c-green' : 'c-red';
+            html += `<tfoot><tr>
+                <td colspan="7" style="text-align:right;font-weight:700;font-size:14px;padding:14px 12px;border-top:2px solid var(--border-color)">Gesamt P&L</td>
+                <td colspan="3" class="${totalCls}" style="font-weight:700;font-size:16px;padding:14px 12px;border-top:2px solid var(--border-color)">${(totalNet>=0?'+':'')+money(totalNet)} &euro;</td>
+            </tr></tfoot>`;
+
             html += '</tbody></table>';
             c.innerHTML = html;
         }
@@ -1658,6 +1667,15 @@
                         }
                         html += `</div></td></tr>`;
                     });
+
+                    // Gesamt-P&L Summe
+                    let totalNet = 0;
+                    openTrades.forEach(p => { totalNet += (+p.profit||0) + (+p.swap||0); });
+                    const totalCls = totalNet >= 0 ? 'c-green' : 'c-red';
+                    html += `<tfoot><tr>
+                        <td colspan="6" style="text-align:right;font-weight:700;font-size:14px;padding:14px 12px;border-top:2px solid var(--border-color)">Gesamt P&L</td>
+                        <td colspan="3" class="${totalCls}" style="font-weight:700;font-size:16px;padding:14px 12px;border-top:2px solid var(--border-color)">${(totalNet>=0?'+':'')+money(totalNet)} &euro;</td>
+                    </tr></tfoot>`;
 
                     html += '</tbody></table>';
                     c.innerHTML = html;
