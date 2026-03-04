@@ -2705,25 +2705,25 @@
 
                 let avgResultScore = 0;
                 let avgResultLabel = 'N/A';
-                
+
                 if (total > 0) {
                     const tp3Count = signals.filter(s => s.tp3_hit === true).length;
                     const tp2Only = signals.filter(s => s.tp2_hit === true && s.tp3_hit !== true).length;
                     const tp1Only = signals.filter(s => s.tp1_hit === true && s.tp2_hit !== true && s.tp3_hit !== true).length;
                     const slOnly = signals.filter(s => s.sl_hit === true && !s.tp1_hit && !s.tp2_hit && !s.tp3_hit).length;
-                    
-                    if (tp3Count > tp2Only && tp3Count > tp1Only && tp3Count > slOnly) {
+
+                    // Gewichteter Score: TP3=3, TP2=2, TP1=1, SL=0
+                    avgResultScore = (tp3Count * 3 + tp2Only * 2 + tp1Only * 1) / total;
+
+                    // Label: bestes dominantes Ergebnis (bei Gleichstand TP bevorzugt)
+                    if (tp3Count >= tp2Only && tp3Count >= tp1Only && tp3Count >= slOnly && tp3Count > 0) {
                         avgResultLabel = 'TP3';
-                        avgResultScore = 3;
-                    } else if (tp2Only > tp1Only && tp2Only > slOnly) {
+                    } else if (tp2Only >= tp1Only && tp2Only >= slOnly && tp2Only > 0) {
                         avgResultLabel = 'TP2';
-                        avgResultScore = 2;
-                    } else if (tp1Only > slOnly && tp1Only > 0) {
+                    } else if (tp1Only >= slOnly && tp1Only > 0) {
                         avgResultLabel = 'TP1';
-                        avgResultScore = 1;
                     } else if (slOnly > 0) {
                         avgResultLabel = 'SL';
-                        avgResultScore = 0;
                     }
                 }
 
@@ -2760,16 +2760,11 @@
                 };
             });
 
-            // Ranking: TP-Score (TP3=3 > TP2=2 > TP1=1 > SL=0), dann WinRate
+            // Ranking: TP-Score (TP3=3 > TP2=2 > TP1=1 > SL=0), dann WinRate, dann Signalanzahl
             performanceData.sort((a, b) => {
-                if (a.total >= 2 && b.total >= 2) {
-                    if (b.avgResultScore !== a.avgResultScore) return b.avgResultScore - a.avgResultScore;
-                    return b.winRate - a.winRate;
-                }
-                if (a.total >= 2) return -1;
-                if (b.total >= 2) return 1;
                 if (b.avgResultScore !== a.avgResultScore) return b.avgResultScore - a.avgResultScore;
-                return b.winRate - a.winRate;
+                if (b.winRate !== a.winRate) return b.winRate - a.winRate;
+                return b.total - a.total;
             });
         }
 

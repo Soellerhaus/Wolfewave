@@ -1569,8 +1569,8 @@
 
         async function loadGuestPreview() {
             try {
-                // Load overview trades (without P&L details)
-                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,tp1,sl,phase,open_time,status&terminal_id=eq.demo&order=open_time.desc');
+                // Load overview trades (with current price for P&L)
+                const allPos = await sb('ea_positions','select=symbol,direction,wedge_id,open_price,current_price,tp1,sl,phase,open_time,status,profit,swap&terminal_id=eq.demo&order=open_time.desc');
                 const openTrades = (allPos||[]).filter(p => p.status === 'open');
                 const totalCount = openTrades.length;
                 const c = $('overview-table');
@@ -1605,8 +1605,8 @@
 
                     let html = `<table class="ov-table">
                         <thead><tr>
-                            <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th>
-                            <th>EPA Ziel</th><th class="hide-mobile">Formation</th><th class="hide-mobile">Phase</th>
+                            <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
+                            <th>+/-%</th><th>P&L</th><th class="hide-mobile">Formation</th><th class="hide-mobile">Phase</th>
                         </tr></thead><tbody>`;
 
                     openTrades.forEach((p, idx) => {
@@ -1614,23 +1614,31 @@
                         const isBuy = dir==='BUY';
                         const phase = p.phase||0;
                         const entry = +p.open_price;
+                        const cur = +p.current_price;
+                        const profit = +p.profit, swap = +p.swap, net = profit + swap;
                         const epaTarget = +p.tp1;
                         const wid = p.wedge_id||'';
                         const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
                         const formation = (wid && formationMap[wid]) ? formationMap[wid] : '\u2014';
+
+                        const changePct = entry ? ((isBuy ? cur-entry : entry-cur)/entry*100) : 0;
+                        const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
+                        const netCls = net >= 0 ? 'c-green' : 'c-red';
 
                         html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                             <td><span class="ov-arrow">&#9660;</span></td>
                             <td>${name}<span class="ov-sym">${sym}</span></td>
                             <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
                             <td>${price(entry)}</td>
-                            <td>${epaTarget ? price(epaTarget) : '--'}</td>
+                            <td>${price(cur)}</td>
+                            <td class="${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</td>
+                            <td class="${netCls}" style="font-weight:700">${(net>=0?'+':'')+money(net)}</td>
                             <td class="hide-mobile" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:${formation!=='\u2014'?'var(--accent-gold)':'var(--text-tertiary)'}">${formation}</td>
                             <td class="hide-mobile">${phase}</td>
                         </tr>`;
 
                         // Accordion row with chart images
-                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="7"><div class="ov-acc-content">`;
+                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="9"><div class="ov-acc-content">`;
                         if (hasImgs) {
                             const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
                             html += `<div class="ov-acc-imgs">`;
