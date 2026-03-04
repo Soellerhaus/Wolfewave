@@ -587,7 +587,7 @@
             .tp-row { grid-template-columns:40px 1fr auto; }
             .tp-price { display:none; }
             .overview-wrap { overflow-x:auto; }
-            .overview-table { min-width:700px; }
+            .overview-table { min-width:800px; }
         }
     </style>
 </head>
@@ -716,6 +716,7 @@
 
         let accountData = null, positions = [], pendingOrders = [], historyDeals = [], skippedSignals = [];
         let imageMap = {}; // wedge_id -> [{image_type, image_url}]
+        let formationMap = {}; // wedge_id -> formation_type string
         let countdown = 30, timer = null;
         let isAdmin = false, isLoggedIn = false;
 
@@ -908,7 +909,7 @@
                 });
                 skippedSignals.forEach(s => { if(s.wedge_id) wids.add(s.wedge_id); });
 
-                // Fetch images for all wedge_ids
+                // Fetch images + formation_type for all wedge_ids
                 if(wids.size > 0) {
                     const wArr = [...wids];
                     const imgs = await sb('signal_images',`select=wedge_id,image_type,image_url&wedge_id=in.(${wArr.join(',')})`);
@@ -917,6 +918,14 @@
                         if(!imageMap[img.wedge_id]) imageMap[img.wedge_id] = [];
                         imageMap[img.wedge_id].push(img);
                     });
+                    // Formation type (may fail if column not yet added)
+                    formationMap = {};
+                    try {
+                        const sigs = await sb('signals',`select=wedge_id,formation_type&wedge_id=in.(${wArr.join(',')})`);
+                        (sigs||[]).forEach(s => {
+                            if(s.formation_type) formationMap[s.wedge_id] = s.formation_type;
+                        });
+                    } catch(e) { /* formation_type column not yet in DB */ }
                 }
 
                 renderAccount();
@@ -969,7 +978,7 @@
             let html = `<table class="ov-table">
                 <thead><tr>
                     <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
-                    <th>+/-%</th><th class="hide-mobile">Lots</th><th>P&L</th><th class="hide-mobile">Phase</th>
+                    <th>+/-%</th><th class="hide-mobile">Lots</th><th>P&L</th><th class="hide-mobile">Formation</th><th class="hide-mobile">Phase</th>
                 </tr></thead><tbody>`;
 
             positions.forEach((p, idx) => {
@@ -984,6 +993,8 @@
                 const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
                 const netCls = net >= 0 ? 'c-green' : 'c-red';
 
+                const formation = (wid && formationMap[wid]) ? formationMap[wid] : '\u2014';
+
                 html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                     <td><span class="ov-arrow">&#9660;</span></td>
                     <td>${name}<span class="ov-sym">${sym}</span></td>
@@ -993,11 +1004,12 @@
                     <td class="${changeCls}">${(changePct>=0?'+':'')+changePct.toFixed(2)}%</td>
                     <td class="hide-mobile">${lots.toFixed(2)}</td>
                     <td class="${netCls}" style="font-weight:700">${(net>=0?'+':'')+money(net)}</td>
+                    <td class="hide-mobile" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:${formation!=='\u2014'?'var(--accent-gold)':'var(--text-tertiary)'}">${formation}</td>
                     <td class="hide-mobile">${phase}</td>
                 </tr>`;
 
                 // Accordion row with chart images
-                html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="9"><div class="ov-acc-content">`;
+                html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="10"><div class="ov-acc-content">`;
                 if (hasImgs) {
                     const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
                     html += `<div class="ov-acc-imgs">`;
@@ -1565,7 +1577,7 @@
 
                 $('ov-cnt').textContent = totalCount;
 
-                // Load images for trade charts
+                // Load images + formation_type for trade charts
                 const wids = new Set();
                 openTrades.forEach(p => { if(p.wedge_id) wids.add(p.wedge_id); });
                 if(wids.size > 0) {
@@ -1576,6 +1588,13 @@
                         if(!imageMap[img.wedge_id]) imageMap[img.wedge_id] = [];
                         imageMap[img.wedge_id].push(img);
                     });
+                    formationMap = {};
+                    try {
+                        const sigs = await sb('signals',`select=wedge_id,formation_type&wedge_id=in.(${wArr.join(',')})`);
+                        (sigs||[]).forEach(s => {
+                            if(s.formation_type) formationMap[s.wedge_id] = s.formation_type;
+                        });
+                    } catch(e) { /* formation_type column not yet in DB */ }
                 }
 
                 if (totalCount === 0) {
@@ -1587,7 +1606,7 @@
                     let html = `<table class="ov-table">
                         <thead><tr>
                             <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th>
-                            <th>EPA Ziel</th><th class="hide-mobile">Phase</th>
+                            <th>EPA Ziel</th><th class="hide-mobile">Formation</th><th class="hide-mobile">Phase</th>
                         </tr></thead><tbody>`;
 
                     openTrades.forEach((p, idx) => {
@@ -1598,6 +1617,7 @@
                         const epaTarget = +p.tp1;
                         const wid = p.wedge_id||'';
                         const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+                        const formation = (wid && formationMap[wid]) ? formationMap[wid] : '\u2014';
 
                         html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                             <td><span class="ov-arrow">&#9660;</span></td>
@@ -1605,11 +1625,12 @@
                             <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
                             <td>${price(entry)}</td>
                             <td>${epaTarget ? price(epaTarget) : '--'}</td>
+                            <td class="hide-mobile" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:${formation!=='\u2014'?'var(--accent-gold)':'var(--text-tertiary)'}">${formation}</td>
                             <td class="hide-mobile">${phase}</td>
                         </tr>`;
 
                         // Accordion row with chart images
-                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="6"><div class="ov-acc-content">`;
+                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="7"><div class="ov-acc-content">`;
                         if (hasImgs) {
                             const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
                             html += `<div class="ov-acc-imgs">`;
