@@ -1020,25 +1020,7 @@
         </div>
     </div>
 
-    <!-- ==================== PREMIUM CTA BANNER ==================== -->
-    <div class="premium-cta-banner">
-        <div class="premium-cta-inner">
-            <div class="cta-content">
-                <h3>Diese Signale <span>live</span> erhalten?</h3>
-                <p>Premium-Mitglieder erhalten jedes neue Wolfe Wave Signal in Echtzeit — direkt per Telegram-Benachrichtigung oder E-Mail-Alarm. Kein Signal mehr verpassen.</p>
-                <div class="cta-features">
-                    <div class="cta-feature"><span class="check">✓</span> Live Telegram-Signale</div>
-                    <div class="cta-feature"><span class="check">✓</span> E-Mail-Alarme</div>
-                    <div class="cta-feature"><span class="check">✓</span> Alle Märkte &amp; Zeitrahmen</div>
-                    <div class="cta-feature"><span class="check">✓</span> Entry, SL &amp; TP Levels</div>
-                </div>
-            </div>
-            <div class="cta-buttons">
-                <a href="/" class="btn-premium">🚀 Jetzt Premium starten</a>
-                <div class="btn-premium-sub">Jederzeit kündbar · Sofortiger Zugang</div>
-            </div>
-        </div>
-    </div>
+    <!-- PREMIUM CTA BANNER — DEAKTIVIERT (alles kostenlos) -->
 
     <!-- ==================== FX BLUE DEAKTIVIERT ==================== -->
     <!--
@@ -1165,64 +1147,7 @@
         </div>
     </div>
 
-    <!-- ==================== BOTTOM PREMIUM CTA ==================== -->
-    <div class="premium-bottom-cta">
-        <div class="premium-bottom-inner">
-            <div class="premium-bottom-icon">🚀</div>
-            <h2>Verpasse kein Signal mehr.<br><span>Werde jetzt Premium.</span></h2>
-            <p>Alle Signale die du hier siehst, hätten live getradet werden können. Als Premium-Mitglied bekommst du jedes neue Signal sofort — bevor der Markt reagiert.</p>
-
-            <div class="premium-features-grid">
-                <div class="pf-item">
-                    <div class="pf-icon">📱</div>
-                    <div class="pf-text">
-                        <strong>Telegram Live-Signale</strong>
-                        <span>Sofortige Push-Benachrichtigung bei jedem neuen Wolfe Wave Signal direkt auf dein Handy.</span>
-                    </div>
-                </div>
-                <div class="pf-item">
-                    <div class="pf-icon">📧</div>
-                    <div class="pf-text">
-                        <strong>E-Mail-Alarme</strong>
-                        <span>Detaillierte E-Mail mit Chart, Entry, Stop-Loss und allen Take-Profit Levels.</span>
-                    </div>
-                </div>
-                <div class="pf-item">
-                    <div class="pf-icon">📊</div>
-                    <div class="pf-text">
-                        <strong>Vollständige Charts</strong>
-                        <span>Hochauflösende Trading-Charts mit eingezeichneten Wolfe Wave Patterns.</span>
-                    </div>
-                </div>
-                <div class="pf-item">
-                    <div class="pf-icon">🎯</div>
-                    <div class="pf-text">
-                        <strong>Exakte Levels</strong>
-                        <span>Entry, Stop-Loss, TP1, TP2 und TP3 — klar definiert für jedes Signal.</span>
-                    </div>
-                </div>
-                <div class="pf-item">
-                    <div class="pf-icon">🌍</div>
-                    <div class="pf-text">
-                        <strong>Alle Märkte</strong>
-                        <span>Forex, Crypto, Aktien und Rohstoffe — alles in einem Abo abgedeckt.</span>
-                    </div>
-                </div>
-                <div class="pf-item">
-                    <div class="pf-icon">⚡</div>
-                    <div class="pf-text">
-                        <strong>24/7 Scanner</strong>
-                        <span>Unser Algorithmus scannt rund um die Uhr alle Timeframes auf neue Setups.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="premium-bottom-buttons">
-                <a href="/" class="btn-premium-large">🚀 Premium-Abo starten</a>
-                <div class="premium-bottom-sub">Jederzeit kündbar · Sofortiger Zugang · Alle Features inklusive</div>
-            </div>
-        </div>
-    </div>
+    <!-- BOTTOM PREMIUM CTA — DEAKTIVIERT (alles kostenlos) -->
 
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2432,84 +2357,12 @@
         let currentMarket = 'all';
         let allSignals = [];
         let performanceData = [];
-        let isPremium = false;
-
-        // ==================== PREMIUM CHECK ====================
-        function getAccessToken() {
-            return localStorage.getItem('sb_access_token') || '';
-        }
+        // TEMPORAER: Alles kostenlos — Premium deaktiviert
+        let isPremium = true;
 
         async function checkPremiumStatus() {
-            try {
-                const token = getAccessToken();
-                console.log('Access token:', token ? 'EXISTS' : 'MISSING');
-                
-                if (!token) {
-                    console.log('No access token - user not logged in');
-                    isPremium = false;
-                    return false;
-                }
-
-                const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!userResponse.ok) {
-                    console.log('Token invalid or expired');
-                    isPremium = false;
-                    return false;
-                }
-
-                const user = await userResponse.json();
-                console.log('User logged in:', user.id);
-
-                const subResponse = await fetch(
-                    `${SUPABASE_URL}/rest/v1/subscriptions?user_id=eq.${user.id}&status=eq.active&select=*`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${token}`
-                        }
-                    }
-                );
-
-                let isSubscribed = false;
-                if (subResponse.ok) {
-                    const subs = await subResponse.json();
-                    isSubscribed = subs.length > 0;
-                    console.log('Subscription check:', isSubscribed ? 'ACTIVE' : 'NO ACTIVE SUBSCRIPTION');
-                }
-
-                const adminResponse = await fetch(
-                    `${SUPABASE_URL}/rest/v1/admins?user_id=eq.${user.id}&select=*`,
-                    {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${token}`
-                        }
-                    }
-                );
-
-                let isAdmin = false;
-                if (adminResponse.ok) {
-                    const admins = await adminResponse.json();
-                    isAdmin = admins.length > 0;
-                    console.log('Admin check:', isAdmin ? 'YES - ADMIN USER' : 'NO');
-                }
-
-                isPremium = isSubscribed || isAdmin;
-                console.log('Premium access granted:', isPremium ? 'YES' : 'NO');
-                
-            } catch (error) {
-                console.error('Premium check error:', error);
-                isPremium = false;
-            }
-            
-            console.log('Final isPremium:', isPremium);
-            return isPremium;
+            isPremium = true;
+            return true;
         }
 
         // ==================== LIGHTBOX & MODALS ====================
@@ -2544,7 +2397,7 @@
             if (lightbox) lightbox.remove();
         }
 
-        function showPremiumModal() {
+        function showPremiumModal() { return; // DEAKTIVIERT — alles kostenlos
             const modalHtml = `
                 <div id="premiumModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,39,68,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s;">
                     <div style="background: var(--bg-card); border: 2px solid var(--accent-green); border-radius: 20px; max-width: 520px; width: 100%; padding: 44px; position: relative; animation: slideUp 0.3s;">
