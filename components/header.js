@@ -67,45 +67,35 @@
   .theme-toggle:hover { color: var(--nav-hover); border-color: var(--nav-text); }
   [data-theme="dark"] .icon-sun { display: none; }
   [data-theme="light"] .icon-moon { display: none; }
-  .burger {
-    display: none; width: 40px; height: 40px; border-radius: 10px;
-    background: none; border: 1px solid var(--header-border);
-    cursor: pointer; flex-direction: column; align-items: center;
-    justify-content: center; gap: 5px; padding: 0;
-  }
-  .burger span {
-    display: block; width: 18px; height: 2px;
-    background: var(--nav-text); border-radius: 2px; transition: all 0.3s;
-  }
-  .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-  .burger.open span:nth-child(2) { opacity: 0; }
-  .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-  body.mobile-nav-open { overflow: hidden; }
   @media (max-width: 768px) {
-    .header-inner { padding: 0 12px; }
+    .header-inner {
+      padding: 8px 12px; flex-wrap: wrap; height: auto;
+    }
     .logo-text { font-size: 16px; }
-    .burger { display: flex; }
     .nav-links {
-      display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
-      flex-direction: column; background: var(--header-bg);
-      padding: 24px; gap: 4px; overflow-y: auto; z-index: 9998;
+      display: flex !important; width: 100%; order: 3;
+      overflow-x: auto; gap: 2px; padding: 6px 0 2px;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
     }
-    .nav-links.open { display: flex; }
-    .nav-link { padding: 12px 16px; font-size: 16px; width: 100%; }
-    .nav-dropdown { width: 100%; }
-    .nav-dropdown-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-link {
+      padding: 6px 10px; font-size: 13px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-dropdown { flex-shrink: 0; }
+    .nav-dropdown-btn { font-size: 13px; padding: 6px 10px; white-space: nowrap; }
     .nav-dropdown-menu {
-      position: static; box-shadow: none; border: none;
-      padding: 0 0 0 16px; display: none;
+      position: absolute; min-width: 200px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
-    .nav-dropdown.mobile-open .nav-dropdown-menu { display: block; }
-    .dropdown-item { padding: 12px 16px; font-size: 15px; }
+    .dropdown-item { padding: 10px 14px; font-size: 13px; }
   }
   @media (max-width: 400px) {
-    .header-inner { padding: 0 8px; }
+    .header-inner { padding: 6px 8px; }
     .logo img { width: 28px; height: 28px; }
     .logo-text { font-size: 14px; }
-    .theme-toggle, .burger { width: 36px; height: 36px; }
+    .theme-toggle { width: 36px; height: 36px; }
+    .nav-link { font-size: 12px; padding: 5px 8px; }
   }
   </style>
   <header class="site-header">
@@ -136,9 +126,6 @@
           <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         </button>
-        <button class="burger" id="burger" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
       </div>
     </div>
   </header>`;
@@ -156,23 +143,6 @@
     localStorage.setItem('wws-theme', next);
   });
 
-  // Burger menu
-  document.getElementById('burger')?.addEventListener('click', function() {
-    const nav = document.getElementById('nav-links');
-    if (nav) nav.classList.toggle('open');
-    this.classList.toggle('open');
-    document.body.classList.toggle('mobile-nav-open');
-  });
-
-  // Close mobile nav on link click
-  function closeMobileNav() {
-    document.getElementById('nav-links')?.classList.remove('open');
-    document.getElementById('burger')?.classList.remove('open');
-    document.body.classList.remove('mobile-nav-open');
-  }
-  document.querySelectorAll('#nav-links a').forEach(a => {
-    a.addEventListener('click', closeMobileNav);
-  });
 
   // Active page detection
   const path = window.location.pathname;

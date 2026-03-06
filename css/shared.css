@@ -73,13 +73,17 @@ section { padding: 80px 0; }
 
 /* ===== BADGES ===== */
 .badge {
-    padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
-    text-transform: uppercase;
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.3px;
 }
-.badge-pending { background: var(--accent-dim); color: var(--accent); }
-.badge-active { background: rgba(59,130,246,0.12); color: var(--blue); }
-.badge-buy, .badge-bullish { background: rgba(16,185,129,0.12); color: var(--accent); }
-.badge-sell, .badge-bearish { background: var(--red-dim); color: var(--red); }
+.badge-pending { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+.badge-active { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+.badge-buy, .badge-bullish { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+.badge-sell, .badge-bearish { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+[data-theme="light"] .badge-pending { color: #d97706; }
+[data-theme="light"] .badge-active { color: #2563eb; }
+[data-theme="light"] .badge-bullish, [data-theme="light"] .badge-buy { color: #059669; }
+[data-theme="light"] .badge-bearish, [data-theme="light"] .badge-sell { color: #dc2626; }
 
 /* ===== FILTERS ===== */
 .filter-bar {
@@ -101,21 +105,31 @@ section { padding: 80px 0; }
 .search-input::placeholder { color: var(--text-muted); }
 
 /* ===== TAB BAR ===== */
-.tab-bar { display: flex; gap: 4px; margin-bottom: 24px; }
+.tab-bar { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
 .tab {
     padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
-    background: none; color: var(--text-muted); border: none;
+    background: none; color: var(--text-muted); border: 1px solid transparent;
     cursor: pointer; transition: all 0.2s; font-family: inherit;
 }
-.tab:hover { color: var(--text); }
-.tab.active { background: var(--accent-dim); color: var(--accent); }
+.tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+[data-theme="light"] .tab:hover { background: rgba(0,0,0,0.03); }
+.tab.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(16,185,129,0.2); }
+.tab[data-tab="active"].active { background: rgba(59,130,246,0.12); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
+.tab[data-tab="pending"].active { background: rgba(245,158,11,0.12); color: #f59e0b; border-color: rgba(245,158,11,0.25); }
+.tab[data-tab="success"].active { background: rgba(16,185,129,0.12); color: #10b981; border-color: rgba(16,185,129,0.25); }
+[data-theme="light"] .tab[data-tab="active"].active { color: #2563eb; }
+[data-theme="light"] .tab[data-tab="pending"].active { color: #d97706; }
+[data-theme="light"] .tab[data-tab="success"].active { color: #059669; }
 .tab .count {
     display: inline-flex; align-items: center; justify-content: center;
     min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px;
     font-size: 11px; font-weight: 600; margin-left: 6px;
     background: var(--border); color: var(--text-muted);
 }
-.tab.active .count { background: var(--accent-dim); color: var(--accent); }
+.tab.active .count { background: rgba(16,185,129,0.15); color: inherit; }
+.tab[data-tab="active"].active .count { background: rgba(59,130,246,0.2); }
+.tab[data-tab="pending"].active .count { background: rgba(245,158,11,0.2); }
+.tab[data-tab="success"].active .count { background: rgba(16,185,129,0.2); }
 
 /* ===== SIGNAL CARDS ===== */
 .signals-grid {

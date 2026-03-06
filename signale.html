@@ -27,7 +27,20 @@
             <button class="tab" data-tab="success">Abgeschlossen <span class="count" id="cnt-success">0</span></button>
         </div>
 
-        <!-- Filters -->
+        <!-- Timeframe Filter -->
+        <div class="filter-bar" id="timeframe-filters">
+            <button class="filter-btn active" data-tf="">Alle TF</button>
+            <button class="filter-btn" data-tf="M5">M5</button>
+            <button class="filter-btn" data-tf="M15">M15</button>
+            <button class="filter-btn" data-tf="M30">M30</button>
+            <button class="filter-btn" data-tf="H1">H1</button>
+            <button class="filter-btn" data-tf="H4">H4</button>
+            <button class="filter-btn" data-tf="D1">D1</button>
+            <button class="filter-btn" data-tf="W1">W1</button>
+            <button class="filter-btn" data-tf="MN">MN</button>
+        </div>
+
+        <!-- Market Filters -->
         <div class="filter-bar" id="signal-filters">
             <button class="filter-btn active" data-market="">Alle Maerkte</button>
             <button class="filter-btn" data-market="DAX">DAX</button>
@@ -70,6 +83,7 @@ let completedSignals = [];
 let imageMap = {};
 let currentTab = 'all';
 let currentMarket = '';
+let currentTimeframe = '';
 let searchTerm = '';
 const SIGNALS_PER_PAGE = 12;
 let visibleCount = SIGNALS_PER_PAGE;
@@ -93,6 +107,7 @@ function getFilteredSignals() {
     if (currentTab === 'active') filtered = filtered.filter(s => s.status === 'active');
     if (currentTab === 'pending') filtered = filtered.filter(s => s.status === 'pending');
     if (currentMarket) filtered = filtered.filter(s => s.market === currentMarket);
+    if (currentTimeframe) filtered = filtered.filter(s => s.timeframe === currentTimeframe);
     if (searchTerm) {
         const q = searchTerm.toLowerCase();
         filtered = filtered.filter(s =>
@@ -106,6 +121,7 @@ function getFilteredSignals() {
 function getFilteredCompleted() {
     let filtered = [...completedSignals];
     if (currentMarket) filtered = filtered.filter(s => s.market === currentMarket);
+    if (currentTimeframe) filtered = filtered.filter(s => s.timeframe === currentTimeframe);
     if (searchTerm) {
         const q = searchTerm.toLowerCase();
         filtered = filtered.filter(s => s.symbol.toLowerCase().includes(q));
@@ -172,6 +188,16 @@ function setupEvents() {
             document.querySelectorAll('#signal-filters .filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentMarket = btn.dataset.market;
+            visibleCount = SIGNALS_PER_PAGE;
+            renderSignals();
+        });
+    });
+
+    document.querySelectorAll('#timeframe-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#timeframe-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTimeframe = btn.dataset.tf;
             visibleCount = SIGNALS_PER_PAGE;
             renderSignals();
         });
