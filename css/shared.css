@@ -164,6 +164,16 @@ section { padding: 80px 0; }
 .price-entry .val { color: var(--blue); }
 .price-sl .val { color: var(--red); }
 .price-tp .val { color: var(--accent); }
+.signal-formation {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+}
+.formation-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    background: rgba(255,140,0,0.12); color: #f59e0b;
+    border: 1px solid rgba(255,140,0,0.2); letter-spacing: 0.3px;
+}
+[data-theme="light"] .formation-badge { color: #d97706; background: rgba(255,140,0,0.08); }
 .signal-meta {
     display: flex; justify-content: space-between; align-items: center;
     margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);

@@ -184,6 +184,7 @@ function renderSignalCard(s, imgMap) {
                 <div class="signal-price price-tp"><div class="lbl">TP3</div><div class="val">${price(s.tp3)}</div></div>
                 <div class="signal-price"><div class="lbl">R:R</div><div class="val signal-rr">${s.rr ? (+s.rr).toFixed(1) : '--'}</div></div>
             </div>
+            ${s.formation_type ? `<div class="signal-formation"><span class="formation-badge">\u2605 ${s.formation_type}</span></div>` : ''}
             <div class="signal-meta">
                 <span>${s.market || '--'}</span>
                 <a href="${getTradingViewUrl(s.symbol)}" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;" onclick="event.stopPropagation()">TradingView &rarr;</a>
@@ -222,6 +223,7 @@ function renderCompletedCard(s, imgMap) {
                 <div class="signal-price price-sl"><div class="lbl">SL</div><div class="val">${price(s.sl)}</div></div>
                 <div class="signal-price price-tp"><div class="lbl">TP1</div><div class="val">${price(s.tp1)}</div></div>
             </div>
+            ${s.formation_type ? `<div class="signal-formation"><span class="formation-badge">\u2605 ${s.formation_type}</span></div>` : ''}
             <div class="signal-meta">
                 <span>${s.market || '--'}</span>
                 <span>${fmtDate(s.created_at)}</span>
