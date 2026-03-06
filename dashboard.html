@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Dashboard - WolfeWaveSignals</title>
-    <meta name="description" content="Live Trade Dashboard — echte EA-Trades mit P&L, Account-Uebersicht und Trade-History.">
+    <meta name="description" content="Live Trade Dashboard — echte EA-Trades mit P&L, Account-Übersicht und Trade-History.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -1025,7 +1025,7 @@
                     });
                     html += `</div>`;
                 } else {
-                    html += `<div class="ov-acc-noimg">Kein Chart verfuegbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView oeffnen</a></div>`;
+                    html += `<div class="ov-acc-noimg">Kein Chart verfügbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView öffnen</a></div>`;
                 }
                 html += `</div></td></tr>`;
             });
@@ -1261,7 +1261,7 @@
             const diffMin = diffMs / 60000;
             const sub = timeAgo(diffMs);
             if (diffMin < 2) return { status: 'online', color: 'green', text: 'Online', sub };
-            if (diffMin < 5) return { status: 'warning', color: 'yellow', text: 'Verzoegert', sub };
+            if (diffMin < 5) return { status: 'warning', color: 'yellow', text: 'Verzögert', sub };
             return { status: 'offline', color: 'red', text: 'Offline', sub };
         }
 
@@ -1282,7 +1282,7 @@
             const diffMin = diffMs / 60000;
             const sub = timeAgo(diffMs) + (heartbeat.version ? ` (${heartbeat.version})` : '');
             if (diffMin < 2) return { status: 'online', color: 'green', text: 'Online', sub };
-            if (diffMin < 5) return { status: 'warning', color: 'yellow', text: 'Verzoegert', sub };
+            if (diffMin < 5) return { status: 'warning', color: 'yellow', text: 'Verzögert', sub };
             return { status: 'offline', color: 'red', text: 'Offline', sub };
         }
 
@@ -1400,7 +1400,7 @@
 
                 const reasonMap = {
                     'Signal zu alt': 'c-gold',
-                    'Ungueltige Preise': 'c-red',
+                    'Ungültige Preise': 'c-red',
                     'Symbol nicht gefunden': 'c-red',
                     'Kein Preis': 'c-gold',
                     'Max Trades': 'c-blue',
@@ -1445,7 +1445,7 @@
             const cont = $('lb-images');
 
             if(!imgs.length) {
-                cont.innerHTML = '<div class="lb-no-images">Keine Bilder vorhanden fuer diesen Trade</div>';
+                cont.innerHTML = '<div class="lb-no-images">Keine Bilder vorhanden für diesen Trade</div>';
             } else {
                 // Sort by phase order
                 imgs.sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
@@ -1652,7 +1652,7 @@
                             });
                             html += `</div>`;
                         } else {
-                            html += `<div class="ov-acc-noimg">Kein Chart verfuegbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView oeffnen</a></div>`;
+                            html += `<div class="ov-acc-noimg">Kein Chart verfügbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView öffnen</a></div>`;
                         }
                         html += `</div></td></tr>`;
                     });
@@ -1676,7 +1676,7 @@
                 // Load and show system status for all visitors
                 renderSystemStatus();
             } catch(e) {
-                $('overview-table').innerHTML = '<div class="empty">Dashboard nicht verfuegbar</div>';
+                $('overview-table').innerHTML = '<div class="empty">Dashboard nicht verfügbar</div>';
             }
         }
     </script>
