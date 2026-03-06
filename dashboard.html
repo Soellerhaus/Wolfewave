@@ -458,15 +458,7 @@
             margin-top: 4px;
         }
 
-        /* ========== GUEST / LOCKED ========== */
-        .is-guest .account-strip { display:none; }
-        .is-guest #acc-details,
-        .is-guest #acc-details + .accordion-body,
-        .is-guest #acc-history,
-        .is-guest #acc-history + .accordion-body,
-        .is-guest #acc-skipped,
-        .is-guest #acc-skipped + .accordion-body { display:none; }
-        .is-guest .refresh-bar { display:none; }
+        /* ========== GUEST (alles sichtbar - kostenlos) ========== */
 
         /* Chart Thumbnails on trade cards */
         .tc-thumb {
@@ -1560,19 +1552,9 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await checkAuth();
             applyAccessLevel();
-            if (isAdmin) {
-                load();
-                startRefresh();
-            } else {
-                loadGuestPreview();
-                // Open system status accordion for guests
-                const sysHead = $('acc-system');
-                const sysBody = sysHead?.nextElementSibling;
-                if (sysHead && sysBody) {
-                    sysHead.classList.add('open');
-                    sysBody.classList.add('open');
-                }
-            }
+            // Alles kostenlos - immer volle Daten laden
+            load();
+            startRefresh();
         });
 
         async function loadGuestPreview() {
