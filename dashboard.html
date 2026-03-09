@@ -411,9 +411,10 @@
             font-family:'Space Grotesk',sans-serif;
             font-weight:600; font-size:13px;
         }
-        .overview-table .ov-sym {
+        .ov-sym {
             font-size:10px; color:var(--text-secondary);
             font-family:'JetBrains Mono',monospace;
+            display:block;
         }
         .ov-dir { font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; }
         .ov-dir.buy { background:var(--accent-green-dim); color:var(--accent-green); }
@@ -990,7 +991,7 @@
 
                 html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                     <td><span class="ov-arrow">&#9660;</span></td>
-                    <td>${name}<span class="ov-sym">${sym}</span></td>
+                    <td>${name !== sym ? `${name}<span class="ov-sym">${sym}</span>` : sym}</td>
                     <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
                     <td>${price(entry)}</td>
                     <td>${price(cur)}</td>
@@ -1412,7 +1413,7 @@
 
                 return `<tr ${clickAttr}>
                     <td style="font-size:12px;color:var(--text-secondary)">${fmtDate(s.skip_time)}</td>
-                    <td><span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span></td>
+                    <td>${name !== sym ? `<span class="ov-name">${name}</span><br><span class="ov-sym">${sym}</span>` : sym}</td>
                     <td>${dir ? `<span class="ov-dir ${isBuy?'buy':'sell'}">${dir}</span>` : '—'}</td>
                     <td style="font-size:12px">${s.timeframe||'—'}</td>
                     <td class="${reasonCls}" style="font-size:12px;font-family:'Space Grotesk',sans-serif;white-space:normal">${s.reason||'—'}</td>
@@ -1634,7 +1635,7 @@
 
                         html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                             <td><span class="ov-arrow">&#9660;</span></td>
-                            <td>${name}<span class="ov-sym">${sym}</span></td>
+                            <td>${name !== sym ? `${name}<span class="ov-sym">${sym}</span>` : sym}</td>
                             <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
                             <td>${price(entry)}</td>
                             <td>${price(cur)}</td>
