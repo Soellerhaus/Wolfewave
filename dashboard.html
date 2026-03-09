@@ -835,17 +835,8 @@
 
         function getName(sym) { return SN[sym] || sym; }
 
-        function chartUrl(sym) {
-            const map = {'.OQ':'NASDAQ','.N':'NYSE','.O':'NASDAQ','.DE':'XETR','.PA':'EURONEXT','.AS':'EURONEXT','.MC':'BME','.HK':'HKEX'};
-            for (const [sfx, ex] of Object.entries(map)) {
-                if (sym.endsWith(sfx)) {
-                    let base = sym.slice(0, -sfx.length).replace(/[a-z]$/,'').replace(/_p$/,'');
-                    return `https://www.tradingview.com/chart/?symbol=${ex}:${base}`;
-                }
-            }
-            if (sym.length === 6 && !sym.includes('.')) return `https://www.tradingview.com/chart/?symbol=FX:${sym}`;
-            return `https://www.tradingview.com/chart/?symbol=${sym}`;
-        }
+        // chartUrl: uses getStock3Url from shared.js
+        function chartUrl(sym) { return getStock3Url(sym); }
 
         // ==================== AUTH CHECK ====================
         function getAccessToken() { return localStorage.getItem('sb_access_token') || ''; }
@@ -1029,7 +1020,8 @@
                     });
                     html += `</div>`;
                 } else {
-                    html += `<div class="ov-acc-noimg">Kein Chart verfügbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView öffnen</a></div>`;
+                    const s3u = chartUrl(sym);
+                    html += `<div class="ov-acc-noimg">Kein Chart verfügbar${s3u ? ` &mdash; <a href="${s3u}" target="_blank">stock3 Chart</a>` : ''}</div>`;
                 }
                 html += `</div></td></tr>`;
             });
@@ -1088,12 +1080,12 @@
                 return `<div class="trade-card fade-in">
                     ${thumbUrl ? `<img class="tc-thumb" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.style.display='none'" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : ''}>` : ''}
                     <div class="tc-head" ${!thumbUrl ? 'style="margin-top:0"' : ''}>
-                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
+                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : (chartUrl(sym) ? `onclick="window.open('${chartUrl(sym)}','_blank')"` : '')}>
                             ${name}
                             <small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
                         </div>
                         <div class="tc-badges">
-                            <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
+                            ${chartUrl(sym) ? `<a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="stock3 Chart" onclick="event.stopPropagation()">&#9783;</a>` : ''}
                             <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
                         </div>
                     </div>
@@ -1140,11 +1132,11 @@
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
                 return `<div class="trade-card fade-in" style="border-color:rgba(59,130,246,.2)">
                     <div class="tc-head">
-                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
+                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : (chartUrl(sym) ? `onclick="window.open('${chartUrl(sym)}','_blank')"` : '')}>
                             ${name}<small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
                         </div>
                         <div class="tc-badges">
-                            <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
+                            ${chartUrl(sym) ? `<a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="stock3 Chart" onclick="event.stopPropagation()">&#9783;</a>` : ''}
                             <span class="badge badge-pending">PENDING ${isBuy?'BUY':'SELL'}</span>
                         </div>
                     </div>
@@ -1235,11 +1227,11 @@
                 return `<div class="trade-card closed fade-in">
                     ${thumbUrl2 ? `<img class="tc-thumb" src="${thumbUrl2}" alt="${name}" loading="lazy" onerror="this.style.display='none'" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : ''}>` : ''}
                     <div class="tc-head">
-                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : `onclick="window.open('${chartUrl(sym)}','_blank')"`}>
+                        <div class="tc-name" ${hasImgs ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"` : (chartUrl(sym) ? `onclick="window.open('${chartUrl(sym)}','_blank')"` : '')}>
                             ${name}<small>${sym}${hasImgs ? ' &middot; Bilder anzeigen' : ''}</small>
                         </div>
                         <div class="tc-badges">
-                            <a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="TradingView" onclick="event.stopPropagation()">&#9783;</a>
+                            ${chartUrl(sym) ? `<a class="tv-link" href="${chartUrl(sym)}" target="_blank" title="stock3 Chart" onclick="event.stopPropagation()">&#9783;</a>` : ''}
                             <span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span>
                             <span class="close-reason ${closeReason.cls}">${closeReason.text}</span>
                         </div>
@@ -1400,7 +1392,7 @@
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
                 const clickAttr = hasImgs
                     ? `onclick="openLB('${wid}','${name.replace(/'/g,"\\'")}','${sym}')"`
-                    : `onclick="window.open('${chartUrl(sym)}','_blank')"`;
+                    : (chartUrl(sym) ? `onclick="window.open('${chartUrl(sym)}','_blank')"` : '');
 
                 const reasonMap = {
                     'Signal zu alt': 'c-gold',
@@ -1443,7 +1435,7 @@
         function openLB(wedgeId, name, sym) {
             const lb = $('lightbox');
             $('lb-title').textContent = name;
-            $('lb-subtitle').innerHTML = `${sym} <a href="${chartUrl(sym)}" target="_blank">TradingView Chart &rarr;</a>`;
+            $('lb-subtitle').innerHTML = `${sym}${chartUrl(sym) ? ` <a href="${chartUrl(sym)}" target="_blank">stock3 Chart &rarr;</a>` : ''}`;
 
             const imgs = imageMap[wedgeId] || [];
             const cont = $('lb-images');
@@ -1669,7 +1661,8 @@
                             });
                             html += `</div>`;
                         } else {
-                            html += `<div class="ov-acc-noimg">Kein Chart verfügbar &mdash; <a href="${chartUrl(sym)}" target="_blank">TradingView öffnen</a></div>`;
+                            const s3u2 = chartUrl(sym);
+                            html += `<div class="ov-acc-noimg">Kein Chart verfügbar${s3u2 ? ` &mdash; <a href="${s3u2}" target="_blank">stock3 Chart</a>` : ''}</div>`;
                         }
                         html += `</div></td></tr>`;
                     });
