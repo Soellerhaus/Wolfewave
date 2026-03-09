@@ -314,10 +314,10 @@ async function loadAllSignalImages() {
                 scanned_at: img.scanned_at
             });
         });
-        // Sort each wedge's images: detect -> entry -> latest -> display_photo
-        const order = { 'detect': 1, 'entry': 2, 'latest': 3, 'display_photo': 4 };
+        // Sort each wedge's images: newest first (entry/latest before detect)
+        const order = { 'display_photo': 4, 'latest': 3, 'entry': 2, 'detect': 1 };
         Object.values(byWedge).forEach(arr => {
-            arr.sort((a, b) => (order[a.type] || 0) - (order[b.type] || 0));
+            arr.sort((a, b) => (order[b.type] || 0) - (order[a.type] || 0));
         });
         return byWedge;
     } catch(e) {
