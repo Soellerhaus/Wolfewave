@@ -19,7 +19,23 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        :root {
+        :root, [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-elevated: #263548;
+            --bg-hover: rgba(255, 255, 255, 0.04);
+            --accent-green: #10b981;
+            --accent-green-dim: rgba(16, 185, 129, 0.15);
+            --accent-red: #ef4444;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(16, 185, 129, 0.3);
+        }
+        [data-theme="light"] {
             --bg-primary: #faf8f5;
             --bg-card: #ffffff;
             --bg-card-elevated: #f5f3f0;
@@ -216,7 +232,7 @@
         .badge-buy { background:var(--accent-green-dim); color:var(--accent-green); }
         .badge-sell { background:rgba(220,38,38,.1); color:var(--accent-red); }
         .badge-pending { background:rgba(59,130,246,.1); color:var(--accent-blue); }
-        .badge-closed { background:rgba(0,0,0,.05); color:var(--text-secondary); }
+        .badge-closed { background:var(--bg-hover); color:var(--text-secondary); }
 
         /* Card Info Row */
         .tc-info {
@@ -238,7 +254,7 @@
             align-items: center;
             gap: 8px;
             padding: 7px 0;
-            border-bottom: 1px solid rgba(0,0,0,.06);
+            border-bottom: 1px solid var(--border-color);
         }
         .tp-row:last-child { border-bottom: none; }
         .tp-label {
@@ -396,7 +412,7 @@
             white-space:nowrap;
         }
         .overview-table tbody tr {
-            border-bottom:1px solid rgba(0,0,0,.06);
+            border-bottom:1px solid var(--border-color);
             transition:background .2s;
             cursor:pointer;
         }
