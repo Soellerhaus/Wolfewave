@@ -928,10 +928,12 @@
                     });
                     // Formation type (may fail if column not yet added)
                     formationMap = {};
+                    window._tfMap = {};
                     try {
-                        const sigs = await sb('signals',`select=wedge_id,formation_type&wedge_id=in.(${wArr.join(',')})`);
+                        const sigs = await sb('signals',`select=wedge_id,formation_type,timeframe&wedge_id=in.(${wArr.join(',')})`);
                         (sigs||[]).forEach(s => {
                             if(s.formation_type) formationMap[s.wedge_id] = s.formation_type;
+                            if(s.timeframe) window._tfMap[s.wedge_id] = s.timeframe;
                         });
                     } catch(e) { /* formation_type column not yet in DB */ }
                 }
@@ -985,7 +987,7 @@
 
             let html = `<table class="ov-table">
                 <thead><tr>
-                    <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
+                    <th></th><th>Symbol</th><th>TF</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
                     <th>+/-%</th><th class="hide-mobile">Lots</th><th>P&L</th><th class="hide-mobile">Formation</th><th class="hide-mobile">Eröffnet</th><th class="hide-mobile">Laufzeit</th><th class="hide-mobile">Phase</th>
                 </tr></thead><tbody>`;
 
@@ -996,6 +998,7 @@
                 const phase = p.phase || 0;
                 const wid = p.wedge_id||'';
                 const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
+                const tf = (wid && window._tfMap && window._tfMap[wid]) ? window._tfMap[wid] : '\u2014';
 
                 const changePct = entry ? ((isBuy ? cur-entry : entry-cur)/entry*100) : 0;
                 const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
@@ -1008,6 +1011,7 @@
                 html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                     <td><span class="ov-arrow">&#9660;</span></td>
                     <td>${name !== sym ? `${name}<span class="ov-sym">${sym}</span>` : sym}</td>
+                    <td style="font-size:11px;color:var(--text-secondary);white-space:nowrap">${tf}</td>
                     <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
                     <td>${price(entry)}</td>
                     <td>${price(cur)}</td>
@@ -1021,7 +1025,7 @@
                 </tr>`;
 
                 // Accordion row with chart images
-                html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="12"><div class="ov-acc-content">`;
+                html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="13"><div class="ov-acc-content">`;
                 if (hasImgs) {
                     const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
                     html += `<div class="ov-acc-imgs">`;
@@ -1613,10 +1617,12 @@
                         imageMap[img.wedge_id].push(img);
                     });
                     formationMap = {};
+                    window._tfMap = window._tfMap || {};
                     try {
-                        const sigs = await sb('signals',`select=wedge_id,formation_type&wedge_id=in.(${wArr.join(',')})`);
+                        const sigs = await sb('signals',`select=wedge_id,formation_type,timeframe&wedge_id=in.(${wArr.join(',')})`);
                         (sigs||[]).forEach(s => {
                             if(s.formation_type) formationMap[s.wedge_id] = s.formation_type;
+                            if(s.timeframe) window._tfMap[s.wedge_id] = s.timeframe;
                         });
                     } catch(e) { /* formation_type column not yet in DB */ }
                 }
@@ -1629,7 +1635,7 @@
 
                     let html = `<table class="ov-table">
                         <thead><tr>
-                            <th></th><th>Symbol</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
+                            <th></th><th>Symbol</th><th>TF</th><th>Richtung</th><th>Entry</th><th>Aktuell</th>
                             <th>+/-%</th><th>P&L</th><th class="hide-mobile">Formation</th><th class="hide-mobile">Phase</th>
                         </tr></thead><tbody>`;
 
@@ -1644,6 +1650,7 @@
                         const wid = p.wedge_id||'';
                         const hasImgs = wid && imageMap[wid] && imageMap[wid].length > 0;
                         const formation = (wid && formationMap[wid]) ? formationMap[wid] : '\u2014';
+                        const tf = (wid && window._tfMap && window._tfMap[wid]) ? window._tfMap[wid] : '\u2014';
 
                         const changePct = entry ? ((isBuy ? cur-entry : entry-cur)/entry*100) : 0;
                         const changeCls = changePct >= 0 ? 'c-green' : 'c-red';
@@ -1652,6 +1659,7 @@
                         html += `<tr class="ov-row" onclick="toggleTradeAcc(${idx})">
                             <td><span class="ov-arrow">&#9660;</span></td>
                             <td>${name !== sym ? `${name}<span class="ov-sym">${sym}</span>` : sym}</td>
+                            <td style="font-size:11px;color:var(--text-secondary);white-space:nowrap">${tf}</td>
                             <td><span class="badge ${isBuy?'badge-buy':'badge-sell'}">${dir}</span></td>
                             <td>${price(entry)}</td>
                             <td>${price(cur)}</td>
@@ -1662,7 +1670,7 @@
                         </tr>`;
 
                         // Accordion row with chart images
-                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="9"><div class="ov-acc-content">`;
+                        html += `<tr class="ov-acc-row" id="acc-${idx}"><td colspan="10"><div class="ov-acc-content">`;
                         if (hasImgs) {
                             const imgs = imageMap[wid].sort((a,b) => PHASE_ORDER.indexOf(a.image_type) - PHASE_ORDER.indexOf(b.image_type));
                             html += `<div class="ov-acc-imgs">`;
