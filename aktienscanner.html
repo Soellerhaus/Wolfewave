@@ -468,7 +468,7 @@
 
         var h = '<table class="scanner-table"><thead><tr>';
         h += '<th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th><th>Kursziel</th><th>Upside</th>';
-        h += '<th>Buy / Hold / Sell</th><th>Trend</th><th>RSI</th><th>News</th><th>Sektor</th>';
+        h += '<th>Buy / Hold / Sell</th><th>Trend</th><th>RSI</th><th>News Sentiment</th>';
         h += '</tr></thead><tbody>';
 
         for (var i = 0; i < signals.length; i++) {
@@ -486,8 +486,8 @@
             h += '<td>' + bhsTags(ac) + '</td>';
             h += '<td>' + (d.analyst_trend || '-') + '</td>';
             h += '<td>' + (d.rsi != null ? d.rsi : '-') + '</td>';
-            h += '<td>' + (nr != null ? '<span class="' + (nr >= 55 ? 'indicator-up' : nr <= 45 ? 'indicator-down' : '') + '">' + nr + '% Bull</span>' : '-') + '</td>';
-            h += '<td>' + (d.sector ? '<span class="sector-chip">' + d.sector + '</span>' : '-') + '</td>';
+            var nArt = d.news_articles || 0;
+            h += '<td>' + (nr != null ? '<span class="' + (nr >= 55 ? 'indicator-up' : nr <= 45 ? 'indicator-down' : '') + '">' + nr + '% Bull</span> <small style="opacity:.6">(' + nArt + ' Artikel)</small>' : '-') + '</td>';
             h += '</tr>';
         }
         return h + '</tbody></table>';
