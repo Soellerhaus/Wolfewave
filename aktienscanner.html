@@ -328,6 +328,21 @@
             </div>
         </div>
 
+        <!-- Accordion: Analysten-Aenderungen -->
+        <div class="scanner-accordion" id="accChanges">
+            <div class="accordion-header acc-blue" onclick="toggleAcc('accChanges')">
+                <div class="accordion-left">
+                    <span>&#x1F4E2;</span>
+                    <span class="accordion-title">Neueste Analysten-Aenderungen</span>
+                    <span class="accordion-count" id="cntChanges">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblChanges"></div>
+            </div>
+        </div>
+
         <!-- Accordion: Alle Aktien -->
         <div class="scanner-accordion open" id="accAll">
             <div class="accordion-header acc-gray" onclick="toggleAcc('accAll')">
@@ -544,6 +559,54 @@
         return h + '</tbody></table>';
     }
 
+    // ===== BUILD CHANGES TABLE =====
+    function buildChangesTable(stocks) {
+        // Nur Aktien mit Aenderungen (buy oder sell geaendert)
+        var changed = stocks.filter(function(s) {
+            var ch = s.analyst_changes || {};
+            return (ch.buy && ch.buy !== 0) || (ch.sell && ch.sell !== 0);
+        });
+        // Sortieren: groesste Aenderungen zuerst
+        changed.sort(function(a, b) {
+            var ca = a.analyst_changes || {}, cb = b.analyst_changes || {};
+            return Math.abs(cb.buy||0) - Math.abs(ca.buy||0);
+        });
+        if (changed.length === 0)
+            return '<div class="empty-state">Keine Aenderungen im letzten Monat</div>';
+
+        var h = '<table class="scanner-table"><thead><tr>';
+        h += '<th>Symbol</th><th>Name</th><th>Kurs</th><th>Kursziel</th><th>Upside</th>';
+        h += '<th>Buy Aenderung</th><th>Hold Aenderung</th><th>Sell Aenderung</th>';
+        h += '<th>Aktuell B/H/S</th><th>Periode</th>';
+        h += '</tr></thead><tbody>';
+
+        for (var i = 0; i < changed.length; i++) {
+            var s = changed[i], ch = s.analyst_changes || {}, ac = s.analyst_current || {};
+            var tp = s.target_price;
+            var up = s.target_upside_pct || 0;
+
+            function fmtChange(v) {
+                if (!v || v === 0) return '<span style="opacity:.4">-</span>';
+                var cls = v > 0 ? 'indicator-up' : 'indicator-down';
+                return '<span class="' + cls + '" style="font-weight:700">' + (v > 0 ? '+' : '') + v + '</span>';
+            }
+
+            h += '<tr>';
+            h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td>' + (s.name || s.symbol) + '</td>';
+            h += '<td>' + (s.price ? cur(s.symbol) + s.price.toFixed(2) : '-') + '</td>';
+            h += '<td>' + kurszielCell(s.symbol, tp, s.target_low, s.target_high, s.target_analyst_count) + '</td>';
+            h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '" style="font-weight:600">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
+            h += '<td>' + fmtChange(ch.buy) + '</td>';
+            h += '<td>' + fmtChange(ch.hold) + '</td>';
+            h += '<td>' + fmtChange(ch.sell) + '</td>';
+            h += '<td>' + bhsTags(ac) + '</td>';
+            h += '<td>' + (s.analyst_period || '-') + '</td>';
+            h += '</tr>';
+        }
+        return h + '</tbody></table>';
+    }
+
     // ===== BUILD HISTORY TABLE =====
     function buildHistoryTable(history) {
         var strong = history.filter(function(h) { return h.score >= 70; });
@@ -588,6 +651,15 @@
         document.getElementById('tblStrong').innerHTML = buildSignalTable(strongBuy);
         document.getElementById('tblMedium').innerHTML = buildSignalTable(mediumBuy);
         document.getElementById('tblSell').innerHTML = buildSignalTable(sells);
+
+        // Analysten-Aenderungen
+        var allFiltered = (SIGNALS.all_stocks || []).filter(matchesFilter);
+        var changed = allFiltered.filter(function(s) {
+            var ch = s.analyst_changes || {};
+            return (ch.buy && ch.buy !== 0) || (ch.sell && ch.sell !== 0);
+        });
+        document.getElementById('cntChanges').textContent = changed.length;
+        document.getElementById('tblChanges').innerHTML = buildChangesTable(allFiltered);
     }
 
     function renderAllStocks() {
