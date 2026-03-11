@@ -48,6 +48,7 @@
           <a href="/signale.html">Signale</a>
           <a href="/performance.html">Performance</a>
           <a href="/dashboard.html">Dashboard</a>
+          <a href="/aktienscanner.html">Aktienscanner</a>
           <a href="/wolfewaves.html">Wolfe Waves lernen</a>
           <a href="/about.html">Ueber mich</a>
         </div>

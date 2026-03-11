@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F3BQLK365X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-F3BQLK365X');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktienscanner | WolfeWaveSignals</title>
+    <meta name="description" content="Automatischer Aktienscanner fuer DAX 40 und S&amp;P 500. Buy/Sell Signale basierend auf Analysten, News-Sentiment und technischer Analyse.">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/css/shared.css">
+    <style>
+        /* ===== SCANNER-SPECIFIC STYLES ===== */
+        .scanner-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .scanner-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .scanner-stat::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .scanner-stat:nth-child(1)::before { background: var(--accent); }
+        .scanner-stat:nth-child(2)::before { background: var(--blue); }
+        .scanner-stat:nth-child(3)::before { background: var(--red); }
+        .scanner-stat:nth-child(4)::before { background: var(--gold); }
+        .scanner-stat .num {
+            font-size: 28px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        .scanner-stat .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .scanner-stat .detail {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ===== TOOLBAR ===== */
+        .scanner-toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .scanner-toolbar .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+        .scanner-toolbar select {
+            padding: 8px 28px 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+        .scanner-toolbar select:focus { border-color: var(--accent); }
+
+        /* ===== ACCORDION ===== */
+        .scanner-accordion {
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: filter 0.2s;
+        }
+        .accordion-header:hover { filter: brightness(1.15); }
+        .accordion-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .accordion-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+        .accordion-count {
+            background: rgba(255,255,255,0.15);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .accordion-chevron {
+            transition: transform 0.3s;
+            color: rgba(255,255,255,0.5);
+        }
+        .scanner-accordion.open .accordion-chevron { transform: rotate(180deg); }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: var(--bg-card);
+        }
+        .scanner-accordion.open .accordion-body { max-height: 200000px; }
+
+        .acc-green { background: linear-gradient(135deg, #064e3b, #065f46); }
+        .acc-yellow { background: linear-gradient(135deg, #78350f, #92400e); }
+        .acc-red { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
+        .acc-gray { background: linear-gradient(135deg, #1e293b, #334155); }
+        .acc-blue { background: linear-gradient(135deg, #1e3a5f, #1e40af); }
+
+        [data-theme="light"] .acc-green { background: linear-gradient(135deg, #059669, #10b981); }
+        [data-theme="light"] .acc-yellow { background: linear-gradient(135deg, #d97706, #f59e0b); }
+        [data-theme="light"] .acc-red { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        [data-theme="light"] .acc-gray { background: linear-gradient(135deg, #475569, #64748b); }
+        [data-theme="light"] .acc-blue { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+
+        /* ===== TABLE ===== */
+        .scanner-table-wrap {
+            overflow-x: auto;
+        }
+        .scanner-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .scanner-table th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+        }
+        .scanner-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .scanner-table tbody tr { transition: background 0.15s; }
+        .scanner-table tbody tr:hover { background: var(--bg-card-hover); }
+
+        .score-pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 36px;
+            text-align: center;
+        }
+        .score-high { background: var(--accent-dim); color: var(--accent); }
+        .score-medium { background: rgba(245,158,11,0.12); color: var(--gold); }
+        .score-low { background: rgba(100,116,139,0.12); color: var(--text-muted); }
+
+        .tag-buy { color: var(--accent); font-weight: 600; }
+        .tag-hold { color: var(--gold); font-weight: 600; }
+        .tag-sell { color: var(--red); font-weight: 600; }
+
+        .sector-chip {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+        }
+        [data-theme="light"] .sector-chip { background: rgba(0,0,0,0.05); }
+
+        .market-dax { color: var(--blue); font-weight: 600; }
+        .market-sp { color: var(--text-muted); }
+
+        .indicator-up { color: var(--accent); }
+        .indicator-down { color: var(--red); }
+
+        /* ===== DATA SOURCE NOTE ===== */
+        .data-note {
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 24px;
+        }
+        .data-note .status-dot {
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-right: 6px;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section>
+    <div class="container">
+        <p class="section-label">Aktienscanner</p>
+        <h2 class="section-title">DAX 40 &amp; S&amp;P 500 Scanner</h2>
+        <p class="section-desc">Automatische Buy/Sell Signale basierend auf Analysten-Empfehlungen, News-Sentiment und technischer Analyse.</p>
+
+        <!-- Stats -->
+        <div class="scanner-stats">
+            <div class="scanner-stat">
+                <div class="label">Aktien gescannt</div>
+                <div class="num c-green" id="statTotal">-</div>
+                <div class="detail" id="statMarkets">-</div>
+            </div>
+            <div class="scanner-stat">
+                <div class="label">Buy Signale</div>
+                <div class="num c-blue" id="statBuy">-</div>
+                <div class="detail" id="statBuyDetail">-</div>
+            </div>
+            <div class="scanner-stat">
+                <div class="label">Sell Signale</div>
+                <div class="num c-red" id="statSell">-</div>
+                <div class="detail" id="statSellDetail">-</div>
+            </div>
+            <div class="scanner-stat">
+                <div class="label">Letzter Scan</div>
+                <div class="num c-gold" id="statLastScan" style="font-size:18px;">-</div>
+                <div class="detail" id="statNextScan">-</div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="scanner-toolbar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Aktie suchen (Name oder Symbol)..." oninput="applyFilters()" style="flex:1;min-width:200px;">
+            <div class="filter-bar" id="marketFilter" style="margin-bottom:0;">
+                <button class="filter-btn active" data-market="all" onclick="setMarket('all')">Alle</button>
+                <button class="filter-btn" data-market="DAX" onclick="setMarket('DAX')">DAX</button>
+                <button class="filter-btn" data-market="S&P 500" onclick="setMarket('S&P 500')">S&amp;P 500</button>
+            </div>
+            <select id="sectorFilter" onchange="applyFilters()">
+                <option value="all">Alle Sektoren</option>
+            </select>
+        </div>
+
+        <!-- Accordion: Starke Buy -->
+        <div class="scanner-accordion open" id="accStrong">
+            <div class="accordion-header acc-green" onclick="toggleAcc('accStrong')">
+                <div class="accordion-left">
+                    <span>&#x1F7E2;</span>
+                    <span class="accordion-title">Starke Buy Signale (Score &ge; 70)</span>
+                    <span class="accordion-count" id="cntStrong">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblStrong"></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Mittlere Buy -->
+        <div class="scanner-accordion" id="accMedium">
+            <div class="accordion-header acc-yellow" onclick="toggleAcc('accMedium')">
+                <div class="accordion-left">
+                    <span>&#x1F7E1;</span>
+                    <span class="accordion-title">Mittlere Buy Signale (Score 50-69)</span>
+                    <span class="accordion-count" id="cntMedium">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblMedium"></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Sell -->
+        <div class="scanner-accordion" id="accSell">
+            <div class="accordion-header acc-red" onclick="toggleAcc('accSell')">
+                <div class="accordion-left">
+                    <span>&#x1F534;</span>
+                    <span class="accordion-title">Sell Signale (Score &ge; 70)</span>
+                    <span class="accordion-count" id="cntSell">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblSell"></div>
+            </div>
+        </div>
+
+        <!-- Accordion: Alle Aktien -->
+        <div class="scanner-accordion open" id="accAll">
+            <div class="accordion-header acc-gray" onclick="toggleAcc('accAll')">
+                <div class="accordion-left">
+                    <span>&#x1F4CA;</span>
+                    <span class="accordion-title">Alle Aktien</span>
+                    <span class="accordion-count" id="cntAll">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblAll"></div>
+            </div>
+        </div>
+
+        <!-- Accordion: History -->
+        <div class="scanner-accordion" id="accHistory">
+            <div class="accordion-header acc-blue" onclick="toggleAcc('accHistory')">
+                <div class="accordion-left">
+                    <span>&#x1F4C5;</span>
+                    <span class="accordion-title">Historische Signale (30 Tage)</span>
+                    <span class="accordion-count" id="cntHistory">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblHistory"></div>
+            </div>
+        </div>
+
+        <div class="data-note">
+            <span class="status-dot"></span>
+            Datenquelle: StockSignal Scanner &mdash; Auto-Scan alle 6 Stunden &mdash; Analysten (Finnhub) + News (Google) + Technisch (yfinance)
+        </div>
+    </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/components/header.js"></script>
+<script src="/components/footer.js"></script>
+<script>
+(function() {
+    // ===== DATA =====
+    var SIGNALS = {};
+    var HISTORY = [];
+    var currentMarket = 'all';
+    var currentSector = 'all';
+
+    // Load data from signals.json (relative path for GitHub Pages)
+    function loadData() {
+        Promise.all([
+            fetch('/data/signals.json').then(function(r) { return r.ok ? r.json() : {}; }).catch(function() { return {}; }),
+            fetch('/data/history.json').then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; })
+        ]).then(function(results) {
+            SIGNALS = results[0];
+            HISTORY = Array.isArray(results[1]) ? results[1] : [];
+            render();
+        });
+    }
+
+    // ===== HELPERS =====
+    function fmtDate(s) {
+        if (!s) return '-';
+        try {
+            var p = s.split(' ');
+            var d = p[0].split('-');
+            return d[2] + '.' + d[1] + '.' + d[0] + ' ' + (p[1]||'');
+        } catch(e) { return s; }
+    }
+    function fmtTime(s) {
+        if (!s) return '-';
+        try { return s.split(' ')[1] || '-'; } catch(e) { return s; }
+    }
+    function cur(sym) { return sym.endsWith('.DE') ? '\u20AC' : '$'; }
+
+    function scorePill(score) {
+        var c = 'score-low';
+        if (score >= 70) c = 'score-high';
+        else if (score >= 50) c = 'score-medium';
+        return '<span class="score-pill ' + c + '">' + score + '</span>';
+    }
+
+    function bhsTags(ac) {
+        var b = (ac.buy||0) + (ac.strongBuy||0);
+        var h = ac.hold||0;
+        var s = (ac.sell||0) + (ac.strongSell||0);
+        return '<span class="tag-buy">' + b + '</span> / <span class="tag-hold">' + h + '</span> / <span class="tag-sell">' + s + '</span>';
+    }
+
+    // ===== ACCORDION =====
+    window.toggleAcc = function(id) {
+        document.getElementById(id).classList.toggle('open');
+    };
+
+    // ===== FILTERS =====
+    window.setMarket = function(m) {
+        currentMarket = m;
+        document.querySelectorAll('#marketFilter .filter-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-market') === m);
+        });
+        applyFilters();
+    };
+
+    window.applyFilters = function() {
+        currentSector = document.getElementById('sectorFilter').value;
+        renderAllStocks();
+    };
+
+    function matchesFilter(item) {
+        var q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+        if (q) {
+            var sym = (item.symbol||'').toLowerCase();
+            var name = (item.name||'').toLowerCase();
+            if (sym.indexOf(q) === -1 && name.indexOf(q) === -1) return false;
+        }
+        if (currentMarket !== 'all' && (item.market||'') !== currentMarket) return false;
+        if (currentSector !== 'all' && (item.sector||'') !== currentSector) return false;
+        return true;
+    }
+
+    // ===== BUILD SIGNAL TABLE =====
+    function buildSignalTable(signals) {
+        if (!signals || signals.length === 0)
+            return '<div class="empty-state">Keine Signale gefunden</div>';
+
+        var h = '<table class="scanner-table"><thead><tr>';
+        h += '<th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th>';
+        h += '<th>Buy / Hold / Sell</th><th>Trend</th><th>RSI</th><th>News</th><th>Sektor</th>';
+        h += '</tr></thead><tbody>';
+
+        for (var i = 0; i < signals.length; i++) {
+            var s = signals[i], d = s.data || {}, ac = d.analyst_current || {};
+            var nr = d.news_bullish_ratio;
+            h += '<tr>';
+            h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td>' + (d.name || s.symbol) + '</td>';
+            h += '<td>' + scorePill(s.score) + '</td>';
+            h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
+            h += '<td>' + bhsTags(ac) + '</td>';
+            h += '<td>' + (d.analyst_trend || '-') + '</td>';
+            h += '<td>' + (d.rsi != null ? d.rsi : '-') + '</td>';
+            h += '<td>' + (nr != null ? '<span class="' + (nr >= 55 ? 'indicator-up' : nr <= 45 ? 'indicator-down' : '') + '">' + nr + '% Bull</span>' : '-') + '</td>';
+            h += '<td>' + (d.sector ? '<span class="sector-chip">' + d.sector + '</span>' : '-') + '</td>';
+            h += '</tr>';
+        }
+        return h + '</tbody></table>';
+    }
+
+    // ===== BUILD ALL STOCKS TABLE =====
+    function buildAllTable(stocks) {
+        if (!stocks || stocks.length === 0)
+            return '<div class="empty-state">Keine Daten</div>';
+
+        var h = '<table class="scanner-table"><thead><tr>';
+        h += '<th>Symbol</th><th>Name</th><th>Markt</th><th>Sektor</th><th>Kurs</th>';
+        h += '<th>Buy Score</th><th>Sell Score</th>';
+        h += '<th>Analyst</th><th>Sentiment</th><th>Technisch</th>';
+        h += '<th>RSI</th><th>MA50</th><th>MA200</th><th>Buy / Hold / Sell</th>';
+        h += '</tr></thead><tbody>';
+
+        for (var i = 0; i < stocks.length; i++) {
+            var s = stocks[i], bd = s.buy_detail || {}, ac = s.analyst_current || {};
+            var bg = '';
+            if (s.buy_score >= 70) bg = ' style="background:rgba(16,185,129,0.06);"';
+            else if (s.buy_score >= 50) bg = ' style="background:rgba(245,158,11,0.06);"';
+            else if (s.sell_score >= 50) bg = ' style="background:rgba(239,68,68,0.06);"';
+
+            h += '<tr' + bg + '>';
+            h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td>' + (s.name || s.symbol) + '</td>';
+            h += '<td>' + (s.market === 'DAX' ? '<span class="market-dax">DAX</span>' : '<span class="market-sp">S&P</span>') + '</td>';
+            h += '<td>' + (s.sector ? '<span class="sector-chip">' + s.sector + '</span>' : '-') + '</td>';
+            h += '<td>' + (s.price ? cur(s.symbol) + s.price.toFixed(2) : '-') + '</td>';
+            h += '<td>' + scorePill(s.buy_score) + '</td>';
+            h += '<td>' + (s.sell_score > 0 ? scorePill(s.sell_score) : '<span style="color:var(--text-muted)">0</span>') + '</td>';
+            h += '<td>' + (bd.analyst||0) + '</td>';
+            h += '<td>' + (bd.sentiment||0) + '</td>';
+            h += '<td>' + (bd.technical||0) + '</td>';
+            h += '<td>' + (s.rsi != null ? s.rsi : '-') + '</td>';
+            h += '<td class="' + (s.above_ma50 ? 'indicator-up' : 'indicator-down') + '">' + (s.above_ma50 ? 'dar\u00FCber' : 'darunter') + '</td>';
+            h += '<td class="' + (s.above_ma200 ? 'indicator-up' : 'indicator-down') + '">' + (s.above_ma200 ? 'dar\u00FCber' : 'darunter') + '</td>';
+            h += '<td>' + bhsTags(ac) + '</td>';
+            h += '</tr>';
+        }
+        return h + '</tbody></table>';
+    }
+
+    // ===== BUILD HISTORY TABLE =====
+    function buildHistoryTable(history) {
+        var strong = history.filter(function(h) { return h.score >= 70; });
+        if (strong.length === 0)
+            return '<div class="empty-state">Keine historischen Signale</div>';
+
+        strong.sort(function(a, b) { return (b.timestamp||'').localeCompare(a.timestamp||''); });
+
+        var h = '<table class="scanner-table"><thead><tr>';
+        h += '<th>Datum</th><th>Typ</th><th>Symbol</th><th>Score</th><th>Kurs</th><th>Alert</th>';
+        h += '</tr></thead><tbody>';
+
+        var max = Math.min(strong.length, 100);
+        for (var i = 0; i < max; i++) {
+            var s = strong[i], d = s.data || {};
+            h += '<tr>';
+            h += '<td>' + fmtDate(s.timestamp) + '</td>';
+            h += '<td class="' + (s.type === 'BUY' ? 'indicator-up' : 'indicator-down') + '">' + (s.type === 'BUY' ? '&#x1F7E2;' : '&#x1F534;') + ' ' + s.type + '</td>';
+            h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td>' + scorePill(s.score) + '</td>';
+            h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
+            h += '<td>' + (s.alerted ? '&#x2705;' : '&#x274C;') + '</td>';
+            h += '</tr>';
+        }
+        return h + '</tbody></table>';
+    }
+
+    // ===== RENDER ALL STOCKS =====
+    function renderAllStocks() {
+        var stocks = (SIGNALS.all_stocks || []).filter(matchesFilter);
+        document.getElementById('tblAll').innerHTML = buildAllTable(stocks);
+        document.getElementById('cntAll').textContent = stocks.length;
+    }
+
+    // ===== POPULATE SECTORS =====
+    function populateSectors() {
+        var all = SIGNALS.all_stocks || [];
+        var map = {};
+        for (var i = 0; i < all.length; i++) {
+            var s = all[i].sector;
+            if (s) map[s] = (map[s]||0) + 1;
+        }
+        var sel = document.getElementById('sectorFilter');
+        Object.keys(map).sort().forEach(function(k) {
+            var o = document.createElement('option');
+            o.value = k;
+            o.textContent = k + ' (' + map[k] + ')';
+            sel.appendChild(o);
+        });
+    }
+
+    // ===== MAIN RENDER =====
+    function render() {
+        // Stats
+        var all = SIGNALS.all_stocks || [];
+        var daxC = all.filter(function(s) { return s.market === 'DAX'; }).length;
+        var spC = all.length - daxC;
+        document.getElementById('statTotal').textContent = SIGNALS.total_scanned || all.length || '0';
+        document.getElementById('statMarkets').textContent = daxC + ' DAX + ' + spC + ' S&P 500';
+
+        var buys = SIGNALS.buy_signals || [];
+        var strongBuy = buys.filter(function(s) { return s.score >= 70; });
+        var mediumBuy = buys.filter(function(s) { return s.score >= 50 && s.score < 70; });
+        var sells = (SIGNALS.sell_signals || []).filter(function(s) { return s.score >= 70; });
+
+        document.getElementById('statBuy').textContent = buys.length;
+        document.getElementById('statBuyDetail').textContent = strongBuy.length + ' stark, ' + mediumBuy.length + ' mittel';
+        document.getElementById('statSell').textContent = sells.length;
+        document.getElementById('statSellDetail').textContent = 'Score \u2265 70';
+        document.getElementById('statLastScan').textContent = SIGNALS.last_scan ? fmtDate(SIGNALS.last_scan) : '-';
+        document.getElementById('statNextScan').textContent = SIGNALS.next_scan ? 'Naechster: ' + fmtDate(SIGNALS.next_scan) : '';
+
+        // Accordions
+        document.getElementById('cntStrong').textContent = strongBuy.length;
+        document.getElementById('cntMedium').textContent = mediumBuy.length;
+        document.getElementById('cntSell').textContent = sells.length;
+        document.getElementById('tblStrong').innerHTML = buildSignalTable(strongBuy);
+        document.getElementById('tblMedium').innerHTML = buildSignalTable(mediumBuy);
+        document.getElementById('tblSell').innerHTML = buildSignalTable(sells);
+
+        // History
+        var hist = HISTORY.filter(function(h) { return h.score >= 70; });
+        document.getElementById('cntHistory').textContent = hist.length;
+        document.getElementById('tblHistory').innerHTML = buildHistoryTable(HISTORY);
+
+        // Sectors + All stocks
+        populateSectors();
+        renderAllStocks();
+    }
+
+    // Load data on page load
+    loadData();
+})();
+</script>
+
+</body>
+</html>
