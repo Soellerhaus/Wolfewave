@@ -418,6 +418,18 @@
         return '<span class="tag-buy">' + b + '</span> / <span class="tag-hold">' + h + '</span> / <span class="tag-sell">' + s + '</span>';
     }
 
+    function kurszielCell(sym, tp, tl, th, cnt) {
+        if (!tp) return '-';
+        var c = cur(sym);
+        var tip = c + tp.toFixed(2);
+        var parts = [];
+        if (tl) parts.push('Low: ' + c + tl.toFixed(2));
+        if (th) parts.push('High: ' + c + th.toFixed(2));
+        if (cnt) parts.push(cnt + ' Analysten');
+        if (parts.length) tip = '<span title="' + parts.join(' | ') + '" style="cursor:help;border-bottom:1px dotted var(--text-muted)">' + tip + '</span>';
+        return tip;
+    }
+
     // ===== ACCORDION =====
     window.toggleAcc = function(id) {
         document.getElementById(id).classList.toggle('open');
@@ -469,7 +481,7 @@
             h += '<td>' + (d.name || s.symbol) + '</td>';
             h += '<td>' + scorePill(s.score) + '</td>';
             h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
-            h += '<td>' + (tp ? cur(s.symbol) + tp.toFixed(2) : '-') + '</td>';
+            h += '<td>' + kurszielCell(s.symbol, tp, d.target_low, d.target_high, d.target_analyst_count) + '</td>';
             h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
             h += '<td>' + bhsTags(ac) + '</td>';
             h += '<td>' + (d.analyst_trend || '-') + '</td>';
@@ -508,7 +520,7 @@
             h += '<td>' + (s.market === 'DAX' ? '<span class="market-dax">DAX</span>' : '<span class="market-sp">S&P</span>') + '</td>';
             h += '<td>' + (s.sector ? '<span class="sector-chip">' + s.sector + '</span>' : '-') + '</td>';
             h += '<td>' + (s.price ? cur(s.symbol) + s.price.toFixed(2) : '-') + '</td>';
-            h += '<td>' + (tp ? cur(s.symbol) + tp.toFixed(2) : '-') + '</td>';
+            h += '<td>' + kurszielCell(s.symbol, tp, s.target_low, s.target_high, s.target_analyst_count) + '</td>';
             h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '" style="font-weight:600;">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
             h += '<td>' + scorePill(s.buy_score) + '</td>';
             h += '<td>' + (s.sell_score > 0 ? scorePill(s.sell_score) : '<span style="color:var(--text-muted)">0</span>') + '</td>';
