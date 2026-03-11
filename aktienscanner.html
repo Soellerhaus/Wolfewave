@@ -446,18 +446,29 @@
 
     window.applyFilters = function() {
         currentSector = document.getElementById('sectorFilter').value;
+        renderSignals();
         renderAllStocks();
     };
+
+    function getMarket(item) {
+        if (item.market) return item.market;
+        var sym = item.symbol || (item.data && item.data.symbol) || '';
+        return sym.endsWith('.DE') ? 'DAX' : 'S&P 500';
+    }
+
+    function getSector(item) {
+        return item.sector || (item.data && item.data.sector) || '';
+    }
 
     function matchesFilter(item) {
         var q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
         if (q) {
             var sym = (item.symbol||'').toLowerCase();
-            var name = (item.name||'').toLowerCase();
+            var name = (item.name || (item.data && item.data.name) || '').toLowerCase();
             if (sym.indexOf(q) === -1 && name.indexOf(q) === -1) return false;
         }
-        if (currentMarket !== 'all' && (item.market||'') !== currentMarket) return false;
-        if (currentSector !== 'all' && (item.sector||'') !== currentSector) return false;
+        if (currentMarket !== 'all' && getMarket(item) !== currentMarket) return false;
+        if (currentSector !== 'all' && getSector(item) !== currentSector) return false;
         return true;
     }
 
@@ -561,6 +572,24 @@
     }
 
     // ===== RENDER ALL STOCKS =====
+    function renderSignals() {
+        var buys = (SIGNALS.buy_signals || []).filter(matchesFilter);
+        var sells = (SIGNALS.sell_signals || []).filter(function(s) { return s.score >= 70 && matchesFilter(s); });
+        var strongBuy = buys.filter(function(s) { return s.score >= 70; });
+        var mediumBuy = buys.filter(function(s) { return s.score >= 50 && s.score < 70; });
+
+        document.getElementById('statBuy').textContent = buys.length;
+        document.getElementById('statBuyDetail').textContent = strongBuy.length + ' stark, ' + mediumBuy.length + ' mittel';
+        document.getElementById('statSell').textContent = sells.length;
+
+        document.getElementById('cntStrong').textContent = strongBuy.length;
+        document.getElementById('cntMedium').textContent = mediumBuy.length;
+        document.getElementById('cntSell').textContent = sells.length;
+        document.getElementById('tblStrong').innerHTML = buildSignalTable(strongBuy);
+        document.getElementById('tblMedium').innerHTML = buildSignalTable(mediumBuy);
+        document.getElementById('tblSell').innerHTML = buildSignalTable(sells);
+    }
+
     function renderAllStocks() {
         var stocks = (SIGNALS.all_stocks || []).filter(matchesFilter);
         document.getElementById('tblAll').innerHTML = buildAllTable(stocks);
@@ -593,25 +622,12 @@
         document.getElementById('statTotal').textContent = SIGNALS.total_scanned || all.length || '0';
         document.getElementById('statMarkets').textContent = daxC + ' DAX + ' + spC + ' S&P 500';
 
-        var buys = SIGNALS.buy_signals || [];
-        var strongBuy = buys.filter(function(s) { return s.score >= 70; });
-        var mediumBuy = buys.filter(function(s) { return s.score >= 50 && s.score < 70; });
-        var sells = (SIGNALS.sell_signals || []).filter(function(s) { return s.score >= 70; });
-
-        document.getElementById('statBuy').textContent = buys.length;
-        document.getElementById('statBuyDetail').textContent = strongBuy.length + ' stark, ' + mediumBuy.length + ' mittel';
-        document.getElementById('statSell').textContent = sells.length;
         document.getElementById('statSellDetail').textContent = 'Score \u2265 70';
         document.getElementById('statLastScan').textContent = SIGNALS.last_scan ? fmtDate(SIGNALS.last_scan) : '-';
         document.getElementById('statNextScan').textContent = SIGNALS.next_scan ? 'Naechster: ' + fmtDate(SIGNALS.next_scan) : '';
 
-        // Accordions
-        document.getElementById('cntStrong').textContent = strongBuy.length;
-        document.getElementById('cntMedium').textContent = mediumBuy.length;
-        document.getElementById('cntSell').textContent = sells.length;
-        document.getElementById('tblStrong').innerHTML = buildSignalTable(strongBuy);
-        document.getElementById('tblMedium').innerHTML = buildSignalTable(mediumBuy);
-        document.getElementById('tblSell').innerHTML = buildSignalTable(sells);
+        // Signal-Tabellen (mit Filter)
+        renderSignals();
 
         // History
         var hist = HISTORY.filter(function(h) { return h.score >= 70; });
