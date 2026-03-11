@@ -455,18 +455,22 @@
             return '<div class="empty-state">Keine Signale gefunden</div>';
 
         var h = '<table class="scanner-table"><thead><tr>';
-        h += '<th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th>';
+        h += '<th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th><th>Kursziel</th><th>Upside</th>';
         h += '<th>Buy / Hold / Sell</th><th>Trend</th><th>RSI</th><th>News</th><th>Sektor</th>';
         h += '</tr></thead><tbody>';
 
         for (var i = 0; i < signals.length; i++) {
             var s = signals[i], d = s.data || {}, ac = d.analyst_current || {};
             var nr = d.news_bullish_ratio;
+            var tp = d.target_price;
+            var up = d.target_upside_pct || 0;
             h += '<tr>';
             h += '<td><strong>' + s.symbol + '</strong></td>';
             h += '<td>' + (d.name || s.symbol) + '</td>';
             h += '<td>' + scorePill(s.score) + '</td>';
             h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
+            h += '<td>' + (tp ? cur(s.symbol) + tp.toFixed(2) : '-') + '</td>';
+            h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
             h += '<td>' + bhsTags(ac) + '</td>';
             h += '<td>' + (d.analyst_trend || '-') + '</td>';
             h += '<td>' + (d.rsi != null ? d.rsi : '-') + '</td>';
@@ -484,13 +488,15 @@
 
         var h = '<table class="scanner-table"><thead><tr>';
         h += '<th>Symbol</th><th>Name</th><th>Markt</th><th>Sektor</th><th>Kurs</th>';
+        h += '<th>Kursziel</th><th>Upside</th>';
         h += '<th>Buy Score</th><th>Sell Score</th>';
-        h += '<th>Analyst</th><th>Sentiment</th><th>Technisch</th>';
         h += '<th>RSI</th><th>MA50</th><th>MA200</th><th>Buy / Hold / Sell</th>';
         h += '</tr></thead><tbody>';
 
         for (var i = 0; i < stocks.length; i++) {
             var s = stocks[i], bd = s.buy_detail || {}, ac = s.analyst_current || {};
+            var tp = s.target_price;
+            var up = s.target_upside_pct || 0;
             var bg = '';
             if (s.buy_score >= 70) bg = ' style="background:rgba(16,185,129,0.06);"';
             else if (s.buy_score >= 50) bg = ' style="background:rgba(245,158,11,0.06);"';
@@ -502,11 +508,10 @@
             h += '<td>' + (s.market === 'DAX' ? '<span class="market-dax">DAX</span>' : '<span class="market-sp">S&P</span>') + '</td>';
             h += '<td>' + (s.sector ? '<span class="sector-chip">' + s.sector + '</span>' : '-') + '</td>';
             h += '<td>' + (s.price ? cur(s.symbol) + s.price.toFixed(2) : '-') + '</td>';
+            h += '<td>' + (tp ? cur(s.symbol) + tp.toFixed(2) : '-') + '</td>';
+            h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '" style="font-weight:600;">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
             h += '<td>' + scorePill(s.buy_score) + '</td>';
             h += '<td>' + (s.sell_score > 0 ? scorePill(s.sell_score) : '<span style="color:var(--text-muted)">0</span>') + '</td>';
-            h += '<td>' + (bd.analyst||0) + '</td>';
-            h += '<td>' + (bd.sentiment||0) + '</td>';
-            h += '<td>' + (bd.technical||0) + '</td>';
             h += '<td>' + (s.rsi != null ? s.rsi : '-') + '</td>';
             h += '<td class="' + (s.above_ma50 ? 'indicator-up' : 'indicator-down') + '">' + (s.above_ma50 ? 'dar\u00FCber' : 'darunter') + '</td>';
             h += '<td class="' + (s.above_ma200 ? 'indicator-up' : 'indicator-down') + '">' + (s.above_ma200 ? 'dar\u00FCber' : 'darunter') + '</td>';
