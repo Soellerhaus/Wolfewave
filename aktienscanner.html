@@ -283,8 +283,23 @@
             </select>
         </div>
 
+        <!-- Accordion: Analysten-Aenderungen (OBEN) -->
+        <div class="scanner-accordion" id="accChanges">
+            <div class="accordion-header acc-blue" onclick="toggleAcc('accChanges')">
+                <div class="accordion-left">
+                    <span>&#x1F4E2;</span>
+                    <span class="accordion-title">Neueste Analysten-Aenderungen</span>
+                    <span class="accordion-count" id="cntChanges">0</span>
+                </div>
+                <span class="accordion-chevron">&#x25BC;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="scanner-table-wrap" id="tblChanges"></div>
+            </div>
+        </div>
+
         <!-- Accordion: Starke Buy -->
-        <div class="scanner-accordion open" id="accStrong">
+        <div class="scanner-accordion" id="accStrong">
             <div class="accordion-header acc-green" onclick="toggleAcc('accStrong')">
                 <div class="accordion-left">
                     <span>&#x1F7E2;</span>
@@ -328,23 +343,8 @@
             </div>
         </div>
 
-        <!-- Accordion: Analysten-Aenderungen -->
-        <div class="scanner-accordion" id="accChanges">
-            <div class="accordion-header acc-blue" onclick="toggleAcc('accChanges')">
-                <div class="accordion-left">
-                    <span>&#x1F4E2;</span>
-                    <span class="accordion-title">Neueste Analysten-Aenderungen</span>
-                    <span class="accordion-count" id="cntChanges">0</span>
-                </div>
-                <span class="accordion-chevron">&#x25BC;</span>
-            </div>
-            <div class="accordion-body">
-                <div class="scanner-table-wrap" id="tblChanges"></div>
-            </div>
-        </div>
-
         <!-- Accordion: Alle Aktien -->
-        <div class="scanner-accordion open" id="accAll">
+        <div class="scanner-accordion" id="accAll">
             <div class="accordion-header acc-gray" onclick="toggleAcc('accAll')">
                 <div class="accordion-left">
                     <span>&#x1F4CA;</span>
@@ -375,7 +375,7 @@
 
         <div class="data-note">
             <span class="status-dot"></span>
-            Datenquelle: StockSignal Scanner &mdash; Auto-Scan alle 6 Stunden &mdash; Analysten (Finnhub) + News (Google) + Technisch (yfinance)
+            Datenquelle: StockSignal Scanner &mdash; Auto-Scan alle 2 Stunden &mdash; Analysten (Finnhub) + News (Google 7 Tage) + Technisch (yfinance)
         </div>
     </div>
 </section>
@@ -405,17 +405,21 @@
     }
 
     // ===== HELPERS =====
+    var MONATE = ['Januar','Februar','M\u00e4rz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
     function fmtDate(s) {
         if (!s) return '-';
         try {
             var p = s.split(' ');
             var d = p[0].split('-');
-            return d[2] + '.' + d[1] + '.' + d[0] + ' ' + (p[1]||'');
+            var tag = parseInt(d[2], 10);
+            var monat = MONATE[parseInt(d[1], 10) - 1] || d[1];
+            var zeit = p[1] ? ' ' + p[1] + ' Uhr' : '';
+            return tag + '. ' + monat + ' ' + d[0] + zeit;
         } catch(e) { return s; }
     }
     function fmtTime(s) {
         if (!s) return '-';
-        try { return s.split(' ')[1] || '-'; } catch(e) { return s; }
+        try { return s.split(' ')[1] + ' Uhr' || '-'; } catch(e) { return s; }
     }
     function cur(sym) { return sym.endsWith('.DE') ? '\u20AC' : '$'; }
 
