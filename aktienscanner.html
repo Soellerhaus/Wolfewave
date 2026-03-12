@@ -605,7 +605,7 @@
             h += '<td>' + fmtChange(ch.hold) + '</td>';
             h += '<td>' + fmtChange(ch.sell) + '</td>';
             h += '<td>' + bhsTags(ac) + '</td>';
-            h += '<td>' + (s.analyst_period || '-') + '</td>';
+            h += '<td>' + fmtDate(s.analyst_period) + '</td>';
             h += '</tr>';
         }
         return h + '</tbody></table>';
