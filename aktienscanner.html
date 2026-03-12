@@ -555,14 +555,27 @@
         return true;
     }
 
+    // ===== COLUMN TOOLTIP HELPER =====
+    function th(label, tip) {
+        return '<th><span class="info-tip" title="' + tip + '">' + label + '</span></th>';
+    }
+
     // ===== BUILD SIGNAL TABLE =====
     function buildSignalTable(signals) {
         if (!signals || signals.length === 0)
             return '<div class="empty-state">Keine Signale gefunden</div>';
 
         var h = '<table class="scanner-table"><thead><tr>';
-        h += '<th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th><th>Kursziel</th><th>Upside</th>';
-        h += '<th>Buy / Hold / Sell</th><th>Trend</th><th>RSI</th><th>News Sentiment</th>';
+        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, NVDA = Nvidia)');
+        h += th('Name', 'Vollst\u00E4ndiger Firmenname');
+        h += th('Score', 'Signal-St\u00E4rke von 0\u2013100. Je h\u00F6her, desto st\u00E4rker das Kauf-/Verkaufssignal.\n\n\u2265 70 = Stark (gr\u00FCn)\n50\u201369 = Mittel (gelb)\n< 50 = Schwach');
+        h += th('Kurs', 'Aktueller Aktienkurs zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
+        h += th('Kursziel', 'Durchschnittliches Kursziel der Wall-Street-Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance (Refinitiv/LSEG)');
+        h += th('Upside', 'Prozentuale Differenz zwischen aktuellem Kurs und Kursziel.\n\n+ = Analysten erwarten Kursanstieg\n\u2013 = Analysten erwarten Kursverlust');
+        h += th('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub (monatlich aggregiert)');
+        h += th('Trend', 'Entwicklung der Analysten-Meinungen.\n\n\u2191 Bullish = Mehr Kaufempfehlungen als vorher\n\u2193 Bearish = Mehr Verkaufsempfehlungen\n\u2192 Neutral = Keine Ver\u00E4nderung');
+        h += th('RSI', 'Relative Strength Index (14 Tage).\nTechnischer Indikator f\u00FCr \u00DCberkauft/\u00DCberverkauft.\n\n> 70 = \u00DCberkauft (m\u00F6glicher R\u00FCckgang)\n< 30 = \u00DCberverkauft (m\u00F6glicher Anstieg)\nQuelle: Yahoo Finance (berechnet)');
+        h += th('News Sentiment', 'Stimmungsanalyse der Nachrichten der letzten 7 Tage.\nZeigt % positive Artikel und Gesamtanzahl.\nQuelle: Google News RSS (KI-Analyse)');
         h += '</tr></thead><tbody>';
 
         for (var i = 0; i < signals.length; i++) {
@@ -593,10 +606,19 @@
             return '<div class="empty-state">Keine Daten</div>';
 
         var h = '<table class="scanner-table"><thead><tr>';
-        h += '<th>Symbol</th><th>Name</th><th>Markt</th><th>Sektor</th><th>Kurs</th>';
-        h += '<th>Kursziel</th><th>Upside</th>';
-        h += '<th>Buy Score</th><th>Sell Score</th>';
-        h += '<th>RSI</th><th>MA50</th><th>MA200</th><th>Buy / Hold / Sell</th>';
+        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP)');
+        h += th('Name', 'Vollst\u00E4ndiger Firmenname');
+        h += th('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = US-B\u00F6rse S&P 500 (505 Aktien)');
+        h += th('Sektor', 'Branche/Industrie der Firma.\nz.B. Technology, Healthcare, Financial Services');
+        h += th('Kurs', 'Aktueller Aktienkurs.\nQuelle: Yahoo Finance');
+        h += th('Kursziel', 'Durchschnittliches Kursziel der Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance');
+        h += th('Upside', 'Prozentuale Differenz Kurs vs. Kursziel.\n+ = Potenzial nach oben\n\u2013 = Potenzial nach unten');
+        h += th('Buy Score', 'Kaufsignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Kaufsignal\n50\u201369 = Mittleres Signal');
+        h += th('Sell Score', 'Verkaufssignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Verkaufssignal');
+        h += th('RSI', 'Relative Strength Index (14 Tage).\n> 70 = \u00DCberkauft | < 30 = \u00DCberverkauft\nQuelle: Yahoo Finance');
+        h += th('MA50', '50-Tage gleitender Durchschnitt.\nKurs dar\u00FCber = Aufwärtstrend (bullish)\nKurs darunter = Abwärtstrend (bearish)');
+        h += th('MA200', '200-Tage gleitender Durchschnitt.\nLangfristiger Trendindikator.\ndar\u00FCber = Langfristig positiv\ndarunter = Langfristig negativ');
+        h += th('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub');
         h += '</tr></thead><tbody>';
 
         for (var i = 0; i < stocks.length; i++) {
@@ -754,11 +776,15 @@
             return '<div class="empty-state">Keine Analysten-Aenderungen in den letzten 30 Tagen</div>';
 
         var h = '<table class="scanner-table"><thead><tr>';
-        h += '<th>Datum</th><th>Symbol</th><th>Name</th><th>Firma</th>';
-        h += '<th>Aktion <span class="info-icon" title="Was hat der Analyst gemacht?\n\n\u2B06 Upgrade = Hochgestuft\n\uD83D\uDD04 Best\u00E4tigt = Rating beibehalten\n\u2B07 Downgrade = Herabgestuft\n\uD83C\uDD95 Neu = Erste Bewertung">?</span></th>';
-        h += '<th>Von <span class="info-icon" title="Vorheriges Rating des Analysten.\n\nBuy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
-        h += '<th>Auf <span class="info-icon" title="Neues/aktuelles Rating des Analysten.\n\nBuy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
-        h += '<th>Kursziel</th><th>Kurs</th>';
+        h += th('Datum', 'Wann hat der Analyst seine Bewertung ver\u00F6ffentlicht.\nQuelle: Yahoo Finance');
+        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der bewerteten Aktie');
+        h += th('Name', 'Vollst\u00E4ndiger Firmenname der Aktie');
+        h += th('Firma', 'Name der Analysten-Firma (z.B. Goldman Sachs, UBS, Morgan Stanley).\nDas sind Banken und Investmentfirmen deren Analysten Aktien bewerten.');
+        h += '<th><span class="info-tip" title="Was hat der Analyst gemacht?\n\n\u2B06 Upgrade = Rating hochgestuft (z.B. Hold \u2192 Buy)\n\uD83D\uDD04 Best\u00E4tigt = Rating beibehalten, oft aber Kursziel angepasst\n\u2B07 Downgrade = Rating herabgestuft (z.B. Buy \u2192 Hold)\n\uD83C\uDD95 Neu = Analyst bewertet die Aktie zum ersten Mal">Aktion</span> <span class="info-icon" title="Was hat der Analyst gemacht?\n\u2B06 Upgrade = Hochgestuft\n\uD83D\uDD04 Best\u00E4tigt = Beibehalten\n\u2B07 Downgrade = Herabgestuft\n\uD83C\uDD95 Neu = Erstbewertung">?</span></th>';
+        h += '<th><span class="info-tip" title="Vorheriges Rating des Analysten.\n\nKauf-Ratings: Buy, Outperform, Overweight, Strong Buy\nHalte-Ratings: Hold, Neutral, Equal-Weight, Market Perform\nVerkauf-Ratings: Sell, Underperform, Underweight\n\nJede Firma benutzt eigene Bezeichnungen f\u00FCr dasselbe.">Von</span> <span class="info-icon" title="Buy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
+        h += '<th><span class="info-tip" title="Neues/aktuelles Rating des Analysten.\n\nKauf-Ratings: Buy, Outperform, Overweight, Strong Buy\nHalte-Ratings: Hold, Neutral, Equal-Weight, Market Perform\nVerkauf-Ratings: Sell, Underperform, Underweight\n\nJede Firma benutzt eigene Bezeichnungen f\u00FCr dasselbe.">Auf</span> <span class="info-icon" title="Buy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
+        h += th('Kursziel', 'Preisziel des Analysten f\u00FCr diese Aktie.\nIn Klammern steht das vorherige Kursziel.\nQuelle: Yahoo Finance');
+        h += th('Kurs', 'Aktueller Aktienkurs zum Vergleich mit dem Kursziel.\nQuelle: Yahoo Finance');
         h += '</tr></thead><tbody>';
 
         var max = Math.min(all.length, 200);
@@ -817,9 +843,15 @@
             + '</div>';
 
         var h = info + '<table class="scanner-table"><thead><tr>';
-        h += '<th>Datum</th><th>Typ</th><th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th>';
-        h += '<th>Kursziel</th><th>Upside</th>';
-        h += '<th>Telegram <span class="info-icon" title="Wurde eine Telegram-Benachrichtigung gesendet?\n\n\u2705 = Ja, Nachricht wurde gesendet\n\u274C = Nein, wurde nicht gesendet (z.B. weil bereits in den letzten 48h gesendet oder Telegram nicht konfiguriert)">?</span></th>';
+        h += th('Datum', 'Zeitpunkt, wann der Scanner dieses Signal erkannt hat.\nDer Scanner l\u00E4uft jede Stunde \u2013 dieselbe Aktie kann mehrfach erscheinen.');
+        h += th('Typ', 'Art des Signals.\n\n\uD83D\uDFE2 BUY = Kaufsignal (Score \u2265 70)\n\uD83D\uDD34 SELL = Verkaufssignal (Score \u2265 70)');
+        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie');
+        h += th('Name', 'Vollst\u00E4ndiger Firmenname');
+        h += th('Score', 'Signal-St\u00E4rke zum Zeitpunkt des Scans (0\u2013100).\nNur Signale mit Score \u2265 70 werden hier angezeigt.');
+        h += th('Kurs', 'Aktienkurs zum Zeitpunkt des Scans.\nKann sich seitdem ver\u00E4ndert haben!');
+        h += th('Kursziel', 'Analysten-Kursziel zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
+        h += th('Upside', 'Potenzial zum Zeitpunkt des Scans.\nVergleich Kurs vs. Kursziel in Prozent.');
+        h += '<th><span class="info-tip" title="Wurde eine Telegram-Benachrichtigung gesendet?\n\n\u2705 Gesendet = Du hast eine Nachricht bekommen\n\u274C Nicht gesendet = Keine Nachricht, weil:\n\u2022 Signal wurde in den letzten 48h bereits gemeldet\n\u2022 Oder Telegram ist nicht konfiguriert">Telegram</span> <span class="info-icon" title="Jedes Signal wird maximal 1x pro 48 Stunden per Telegram gesendet, damit du nicht jede Stunde die gleiche Nachricht bekommst.">?</span></th>';
         h += '</tr></thead><tbody>';
 
         var max = Math.min(strong.length, 100);
