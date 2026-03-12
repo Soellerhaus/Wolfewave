@@ -563,49 +563,76 @@
         return h + '</tbody></table>';
     }
 
-    // ===== BUILD CHANGES TABLE =====
+    // ===== BUILD CHANGES TABLE (individuelle Upgrades/Downgrades) =====
     function buildChangesTable(stocks) {
-        // Nur Aktien mit Aenderungen (buy oder sell geaendert)
-        var changed = stocks.filter(function(s) {
-            var ch = s.analyst_changes || {};
-            return (ch.buy && ch.buy !== 0) || (ch.sell && ch.sell !== 0);
-        });
-        // Sortieren: groesste Aenderungen zuerst
-        changed.sort(function(a, b) {
-            var ca = a.analyst_changes || {}, cb = b.analyst_changes || {};
-            return Math.abs(cb.buy||0) - Math.abs(ca.buy||0);
-        });
-        if (changed.length === 0)
-            return '<div class="empty-state">Keine Aenderungen im letzten Monat</div>';
+        // Alle recent_upgrades aus allen Aktien sammeln
+        var all = [];
+        for (var i = 0; i < stocks.length; i++) {
+            var s = stocks[i];
+            var ups = s.recent_upgrades || [];
+            for (var j = 0; j < ups.length; j++) {
+                var u = ups[j];
+                all.push({
+                    symbol: s.symbol,
+                    name: s.name || s.symbol,
+                    price: s.price,
+                    date: u.date,
+                    firm: u.firm,
+                    to: u.to,
+                    from: u['from'],
+                    action: u.action,
+                    target_new: u.target_new,
+                    target_old: u.target_old,
+                });
+            }
+        }
+        // Sortieren: neueste zuerst
+        all.sort(function(a, b) { return (b.date||'').localeCompare(a.date||''); });
+
+        if (all.length === 0)
+            return '<div class="empty-state">Keine Analysten-Aenderungen in den letzten 30 Tagen</div>';
 
         var h = '<table class="scanner-table"><thead><tr>';
-        h += '<th>Symbol</th><th>Name</th><th>Kurs</th><th>Kursziel</th><th>Upside</th>';
-        h += '<th>Buy Aenderung</th><th>Hold Aenderung</th><th>Sell Aenderung</th>';
-        h += '<th>Aktuell B/H/S</th><th>Periode</th>';
+        h += '<th>Datum</th><th>Symbol</th><th>Name</th><th>Firma</th>';
+        h += '<th>Aktion</th><th>Von</th><th>Auf</th>';
+        h += '<th>Kursziel</th><th>Kurs</th>';
         h += '</tr></thead><tbody>';
 
-        for (var i = 0; i < changed.length; i++) {
-            var s = changed[i], ch = s.analyst_changes || {}, ac = s.analyst_current || {};
-            var tp = s.target_price;
-            var up = s.target_upside_pct || 0;
+        var max = Math.min(all.length, 200);
+        for (var k = 0; k < max; k++) {
+            var r = all[k];
 
-            function fmtChange(v) {
-                if (!v || v === 0) return '<span style="opacity:.4">-</span>';
-                var cls = v > 0 ? 'indicator-up' : 'indicator-down';
-                return '<span class="' + cls + '" style="font-weight:700">' + (v > 0 ? '+' : '') + v + '</span>';
+            // Aktion einfaerben
+            var actionCls = '';
+            var actionIcon = '';
+            var act = (r.action || '').toLowerCase();
+            if (act === 'up' || act === 'upgrade') { actionCls = 'indicator-up'; actionIcon = '&#x2B06; Upgrade'; }
+            else if (act === 'down' || act === 'downgrade') { actionCls = 'indicator-down'; actionIcon = '&#x2B07; Downgrade'; }
+            else if (act === 'init') { actionIcon = '&#x1F195; Neu'; }
+            else if (act === 'main' || act === 'reit') { actionIcon = '&#x1F504; Bestätigt'; }
+            else { actionIcon = r.action || '-'; }
+
+            // Kursziel-Anzeige
+            var targetTxt = '-';
+            if (r.target_new) {
+                var c = r.symbol && r.symbol.endsWith('.DE') ? '\u20AC' : '$';
+                targetTxt = c + r.target_new.toFixed(0);
+                if (r.target_old && r.target_old !== r.target_new) {
+                    var diff = r.target_new - r.target_old;
+                    targetTxt += ' <small style="opacity:.6">(vorher ' + c + r.target_old.toFixed(0) + ')</small>';
+                }
             }
 
             h += '<tr>';
-            h += '<td><strong>' + s.symbol + '</strong></td>';
-            h += '<td>' + (s.name || s.symbol) + '</td>';
-            h += '<td>' + (s.price ? cur(s.symbol) + s.price.toFixed(2) : '-') + '</td>';
-            h += '<td>' + kurszielCell(s.symbol, tp, s.target_low, s.target_high, s.target_analyst_count) + '</td>';
-            h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '" style="font-weight:600">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
-            h += '<td>' + fmtChange(ch.buy) + '</td>';
-            h += '<td>' + fmtChange(ch.hold) + '</td>';
-            h += '<td>' + fmtChange(ch.sell) + '</td>';
-            h += '<td>' + bhsTags(ac) + '</td>';
-            h += '<td>' + fmtDate(s.analyst_period) + '</td>';
+            h += '<td style="white-space:nowrap">' + fmtDate(r.date) + '</td>';
+            h += '<td><strong>' + r.symbol + '</strong></td>';
+            h += '<td>' + r.name + '</td>';
+            h += '<td>' + (r.firm || '-') + '</td>';
+            h += '<td class="' + actionCls + '" style="font-weight:600">' + actionIcon + '</td>';
+            h += '<td>' + (r.from || '-') + '</td>';
+            h += '<td>' + (r.to || '-') + '</td>';
+            h += '<td>' + targetTxt + '</td>';
+            h += '<td>' + (r.price ? cur(r.symbol) + r.price.toFixed(2) : '-') + '</td>';
             h += '</tr>';
         }
         return h + '</tbody></table>';
@@ -658,11 +685,12 @@
 
         // Analysten-Aenderungen
         var allFiltered = (SIGNALS.all_stocks || []).filter(matchesFilter);
-        var changed = allFiltered.filter(function(s) {
-            var ch = s.analyst_changes || {};
-            return (ch.buy && ch.buy !== 0) || (ch.sell && ch.sell !== 0);
-        });
-        document.getElementById('cntChanges').textContent = changed.length;
+        // Individuelle Upgrades/Downgrades zaehlen
+        var totalUpgrades = 0;
+        for (var u = 0; u < allFiltered.length; u++) {
+            totalUpgrades += (allFiltered[u].recent_upgrades || []).length;
+        }
+        document.getElementById('cntChanges').textContent = totalUpgrades;
         document.getElementById('tblChanges').innerHTML = buildChangesTable(allFiltered);
     }
 
