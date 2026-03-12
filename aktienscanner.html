@@ -234,6 +234,57 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
+
+        /* ===== FIRMA FILTER ===== */
+        .changes-toolbar {
+            display: flex;
+            gap: 10px;
+            padding: 12px 16px 4px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .changes-toolbar input,
+        .changes-toolbar select {
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            outline: none;
+        }
+        .changes-toolbar input:focus,
+        .changes-toolbar select:focus { border-color: var(--accent); }
+        .changes-toolbar select {
+            appearance: none;
+            padding-right: 28px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            cursor: pointer;
+        }
+
+        /* Tooltip styling for ratings */
+        .info-tip {
+            cursor: help;
+            border-bottom: 1px dotted var(--text-muted);
+        }
+        .info-icon {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            line-height: 14px;
+            text-align: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            font-size: 10px;
+            cursor: help;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+        [data-theme="light"] .info-icon { background: rgba(0,0,0,0.06); }
     </style>
 </head>
 <body>
@@ -294,6 +345,19 @@
                 <span class="accordion-chevron">&#x25BC;</span>
             </div>
             <div class="accordion-body">
+                <div class="changes-toolbar">
+                    <select id="firmaFilter" onchange="filterChanges()">
+                        <option value="all">Alle Firmen</option>
+                    </select>
+                    <select id="actionFilter" onchange="filterChanges()">
+                        <option value="all">Alle Aktionen</option>
+                        <option value="upgrade">⬆ Upgrade</option>
+                        <option value="downgrade">⬇ Downgrade</option>
+                        <option value="main">🔄 Bestätigt</option>
+                        <option value="init">🆕 Neu</option>
+                    </select>
+                    <input type="text" id="firmaSearch" placeholder="Firma oder Aktie suchen..." oninput="filterChanges()" style="min-width:200px;">
+                </div>
                 <div class="scanner-table-wrap" id="tblChanges"></div>
             </div>
         </div>
@@ -563,21 +627,77 @@
         return h + '</tbody></table>';
     }
 
-    // ===== BUILD CHANGES TABLE (individuelle Upgrades/Downgrades) =====
-    function buildChangesTable(stocks) {
-        // Alle recent_upgrades aus allen Aktien sammeln
-        var all = [];
+    // ===== RATING TOOLTIPS =====
+    var RATING_INFO = {
+        'buy': 'Kaufempfehlung \u2013 Analyst erwartet Kursanstieg',
+        'strong buy': 'Starke Kaufempfehlung \u2013 Analyst sehr optimistisch',
+        'strongbuy': 'Starke Kaufempfehlung \u2013 Analyst sehr optimistisch',
+        'outperform': 'Outperform \u2013 Aktie wird besser als der Markt abschneiden',
+        'overweight': 'Overweight \u2013 Aktie \u00FCbergewichten, wird besser als Benchmark',
+        'positive': 'Positive Bewertung \u2013 Analyst erwartet Kursanstieg',
+        'hold': 'Halten \u2013 Aktie behalten, weder kaufen noch verkaufen',
+        'neutral': 'Neutral \u2013 Keine klare Richtung erwartet',
+        'equal-weight': 'Equal-Weight \u2013 Marktgewichtung, durchschnittliche Erwartung',
+        'market perform': 'Market Perform \u2013 Entwickelt sich wie der Gesamtmarkt',
+        'peer perform': 'Peer Perform \u2013 Entwickelt sich wie vergleichbare Aktien',
+        'in-line': 'In-Line \u2013 Entspricht den Markterwartungen',
+        'sector perform': 'Sector Perform \u2013 Wie der Sektor-Durchschnitt',
+        'sector outperform': 'Sector Outperform \u2013 Besser als der Sektor-Durchschnitt',
+        'sell': 'Verkaufsempfehlung \u2013 Analyst erwartet Kursverlust',
+        'strong sell': 'Starke Verkaufsempfehlung \u2013 Analyst sehr pessimistisch',
+        'underperform': 'Underperform \u2013 Schlechter als der Markt erwartet',
+        'underweight': 'Underweight \u2013 Aktie untergewichten, schw\u00E4cher als Benchmark',
+        'reduce': 'Reduce \u2013 Bestand reduzieren, Kursabfall erwartet',
+        'negative': 'Negative Bewertung \u2013 Analyst erwartet Kursverlust',
+    };
+
+    var ACTION_INFO = {
+        'upgrade': 'Hochstufung \u2013 Analyst hat sein Rating verbessert (z.B. Neutral \u2192 Buy)',
+        'downgrade': 'Herabstufung \u2013 Analyst hat sein Rating verschlechtert (z.B. Buy \u2192 Neutral)',
+        'main': 'Best\u00E4tigt \u2013 Rating beibehalten, aber oft Kursziel angepasst',
+        'reit': 'Best\u00E4tigt \u2013 Rating beibehalten, aber oft Kursziel angepasst',
+        'init': 'Erstbewertung \u2013 Analyst bewertet diese Aktie zum ersten Mal',
+    };
+
+    function ratingWithTip(rating) {
+        if (!rating || rating === '-') return '-';
+        var key = rating.toLowerCase().trim();
+        var tip = RATING_INFO[key];
+        if (tip) {
+            return '<span class="info-tip" title="' + tip + '">' + rating + '</span>';
+        }
+        return rating;
+    }
+
+    function actionWithTip(actionRaw, actionIcon, actionCls) {
+        var key = (actionRaw || '').toLowerCase();
+        var tip = ACTION_INFO[key] || '';
+        if (tip) {
+            return '<span class="info-tip ' + actionCls + '" title="' + tip + '" style="font-weight:600">' + actionIcon + '</span>';
+        }
+        return '<span class="' + actionCls + '" style="font-weight:600">' + actionIcon + '</span>';
+    }
+
+    // ===== CHANGES DATA (global so filter can access) =====
+    var ALL_CHANGES = [];
+    var ALL_FIRMS = [];
+
+    function collectChanges(stocks) {
+        ALL_CHANGES = [];
+        var firmSet = {};
         for (var i = 0; i < stocks.length; i++) {
             var s = stocks[i];
             var ups = s.recent_upgrades || [];
             for (var j = 0; j < ups.length; j++) {
                 var u = ups[j];
-                all.push({
+                var firm = u.firm || '';
+                if (firm) firmSet[firm] = (firmSet[firm] || 0) + 1;
+                ALL_CHANGES.push({
                     symbol: s.symbol,
                     name: s.name || s.symbol,
                     price: s.price,
                     date: u.date,
-                    firm: u.firm,
+                    firm: firm,
                     to: u.to,
                     from: u['from'],
                     action: u.action,
@@ -586,15 +706,58 @@
                 });
             }
         }
-        // Sortieren: neueste zuerst
-        all.sort(function(a, b) { return (b.date||'').localeCompare(a.date||''); });
+        ALL_CHANGES.sort(function(a, b) { return (b.date||'').localeCompare(a.date||''); });
+
+        // Firmen-Dropdown befuellen
+        ALL_FIRMS = Object.keys(firmSet).sort();
+        var sel = document.getElementById('firmaFilter');
+        // Alte Optionen entfernen (ausser "Alle Firmen")
+        while (sel.options.length > 1) sel.remove(1);
+        for (var f = 0; f < ALL_FIRMS.length; f++) {
+            var o = document.createElement('option');
+            o.value = ALL_FIRMS[f];
+            o.textContent = ALL_FIRMS[f] + ' (' + firmSet[ALL_FIRMS[f]] + ')';
+            sel.appendChild(o);
+        }
+    }
+
+    window.filterChanges = function() {
+        var firma = document.getElementById('firmaFilter').value;
+        var actionF = document.getElementById('actionFilter').value;
+        var query = (document.getElementById('firmaSearch').value || '').toLowerCase().trim();
+
+        var filtered = ALL_CHANGES.filter(function(r) {
+            if (firma !== 'all' && r.firm !== firma) return false;
+            if (actionF !== 'all') {
+                var act = (r.action || '').toLowerCase();
+                if (actionF === 'upgrade' && act !== 'up' && act !== 'upgrade') return false;
+                if (actionF === 'downgrade' && act !== 'down' && act !== 'downgrade') return false;
+                if (actionF === 'main' && act !== 'main' && act !== 'reit') return false;
+                if (actionF === 'init' && act !== 'init') return false;
+            }
+            if (query) {
+                var haystack = ((r.firm||'') + ' ' + (r.symbol||'') + ' ' + (r.name||'')).toLowerCase();
+                if (haystack.indexOf(query) === -1) return false;
+            }
+            return true;
+        });
+
+        document.getElementById('cntChanges').textContent = filtered.length;
+        document.getElementById('tblChanges').innerHTML = buildChangesTable(filtered, true);
+    };
+
+    // ===== BUILD CHANGES TABLE (individuelle Upgrades/Downgrades) =====
+    function buildChangesTable(data, preFiltered) {
+        var all = preFiltered ? data : ALL_CHANGES;
 
         if (all.length === 0)
             return '<div class="empty-state">Keine Analysten-Aenderungen in den letzten 30 Tagen</div>';
 
         var h = '<table class="scanner-table"><thead><tr>';
         h += '<th>Datum</th><th>Symbol</th><th>Name</th><th>Firma</th>';
-        h += '<th>Aktion</th><th>Von</th><th>Auf</th>';
+        h += '<th>Aktion <span class="info-icon" title="Was hat der Analyst gemacht?\n\n\u2B06 Upgrade = Hochgestuft\n\uD83D\uDD04 Best\u00E4tigt = Rating beibehalten\n\u2B07 Downgrade = Herabgestuft\n\uD83C\uDD95 Neu = Erste Bewertung">?</span></th>';
+        h += '<th>Von <span class="info-icon" title="Vorheriges Rating des Analysten.\n\nBuy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
+        h += '<th>Auf <span class="info-icon" title="Neues/aktuelles Rating des Analysten.\n\nBuy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
         h += '<th>Kursziel</th><th>Kurs</th>';
         h += '</tr></thead><tbody>';
 
@@ -606,10 +769,10 @@
             var actionCls = '';
             var actionIcon = '';
             var act = (r.action || '').toLowerCase();
-            if (act === 'up' || act === 'upgrade') { actionCls = 'indicator-up'; actionIcon = '&#x2B06; Upgrade'; }
-            else if (act === 'down' || act === 'downgrade') { actionCls = 'indicator-down'; actionIcon = '&#x2B07; Downgrade'; }
-            else if (act === 'init') { actionIcon = '&#x1F195; Neu'; }
-            else if (act === 'main' || act === 'reit') { actionIcon = '&#x1F504; Bestätigt'; }
+            if (act === 'up' || act === 'upgrade') { actionCls = 'indicator-up'; actionIcon = '\u2B06 Upgrade'; }
+            else if (act === 'down' || act === 'downgrade') { actionCls = 'indicator-down'; actionIcon = '\u2B07 Downgrade'; }
+            else if (act === 'init') { actionIcon = '\uD83C\uDD95 Neu'; }
+            else if (act === 'main' || act === 'reit') { actionIcon = '\uD83D\uDD04 Best\u00E4tigt'; }
             else { actionIcon = r.action || '-'; }
 
             // Kursziel-Anzeige
@@ -618,7 +781,6 @@
                 var c = r.symbol && r.symbol.endsWith('.DE') ? '\u20AC' : '$';
                 targetTxt = c + r.target_new.toFixed(0);
                 if (r.target_old && r.target_old !== r.target_new) {
-                    var diff = r.target_new - r.target_old;
                     targetTxt += ' <small style="opacity:.6">(vorher ' + c + r.target_old.toFixed(0) + ')</small>';
                 }
             }
@@ -628,12 +790,15 @@
             h += '<td><strong>' + r.symbol + '</strong></td>';
             h += '<td>' + r.name + '</td>';
             h += '<td>' + (r.firm || '-') + '</td>';
-            h += '<td class="' + actionCls + '" style="font-weight:600">' + actionIcon + '</td>';
-            h += '<td>' + (r.from || '-') + '</td>';
-            h += '<td>' + (r.to || '-') + '</td>';
+            h += '<td>' + actionWithTip(r.action, actionIcon, actionCls) + '</td>';
+            h += '<td>' + ratingWithTip(r.from) + '</td>';
+            h += '<td>' + ratingWithTip(r.to) + '</td>';
             h += '<td>' + targetTxt + '</td>';
             h += '<td>' + (r.price ? cur(r.symbol) + r.price.toFixed(2) : '-') + '</td>';
             h += '</tr>';
+        }
+        if (all.length > 200) {
+            h += '<tr><td colspan="9" style="text-align:center;padding:16px;color:var(--text-muted);">Zeige 200 von ' + all.length + ' Eintr\u00E4gen. Nutze die Filter um einzugrenzen.</td></tr>';
         }
         return h + '</tbody></table>';
     }
@@ -646,20 +811,32 @@
 
         strong.sort(function(a, b) { return (b.timestamp||'').localeCompare(a.timestamp||''); });
 
-        var h = '<table class="scanner-table"><thead><tr>';
-        h += '<th>Datum</th><th>Typ</th><th>Symbol</th><th>Score</th><th>Kurs</th><th>Alert</th>';
+        var info = '<div style="padding:12px 16px;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);">'
+            + '\uD83D\uDCC5 <strong>Historische Signale</strong> zeigt alle vom Scanner erkannten starken Buy/Sell Signale (Score \u2265 70) der letzten 30 Tage. '
+            + 'Jedes Mal wenn der Scanner ein starkes Signal erkennt, wird es hier gespeichert.'
+            + '</div>';
+
+        var h = info + '<table class="scanner-table"><thead><tr>';
+        h += '<th>Datum</th><th>Typ</th><th>Symbol</th><th>Name</th><th>Score</th><th>Kurs</th>';
+        h += '<th>Kursziel</th><th>Upside</th>';
+        h += '<th>Telegram <span class="info-icon" title="Wurde eine Telegram-Benachrichtigung gesendet?\n\n\u2705 = Ja, Nachricht wurde gesendet\n\u274C = Nein, wurde nicht gesendet (z.B. weil bereits in den letzten 48h gesendet oder Telegram nicht konfiguriert)">?</span></th>';
         h += '</tr></thead><tbody>';
 
         var max = Math.min(strong.length, 100);
         for (var i = 0; i < max; i++) {
             var s = strong[i], d = s.data || {};
+            var tp = d.target_price;
+            var up = d.target_upside_pct || 0;
             h += '<tr>';
-            h += '<td>' + fmtDate(s.timestamp) + '</td>';
-            h += '<td class="' + (s.type === 'BUY' ? 'indicator-up' : 'indicator-down') + '">' + (s.type === 'BUY' ? '&#x1F7E2;' : '&#x1F534;') + ' ' + s.type + '</td>';
+            h += '<td style="white-space:nowrap">' + fmtDate(s.timestamp) + '</td>';
+            h += '<td class="' + (s.type === 'BUY' ? 'indicator-up' : 'indicator-down') + '" style="font-weight:600">' + (s.type === 'BUY' ? '\uD83D\uDFE2 BUY' : '\uD83D\uDD34 SELL') + '</td>';
             h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td>' + (d.name || s.symbol) + '</td>';
             h += '<td>' + scorePill(s.score) + '</td>';
             h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
-            h += '<td>' + (s.alerted ? '&#x2705;' : '&#x274C;') + '</td>';
+            h += '<td>' + (tp ? cur(s.symbol) + tp.toFixed(2) : '-') + '</td>';
+            h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
+            h += '<td title="' + (s.alerted ? 'Telegram-Nachricht wurde gesendet' : 'Keine Benachrichtigung gesendet (bereits k\u00FCrzlich gesendet oder Telegram nicht konfiguriert)') + '">' + (s.alerted ? '\u2705 Gesendet' : '\u274C Nicht gesendet') + '</td>';
             h += '</tr>';
         }
         return h + '</tbody></table>';
@@ -685,13 +862,13 @@
 
         // Analysten-Aenderungen
         var allFiltered = (SIGNALS.all_stocks || []).filter(matchesFilter);
-        // Individuelle Upgrades/Downgrades zaehlen
-        var totalUpgrades = 0;
-        for (var u = 0; u < allFiltered.length; u++) {
-            totalUpgrades += (allFiltered[u].recent_upgrades || []).length;
-        }
-        document.getElementById('cntChanges').textContent = totalUpgrades;
-        document.getElementById('tblChanges').innerHTML = buildChangesTable(allFiltered);
+        collectChanges(allFiltered);
+        // Reset filter dropdowns
+        document.getElementById('firmaFilter').value = 'all';
+        document.getElementById('actionFilter').value = 'all';
+        document.getElementById('firmaSearch').value = '';
+        document.getElementById('cntChanges').textContent = ALL_CHANGES.length;
+        document.getElementById('tblChanges').innerHTML = buildChangesTable(ALL_CHANGES, true);
     }
 
     function renderAllStocks() {
