@@ -285,6 +285,53 @@
             vertical-align: middle;
         }
         [data-theme="light"] .info-icon { background: rgba(0,0,0,0.06); }
+
+        /* ===== LOAD MORE BUTTON ===== */
+        .load-more-wrap {
+            text-align: center;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .load-more-btn {
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px 32px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .load-more-btn:hover {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        [data-theme="light"] .load-more-btn { background: rgba(0,0,0,0.04); }
+
+        /* ===== SECTION INFO BANNER ===== */
+        .section-info {
+            padding: 14px 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            line-height: 1.6;
+        }
+        .section-info strong { color: var(--text); }
+
+        /* ===== SORT BUTTONS ===== */
+        .sort-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 10px;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }
+        .sort-btn:hover { color: var(--accent); }
+        .sort-btn.active { color: var(--accent); font-weight: 700; }
     </style>
 </head>
 <body>
@@ -351,12 +398,18 @@
                     </select>
                     <select id="actionFilter" onchange="filterChanges()">
                         <option value="all">Alle Aktionen</option>
-                        <option value="upgrade">⬆ Upgrade</option>
-                        <option value="downgrade">⬇ Downgrade</option>
-                        <option value="main">🔄 Bestätigt</option>
-                        <option value="init">🆕 Neu</option>
+                        <option value="upgrade">&uarr; Upgrade</option>
+                        <option value="downgrade">&darr; Downgrade</option>
+                        <option value="main">Bestaetigt</option>
+                        <option value="init">Neu</option>
                     </select>
-                    <input type="text" id="firmaSearch" placeholder="Firma oder Aktie suchen..." oninput="filterChanges()" style="min-width:200px;">
+                    <select id="sortChanges" onchange="filterChanges()">
+                        <option value="date">Sortierung: Datum (neueste zuerst)</option>
+                        <option value="upgrade">Sortierung: Upgrades zuerst</option>
+                        <option value="downgrade">Sortierung: Downgrades zuerst</option>
+                        <option value="firma">Sortierung: Firma A-Z</option>
+                    </select>
+                    <input type="text" id="firmaSearch" placeholder="Firma oder Aktie suchen..." oninput="filterChanges()" style="min-width:180px;">
                 </div>
                 <div class="scanner-table-wrap" id="tblChanges"></div>
             </div>
@@ -397,7 +450,7 @@
             <div class="accordion-header acc-red" onclick="toggleAcc('accSell')">
                 <div class="accordion-left">
                     <span>&#x1F534;</span>
-                    <span class="accordion-title">Sell Signale (Score &ge; 70)</span>
+                    <span class="accordion-title">Sell Signale (Score &ge; 50)</span>
                     <span class="accordion-count" id="cntSell">0</span>
                 </div>
                 <span class="accordion-chevron">&#x25BC;</span>
@@ -560,15 +613,69 @@
         return '<th><span class="info-tip" title="' + tip + '">' + label + '</span></th>';
     }
 
+    // ===== PAGINATION HELPER =====
+    var PAGE_SIZE = 50;
+    var pageCounts = {}; // Track how many items shown per table ID
+
+    function showMore(tableId) {
+        pageCounts[tableId] = (pageCounts[tableId] || PAGE_SIZE) + PAGE_SIZE;
+        // Re-render the appropriate table
+        if (tableId === 'tblStrong' || tableId === 'tblMedium' || tableId === 'tblSell') renderSignals();
+        else if (tableId === 'tblAll') renderAllStocks();
+        else if (tableId === 'tblChanges') window.filterChanges();
+        else if (tableId === 'tblHistory') {
+            var hist = HISTORY.filter(function(h) { return h.score >= 70; });
+            document.getElementById('tblHistory').innerHTML = buildHistoryTable(HISTORY);
+        }
+    }
+    window.showMore = showMore;
+
+    function loadMoreBtn(tableId, shown, total) {
+        if (shown >= total) return '';
+        return '<div class="load-more-wrap"><button class="load-more-btn" onclick="showMore(\'' + tableId + '\')">'
+            + 'Weitere ' + Math.min(PAGE_SIZE, total - shown) + ' anzeigen (' + shown + ' von ' + total + ')'
+            + '</button></div>';
+    }
+
+    // ===== SECTION DESCRIPTIONS =====
+    var DESC_STRONG = '<div class="section-info">'
+        + '\uD83D\uDFE2 <strong>Starke Buy Signale</strong> \u2013 Aktien mit einem Score \u2265 70 von 100. '
+        + 'Der Score wird berechnet aus: <strong>Analysten-Empfehlungen</strong> (max. 35 Punkte: Anzahl Buy vs. Sell Bewertungen), '
+        + '<strong>News-Sentiment</strong> (max. 25 Punkte: positive vs. negative Nachrichten der letzten 7 Tage), '
+        + '<strong>Technische Analyse</strong> (max. 40 Punkte: RSI, Kurs \u00FCber/unter MA50 und MA200, Kursziel-Upside). '
+        + 'Je h\u00F6her der Score, desto mehr Faktoren sprechen f\u00FCr einen Kursanstieg.'
+        + '</div>';
+
+    var DESC_MEDIUM = '<div class="section-info">'
+        + '\uD83D\uDFE1 <strong>Mittlere Buy Signale</strong> \u2013 Aktien mit einem Score zwischen 50 und 69. '
+        + 'Diese Aktien zeigen einige positive Faktoren, aber nicht alle Indikatoren sind eindeutig. '
+        + 'Weniger starke \u00DCbereinstimmung zwischen Analysten, News und Technik als bei starken Signalen.'
+        + '</div>';
+
+    var DESC_SELL = '<div class="section-info">'
+        + '\uD83D\uDD34 <strong>Sell Signale</strong> \u2013 Aktien bei denen mehrere Faktoren auf einen m\u00F6glichen Kursr\u00FCckgang hindeuten. '
+        + 'Score \u2265 50: Analysten empfehlen vermehrt "Sell", negative News-Stimmung, technisch schw\u00E4chelnder Kurs (unter MA50/MA200, RSI).'
+        + '</div>';
+
+    var DESC_ALL = '<div class="section-info">'
+        + '\uD83D\uDCCA <strong>Alle Aktien</strong> \u2013 \u00DCbersicht \u00FCber alle 547 gescannten DAX- und S&P-500-Aktien mit allen verf\u00FCgbaren Daten. '
+        + 'Nutze die Suchleiste und Filter oben um gezielt nach Aktien zu suchen.'
+        + '</div>';
+
     // ===== BUILD SIGNAL TABLE =====
-    function buildSignalTable(signals) {
+    function buildSignalTable(signals, tableId) {
         if (!signals || signals.length === 0)
             return '<div class="empty-state">Keine Signale gefunden</div>';
 
-        var h = '<table class="scanner-table"><thead><tr>';
+        var desc = '';
+        if (tableId === 'tblStrong') desc = DESC_STRONG;
+        else if (tableId === 'tblMedium') desc = DESC_MEDIUM;
+        else if (tableId === 'tblSell') desc = DESC_SELL;
+
+        var h = desc + '<table class="scanner-table"><thead><tr>';
         h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, NVDA = Nvidia)');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname');
-        h += th('Score', 'Signal-St\u00E4rke von 0\u2013100. Je h\u00F6her, desto st\u00E4rker das Kauf-/Verkaufssignal.\n\n\u2265 70 = Stark (gr\u00FCn)\n50\u201369 = Mittel (gelb)\n< 50 = Schwach');
+        h += th('Score', 'Signal-St\u00E4rke von 0\u2013100. Je h\u00F6her, desto st\u00E4rker das Signal.\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte\n\n\u2265 70 = Stark | 50\u201369 = Mittel');
         h += th('Kurs', 'Aktueller Aktienkurs zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
         h += th('Kursziel', 'Durchschnittliches Kursziel der Wall-Street-Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance (Refinitiv/LSEG)');
         h += th('Upside', 'Prozentuale Differenz zwischen aktuellem Kurs und Kursziel.\n\n+ = Analysten erwarten Kursanstieg\n\u2013 = Analysten erwarten Kursverlust');
@@ -578,7 +685,9 @@
         h += th('News Sentiment', 'Stimmungsanalyse der Nachrichten der letzten 7 Tage.\nZeigt % positive Artikel und Gesamtanzahl.\nQuelle: Google News RSS (KI-Analyse)');
         h += '</tr></thead><tbody>';
 
-        for (var i = 0; i < signals.length; i++) {
+        var limit = pageCounts[tableId] || PAGE_SIZE;
+        var max = Math.min(signals.length, limit);
+        for (var i = 0; i < max; i++) {
             var s = signals[i], d = s.data || {}, ac = d.analyst_current || {};
             var nr = d.news_bullish_ratio;
             var tp = d.target_price;
@@ -597,7 +706,9 @@
             h += '<td>' + (nr != null ? '<span class="' + (nr >= 55 ? 'indicator-up' : nr <= 45 ? 'indicator-down' : '') + '">' + nr + '% Bull</span> <small style="opacity:.6">(' + nArt + ' Artikel)</small>' : '-') + '</td>';
             h += '</tr>';
         }
-        return h + '</tbody></table>';
+        h += '</tbody></table>';
+        h += loadMoreBtn(tableId, max, signals.length);
+        return h;
     }
 
     // ===== BUILD ALL STOCKS TABLE =====
@@ -605,7 +716,7 @@
         if (!stocks || stocks.length === 0)
             return '<div class="empty-state">Keine Daten</div>';
 
-        var h = '<table class="scanner-table"><thead><tr>';
+        var h = DESC_ALL + '<table class="scanner-table"><thead><tr>';
         h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP)');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname');
         h += th('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = US-B\u00F6rse S&P 500 (505 Aktien)');
@@ -616,12 +727,14 @@
         h += th('Buy Score', 'Kaufsignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Kaufsignal\n50\u201369 = Mittleres Signal');
         h += th('Sell Score', 'Verkaufssignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Verkaufssignal');
         h += th('RSI', 'Relative Strength Index (14 Tage).\n> 70 = \u00DCberkauft | < 30 = \u00DCberverkauft\nQuelle: Yahoo Finance');
-        h += th('MA50', '50-Tage gleitender Durchschnitt.\nKurs dar\u00FCber = Aufwärtstrend (bullish)\nKurs darunter = Abwärtstrend (bearish)');
+        h += th('MA50', '50-Tage gleitender Durchschnitt.\nKurs dar\u00FCber = Aufw\u00E4rtstrend (bullish)\nKurs darunter = Abw\u00E4rtstrend (bearish)');
         h += th('MA200', '200-Tage gleitender Durchschnitt.\nLangfristiger Trendindikator.\ndar\u00FCber = Langfristig positiv\ndarunter = Langfristig negativ');
         h += th('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub');
         h += '</tr></thead><tbody>';
 
-        for (var i = 0; i < stocks.length; i++) {
+        var limit = pageCounts['tblAll'] || PAGE_SIZE;
+        var max = Math.min(stocks.length, limit);
+        for (var i = 0; i < max; i++) {
             var s = stocks[i], bd = s.buy_detail || {}, ac = s.analyst_current || {};
             var tp = s.target_price;
             var up = s.target_upside_pct || 0;
@@ -646,7 +759,9 @@
             h += '<td>' + bhsTags(ac) + '</td>';
             h += '</tr>';
         }
-        return h + '</tbody></table>';
+        h += '</tbody></table>';
+        h += loadMoreBtn('tblAll', max, stocks.length);
+        return h;
     }
 
     // ===== RATING TOOLTIPS =====
@@ -743,9 +858,18 @@
         }
     }
 
+    function actionOrder(act) {
+        var a = (act || '').toLowerCase();
+        if (a === 'up' || a === 'upgrade') return 0;
+        if (a === 'init') return 1;
+        if (a === 'down' || a === 'downgrade') return 2;
+        return 3; // main/reit
+    }
+
     window.filterChanges = function() {
         var firma = document.getElementById('firmaFilter').value;
         var actionF = document.getElementById('actionFilter').value;
+        var sortBy = document.getElementById('sortChanges').value;
         var query = (document.getElementById('firmaSearch').value || '').toLowerCase().trim();
 
         var filtered = ALL_CHANGES.filter(function(r) {
@@ -764,6 +888,31 @@
             return true;
         });
 
+        // Sorting
+        if (sortBy === 'upgrade') {
+            filtered.sort(function(a, b) {
+                var d = actionOrder(a.action) - actionOrder(b.action);
+                return d !== 0 ? d : (b.date||'').localeCompare(a.date||'');
+            });
+        } else if (sortBy === 'downgrade') {
+            filtered.sort(function(a, b) {
+                var ao = actionOrder(a.action), bo = actionOrder(b.action);
+                // Put downgrades (2) first, then reverse
+                var aScore = ao === 2 ? 0 : ao === 0 ? 2 : ao;
+                var bScore = bo === 2 ? 0 : bo === 0 ? 2 : bo;
+                var d = aScore - bScore;
+                return d !== 0 ? d : (b.date||'').localeCompare(a.date||'');
+            });
+        } else if (sortBy === 'firma') {
+            filtered.sort(function(a, b) {
+                return (a.firm||'').localeCompare(b.firm||'') || (b.date||'').localeCompare(a.date||'');
+            });
+        } else {
+            filtered.sort(function(a, b) { return (b.date||'').localeCompare(a.date||''); });
+        }
+
+        // Reset pagination when filters change
+        pageCounts['tblChanges'] = PAGE_SIZE;
         document.getElementById('cntChanges').textContent = filtered.length;
         document.getElementById('tblChanges').innerHTML = buildChangesTable(filtered, true);
     };
@@ -780,14 +929,15 @@
         h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der bewerteten Aktie');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname der Aktie');
         h += th('Firma', 'Name der Analysten-Firma (z.B. Goldman Sachs, UBS, Morgan Stanley).\nDas sind Banken und Investmentfirmen deren Analysten Aktien bewerten.');
-        h += '<th><span class="info-tip" title="Was hat der Analyst gemacht?\n\n\u2B06 Upgrade = Rating hochgestuft (z.B. Hold \u2192 Buy)\n\uD83D\uDD04 Best\u00E4tigt = Rating beibehalten, oft aber Kursziel angepasst\n\u2B07 Downgrade = Rating herabgestuft (z.B. Buy \u2192 Hold)\n\uD83C\uDD95 Neu = Analyst bewertet die Aktie zum ersten Mal">Aktion</span> <span class="info-icon" title="Was hat der Analyst gemacht?\n\u2B06 Upgrade = Hochgestuft\n\uD83D\uDD04 Best\u00E4tigt = Beibehalten\n\u2B07 Downgrade = Herabgestuft\n\uD83C\uDD95 Neu = Erstbewertung">?</span></th>';
-        h += '<th><span class="info-tip" title="Vorheriges Rating des Analysten.\n\nKauf-Ratings: Buy, Outperform, Overweight, Strong Buy\nHalte-Ratings: Hold, Neutral, Equal-Weight, Market Perform\nVerkauf-Ratings: Sell, Underperform, Underweight\n\nJede Firma benutzt eigene Bezeichnungen f\u00FCr dasselbe.">Von</span> <span class="info-icon" title="Buy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
-        h += '<th><span class="info-tip" title="Neues/aktuelles Rating des Analysten.\n\nKauf-Ratings: Buy, Outperform, Overweight, Strong Buy\nHalte-Ratings: Hold, Neutral, Equal-Weight, Market Perform\nVerkauf-Ratings: Sell, Underperform, Underweight\n\nJede Firma benutzt eigene Bezeichnungen f\u00FCr dasselbe.">Auf</span> <span class="info-icon" title="Buy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
+        h += '<th><span class="info-tip" title="Was hat der Analyst gemacht?\n\n\u2B06 Upgrade = Rating hochgestuft (z.B. Hold \u2192 Buy)\n\uD83D\uDD04 Best\u00E4tigt = Rating beibehalten, oft aber Kursziel angepasst\n\u2B07 Downgrade = Rating herabgestuft (z.B. Buy \u2192 Hold)\n\uD83C\uDD95 Neu = Analyst bewertet die Aktie zum ersten Mal">Aktion</span> <span class="info-icon" title="\u2B06 Upgrade = Hochgestuft\n\uD83D\uDD04 Best\u00E4tigt = Beibehalten\n\u2B07 Downgrade = Herabgestuft\n\uD83C\uDD95 Neu = Erstbewertung">?</span></th>';
+        h += '<th><span class="info-tip" title="Vorheriges Rating des Analysten.\n\nKauf: Buy, Outperform, Overweight\nHalten: Hold, Neutral, Equal-Weight\nVerkauf: Sell, Underperform, Underweight">Von</span> <span class="info-icon" title="Buy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
+        h += '<th><span class="info-tip" title="Neues/aktuelles Rating des Analysten.\n\nKauf: Buy, Outperform, Overweight\nHalten: Hold, Neutral, Equal-Weight\nVerkauf: Sell, Underperform, Underweight">Auf</span> <span class="info-icon" title="Buy/Outperform/Overweight = Kaufen\nHold/Neutral/Equal-Weight = Halten\nSell/Underweight = Verkaufen">?</span></th>';
         h += th('Kursziel', 'Preisziel des Analysten f\u00FCr diese Aktie.\nIn Klammern steht das vorherige Kursziel.\nQuelle: Yahoo Finance');
         h += th('Kurs', 'Aktueller Aktienkurs zum Vergleich mit dem Kursziel.\nQuelle: Yahoo Finance');
         h += '</tr></thead><tbody>';
 
-        var max = Math.min(all.length, 200);
+        var limit = pageCounts['tblChanges'] || PAGE_SIZE;
+        var max = Math.min(all.length, limit);
         for (var k = 0; k < max; k++) {
             var r = all[k];
 
@@ -823,10 +973,9 @@
             h += '<td>' + (r.price ? cur(r.symbol) + r.price.toFixed(2) : '-') + '</td>';
             h += '</tr>';
         }
-        if (all.length > 200) {
-            h += '<tr><td colspan="9" style="text-align:center;padding:16px;color:var(--text-muted);">Zeige 200 von ' + all.length + ' Eintr\u00E4gen. Nutze die Filter um einzugrenzen.</td></tr>';
-        }
-        return h + '</tbody></table>';
+        h += '</tbody></table>';
+        h += loadMoreBtn('tblChanges', max, all.length);
+        return h;
     }
 
     // ===== BUILD HISTORY TABLE =====
@@ -837,9 +986,11 @@
 
         strong.sort(function(a, b) { return (b.timestamp||'').localeCompare(a.timestamp||''); });
 
-        var info = '<div style="padding:12px 16px;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);">'
-            + '\uD83D\uDCC5 <strong>Historische Signale</strong> zeigt alle vom Scanner erkannten starken Buy/Sell Signale (Score \u2265 70) der letzten 30 Tage. '
-            + 'Jedes Mal wenn der Scanner ein starkes Signal erkennt, wird es hier gespeichert.'
+        var info = '<div class="section-info">'
+            + '\uD83D\uDCC5 <strong>Signalverlauf</strong> \u2013 Diese Tabelle protokolliert alle starken Signale (Score \u2265 70) die der Scanner in den letzten 30 Tagen erkannt hat. '
+            + 'Der Scanner l\u00E4uft <strong>jede Stunde</strong> und pr\u00FCft alle 547 Aktien. Erkennt er ein starkes Signal, wird es hier mit Datum und Kurs festgehalten. '
+            + 'Dieselbe Aktie kann mehrfach erscheinen \u2013 das zeigt, dass das Signal \u00FCber mehrere Scans stabil geblieben ist. '
+            + 'So kannst du nachvollziehen, <strong>seit wann</strong> ein Signal aktiv ist und wie sich der Kurs seitdem entwickelt hat.'
             + '</div>';
 
         var h = info + '<table class="scanner-table"><thead><tr>';
@@ -847,14 +998,14 @@
         h += th('Typ', 'Art des Signals.\n\n\uD83D\uDFE2 BUY = Kaufsignal (Score \u2265 70)\n\uD83D\uDD34 SELL = Verkaufssignal (Score \u2265 70)');
         h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname');
-        h += th('Score', 'Signal-St\u00E4rke zum Zeitpunkt des Scans (0\u2013100).\nNur Signale mit Score \u2265 70 werden hier angezeigt.');
+        h += th('Score', 'Signal-St\u00E4rke zum Zeitpunkt des Scans (0\u2013100).\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte');
         h += th('Kurs', 'Aktienkurs zum Zeitpunkt des Scans.\nKann sich seitdem ver\u00E4ndert haben!');
         h += th('Kursziel', 'Analysten-Kursziel zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
         h += th('Upside', 'Potenzial zum Zeitpunkt des Scans.\nVergleich Kurs vs. Kursziel in Prozent.');
-        h += '<th><span class="info-tip" title="Wurde eine Telegram-Benachrichtigung gesendet?\n\n\u2705 Gesendet = Du hast eine Nachricht bekommen\n\u274C Nicht gesendet = Keine Nachricht, weil:\n\u2022 Signal wurde in den letzten 48h bereits gemeldet\n\u2022 Oder Telegram ist nicht konfiguriert">Telegram</span> <span class="info-icon" title="Jedes Signal wird maximal 1x pro 48 Stunden per Telegram gesendet, damit du nicht jede Stunde die gleiche Nachricht bekommst.">?</span></th>';
         h += '</tr></thead><tbody>';
 
-        var max = Math.min(strong.length, 100);
+        var limit = pageCounts['tblHistory'] || PAGE_SIZE;
+        var max = Math.min(strong.length, limit);
         for (var i = 0; i < max; i++) {
             var s = strong[i], d = s.data || {};
             var tp = d.target_price;
@@ -868,16 +1019,17 @@
             h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
             h += '<td>' + (tp ? cur(s.symbol) + tp.toFixed(2) : '-') + '</td>';
             h += '<td class="' + (up > 0 ? 'indicator-up' : up < 0 ? 'indicator-down' : '') + '">' + (tp ? (up > 0 ? '+' : '') + up + '%' : '-') + '</td>';
-            h += '<td title="' + (s.alerted ? 'Telegram-Nachricht wurde gesendet' : 'Keine Benachrichtigung gesendet (bereits k\u00FCrzlich gesendet oder Telegram nicht konfiguriert)') + '">' + (s.alerted ? '\u2705 Gesendet' : '\u274C Nicht gesendet') + '</td>';
             h += '</tr>';
         }
-        return h + '</tbody></table>';
+        h += '</tbody></table>';
+        h += loadMoreBtn('tblHistory', max, strong.length);
+        return h;
     }
 
-    // ===== RENDER ALL STOCKS =====
+    // ===== RENDER SIGNALS =====
     function renderSignals() {
         var buys = (SIGNALS.buy_signals || []).filter(matchesFilter);
-        var sells = (SIGNALS.sell_signals || []).filter(function(s) { return s.score >= 70 && matchesFilter(s); });
+        var sells = (SIGNALS.sell_signals || []).filter(function(s) { return s.score >= 50 && matchesFilter(s); });
         var strongBuy = buys.filter(function(s) { return s.score >= 70; });
         var mediumBuy = buys.filter(function(s) { return s.score >= 50 && s.score < 70; });
 
@@ -888,9 +1040,9 @@
         document.getElementById('cntStrong').textContent = strongBuy.length;
         document.getElementById('cntMedium').textContent = mediumBuy.length;
         document.getElementById('cntSell').textContent = sells.length;
-        document.getElementById('tblStrong').innerHTML = buildSignalTable(strongBuy);
-        document.getElementById('tblMedium').innerHTML = buildSignalTable(mediumBuy);
-        document.getElementById('tblSell').innerHTML = buildSignalTable(sells);
+        document.getElementById('tblStrong').innerHTML = buildSignalTable(strongBuy, 'tblStrong');
+        document.getElementById('tblMedium').innerHTML = buildSignalTable(mediumBuy, 'tblMedium');
+        document.getElementById('tblSell').innerHTML = buildSignalTable(sells, 'tblSell');
 
         // Analysten-Aenderungen
         var allFiltered = (SIGNALS.all_stocks || []).filter(matchesFilter);
@@ -935,7 +1087,7 @@
         document.getElementById('statTotal').textContent = SIGNALS.total_scanned || all.length || '0';
         document.getElementById('statMarkets').textContent = daxC + ' DAX + ' + spC + ' S&P 500';
 
-        document.getElementById('statSellDetail').textContent = 'Score \u2265 70';
+        document.getElementById('statSellDetail').textContent = 'Score \u2265 50';
         document.getElementById('statLastScan').textContent = SIGNALS.last_scan ? fmtDate(SIGNALS.last_scan) : '-';
         document.getElementById('statNextScan').textContent = SIGNALS.next_scan ? 'Naechster: ' + fmtDate(SIGNALS.next_scan) : '';
 
