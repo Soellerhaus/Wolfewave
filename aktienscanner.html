@@ -341,7 +341,7 @@
 <section>
     <div class="container">
         <p class="section-label">Aktienscanner</p>
-        <h2 class="section-title">DAX 40 &amp; S&amp;P 500 Scanner</h2>
+        <h2 class="section-title">DAX, S&amp;P 500, NASDAQ-100 &amp; Dow Jones Scanner</h2>
         <p class="section-desc">Automatische Buy/Sell Signale basierend auf Analysten-Empfehlungen, News-Sentiment und technischer Analyse.</p>
 
         <!-- Stats -->
@@ -375,6 +375,8 @@
                 <button class="filter-btn active" data-market="all" onclick="setMarket('all')">Alle</button>
                 <button class="filter-btn" data-market="DAX" onclick="setMarket('DAX')">DAX</button>
                 <button class="filter-btn" data-market="S&P 500" onclick="setMarket('S&P 500')">S&amp;P 500</button>
+                <button class="filter-btn" data-market="NASDAQ-100" onclick="setMarket('NASDAQ-100')">NASDAQ-100</button>
+                <button class="filter-btn" data-market="Dow Jones" onclick="setMarket('Dow Jones')">Dow Jones</button>
             </div>
             <select id="sectorFilter" onchange="applyFilters()">
                 <option value="all">Alle Sektoren</option>
@@ -586,10 +588,17 @@
         renderAllStocks();
     };
 
-    function getMarket(item) {
-        if (item.market) return item.market;
+    function getMarkets(item) {
+        if (item.markets) return item.markets;
+        if (item.market) return [item.market];
         var sym = item.symbol || (item.data && item.data.symbol) || '';
-        return sym.endsWith('.DE') ? 'DAX' : 'S&P 500';
+        return [sym.endsWith('.DE') ? 'DAX' : 'S&P 500'];
+    }
+
+    var MARKET_SHORT = {'S&P 500':'S&P','NASDAQ-100':'NDX','Dow Jones':'DJIA','DAX':'DAX','Watchlist':'WL'};
+    function formatMarkets(item) {
+        var m = getMarkets(item);
+        return m.map(function(x){ return MARKET_SHORT[x]||x; }).join(', ');
     }
 
     function getSector(item) {
@@ -603,7 +612,7 @@
             var name = (item.name || (item.data && item.data.name) || '').toLowerCase();
             if (sym.indexOf(q) === -1 && name.indexOf(q) === -1) return false;
         }
-        if (currentMarket !== 'all' && getMarket(item) !== currentMarket) return false;
+        if (currentMarket !== 'all' && getMarkets(item).indexOf(currentMarket) === -1) return false;
         if (currentSector !== 'all' && getSector(item) !== currentSector) return false;
         return true;
     }
@@ -658,7 +667,7 @@
         + '</div>';
 
     var DESC_ALL = '<div class="section-info">'
-        + '\uD83D\uDCCA <strong>Alle Aktien</strong> \u2013 \u00DCbersicht \u00FCber alle 547 gescannten DAX- und S&P-500-Aktien mit allen verf\u00FCgbaren Daten. '
+        + '\uD83D\uDCCA <strong>Alle Aktien</strong> \u2013 \u00DCbersicht \u00FCber alle gescannten DAX, S&amp;P 500, NASDAQ-100 und Dow Jones Aktien mit allen verf\u00FCgbaren Daten. '
         + 'Nutze die Suchleiste und Filter oben um gezielt nach Aktien zu suchen.'
         + '</div>';
 
@@ -719,7 +728,7 @@
         var h = DESC_ALL + '<table class="scanner-table"><thead><tr>';
         h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP)');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname');
-        h += th('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = US-B\u00F6rse S&P 500 (505 Aktien)');
+        h += th('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = S&P 500 (505 Aktien)\nNDX = NASDAQ-100 (100 Aktien)\nDJIA = Dow Jones (30 Aktien)\nAktien k\u00F6nnen in mehreren Indizes sein.');
         h += th('Sektor', 'Branche/Industrie der Firma.\nz.B. Technology, Healthcare, Financial Services');
         h += th('Kurs', 'Aktueller Aktienkurs.\nQuelle: Yahoo Finance');
         h += th('Kursziel', 'Durchschnittliches Kursziel der Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance');
@@ -746,7 +755,7 @@
             h += '<tr' + bg + '>';
             h += '<td><strong>' + s.symbol + '</strong></td>';
             h += '<td>' + (s.name || s.symbol) + '</td>';
-            h += '<td>' + (s.market === 'DAX' ? '<span class="market-dax">DAX</span>' : '<span class="market-sp">S&P</span>') + '</td>';
+            h += '<td>' + formatMarkets(s) + '</td>';
             h += '<td>' + (s.sector ? '<span class="sector-chip">' + s.sector + '</span>' : '-') + '</td>';
             h += '<td>' + (s.price ? cur(s.symbol) + s.price.toFixed(2) : '-') + '</td>';
             h += '<td>' + kurszielCell(s.symbol, tp, s.target_low, s.target_high, s.target_analyst_count) + '</td>';
@@ -1082,10 +1091,17 @@
     function render() {
         // Stats
         var all = SIGNALS.all_stocks || [];
-        var daxC = all.filter(function(s) { return s.market === 'DAX'; }).length;
-        var spC = all.length - daxC;
+        var daxC = all.filter(function(s) { return (s.markets || [s.market]).indexOf('DAX') !== -1; }).length;
+        var spC = all.filter(function(s) { return (s.markets || [s.market]).indexOf('S&P 500') !== -1; }).length;
+        var ndxC = all.filter(function(s) { return (s.markets || []).indexOf('NASDAQ-100') !== -1; }).length;
+        var djiaC = all.filter(function(s) { return (s.markets || []).indexOf('Dow Jones') !== -1; }).length;
         document.getElementById('statTotal').textContent = SIGNALS.total_scanned || all.length || '0';
-        document.getElementById('statMarkets').textContent = daxC + ' DAX + ' + spC + ' S&P 500';
+        var marketParts = [];
+        if (daxC) marketParts.push(daxC + ' DAX');
+        if (spC) marketParts.push(spC + ' S&P');
+        if (ndxC) marketParts.push(ndxC + ' NDX');
+        if (djiaC) marketParts.push(djiaC + ' DJIA');
+        document.getElementById('statMarkets').textContent = marketParts.join(' + ');
 
         document.getElementById('statSellDetail').textContent = 'Score \u2265 50';
         document.getElementById('statLastScan').textContent = SIGNALS.last_scan ? fmtDate(SIGNALS.last_scan) : '-';
