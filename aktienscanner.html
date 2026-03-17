@@ -220,6 +220,14 @@
             cursor: pointer; transition: opacity .2s;
         }
         .wolfe-badge:hover { opacity: .8; }
+        .wolfe-inline {
+            display: inline-block; padding: 1px 5px; border-radius: 3px;
+            font-size: 10px; font-weight: 700; text-decoration: none;
+            cursor: pointer; transition: opacity .2s; vertical-align: middle;
+            margin-left: 4px; letter-spacing: -0.3px; line-height: 1.4;
+        }
+        .wolfe-inline:hover { opacity: .7; }
+        .wolfe-inline sup { font-size: 8px; margin-left: 1px; }
         .wolfe-bull { background: rgba(16,185,129,.15); color: #10b981; }
         .wolfe-bear { background: rgba(239,68,68,.15); color: #ef4444; }
         .wolfe-pending { border: 1px dashed currentColor; }
@@ -734,6 +742,27 @@
         return parts.join(' ');
     }
 
+    // Compact inline wolfe badge for Symbol column (no extra column needed)
+    function wolfeInline(stockSymbol) {
+        var matches = findWolfeSignals(stockSymbol);
+        if (!matches.length) return '';
+        var w = matches[0]; // Show newest signal
+        var isBull = (w.direction || '').toUpperCase().indexOf('BULL') !== -1;
+        var cls = 'wolfe-inline ' + (isBull ? 'wolfe-bull' : 'wolfe-bear') + (w.status === 'pending' ? ' wolfe-pending' : '');
+        var icon = isBull ? '\u25B2' : '\u25BC';
+        var status = w.status === 'pending' ? 'Pending' : 'Active';
+        var tip = (isBull ? 'Bullish' : 'Bearish') + ' Wolfe Wave | ' + w.timeframe + ' | ' + status;
+        if (w.entry) tip += ' | Entry: ' + (+w.entry).toFixed(2);
+        if (w.tp1) tip += ' | TP1: ' + (+w.tp1).toFixed(2);
+        if (matches.length > 1) tip += ' | +' + (matches.length - 1) + ' weitere';
+        var imgUrl = getWolfeImage(w.wedge_id);
+        var count = matches.length > 1 ? '<sup>' + matches.length + '</sup>' : '';
+        if (imgUrl) {
+            return '<a class="' + cls + '" href="javascript:void(0)" onclick="event.stopPropagation();openWolfeLightbox(\'' + imgUrl + '\',\'' + tip.replace(/'/g, '') + '\')" title="' + tip + '">' + icon + 'WW' + count + '</a>';
+        }
+        return '<span class="' + cls + '" title="' + tip + '">' + icon + 'WW' + count + '</span>';
+    }
+
     // Lightbox functions
     window.openWolfeLightbox = function(imgUrl, info) {
         var lb = document.getElementById('wolfeLightbox');
@@ -809,7 +838,7 @@
         else if (tableId === 'tblSell') desc = DESC_SELL;
 
         var h = desc + '<table class="scanner-table"><thead><tr>';
-        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, NVDA = Nvidia)');
+        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, NVDA = Nvidia).\nFarbiger WW-Badge = Wolfe Wave Pattern gefunden.\nKlick auf Badge \u00F6ffnet Chart-Bild.');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname');
         h += th('Score', 'Signal-St\u00E4rke von 0\u2013100. Je h\u00F6her, desto st\u00E4rker das Signal.\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte\n\n\u2265 70 = Stark | 50\u201369 = Mittel');
         h += th('Kurs', 'Aktueller Aktienkurs zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
@@ -819,7 +848,6 @@
         h += th('Trend', 'Entwicklung der Analysten-Meinungen.\n\n\u2191 Bullish = Mehr Kaufempfehlungen als vorher\n\u2193 Bearish = Mehr Verkaufsempfehlungen\n\u2192 Neutral = Keine Ver\u00E4nderung');
         h += th('RSI', 'Relative Strength Index (14 Tage).\nTechnischer Indikator f\u00FCr \u00DCberkauft/\u00DCberverkauft.\n\n> 70 = \u00DCberkauft (m\u00F6glicher R\u00FCckgang)\n< 30 = \u00DCberverkauft (m\u00F6glicher Anstieg)\nQuelle: Yahoo Finance (berechnet)');
         h += th('News Sentiment', 'Stimmungsanalyse der Nachrichten der letzten 7 Tage.\nZeigt % positive Artikel und Gesamtanzahl.\nQuelle: Google News RSS (KI-Analyse)');
-        h += th('Wolfe Wave', 'Wolfe Wave Pattern-Erkennung aus dem WolfeWave Scanner (MT5).\nZeigt ob ein Wolfe-Wave-Keil f\u00FCr diese Aktie gefunden wurde.\n\n\u25B2 = Bullish (Kauf-Pattern)\n\u25BC = Bearish (Verkauf-Pattern)\nTimeframe wird angezeigt (H1, H4, D1 etc.)\n\nKlick \u00F6ffnet das Chart-Bild.\nGestrichelt = Pending (wartet auf Entry)\nVoll = Active (Entry erreicht)');
         h += '</tr></thead><tbody>';
 
         var limit = pageCounts[tableId] || PAGE_SIZE;
@@ -830,7 +858,7 @@
             var tp = d.target_price;
             var up = d.target_upside_pct || 0;
             h += '<tr>';
-            h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td><strong>' + s.symbol + '</strong> ' + wolfeInline(s.symbol) + '</td>';
             h += '<td>' + (d.name || s.symbol) + '</td>';
             h += '<td>' + scorePill(s.score) + '</td>';
             h += '<td>' + cur(s.symbol) + (d.price||0).toFixed(2) + '</td>';
@@ -841,7 +869,6 @@
             h += '<td>' + (d.rsi != null ? d.rsi : '-') + '</td>';
             var nArt = d.news_articles || 0;
             h += '<td>' + (nr != null ? '<span class="' + (nr >= 55 ? 'indicator-up' : nr <= 45 ? 'indicator-down' : '') + '">' + nr + '% Bull</span> <small style="opacity:.6">(' + nArt + ' Artikel)</small>' : '-') + '</td>';
-            h += '<td>' + wolfeCell(s.symbol) + '</td>';
             h += '</tr>';
         }
         h += '</tbody></table>';
@@ -855,7 +882,7 @@
             return '<div class="empty-state">Keine Daten</div>';
 
         var h = DESC_ALL + '<table class="scanner-table"><thead><tr>';
-        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP)');
+        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP).\nFarbiger WW-Badge = Wolfe Wave Pattern gefunden.\nKlick auf Badge \u00F6ffnet Chart-Bild.');
         h += th('Name', 'Vollst\u00E4ndiger Firmenname');
         h += th('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = S&P 500 (505 Aktien)\nNDX = NASDAQ-100 (100 Aktien)\nDJIA = Dow Jones (30 Aktien)\nAktien k\u00F6nnen in mehreren Indizes sein.');
         h += th('Sektor', 'Branche/Industrie der Firma.\nz.B. Technology, Healthcare, Financial Services');
@@ -868,7 +895,6 @@
         h += th('MA50', '50-Tage gleitender Durchschnitt.\nKurs dar\u00FCber = Aufw\u00E4rtstrend (bullish)\nKurs darunter = Abw\u00E4rtstrend (bearish)');
         h += th('MA200', '200-Tage gleitender Durchschnitt.\nLangfristiger Trendindikator.\ndar\u00FCber = Langfristig positiv\ndarunter = Langfristig negativ');
         h += th('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub');
-        h += th('Wolfe Wave', 'Wolfe Wave Pattern aus dem MT5 Scanner.\n\u25B2 = Bullish | \u25BC = Bearish\nKlick \u00F6ffnet Chart-Bild.');
         h += '</tr></thead><tbody>';
 
         var limit = pageCounts['tblAll'] || PAGE_SIZE;
@@ -883,7 +909,7 @@
             else if (s.sell_score >= 50) bg = ' style="background:rgba(239,68,68,0.06);"';
 
             h += '<tr' + bg + '>';
-            h += '<td><strong>' + s.symbol + '</strong></td>';
+            h += '<td><strong>' + s.symbol + '</strong> ' + wolfeInline(s.symbol) + '</td>';
             h += '<td>' + (s.name || s.symbol) + '</td>';
             h += '<td>' + formatMarkets(s) + '</td>';
             h += '<td>' + (s.sector ? '<span class="sector-chip">' + s.sector + '</span>' : '-') + '</td>';
@@ -896,7 +922,6 @@
             h += '<td class="' + (s.above_ma50 ? 'indicator-up' : 'indicator-down') + '">' + (s.above_ma50 ? 'dar\u00FCber' : 'darunter') + '</td>';
             h += '<td class="' + (s.above_ma200 ? 'indicator-up' : 'indicator-down') + '">' + (s.above_ma200 ? 'dar\u00FCber' : 'darunter') + '</td>';
             h += '<td>' + bhsTags(ac) + '</td>';
-            h += '<td>' + wolfeCell(s.symbol) + '</td>';
             h += '</tr>';
         }
         h += '</tbody></table>';
