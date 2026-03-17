@@ -429,6 +429,19 @@
             z-index: 2; border: 1px solid var(--border);
         }
         .sym-cell:hover .sym-ticker { opacity: 1; }
+        /* Firm logo in analyst table */
+        .firm-cell { display: inline-flex; align-items: center; gap: 6px; }
+        .firm-logo {
+            width: 18px; height: 18px; border-radius: 4px;
+            object-fit: contain; vertical-align: middle;
+            background: rgba(255,255,255,.08); flex-shrink: 0;
+        }
+        .firm-logo-fb {
+            display: inline-flex; width: 18px; height: 18px; border-radius: 4px;
+            background: rgba(255,255,255,.06); color: var(--text-muted);
+            align-items: center; justify-content: center;
+            font-size: 8px; font-weight: 700; vertical-align: middle; flex-shrink: 0;
+        }
         .top10-history {
             display: flex; align-items: center; gap: 3px;
             font-size: 10px; margin-top: 2px;
@@ -519,8 +532,8 @@
         <!-- Top 10 Tiles -->
         <div class="top10-section" id="top10Section" style="display:none">
             <div class="top10-header">
-                <span class="top10-title">&#x1F3C6; Top 7 Aktien</span>
-                <span class="top10-subtitle" id="top10Subtitle">nach Score</span>
+                <span class="top10-title">&#x1F3C6; Top 7 Wolfe Wave Aktien</span>
+                <span class="top10-subtitle" id="top10Subtitle">nur Aktien mit aktivem WW-Signal</span>
             </div>
             <div class="top10-strip" id="top10Strip"></div>
         </div>
@@ -958,6 +971,61 @@
             + '</span>';
     }
 
+    // Firm logo for analyst table
+    var FIRM_DOMAINS = {
+        'Morgan Stanley':'morganstanley.com','UBS':'ubs.com','Goldman Sachs':'goldmansachs.com',
+        'JP Morgan':'jpmorgan.com','JPMorgan':'jpmorgan.com','Barclays':'barclays.com',
+        'Deutsche Bank':'db.com','Citigroup':'citigroup.com','Citi':'citigroup.com',
+        'Bank of America':'bankofamerica.com','BofA Securities':'bankofamerica.com',
+        'HSBC':'hsbc.com','Credit Suisse':'credit-suisse.com','Jefferies':'jefferies.com',
+        'Wells Fargo':'wellsfargo.com','RBC Capital':'rbc.com','RBC':'rbc.com',
+        'Bernstein':'bernstein.com','Sanford C. Bernstein':'bernstein.com',
+        'Piper Sandler':'pipersandler.com','Wolfe Research':'wolferesearch.com',
+        'Needham':'needham.com','Raymond James':'raymondjames.com',
+        'Stifel':'stifel.com','Baird':'bairdwealth.com','Robert W. Baird':'bairdwealth.com',
+        'Cowen':'cowen.com','TD Cowen':'cowen.com','Oppenheimer':'oppenheimer.com',
+        'Mizuho':'mizuhogroup.com','Nomura':'nomura.com','Macquarie':'macquarie.com',
+        'Truist':'truist.com','Truist Financial':'truist.com','KeyBanc':'key.com',
+        'BMO Capital':'bmo.com','BMO':'bmo.com','Scotiabank':'scotiabank.com',
+        'BTIG':'btig.com','Benchmark':'benchmarkcompany.com',
+        'Wedbush':'wedbush.com','Loop Capital':'loopcapital.com',
+        'Canaccord':'canaccordgenuity.com','Canaccord Genuity':'canaccordgenuity.com',
+        'B. Riley':'brileyfin.com','Evercore':'evercore.com','Evercore ISI':'evercore.com',
+        'Berenberg':'berenberg.de','Warburg Research':'warburg-research.com',
+        'DZ Bank':'dzbank.de','DZ BANK':'dzbank.de','Commerzbank':'commerzbank.de',
+        'Hauck Aufhaeuser':'hauck-aufhaeuser.com','Hauck & Aufhäuser':'hauck-aufhaeuser.com',
+        'Societe Generale':'societegenerale.com','BNP Paribas':'bnpparibas.com',
+        'Kepler Cheuvreux':'keplercheuvreux.com','Susquehanna':'sig.com',
+        'Rosenblatt':'rblt.com','Rosenblatt Securities':'rblt.com',
+        'Stephens':'stephens.com','DA Davidson':'dadavidson.com',
+        'Guggenheim':'guggenheimpartners.com','William Blair':'williamblair.com',
+        'Argus':'argusresearch.com','Argus Research':'argusresearch.com',
+        'Ladenburg Thalmann':'ladenburg.com','Craig-Hallum':'craig-hallum.com',
+        'Erste Group':'erstegroup.com','LBBW':'lbbw.de',
+        'Metzler':'metzler.com','M.M.Warburg':'mmwarburg.com'
+    };
+    function firmLogo(firm) {
+        if (!firm) return '-';
+        var domain = FIRM_DOMAINS[firm];
+        if (!domain) {
+            // Try partial match
+            var keys = Object.keys(FIRM_DOMAINS);
+            for (var i = 0; i < keys.length; i++) {
+                if (firm.indexOf(keys[i]) !== -1 || keys[i].indexOf(firm) !== -1) {
+                    domain = FIRM_DOMAINS[keys[i]]; break;
+                }
+            }
+        }
+        var fb = firm.substring(0, 2).toUpperCase();
+        if (domain) {
+            return '<span class="firm-cell">'
+                + '<img class="firm-logo" src="https://logo.clearbit.com/' + domain + '?size=36"'
+                + ' alt="" onerror="this.outerHTML=\'<span class=\\\'firm-logo-fb\\\'>' + fb + '</span>\'">'
+                + firm + '</span>';
+        }
+        return '<span class="firm-cell"><span class="firm-logo-fb">' + fb + '</span>' + firm + '</span>';
+    }
+
     // Compact inline wolfe badge for Symbol column (no extra column needed)
     function wolfeInline(stockSymbol) {
         var matches = findWolfeSignals(stockSymbol);
@@ -1349,7 +1417,7 @@
             h += '<td style="white-space:nowrap">' + fmtDate(r.date) + '</td>';
             h += '<td>' + symLogo(r.symbol) + '</td>';
             h += '<td>' + r.name + '</td>';
-            h += '<td>' + (r.firm || '-') + '</td>';
+            h += '<td>' + firmLogo(r.firm) + '</td>';
             h += '<td>' + actionWithTip(r.action, actionIcon, actionCls) + '</td>';
             h += '<td>' + ratingWithTip(r.from) + '</td>';
             h += '<td>' + ratingWithTip(r.to) + '</td>';
@@ -1528,7 +1596,7 @@
 
     function renderTop10() {
         var buys = (SIGNALS.buy_signals || []).filter(function(s) {
-            return s.score >= 70 && matchesFilter(s);
+            return s.score >= 70 && matchesFilter(s) && findWolfeSignals(s.symbol).length > 0;
         });
         buys.sort(function(a, b) { return b.score - a.score; });
         var top = buys.slice(0, 7);
@@ -1584,6 +1652,18 @@
             h += logo;
             h += '<span class="top10-name top10-name-main" title="' + name + '">' + name + '</span>';
             h += '<span class="top10-sym-sub">' + sym + '</span>';
+            // WW badges
+            var wwMatches = findWolfeSignals(sym);
+            if (wwMatches.length) {
+                var wwParts = [];
+                wwMatches.forEach(function(w) {
+                    var bull = (w.direction || '').toUpperCase().indexOf('BULL') !== -1;
+                    var wCls = 'wolfe-inline ' + (bull ? 'wolfe-bull' : 'wolfe-bear') + (w.status === 'pending' ? ' wolfe-pending' : '');
+                    var wIcon = bull ? '\u25B2' : '\u25BC';
+                    wwParts.push('<span class="' + wCls + '">' + wIcon + 'WW ' + w.timeframe + '</span>');
+                });
+                h += '<div style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin:2px 0">' + wwParts.join('') + '</div>';
+            }
             h += scorePill(s.score);
             if (upside != null) {
                 var uCls = upside > 0 ? 'indicator-up' : upside < 0 ? 'indicator-down' : '';
