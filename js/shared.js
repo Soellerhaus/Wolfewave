@@ -367,6 +367,13 @@ document.addEventListener('keydown', e => {
 });
 
 // ===== SIGNAL CARD RENDERERS =====
+function signalLogo(sym) {
+    const clean = sym.replace(/\.(OQ|N|DE|L|PA|MI|MC|AS|BR|HK|T|AX|SW|CO|HE|ST|OL|VX)$/i, '')
+        .replace(/G$/, ''); // SAPG->SAP, ALVG->ALV etc
+    const fb = clean.substring(0, 2);
+    return `<img style="width:28px;height:28px;border-radius:50%;object-fit:contain;background:rgba(255,255,255,.08);margin-right:8px;vertical-align:middle;" src="https://assets.parqet.com/logos/symbol/${clean}" alt="" onerror="this.outerHTML='<span style=\\'display:inline-flex;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);color:var(--text-muted);align-items:center;justify-content:center;font-size:10px;font-weight:700;vertical-align:middle;margin-right:8px;\\'>${fb}</span>'">`;
+}
+
 function renderSignalCard(s, imgMap) {
     const imgUrl = imgMap ? getBestImage(imgMap, s.wedge_id) : getImageUrl(s);
     const name = getSymbolName(s.symbol, s);
@@ -382,9 +389,12 @@ function renderSignalCard(s, imgMap) {
         ${hasMulti ? `<div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;">${imgs.length} Bilder</div>` : ''}
         <div class="signal-body">
             <div class="signal-head">
-                <div>
-                    <div class="signal-symbol">${name}</div>
-                    <div class="signal-name">${s.symbol} &middot; ${s.timeframe || '--'}</div>
+                <div style="display:flex;align-items:center;">
+                    ${signalLogo(s.symbol)}
+                    <div>
+                        <div class="signal-symbol">${name}</div>
+                        <div class="signal-name">${s.symbol} &middot; ${s.timeframe || '--'}</div>
+                    </div>
                 </div>
                 <div class="signal-badges">
                     <span class="badge ${statusCls}">${s.status}</span>
@@ -429,9 +439,12 @@ function renderCompletedCard(s, imgMap) {
         ${hasMulti ? `<div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;">${imgs.length} Bilder</div>` : ''}
         <div class="signal-body">
             <div class="signal-head">
-                <div>
-                    <div class="signal-symbol">${name}</div>
-                    <div class="signal-name">${s.symbol} &middot; ${s.timeframe || '--'}</div>
+                <div style="display:flex;align-items:center;">
+                    ${signalLogo(s.symbol)}
+                    <div>
+                        <div class="signal-symbol">${name}</div>
+                        <div class="signal-name">${s.symbol} &middot; ${s.timeframe || '--'}</div>
+                    </div>
                 </div>
                 <span class="badge ${s.direction === 'BULLISH' ? 'badge-bullish' : 'badge-bearish'}">${s.direction || '--'}</span>
             </div>
