@@ -1,1 +1,2 @@
-data/history.json
+# history.json wird jetzt gefiltert kopiert (nur Score>=50, dedupliziert pro Tag)
+# Alte ungefilterte Version war >100MB - nicht committen!
