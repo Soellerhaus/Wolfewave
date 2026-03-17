@@ -405,6 +405,15 @@
         .rank-down { color: #ef4444; }
         .rank-same { color: var(--text-muted); }
         .rank-new { color: #f59e0b; }
+        .top10-history {
+            display: flex; align-items: center; gap: 3px;
+            font-size: 10px; margin-top: 2px;
+            padding: 2px 6px; border-radius: 4px;
+            background: rgba(255,255,255,.05);
+        }
+        .top10-streak {
+            color: var(--text-muted); font-weight: 600;
+        }
         @media (max-width: 480px) {
             .top10-card { flex: 0 0 130px; padding: 12px 10px; }
             .top10-logo, .top10-logo-fallback { width: 32px; height: 32px; }
@@ -486,7 +495,7 @@
         <!-- Top 10 Tiles -->
         <div class="top10-section" id="top10Section" style="display:none">
             <div class="top10-header">
-                <span class="top10-title">&#x1F3C6; Top 10 Aktien</span>
+                <span class="top10-title">&#x1F3C6; Top 7 Aktien</span>
                 <span class="top10-subtitle" id="top10Subtitle">nach Score</span>
             </div>
             <div class="top10-strip" id="top10Strip"></div>
@@ -1421,33 +1430,66 @@
         document.getElementById('tblHistory').innerHTML = buildHistoryTable(filtered, true);
     }
 
-    // ===== TOP 10 TILES =====
-    function getYesterdayRankings() {
+    // ===== TOP 7 TILES WITH HISTORY ANALYSIS =====
+    function analyzeHistory() {
+        // Build per-symbol history: days in top list, score per day, rank per day
+        if (!HISTORY.length) return { ranks: {}, stats: {} };
         var todayStr = (SIGNALS.last_scan || '').split(' ')[0];
-        if (!todayStr || !HISTORY.length) return {};
-        // Find most recent date before today
-        var prevDate = '';
-        for (var i = 0; i < HISTORY.length; i++) {
-            var d = (HISTORY[i].timestamp || '').split(' ')[0];
-            if (d && d < todayStr && d > prevDate) prevDate = d;
-        }
-        if (!prevDate) return {};
-        // Get yesterday's buy signals with score >= 70, deduplicate
-        var bySymbol = {};
+
+        // Group history by date, then rank per date
+        var dates = {};
         for (var i = 0; i < HISTORY.length; i++) {
             var h = HISTORY[i];
             if (h.type !== 'BUY' || h.score < 70) continue;
-            if ((h.timestamp || '').split(' ')[0] !== prevDate) continue;
-            if (!bySymbol[h.symbol] || h.score > bySymbol[h.symbol].score) {
-                bySymbol[h.symbol] = h;
+            var day = (h.timestamp || '').split(' ')[0];
+            if (!day) continue;
+            if (!dates[day]) dates[day] = {};
+            if (!dates[day][h.symbol] || h.score > dates[day][h.symbol]) {
+                dates[day][h.symbol] = h.score;
             }
         }
-        var arr = [];
-        for (var sym in bySymbol) arr.push(bySymbol[sym]);
-        arr.sort(function(a, b) { return b.score - a.score; });
-        var ranks = {};
-        for (var i = 0; i < arr.length; i++) ranks[arr[i].symbol] = i + 1;
-        return ranks;
+
+        // Sort dates descending
+        var sortedDays = Object.keys(dates).sort().reverse();
+
+        // Yesterday's rankings (most recent day before today)
+        var yRanks = {};
+        for (var di = 0; di < sortedDays.length; di++) {
+            if (sortedDays[di] < todayStr) {
+                var dayData = dates[sortedDays[di]];
+                var arr = [];
+                for (var sym in dayData) arr.push({ symbol: sym, score: dayData[sym] });
+                arr.sort(function(a, b) { return b.score - a.score; });
+                for (var j = 0; j < arr.length; j++) yRanks[arr[j].symbol] = j + 1;
+                break;
+            }
+        }
+
+        // Per-symbol stats: days in top list, score trend, first seen
+        var stats = {};
+        for (var di = 0; di < sortedDays.length; di++) {
+            var day = sortedDays[di];
+            var dayData = dates[day];
+            for (var sym in dayData) {
+                if (!stats[sym]) stats[sym] = { days: 0, scores: [], firstSeen: day };
+                stats[sym].days++;
+                stats[sym].scores.push(dayData[sym]);
+                stats[sym].firstSeen = day; // keeps overwriting to oldest
+            }
+        }
+        // Calculate score trend (latest vs earliest)
+        for (var sym in stats) {
+            var sc = stats[sym].scores;
+            if (sc.length >= 2) {
+                var newest = sc[0]; // scores[0] is most recent (sorted desc)
+                var oldest = sc[sc.length - 1];
+                stats[sym].trend = newest - oldest; // positive = improving
+            } else {
+                stats[sym].trend = 0;
+            }
+        }
+
+        return { ranks: yRanks, stats: stats };
     }
 
     function renderTop10() {
@@ -1455,14 +1497,17 @@
             return s.score >= 70 && matchesFilter(s);
         });
         buys.sort(function(a, b) { return b.score - a.score; });
-        var top = buys.slice(0, 10);
+        var top = buys.slice(0, 7);
 
         var section = document.getElementById('top10Section');
         var strip = document.getElementById('top10Strip');
         if (!top.length) { section.style.display = 'none'; return; }
         section.style.display = '';
 
-        var yRanks = getYesterdayRankings();
+        var analysis = analyzeHistory();
+        var yRanks = analysis.ranks;
+        var hStats = analysis.stats;
+
         var h = '';
         for (var i = 0; i < top.length; i++) {
             var s = top[i], d = s.data || {};
@@ -1470,6 +1515,7 @@
             var name = d.name || sym;
             var upside = d.target_upside_pct;
             var rank = i + 1;
+            var st = hStats[sym] || { days: 0, trend: 0 };
 
             // Rank change indicator
             var chg = '';
@@ -1477,9 +1523,20 @@
                 var diff = yRanks[sym] - rank;
                 if (diff > 0) chg = '<span class="top10-rank-change rank-up">\u25B2' + diff + '</span>';
                 else if (diff < 0) chg = '<span class="top10-rank-change rank-down">\u25BC' + Math.abs(diff) + '</span>';
-                else chg = '<span class="top10-rank-change rank-same">\u2022</span>';
+                else chg = '<span class="top10-rank-change rank-same">=</span>';
             } else {
                 chg = '<span class="top10-rank-change rank-new">NEU</span>';
+            }
+
+            // History badge: days in list + trend
+            var histBadge = '';
+            if (st.days > 0) {
+                var trendIcon = st.trend > 0 ? '\u2197' : st.trend < 0 ? '\u2198' : '\u2192';
+                var trendCls = st.trend > 0 ? 'rank-up' : st.trend < 0 ? 'rank-down' : 'rank-same';
+                histBadge = '<span class="top10-history">'
+                    + '<span class="top10-streak">' + st.days + 'T</span>'
+                    + '<span class="' + trendCls + '">' + trendIcon + '</span>'
+                    + '</span>';
             }
 
             // Logo with fallback
@@ -1498,6 +1555,7 @@
                 var uCls = upside > 0 ? 'indicator-up' : upside < 0 ? 'indicator-down' : '';
                 h += '<span class="top10-upside ' + uCls + '">' + (upside > 0 ? '+' : '') + upside + '% Kursziel</span>';
             }
+            h += histBadge;
             h += '</div>';
         }
         strip.innerHTML = h;
