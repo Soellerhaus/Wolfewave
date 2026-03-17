@@ -656,6 +656,7 @@
         currentSector = document.getElementById('sectorFilter').value;
         renderSignals();
         renderAllStocks();
+        renderHistory();
     };
 
     function getMarkets(item) {
@@ -711,7 +712,7 @@
         if (tableId === 'tblStrong' || tableId === 'tblMedium' || tableId === 'tblSell') renderSignals();
         else if (tableId === 'tblAll') renderAllStocks();
         else if (tableId === 'tblHistory') {
-            document.getElementById('tblHistory').innerHTML = buildHistoryTable(HISTORY);
+            renderHistory();
         }
     }
     window.toggleSort = toggleSort;
@@ -894,8 +895,7 @@
         else if (tableId === 'tblAll') renderAllStocks();
         else if (tableId === 'tblChanges') window.filterChanges();
         else if (tableId === 'tblHistory') {
-            var hist = HISTORY.filter(function(h) { return h.score >= 70; });
-            document.getElementById('tblHistory').innerHTML = buildHistoryTable(HISTORY);
+            renderHistory();
         }
     }
     window.showMore = showMore;
@@ -1253,8 +1253,8 @@
     }
 
     // ===== BUILD HISTORY TABLE =====
-    function buildHistoryTable(history) {
-        var strong = history.filter(function(h) { return h.score >= 70; });
+    function buildHistoryTable(history, preFiltered) {
+        var strong = preFiltered ? history : history.filter(function(h) { return h.score >= 70; });
         if (strong.length === 0)
             return '<div class="empty-state">Keine historischen Signale</div>';
 
@@ -1339,6 +1339,21 @@
         document.getElementById('cntAll').textContent = stocks.length;
     }
 
+    function renderHistory() {
+        var q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+        var filtered = HISTORY.filter(function(h) {
+            if (h.score < 70) return false;
+            if (q) {
+                var sym = (h.symbol||'').toLowerCase();
+                var name = ((h.data||{}).name||'').toLowerCase();
+                if (sym.indexOf(q) === -1 && name.indexOf(q) === -1) return false;
+            }
+            return true;
+        });
+        document.getElementById('cntHistory').textContent = filtered.length;
+        document.getElementById('tblHistory').innerHTML = buildHistoryTable(filtered, true);
+    }
+
     // ===== POPULATE SECTORS =====
     function populateSectors() {
         var all = SIGNALS.all_stocks || [];
@@ -1380,9 +1395,7 @@
         renderSignals();
 
         // History
-        var hist = HISTORY.filter(function(h) { return h.score >= 70; });
-        document.getElementById('cntHistory').textContent = hist.length;
-        document.getElementById('tblHistory').innerHTML = buildHistoryTable(HISTORY);
+        renderHistory();
 
         // Sectors + All stocks
         populateSectors();
