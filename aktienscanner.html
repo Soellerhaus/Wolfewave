@@ -171,7 +171,14 @@
             position: sticky;
             top: 0;
             background: var(--bg-card);
+            cursor: pointer;
+            user-select: none;
+            transition: color .2s;
         }
+        .scanner-table th:hover { color: var(--text-primary); }
+        .scanner-table th .sort-arrow { font-size: 10px; margin-left: 3px; opacity: .3; }
+        .scanner-table th.sort-active .sort-arrow { opacity: 1; color: #10b981; }
+        .scanner-table th.sort-active { color: var(--text-primary); }
         .scanner-table td {
             padding: 10px 14px;
             border-bottom: 1px solid var(--border);
@@ -681,8 +688,106 @@
     }
 
     // ===== COLUMN TOOLTIP HELPER =====
-    function th(label, tip) {
-        return '<th><span class="info-tip" title="' + tip + '">' + label + '</span></th>';
+    function th(label, tip, sortKey) {
+        if (!sortKey) return '<th><span class="info-tip" title="' + tip + '">' + label + '</span></th>';
+        return '<th data-sort="' + sortKey + '"><span class="info-tip" title="' + tip + '">' + label + '</span><span class="sort-arrow">\u2195</span></th>';
+    }
+
+    // ===== TABLE SORT SYSTEM =====
+    var sortState = {}; // { tableId: { key: 'score', dir: 'desc' } }
+
+    function getTableSort(tableId) {
+        return sortState[tableId] || null;
+    }
+
+    function toggleSort(tableId, key) {
+        var cur = sortState[tableId];
+        if (cur && cur.key === key) {
+            sortState[tableId] = { key: key, dir: cur.dir === 'desc' ? 'asc' : 'desc' };
+        } else {
+            sortState[tableId] = { key: key, dir: 'desc' };
+        }
+        // Re-render the appropriate table
+        if (tableId === 'tblStrong' || tableId === 'tblMedium' || tableId === 'tblSell') renderSignals();
+        else if (tableId === 'tblAll') renderAllStocks();
+        else if (tableId === 'tblHistory') {
+            document.getElementById('tblHistory').innerHTML = buildHistoryTable(HISTORY);
+        }
+    }
+    window.toggleSort = toggleSort;
+
+    // Value extractors for signal table columns
+    var SIGNAL_EXTRACTORS = {
+        'symbol':    function(s) { return s.symbol || ''; },
+        'name':      function(s) { var d=s.data||{}; return (d.name||s.symbol||'').toLowerCase(); },
+        'score':     function(s) { return s.score || 0; },
+        'price':     function(s) { return (s.data||{}).price || 0; },
+        'target':    function(s) { return (s.data||{}).target_price || 0; },
+        'upside':    function(s) { return (s.data||{}).target_upside_pct || 0; },
+        'buy_count': function(s) { var ac=(s.data||{}).analyst_current||{}; return (ac.buy||0)+(ac.strongBuy||0); },
+        'rsi':       function(s) { return (s.data||{}).rsi || 0; },
+        'news':      function(s) { return (s.data||{}).news_bullish_ratio || 0; }
+    };
+
+    // Value extractors for all-stocks table columns
+    var ALL_EXTRACTORS = {
+        'symbol':     function(s) { return s.symbol || ''; },
+        'name':       function(s) { return (s.name||s.symbol||'').toLowerCase(); },
+        'market':     function(s) { return formatMarkets(s); },
+        'sector':     function(s) { return s.sector || ''; },
+        'price':      function(s) { return s.price || 0; },
+        'target':     function(s) { return s.target_price || 0; },
+        'upside':     function(s) { return s.target_upside_pct || 0; },
+        'buy_score':  function(s) { return s.buy_score || 0; },
+        'sell_score': function(s) { return s.sell_score || 0; },
+        'rsi':        function(s) { return s.rsi || 0; },
+        'ma50':       function(s) { return s.above_ma50 ? 1 : 0; },
+        'ma200':      function(s) { return s.above_ma200 ? 1 : 0; },
+        'buy_count':  function(s) { var ac=s.analyst_current||{}; return (ac.buy||0)+(ac.strongBuy||0); }
+    };
+
+    // Value extractors for history table
+    var HIST_EXTRACTORS = {
+        'date':    function(s) { return s.timestamp || ''; },
+        'type':    function(s) { return s.type || ''; },
+        'symbol':  function(s) { return s.symbol || ''; },
+        'name':    function(s) { return ((s.data||{}).name||s.symbol||'').toLowerCase(); },
+        'score':   function(s) { return s.score || 0; },
+        'price':   function(s) { return (s.data||{}).price || 0; },
+        'target':  function(s) { return (s.data||{}).target_price || 0; },
+        'upside':  function(s) { return (s.data||{}).target_upside_pct || 0; }
+    };
+
+    function applySortToArray(arr, tableId, extractors) {
+        var st = getTableSort(tableId);
+        if (!st) return arr;
+        var fn = extractors[st.key];
+        if (!fn) return arr;
+        var sorted = arr.slice(); // don't mutate original
+        sorted.sort(function(a, b) {
+            var va = fn(a), vb = fn(b);
+            if (typeof va === 'string') {
+                var cmp = va.localeCompare(vb);
+                return st.dir === 'desc' ? -cmp : cmp;
+            }
+            return st.dir === 'desc' ? (vb - va) : (va - vb);
+        });
+        return sorted;
+    }
+
+    function sortHeaderAttrs(tableId, sortKey) {
+        var st = getTableSort(tableId);
+        var active = st && st.key === sortKey;
+        var arrow = active ? (st.dir === 'desc' ? '\u25BC' : '\u25B2') : '\u2195';
+        var cls = active ? ' class="sort-active"' : '';
+        return { cls: cls, arrow: arrow };
+    }
+
+    function thSort(label, tip, tableId, sortKey) {
+        var a = sortHeaderAttrs(tableId, sortKey);
+        return '<th' + a.cls + ' onclick="toggleSort(\'' + tableId + '\',\'' + sortKey + '\')" data-sort="' + sortKey + '">'
+            + '<span class="info-tip" title="' + tip + '">' + label + '</span>'
+            + '<span class="sort-arrow">' + a.arrow + '</span></th>';
     }
 
     // ===== WOLFE WAVE HELPERS =====
@@ -837,17 +942,19 @@
         else if (tableId === 'tblMedium') desc = DESC_MEDIUM;
         else if (tableId === 'tblSell') desc = DESC_SELL;
 
+        signals = applySortToArray(signals, tableId, SIGNAL_EXTRACTORS);
+
         var h = desc + '<table class="scanner-table"><thead><tr>';
-        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, NVDA = Nvidia).\nFarbiger WW-Badge = Wolfe Wave Pattern gefunden.\nKlick auf Badge \u00F6ffnet Chart-Bild.');
-        h += th('Name', 'Vollst\u00E4ndiger Firmenname');
-        h += th('Score', 'Signal-St\u00E4rke von 0\u2013100. Je h\u00F6her, desto st\u00E4rker das Signal.\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte\n\n\u2265 70 = Stark | 50\u201369 = Mittel');
-        h += th('Kurs', 'Aktueller Aktienkurs zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
-        h += th('Kursziel', 'Durchschnittliches Kursziel der Wall-Street-Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance (Refinitiv/LSEG)');
-        h += th('Upside', 'Prozentuale Differenz zwischen aktuellem Kurs und Kursziel.\n\n+ = Analysten erwarten Kursanstieg\n\u2013 = Analysten erwarten Kursverlust');
-        h += th('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub (monatlich aggregiert)');
+        h += thSort('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, NVDA = Nvidia).\nFarbiger WW-Badge = Wolfe Wave Pattern gefunden.\nKlick auf Badge \u00F6ffnet Chart-Bild.', tableId, 'symbol');
+        h += thSort('Name', 'Vollst\u00E4ndiger Firmenname', tableId, 'name');
+        h += thSort('Score', 'Signal-St\u00E4rke von 0\u2013100. Je h\u00F6her, desto st\u00E4rker das Signal.\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte\n\n\u2265 70 = Stark | 50\u201369 = Mittel', tableId, 'score');
+        h += thSort('Kurs', 'Aktueller Aktienkurs zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance', tableId, 'price');
+        h += thSort('Kursziel', 'Durchschnittliches Kursziel der Wall-Street-Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance (Refinitiv/LSEG)', tableId, 'target');
+        h += thSort('Upside', 'Prozentuale Differenz zwischen aktuellem Kurs und Kursziel.\n\n+ = Analysten erwarten Kursanstieg\n\u2013 = Analysten erwarten Kursverlust', tableId, 'upside');
+        h += thSort('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub (monatlich aggregiert)', tableId, 'buy_count');
         h += th('Trend', 'Entwicklung der Analysten-Meinungen.\n\n\u2191 Bullish = Mehr Kaufempfehlungen als vorher\n\u2193 Bearish = Mehr Verkaufsempfehlungen\n\u2192 Neutral = Keine Ver\u00E4nderung');
-        h += th('RSI', 'Relative Strength Index (14 Tage).\nTechnischer Indikator f\u00FCr \u00DCberkauft/\u00DCberverkauft.\n\n> 70 = \u00DCberkauft (m\u00F6glicher R\u00FCckgang)\n< 30 = \u00DCberverkauft (m\u00F6glicher Anstieg)\nQuelle: Yahoo Finance (berechnet)');
-        h += th('News Sentiment', 'Stimmungsanalyse der Nachrichten der letzten 7 Tage.\nZeigt % positive Artikel und Gesamtanzahl.\nQuelle: Google News RSS (KI-Analyse)');
+        h += thSort('RSI', 'Relative Strength Index (14 Tage).\nTechnischer Indikator f\u00FCr \u00DCberkauft/\u00DCberverkauft.\n\n> 70 = \u00DCberkauft (m\u00F6glicher R\u00FCckgang)\n< 30 = \u00DCberverkauft (m\u00F6glicher Anstieg)\nQuelle: Yahoo Finance (berechnet)', tableId, 'rsi');
+        h += thSort('News Sentiment', 'Stimmungsanalyse der Nachrichten der letzten 7 Tage.\nZeigt % positive Artikel und Gesamtanzahl.\nQuelle: Google News RSS (KI-Analyse)', tableId, 'news');
         h += '</tr></thead><tbody>';
 
         var limit = pageCounts[tableId] || PAGE_SIZE;
@@ -881,20 +988,22 @@
         if (!stocks || stocks.length === 0)
             return '<div class="empty-state">Keine Daten</div>';
 
+        stocks = applySortToArray(stocks, 'tblAll', ALL_EXTRACTORS);
+
         var h = DESC_ALL + '<table class="scanner-table"><thead><tr>';
-        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP).\nFarbiger WW-Badge = Wolfe Wave Pattern gefunden.\nKlick auf Badge \u00F6ffnet Chart-Bild.');
-        h += th('Name', 'Vollst\u00E4ndiger Firmenname');
-        h += th('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = S&P 500 (505 Aktien)\nNDX = NASDAQ-100 (100 Aktien)\nDJIA = Dow Jones (30 Aktien)\nAktien k\u00F6nnen in mehreren Indizes sein.');
-        h += th('Sektor', 'Branche/Industrie der Firma.\nz.B. Technology, Healthcare, Financial Services');
-        h += th('Kurs', 'Aktueller Aktienkurs.\nQuelle: Yahoo Finance');
-        h += th('Kursziel', 'Durchschnittliches Kursziel der Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance');
-        h += th('Upside', 'Prozentuale Differenz Kurs vs. Kursziel.\n+ = Potenzial nach oben\n\u2013 = Potenzial nach unten');
-        h += th('Buy Score', 'Kaufsignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Kaufsignal\n50\u201369 = Mittleres Signal');
-        h += th('Sell Score', 'Verkaufssignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Verkaufssignal');
-        h += th('RSI', 'Relative Strength Index (14 Tage).\n> 70 = \u00DCberkauft | < 30 = \u00DCberverkauft\nQuelle: Yahoo Finance');
-        h += th('MA50', '50-Tage gleitender Durchschnitt.\nKurs dar\u00FCber = Aufw\u00E4rtstrend (bullish)\nKurs darunter = Abw\u00E4rtstrend (bearish)');
-        h += th('MA200', '200-Tage gleitender Durchschnitt.\nLangfristiger Trendindikator.\ndar\u00FCber = Langfristig positiv\ndarunter = Langfristig negativ');
-        h += th('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub');
+        h += thSort('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie (z.B. AAPL = Apple, SAP.DE = SAP).\nFarbiger WW-Badge = Wolfe Wave Pattern gefunden.\nKlick auf Badge \u00F6ffnet Chart-Bild.', 'tblAll', 'symbol');
+        h += thSort('Name', 'Vollst\u00E4ndiger Firmenname', 'tblAll', 'name');
+        h += thSort('Markt', 'In welchem Index die Aktie gelistet ist.\nDAX = Deutsche B\u00F6rse (40 Aktien)\nS&P = S&P 500 (505 Aktien)\nNDX = NASDAQ-100 (100 Aktien)\nDJIA = Dow Jones (30 Aktien)\nAktien k\u00F6nnen in mehreren Indizes sein.', 'tblAll', 'market');
+        h += thSort('Sektor', 'Branche/Industrie der Firma.\nz.B. Technology, Healthcare, Financial Services', 'tblAll', 'sector');
+        h += thSort('Kurs', 'Aktueller Aktienkurs.\nQuelle: Yahoo Finance', 'tblAll', 'price');
+        h += thSort('Kursziel', 'Durchschnittliches Kursziel der Analysten.\nHover zeigt Low/High und Anzahl Analysten.\nQuelle: Yahoo Finance', 'tblAll', 'target');
+        h += thSort('Upside', 'Prozentuale Differenz Kurs vs. Kursziel.\n+ = Potenzial nach oben\n\u2013 = Potenzial nach unten', 'tblAll', 'upside');
+        h += thSort('Buy Score', 'Kaufsignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Kaufsignal\n50\u201369 = Mittleres Signal', 'tblAll', 'buy_score');
+        h += thSort('Sell Score', 'Verkaufssignal-St\u00E4rke (0\u2013100).\nBerechnet aus: Analysten + News + Technik.\n\u2265 70 = Starkes Verkaufssignal', 'tblAll', 'sell_score');
+        h += thSort('RSI', 'Relative Strength Index (14 Tage).\n> 70 = \u00DCberkauft | < 30 = \u00DCberverkauft\nQuelle: Yahoo Finance', 'tblAll', 'rsi');
+        h += thSort('MA50', '50-Tage gleitender Durchschnitt.\nKurs dar\u00FCber = Aufw\u00E4rtstrend (bullish)\nKurs darunter = Abw\u00E4rtstrend (bearish)', 'tblAll', 'ma50');
+        h += thSort('MA200', '200-Tage gleitender Durchschnitt.\nLangfristiger Trendindikator.\ndar\u00FCber = Langfristig positiv\ndarunter = Langfristig negativ', 'tblAll', 'ma200');
+        h += thSort('Buy / Hold / Sell', 'Anzahl Analysten-Empfehlungen.\nGr\u00FCn = Kaufen | Gelb = Halten | Rot = Verkaufen\nQuelle: Finnhub', 'tblAll', 'buy_count');
         h += '</tr></thead><tbody>';
 
         var limit = pageCounts['tblAll'] || PAGE_SIZE;
@@ -1149,7 +1258,11 @@
         if (strong.length === 0)
             return '<div class="empty-state">Keine historischen Signale</div>';
 
-        strong.sort(function(a, b) { return (b.timestamp||'').localeCompare(a.timestamp||''); });
+        // Default sort: by date desc; allow user override
+        strong = applySortToArray(strong, 'tblHistory', HIST_EXTRACTORS);
+        if (!getTableSort('tblHistory')) {
+            strong.sort(function(a, b) { return (b.timestamp||'').localeCompare(a.timestamp||''); });
+        }
 
         var info = '<div class="section-info">'
             + '\uD83D\uDCC5 <strong>Signalverlauf</strong> \u2013 Diese Tabelle protokolliert alle starken Signale (Score \u2265 70) die der Scanner in den letzten 30 Tagen erkannt hat. '
@@ -1159,14 +1272,14 @@
             + '</div>';
 
         var h = info + '<table class="scanner-table"><thead><tr>';
-        h += th('Datum', 'Zeitpunkt, wann der Scanner dieses Signal erkannt hat.\nDer Scanner l\u00E4uft jede Stunde \u2013 dieselbe Aktie kann mehrfach erscheinen.');
-        h += th('Typ', 'Art des Signals.\n\n\uD83D\uDFE2 BUY = Kaufsignal (Score \u2265 70)\n\uD83D\uDD34 SELL = Verkaufssignal (Score \u2265 70)');
-        h += th('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie');
-        h += th('Name', 'Vollst\u00E4ndiger Firmenname');
-        h += th('Score', 'Signal-St\u00E4rke zum Zeitpunkt des Scans (0\u2013100).\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte');
-        h += th('Kurs', 'Aktienkurs zum Zeitpunkt des Scans.\nKann sich seitdem ver\u00E4ndert haben!');
-        h += th('Kursziel', 'Analysten-Kursziel zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance');
-        h += th('Upside', 'Potenzial zum Zeitpunkt des Scans.\nVergleich Kurs vs. Kursziel in Prozent.');
+        h += thSort('Datum', 'Zeitpunkt, wann der Scanner dieses Signal erkannt hat.\nDer Scanner l\u00E4uft jede Stunde \u2013 dieselbe Aktie kann mehrfach erscheinen.', 'tblHistory', 'date');
+        h += thSort('Typ', 'Art des Signals.\n\n\uD83D\uDFE2 BUY = Kaufsignal (Score \u2265 70)\n\uD83D\uDD34 SELL = Verkaufssignal (Score \u2265 70)', 'tblHistory', 'type');
+        h += thSort('Symbol', 'B\u00F6rsen-K\u00FCrzel der Aktie', 'tblHistory', 'symbol');
+        h += thSort('Name', 'Vollst\u00E4ndiger Firmenname', 'tblHistory', 'name');
+        h += thSort('Score', 'Signal-St\u00E4rke zum Zeitpunkt des Scans (0\u2013100).\n\nBerechnung:\n\u2022 Analysten: max 35 Punkte\n\u2022 News-Sentiment: max 25 Punkte\n\u2022 Technische Analyse: max 40 Punkte', 'tblHistory', 'score');
+        h += thSort('Kurs', 'Aktienkurs zum Zeitpunkt des Scans.\nKann sich seitdem ver\u00E4ndert haben!', 'tblHistory', 'price');
+        h += thSort('Kursziel', 'Analysten-Kursziel zum Zeitpunkt des Scans.\nQuelle: Yahoo Finance', 'tblHistory', 'target');
+        h += thSort('Upside', 'Potenzial zum Zeitpunkt des Scans.\nVergleich Kurs vs. Kursziel in Prozent.', 'tblHistory', 'upside');
         h += '</tr></thead><tbody>';
 
         var limit = pageCounts['tblHistory'] || PAGE_SIZE;
