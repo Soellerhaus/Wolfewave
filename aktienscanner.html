@@ -491,11 +491,159 @@
         }
         .sort-btn:hover { color: var(--accent); }
         .sort-btn.active { color: var(--accent); font-weight: 700; }
+
+        /* ===== STOCK DETAIL MODAL ===== */
+        .stock-modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+            justify-content: center; align-items: flex-start;
+            padding: 40px 16px; overflow-y: auto;
+        }
+        .stock-modal-overlay.open { display: flex; }
+        .stock-modal {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; width: 100%; max-width: 800px;
+            box-shadow: 0 24px 48px rgba(0,0,0,.4); position: relative;
+            animation: modalIn .2s ease-out;
+        }
+        @keyframes modalIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+        .stock-modal-header {
+            display: flex; align-items: center; gap: 16px;
+            padding: 24px 28px; border-bottom: 1px solid var(--border);
+        }
+        .stock-modal-header .sm-logo {
+            width: 56px; height: 56px; border-radius: 50%;
+            object-fit: contain; background: var(--bg-darker);
+            border: 2px solid var(--border);
+        }
+        .stock-modal-header .sm-logo-fb {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--bg-darker); border: 2px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 700; color: var(--text-muted);
+        }
+        .stock-modal-header .sm-info { flex: 1; }
+        .stock-modal-header .sm-name {
+            font-size: 22px; font-weight: 700; color: var(--text);
+            display: block; line-height: 1.2;
+        }
+        .stock-modal-header .sm-sym {
+            font-size: 13px; color: var(--text-muted);
+        }
+        .stock-modal-header .sm-rank {
+            text-align: center; padding: 8px 14px;
+            background: var(--bg-darker); border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .stock-modal-header .sm-rank .rank-pos {
+            font-size: 24px; font-weight: 800; color: var(--accent);
+        }
+        .stock-modal-header .sm-rank .rank-total {
+            font-size: 11px; color: var(--text-muted); display: block;
+        }
+        .stock-modal-close {
+            position: absolute; top: 16px; right: 16px;
+            background: var(--bg-darker); border: 1px solid var(--border);
+            color: var(--text-muted); width: 32px; height: 32px;
+            border-radius: 50%; cursor: pointer; font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .15s;
+        }
+        .stock-modal-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
+        /* Score overview bar */
+        .sm-scores {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+            padding: 20px 28px; border-bottom: 1px solid var(--border);
+        }
+        .sm-score-card {
+            text-align: center; padding: 12px 8px;
+            background: var(--bg-darker); border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .sm-score-card .sc-val {
+            font-size: 28px; font-weight: 800;
+        }
+        .sm-score-card .sc-label {
+            font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: .5px; margin-top: 2px;
+        }
+        .sm-score-card .sc-bar {
+            height: 4px; border-radius: 2px; background: var(--bg-card);
+            margin-top: 6px; overflow: hidden;
+        }
+        .sm-score-card .sc-bar-fill {
+            height: 100%; border-radius: 2px; transition: width .3s;
+        }
+        /* Accordion */
+        .sm-accordion { padding: 0 28px 20px; }
+        .sm-acc-item { border-bottom: 1px solid var(--border); }
+        .sm-acc-item:last-child { border-bottom: none; }
+        .sm-acc-head {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 0; cursor: pointer; user-select: none;
+            font-weight: 600; font-size: 14px; color: var(--text);
+        }
+        .sm-acc-head:hover { color: var(--accent); }
+        .sm-acc-head .acc-icon {
+            transition: transform .2s; font-size: 12px; color: var(--text-muted);
+        }
+        .sm-acc-item.open .acc-icon { transform: rotate(90deg); }
+        .sm-acc-head .acc-badge {
+            margin-left: auto; font-size: 11px; font-weight: 600;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(16,185,129,.12); color: var(--accent);
+        }
+        .sm-acc-body {
+            max-height: 0; overflow: hidden; transition: max-height .3s ease;
+        }
+        .sm-acc-item.open .sm-acc-body { max-height: 2000px; }
+        .sm-acc-content { padding: 0 0 16px; }
+        /* Table inside accordion */
+        .sm-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+        .sm-table th {
+            text-align: left; padding: 6px 10px; font-size: 11px;
+            color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: .5px; border-bottom: 1px solid var(--border);
+        }
+        .sm-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.04); }
+        .sm-table tr:last-child td { border-bottom: none; }
+        .sm-table .firm-logo {
+            width: 20px; height: 20px; border-radius: 50%; vertical-align: middle;
+            margin-right: 6px; object-fit: contain;
+        }
+        /* Action badges */
+        .action-up { color: var(--accent); font-weight: 600; }
+        .action-down { color: var(--red); font-weight: 600; }
+        .action-main { color: var(--text-muted); }
+        .action-init { color: var(--blue); font-weight: 600; }
+        /* Technicals grid */
+        .sm-tech-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px;
+        }
+        .sm-tech-item {
+            background: var(--bg-darker); border-radius: 8px;
+            padding: 10px 14px; border: 1px solid var(--border);
+        }
+        .sm-tech-item .tl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .sm-tech-item .tv { font-size: 18px; font-weight: 700; margin-top: 2px; }
+        /* Clickable rows */
+        .stock-row-click { cursor: pointer; }
+        .stock-row-click:hover { background: rgba(16,185,129,.06) !important; }
+        .top10-card { cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="site-header"></div>
+
+<!-- Stock Detail Modal -->
+<div class="stock-modal-overlay" id="stockModal" onclick="if(event.target===this)closeStockModal()">
+    <div class="stock-modal">
+        <button class="stock-modal-close" onclick="closeStockModal()">&times;</button>
+        <div id="stockModalContent"></div>
+    </div>
+</div>
 
 <section>
     <div class="container">
@@ -1164,7 +1312,7 @@
             var nr = d.news_bullish_ratio;
             var tp = d.target_price;
             var up = d.target_upside_pct || 0;
-            h += '<tr>';
+            h += '<tr class="stock-row-click" onclick="openStockDetail(\'' + s.symbol + '\')">';
             h += '<td>' + symLogo(s.symbol) + ' ' + wolfeInline(s.symbol) + '</td>';
             h += '<td>' + (d.name || s.symbol) + '</td>';
             h += '<td>' + scorePill(s.score) + '</td>';
@@ -1217,7 +1365,7 @@
             else if (s.buy_score >= 50) bg = ' style="background:rgba(245,158,11,0.06);"';
             else if (s.sell_score >= 50) bg = ' style="background:rgba(239,68,68,0.06);"';
 
-            h += '<tr' + bg + '>';
+            h += '<tr class="stock-row-click"' + bg + ' onclick="openStockDetail(\'' + s.symbol + '\')">';
             h += '<td>' + symLogo(s.symbol) + ' ' + wolfeInline(s.symbol) + '</td>';
             h += '<td>' + (s.name || s.symbol) + '</td>';
             h += '<td>' + formatMarkets(s) + '</td>';
@@ -1668,7 +1816,7 @@
             var logo = '<img class="top10-logo" src="https://assets.parqet.com/logos/symbol/' + sym
                 + '" alt="' + sym + '" onerror="this.outerHTML=\'<div class=\\\'top10-logo-fallback\\\'>' + fb + '</div>\'">';
 
-            h += '<div class="top10-card">';
+            h += '<div class="top10-card" onclick="openStockDetail(\'' + sym + '\')">';
             h += '<span class="top10-rank">#' + rank + '</span>';
             h += chg;
             h += logo;
@@ -1734,6 +1882,286 @@
         // Sectors + All stocks
         populateSectors();
         renderAllStocks();
+    }
+
+    // ===== STOCK DETAIL MODAL =====
+    function findStockData(sym) {
+        // Find from all_stocks (most complete), then buy_signals, then sell_signals
+        var all = SIGNALS.all_stocks || [];
+        var found = null;
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].symbol === sym) { found = { src: 'all', d: all[i], rank: i }; break; }
+        }
+        // Get rank among all stocks sorted by buy_score desc
+        var sorted = all.slice().sort(function(a,b){ return (b.buy_score||0) - (a.buy_score||0); });
+        var rankPos = 0;
+        for (var i = 0; i < sorted.length; i++) {
+            if (sorted[i].symbol === sym) { rankPos = i + 1; break; }
+        }
+        // Get signal data (has more detail)
+        var sigData = null;
+        var buys = SIGNALS.buy_signals || [];
+        for (var i = 0; i < buys.length; i++) {
+            if (buys[i].symbol === sym) { sigData = buys[i]; break; }
+        }
+        if (!sigData) {
+            var sells = SIGNALS.sell_signals || [];
+            for (var i = 0; i < sells.length; i++) {
+                if (sells[i].symbol === sym) { sigData = sells[i]; break; }
+            }
+        }
+        return { stock: found ? found.d : null, signal: sigData, rank: rankPos, total: all.length };
+    }
+
+    function scoreColor(val, max) {
+        if (!max) max = 100;
+        var pct = val / max;
+        if (pct >= 0.7) return 'var(--accent)';
+        if (pct >= 0.4) return 'var(--gold)';
+        return 'var(--red)';
+    }
+
+    function actionLabel(action) {
+        var map = {
+            'up': '\u2B06 Upgrade', 'down': '\u2B07 Downgrade', 'main': '\u2192 Beibehalten',
+            'init': '\u2B50 Initiiert', 'reit': '\u2192 Wiederholt'
+        };
+        return map[action] || action || '-';
+    }
+    function actionClass(action) {
+        if (action === 'up') return 'action-up';
+        if (action === 'down') return 'action-down';
+        if (action === 'init') return 'action-init';
+        return 'action-main';
+    }
+
+    window.openStockDetail = function(sym) {
+        var info = findStockData(sym);
+        var stock = info.stock;
+        var sig = info.signal;
+        var d = sig ? (sig.data || {}) : (stock || {});
+        var name = d.name || (stock&&stock.name) || sym;
+        var score = sig ? sig.score : (stock ? stock.buy_score : 0);
+        var detail = sig ? sig.score_detail : (stock ? stock.buy_detail : {});
+        if (!detail) detail = {};
+
+        var fb = sym.replace('.DE','').substring(0,2);
+
+        var h = '';
+        // === HEADER ===
+        h += '<div class="stock-modal-header">';
+        h += '<img class="sm-logo" src="https://assets.parqet.com/logos/symbol/' + sym
+            + '" alt="" onerror="this.outerHTML=\'<div class=\\\'sm-logo-fb\\\'>' + fb + '</div>\'">';
+        h += '<div class="sm-info">';
+        h += '<span class="sm-name">' + name + '</span>';
+        h += '<span class="sm-sym">' + sym + ' &middot; ' + (stock ? (stock.sector || '') : (d.sector || ''))
+            + ' &middot; ' + (stock ? formatMarkets(stock) : '') + '</span>';
+        h += '</div>';
+        h += '<div class="sm-rank"><span class="rank-pos">#' + info.rank + '</span><span class="rank-total">von ' + info.total + '</span></div>';
+        h += '</div>';
+
+        // === SCORE CARDS ===
+        var analystMax = 35, sentMax = 25, techMax = 40;
+        h += '<div class="sm-scores">';
+        h += scoreCard('Gesamt', score, 100);
+        h += scoreCard('Analysten', detail.analyst || 0, analystMax);
+        h += scoreCard('Sentiment', detail.sentiment || 0, sentMax);
+        h += scoreCard('Technik', detail.technical || 0, techMax);
+        h += '</div>';
+
+        // === ACCORDION SECTIONS ===
+        h += '<div class="sm-accordion">';
+
+        // 1. ANALYSTEN EMPFEHLUNGEN
+        var ac = d.analyst_current || (stock&&stock.analyst_current) || {};
+        var totalAnalysts = (ac.strongBuy||0) + (ac.buy||0) + (ac.hold||0) + (ac.sell||0) + (ac.strongSell||0);
+        h += accItem('analyst', '\uD83D\uDCCA Analysten-Empfehlungen', totalAnalysts + ' Analysten', true, function() {
+            var c = '';
+            // Summary bar
+            var sb = ac.strongBuy||0, b = ac.buy||0, ho = ac.hold||0, se = ac.sell||0, ss = ac.strongSell||0;
+            var tot = sb+b+ho+se+ss || 1;
+            c += '<div style="display:flex;gap:2px;height:24px;border-radius:6px;overflow:hidden;margin-bottom:12px">';
+            if (sb) c += '<div style="flex:' + sb + ';background:#059669;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff" title="Strong Buy">' + sb + '</div>';
+            if (b) c += '<div style="flex:' + b + ';background:#10b981;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff" title="Buy">' + b + '</div>';
+            if (ho) c += '<div style="flex:' + ho + ';background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000" title="Hold">' + ho + '</div>';
+            if (se) c += '<div style="flex:' + se + ';background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff" title="Sell">' + se + '</div>';
+            if (ss) c += '<div style="flex:' + ss + ';background:#991b1b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff" title="Strong Sell">' + ss + '</div>';
+            c += '</div>';
+            c += '<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);margin-bottom:16px">';
+            c += '<span>\uD83D\uDFE2 Strong Buy: <b style="color:var(--accent)">' + sb + '</b></span>';
+            c += '<span>\uD83D\uDFE2 Buy: <b style="color:var(--accent)">' + b + '</b></span>';
+            c += '<span>\uD83D\uDFE1 Hold: <b style="color:var(--gold)">' + ho + '</b></span>';
+            c += '<span>\uD83D\uDD34 Sell: <b style="color:var(--red)">' + se + '</b></span>';
+            c += '<span>\uD83D\uDD34 Strong Sell: <b style="color:var(--red)">' + ss + '</b></span>';
+            c += '</div>';
+            // Trend
+            var trend = d.analyst_trend || (stock&&stock.analyst_trend) || '';
+            if (trend) {
+                c += '<div style="padding:8px 12px;background:var(--bg-darker);border-radius:8px;font-size:13px;margin-bottom:12px">';
+                c += '<strong>Trend:</strong> ' + trend;
+                c += '</div>';
+            }
+            // Kursziel
+            var tp = d.target_price || (stock&&stock.target_price);
+            if (tp) {
+                c += '<div style="padding:8px 12px;background:var(--bg-darker);border-radius:8px;font-size:13px;margin-bottom:12px">';
+                c += '<strong>Kursziel:</strong> ' + cur(sym) + tp.toFixed(2);
+                var low = d.target_low || (stock&&stock.target_low);
+                var high = d.target_high || (stock&&stock.target_high);
+                var cnt = d.target_analyst_count || (stock&&stock.target_analyst_count);
+                if (low && high) c += ' <span style="color:var(--text-muted)">(Low: ' + cur(sym) + low.toFixed(2) + ' / High: ' + cur(sym) + high.toFixed(2) + ')</span>';
+                if (cnt) c += ' <span style="color:var(--text-muted)">(' + cnt + ' Analysten)</span>';
+                var upPct = d.target_upside_pct || (stock&&stock.target_upside_pct) || 0;
+                c += ' <span class="' + (upPct > 0 ? 'indicator-up' : upPct < 0 ? 'indicator-down' : '') + '" style="font-weight:700">' + (upPct > 0 ? '+' : '') + upPct.toFixed(1) + '%</span>';
+                c += '</div>';
+            }
+            return c;
+        });
+
+        // 2. NEUESTE ANALYSTEN-ÄNDERUNGEN (Recent Upgrades)
+        var upgrades = d.recent_upgrades || (stock&&stock.recent_upgrades) || [];
+        h += accItem('upgrades', '\uD83D\uDCE2 Neueste Analysten-Aenderungen', upgrades.length + ' Aenderungen', false, function() {
+            if (!upgrades.length) return '<div style="color:var(--text-muted);font-size:13px">Keine aktuellen Aenderungen</div>';
+            var c = '<table class="sm-table"><thead><tr><th>Datum</th><th>Firma</th><th>Aktion</th><th>Von</th><th>Auf</th><th>Kursziel</th></tr></thead><tbody>';
+            for (var i = 0; i < upgrades.length; i++) {
+                var u = upgrades[i];
+                var tgtStr = '';
+                if (u.target_new) {
+                    tgtStr = cur(sym) + u.target_new.toFixed(0);
+                    if (u.target_old) tgtStr += ' <small style="opacity:.5">(vorher ' + cur(sym) + u.target_old.toFixed(0) + ')</small>';
+                }
+                c += '<tr>';
+                c += '<td style="white-space:nowrap">' + (u.date || '-').substring(0, 10) + '</td>';
+                c += '<td>' + firmLogo(u.firm) + '</td>';
+                c += '<td class="' + actionClass(u.action) + '">' + actionLabel(u.action) + '</td>';
+                c += '<td>' + (u.from || '-') + '</td>';
+                c += '<td><strong>' + (u.to || '-') + '</strong></td>';
+                c += '<td>' + (tgtStr || '-') + '</td>';
+                c += '</tr>';
+            }
+            c += '</tbody></table>';
+            return c;
+        });
+
+        // 3. NEWS-SENTIMENT
+        var newsCount = d.news_articles || 0;
+        var newsPos = d.news_positive || 0;
+        var newsNeg = d.news_negative || 0;
+        var newsRatio = d.news_bullish_ratio;
+        h += accItem('news', '\uD83D\uDCF0 News-Sentiment', newsRatio != null ? newsRatio + '% Bullish' : '-', false, function() {
+            if (!newsCount && newsRatio == null) return '<div style="color:var(--text-muted);font-size:13px">Keine News-Daten verfuegbar</div>';
+            var c = '';
+            c += '<div class="sm-tech-grid" style="margin-bottom:12px">';
+            c += techItem('Artikel (7T)', newsCount);
+            c += techItem('Positiv', newsPos);
+            c += techItem('Negativ', newsNeg);
+            c += techItem('Bullish Ratio', newsRatio != null ? newsRatio + '%' : '-');
+            c += '</div>';
+            // Reddit/StockTwits
+            var redditThis = d.reddit_this_week || 0;
+            var redditLast = d.reddit_last_week || 0;
+            var stBull = d.stocktwits_bullish || 0;
+            var stBear = d.stocktwits_bearish || 0;
+            if (redditThis || stBull || stBear) {
+                c += '<div style="margin-top:8px;font-size:12px;color:var(--text-muted)">';
+                if (redditThis || redditLast) c += 'Reddit: ' + redditThis + ' Erwaennungen diese Woche (letzte: ' + redditLast + '). ';
+                if (stBull || stBear) c += 'StockTwits: ' + stBull + ' Bullish / ' + stBear + ' Bearish.';
+                c += '</div>';
+            }
+            return c;
+        });
+
+        // 4. TECHNISCHE ANALYSE
+        var rsi = d.rsi || (stock&&stock.rsi);
+        var price = d.price || (stock&&stock.price) || 0;
+        var ma50 = d.above_ma50 != null ? d.above_ma50 : ((stock&&stock.above_ma50));
+        var ma200 = d.above_ma200 != null ? d.above_ma200 : ((stock&&stock.above_ma200));
+        h += accItem('tech', '\uD83D\uDCC8 Technische Analyse', (detail.technical || 0) + '/' + techMax + ' Punkte', false, function() {
+            var c = '<div class="sm-tech-grid">';
+            c += techItem('Kurs', cur(sym) + price.toFixed(2));
+            c += techItem('RSI (14)', rsi != null ? rsi.toFixed(1) : '-');
+            c += techItem('MA50', ma50 != null ? (ma50 ? '\u2705 Darueber' : '\u274C Darunter') : '-');
+            c += techItem('MA200', ma200 != null ? (ma200 ? '\u2705 Darueber' : '\u274C Darunter') : '-');
+            c += '</div>';
+            // RSI explanation
+            if (rsi != null) {
+                var rsiNote = rsi > 70 ? '\u26A0 Ueberkauft — Moeglicher Rueckgang' : rsi < 30 ? '\u2705 Ueberverkauft — Moeglicher Anstieg' : 'Neutral';
+                c += '<div style="margin-top:8px;font-size:12px;color:var(--text-muted)">RSI: ' + rsiNote + '</div>';
+            }
+            return c;
+        });
+
+        // 5. WOLFE WAVE
+        var wwMatches = findWolfeSignals(sym);
+        if (wwMatches.length) {
+            h += accItem('wolfe', '\uD83D\uDC3A Wolfe Wave Signale', wwMatches.length + ' Pattern', false, function() {
+                var c = '';
+                wwMatches.forEach(function(w) {
+                    var isBull = (w.direction || '').toUpperCase().indexOf('BULL') !== -1;
+                    var status = w.status === 'pending' ? 'Pending' : 'Active';
+                    c += '<div style="background:var(--bg-darker);border-radius:10px;padding:12px 16px;margin-bottom:8px;border:1px solid var(--border)">';
+                    c += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+                    c += '<span class="wolfe-badge ' + (isBull ? 'wolfe-bull' : 'wolfe-bear') + '">' + (isBull ? '\u25B2 Bullish' : '\u25BC Bearish') + '</span>';
+                    c += '<span style="font-weight:700">' + w.timeframe + '</span>';
+                    c += '<span style="color:var(--text-muted);font-size:12px">' + status + '</span>';
+                    c += '</div>';
+                    var grid = '<div class="sm-tech-grid">';
+                    if (w.entry) grid += techItem('Entry', (+w.entry).toFixed(2));
+                    if (w.sl) grid += techItem('Stop Loss', (+w.sl).toFixed(2));
+                    if (w.tp1) grid += techItem('TP1', (+w.tp1).toFixed(2));
+                    if (w.tp2) grid += techItem('TP2', (+w.tp2).toFixed(2));
+                    if (w.tp3) grid += techItem('TP3', (+w.tp3).toFixed(2));
+                    grid += '</div>';
+                    c += grid;
+                    var imgUrl = getWolfeImage(w.wedge_id);
+                    if (imgUrl) {
+                        c += '<div style="margin-top:8px"><a href="javascript:void(0)" onclick="openWolfeLightbox(\'' + imgUrl + '\',\'' + (w.symbol + ' ' + w.timeframe).replace(/'/g,'') + '\')" style="color:var(--accent);font-size:12px">\uD83D\uDDBC Chart anzeigen</a></div>';
+                    }
+                    c += '</div>';
+                });
+                return c;
+            });
+        }
+
+        h += '</div>'; // .sm-accordion
+        document.getElementById('stockModalContent').innerHTML = h;
+        document.getElementById('stockModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeStockModal = function() {
+        document.getElementById('stockModal').classList.remove('open');
+        document.body.style.overflow = '';
+    };
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('stockModal').classList.contains('open')) {
+            closeStockModal();
+        }
+    });
+
+    function scoreCard(label, val, max) {
+        var pct = max ? Math.round(val / max * 100) : 0;
+        var col = scoreColor(val, max);
+        return '<div class="sm-score-card">'
+            + '<div class="sc-val" style="color:' + col + '">' + val + '<span style="font-size:14px;opacity:.5">/' + max + '</span></div>'
+            + '<div class="sc-label">' + label + '</div>'
+            + '<div class="sc-bar"><div class="sc-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>'
+            + '</div>';
+    }
+
+    function techItem(label, val) {
+        return '<div class="sm-tech-item"><div class="tl">' + label + '</div><div class="tv">' + val + '</div></div>';
+    }
+
+    function accItem(id, title, badge, openByDefault, contentFn) {
+        var cls = openByDefault ? 'sm-acc-item open' : 'sm-acc-item';
+        return '<div class="' + cls + '" id="acc_' + id + '">'
+            + '<div class="sm-acc-head" onclick="this.parentElement.classList.toggle(\'open\')">'
+            + '<span class="acc-icon">\u25B6</span> ' + title
+            + (badge ? '<span class="acc-badge">' + badge + '</span>' : '')
+            + '</div>'
+            + '<div class="sm-acc-body"><div class="sm-acc-content">' + contentFn() + '</div></div>'
+            + '</div>';
     }
 
     // Load data on page load
