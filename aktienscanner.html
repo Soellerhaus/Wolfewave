@@ -353,6 +353,63 @@
         }
         [data-theme="light"] .load-more-btn { background: rgba(0,0,0,0.04); }
 
+        /* ===== TOP 10 TILES ===== */
+        .top10-section { margin-bottom: 24px; }
+        .top10-header {
+            display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;
+        }
+        .top10-title { font-size: 16px; font-weight: 700; color: var(--text); }
+        .top10-subtitle { font-size: 12px; color: var(--text-muted); }
+        .top10-strip {
+            display: flex; gap: 12px; overflow-x: auto;
+            scroll-snap-type: x mandatory; padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .top10-strip::-webkit-scrollbar { height: 4px; }
+        .top10-strip::-webkit-scrollbar-track { background: transparent; }
+        .top10-strip::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        .top10-card {
+            flex: 0 0 150px; scroll-snap-align: start;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px 14px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            position: relative; transition: border-color .2s, transform .2s;
+            cursor: default;
+        }
+        .top10-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .top10-rank {
+            position: absolute; top: 8px; left: 10px;
+            font-size: 11px; font-weight: 700; color: var(--text-muted);
+        }
+        .top10-logo {
+            width: 40px; height: 40px; border-radius: 50%;
+            object-fit: contain; background: rgba(255,255,255,.08);
+        }
+        .top10-logo-fallback {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(16,185,129,.12); color: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px;
+        }
+        .top10-symbol { font-weight: 700; font-size: 13px; color: var(--text); }
+        .top10-name {
+            font-size: 11px; color: var(--text-muted); text-align: center;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px;
+        }
+        .top10-upside { font-size: 11px; font-weight: 600; }
+        .top10-rank-change {
+            position: absolute; top: 8px; right: 10px;
+            font-size: 10px; font-weight: 700;
+        }
+        .rank-up { color: #10b981; }
+        .rank-down { color: #ef4444; }
+        .rank-same { color: var(--text-muted); }
+        .rank-new { color: #f59e0b; }
+        @media (max-width: 480px) {
+            .top10-card { flex: 0 0 130px; padding: 12px 10px; }
+            .top10-logo, .top10-logo-fallback { width: 32px; height: 32px; }
+        }
+
         /* ===== SECTION INFO BANNER ===== */
         .section-info {
             padding: 14px 16px;
@@ -424,6 +481,15 @@
             <select id="sectorFilter" onchange="applyFilters()">
                 <option value="all">Alle Sektoren</option>
             </select>
+        </div>
+
+        <!-- Top 10 Tiles -->
+        <div class="top10-section" id="top10Section" style="display:none">
+            <div class="top10-header">
+                <span class="top10-title">&#x1F3C6; Top 10 Aktien</span>
+                <span class="top10-subtitle" id="top10Subtitle">nach Score</span>
+            </div>
+            <div class="top10-strip" id="top10Strip"></div>
         </div>
 
         <!-- Accordion: Analysten-Aenderungen (OBEN) -->
@@ -657,6 +723,7 @@
         renderSignals();
         renderAllStocks();
         renderHistory();
+        renderTop10();
     };
 
     function getMarkets(item) {
@@ -1354,6 +1421,88 @@
         document.getElementById('tblHistory').innerHTML = buildHistoryTable(filtered, true);
     }
 
+    // ===== TOP 10 TILES =====
+    function getYesterdayRankings() {
+        var todayStr = (SIGNALS.last_scan || '').split(' ')[0];
+        if (!todayStr || !HISTORY.length) return {};
+        // Find most recent date before today
+        var prevDate = '';
+        for (var i = 0; i < HISTORY.length; i++) {
+            var d = (HISTORY[i].timestamp || '').split(' ')[0];
+            if (d && d < todayStr && d > prevDate) prevDate = d;
+        }
+        if (!prevDate) return {};
+        // Get yesterday's buy signals with score >= 70, deduplicate
+        var bySymbol = {};
+        for (var i = 0; i < HISTORY.length; i++) {
+            var h = HISTORY[i];
+            if (h.type !== 'BUY' || h.score < 70) continue;
+            if ((h.timestamp || '').split(' ')[0] !== prevDate) continue;
+            if (!bySymbol[h.symbol] || h.score > bySymbol[h.symbol].score) {
+                bySymbol[h.symbol] = h;
+            }
+        }
+        var arr = [];
+        for (var sym in bySymbol) arr.push(bySymbol[sym]);
+        arr.sort(function(a, b) { return b.score - a.score; });
+        var ranks = {};
+        for (var i = 0; i < arr.length; i++) ranks[arr[i].symbol] = i + 1;
+        return ranks;
+    }
+
+    function renderTop10() {
+        var buys = (SIGNALS.buy_signals || []).filter(function(s) {
+            return s.score >= 70 && matchesFilter(s);
+        });
+        buys.sort(function(a, b) { return b.score - a.score; });
+        var top = buys.slice(0, 10);
+
+        var section = document.getElementById('top10Section');
+        var strip = document.getElementById('top10Strip');
+        if (!top.length) { section.style.display = 'none'; return; }
+        section.style.display = '';
+
+        var yRanks = getYesterdayRankings();
+        var h = '';
+        for (var i = 0; i < top.length; i++) {
+            var s = top[i], d = s.data || {};
+            var sym = s.symbol || '';
+            var name = d.name || sym;
+            var upside = d.target_upside_pct;
+            var rank = i + 1;
+
+            // Rank change indicator
+            var chg = '';
+            if (yRanks[sym] !== undefined) {
+                var diff = yRanks[sym] - rank;
+                if (diff > 0) chg = '<span class="top10-rank-change rank-up">\u25B2' + diff + '</span>';
+                else if (diff < 0) chg = '<span class="top10-rank-change rank-down">\u25BC' + Math.abs(diff) + '</span>';
+                else chg = '<span class="top10-rank-change rank-same">\u2022</span>';
+            } else {
+                chg = '<span class="top10-rank-change rank-new">NEU</span>';
+            }
+
+            // Logo with fallback
+            var fb = sym.replace('.DE','').substring(0,2);
+            var logo = '<img class="top10-logo" src="https://assets.parqet.com/logos/symbol/' + sym
+                + '" alt="' + sym + '" onerror="this.outerHTML=\'<div class=\\\'top10-logo-fallback\\\'>' + fb + '</div>\'">';
+
+            h += '<div class="top10-card">';
+            h += '<span class="top10-rank">#' + rank + '</span>';
+            h += chg;
+            h += logo;
+            h += '<span class="top10-symbol">' + sym + '</span>';
+            h += '<span class="top10-name" title="' + name + '">' + name + '</span>';
+            h += scorePill(s.score);
+            if (upside != null) {
+                var uCls = upside > 0 ? 'indicator-up' : upside < 0 ? 'indicator-down' : '';
+                h += '<span class="top10-upside ' + uCls + '">' + (upside > 0 ? '+' : '') + upside + '% Kursziel</span>';
+            }
+            h += '</div>';
+        }
+        strip.innerHTML = h;
+    }
+
     // ===== POPULATE SECTORS =====
     function populateSectors() {
         var all = SIGNALS.all_stocks || [];
@@ -1396,6 +1545,9 @@
 
         // History
         renderHistory();
+
+        // Top 10 Tiles
+        renderTop10();
 
         // Sectors + All stocks
         populateSectors();
