@@ -50,7 +50,7 @@
           <a href="/dashboard.html">Dashboard</a>
           <a href="/aktienscanner.html">Aktienscanner</a>
           <a href="/wolfewaves.html">Wolfe Waves lernen</a>
-          <a href="/about.html">Ueber mich</a>
+          <a href="/about.html">Über mich</a>
         </div>
       </div>
       <div class="footer-section">

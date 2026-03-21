@@ -120,7 +120,7 @@
             <a href="/faq.html" class="dropdown-item">FAQ</a>
           </div>
         </div>
-        <a href="/about.html" class="nav-link">Ueber mich</a>
+        <a href="/about.html" class="nav-link">Über mich</a>
       </nav>
       <div class="header-actions">
         <button class="theme-toggle" id="theme-toggle" title="Dark/Light Mode">
@@ -135,7 +135,7 @@
   if (container) container.innerHTML = headerHTML;
 
   // Theme toggle
-  const saved = localStorage.getItem('wws-theme') || 'dark';
+  const saved = localStorage.getItem('wws-theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
